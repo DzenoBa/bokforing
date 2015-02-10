@@ -9,5 +9,5 @@ Members
 * Daniel C.
 * Isabelle F.
 * Jakob G.
-* Alexandra L.
+* Alexandra L. - lazica - lazica@student.chalmers.se
 * Victor W.
