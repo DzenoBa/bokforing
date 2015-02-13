@@ -13,3 +13,4 @@ nbactions.xml
 *.jar
 *.war
 *.ear
+/target/
