@@ -1,4 +1,4 @@
-Modernt webbaserat bokföringsprogram för småföretag 
+﻿Modernt webbaserat bokföringsprogram för småföretag 
 ======
 <b>Projektkod: DATX02-15-02<br/>
 Chalmers tekniska högskola</b>
@@ -7,7 +7,7 @@ Members
 ==============
 * Dzenan B. - DzenoBa - dzenan@student.chalmers.se
 * Daniel C.
-* Isabelle F.
+* Isabelle F. - frolich - frolich@student.chalmers.se
 * Jakob C.G. - Jokab - csorgei@student.chalmers.se
 * Alexandra L. - lazica - lazica@student.chalmers.se
 * Victor W.
