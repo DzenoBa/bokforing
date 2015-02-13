@@ -8,6 +8,6 @@ Members
 * Dzenan B. - DzenoBa - dzenan@student.chalmers.se
 * Daniel C.
 * Isabelle F.
-* Jakob G.
+* Jakob C.G. - Jokab - csorgei@student.chalmers.se
 * Alexandra L. - lazica - lazica@student.chalmers.se
 * Victor W.
