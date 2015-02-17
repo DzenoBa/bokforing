@@ -21,17 +21,22 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "se.chalmers.bokforing")
+@ComponentScan(basePackages = "se.chalmers.bokforing.controller")
 public class WebConfig extends WebMvcConfigurerAdapter {
     
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("/static/")
+                .setCachePeriod(31556926);
+        
+        super.addResourceHandlers(registry);
     }
- 
+
     /**
      * Might not be necessary, just pasted this really.
-     * @param configurer 
+     *
+     * @param configurer
      */
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {

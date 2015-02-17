@@ -1,4 +1,4 @@
-package se.chalmers.bokforing;
+package se.chalmers.bokforing.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
