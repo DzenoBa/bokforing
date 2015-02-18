@@ -17,5 +17,10 @@ public class ControllerTest {
                 + "<h3>Hello, World!</h3>Bokföring?<br><br>";
         return new ModelAndView("test", "message", stringToSend);
     }
+    
+    @RequestMapping("/test2")
+    public String getNewPage() {
+        return "test3";
+    }
 
 }
