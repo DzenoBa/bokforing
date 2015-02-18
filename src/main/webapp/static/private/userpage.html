@@ -1,0 +1,40 @@
+
+<!--Body content-->
+<div>
+   
+    <h2>User page</h2>
+    <div ng-show="session.status === 'online'">
+        <table class="table">
+            <tr>
+                <td>Status:</td>
+                <td>
+                    {{session.status}}
+                </td>
+            </tr>
+            <tr>
+                <td>Username:</td>
+                <td>
+                    {{session.user.username}}
+                </td>
+            </tr>
+            <tr>
+                <td>Session id:</td>
+                <td>
+                    {{session.user.sessionid}}
+                </td>
+            </tr>
+            <tr>
+                <td>Level:</td>
+                <td>
+                    {{session.user.level}}
+                </td>
+            </tr>
+        </table>
+        <div class="btn-group">
+            <input type="button" value="Log out" class="btn btn-default" ng-click="logout()"/>
+        </div>
+    </div>
+    <div class="alert alert-danger" ng-show="session.status === 'offline'">
+        Du måste vara inloggad för att visa denna sida!
+    </div>
+</div>
