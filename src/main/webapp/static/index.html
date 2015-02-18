@@ -1,10 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" ng-app="Bok">
     <head>
-        <title>Start Page</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Bok</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="../libs/jquery/jquery.js"></script>
+        <script src="../libs/angular/angular.js"></script>
+        <script src="../libs/angular/angular-animate.js"></script>
+        <script src="../libs/angular/angular-route.js"></script>
+        <script src="../libs/angular/angular-resource.js"></script>
+        <script src="../include/js/app.js"></script>   
+        <script src="../include/js/controllers.js"></script>  
+        <script src="../include/js/services.js"></script>  
+        <link rel="stylesheet" type="text/css" href="../libs/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="../include/css/default.css">
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <header class="container">
+            <hgroup>
+                <h1>Super-<span style="color:blue">Booky</span></h1>
+                <h2><i>Because you're worth it</i></h2>
+            </hgroup>
+        </header>
+        <div class="mynav">
+            <nav class="container" role="navigation">
+                <a class="navbar-brand" href="#">Home</a>
+                <a class="navbar-brand" href="#/login">Login</a>
+                <a class="navbar-brand" href="#/userpage">Userpage</a>
+            </nav>
+        </div>
+        <div class="container">
+            <!-- Include the view template for the current route -->
+            <div ng-view ></div>
+        </div>
     </body>
 </html>

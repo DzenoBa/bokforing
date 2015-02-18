@@ -19,7 +19,7 @@ bok.config(['$routeProvider',
                     controller: 'LoginCtrl'
                 }).
                 when('/userpage', {
-                    templateUrl: 'userpage.html',
+                    templateUrl: 'private/userpage.html',
                     controller: 'UserPageCtrl'
                 }).
                 otherwise({

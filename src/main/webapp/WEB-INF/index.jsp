@@ -29,5 +29,8 @@
             <br>sidor, och sedan få det man skrev in skickat tillbaka
             <br>genom JSON.
         </p>
+        <p>
+        <h1><a href="/bokforing/static">LOGIN</a></h1>
+        </p>
     </body>
 </html>
