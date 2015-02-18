@@ -1,0 +1,27 @@
+/*
+*  Simple CSS
+*/
+
+header {
+    ;
+}
+
+.mynav {
+    background:#EFEFEF;
+}
+nav a {
+    color:#000000;
+}
+nav a:hover {
+    background:#DCDCDC;
+}
+
+footer {
+    bottom:10px;
+    height:30px;
+    width: 800px;
+}
+
+.error {
+    color: #d9534f;
+}
