@@ -12,6 +12,6 @@
         <title>Test part 2</title>
     </head>
     <body>
-        <h1>This is file "test3" even though you tried to access test2.</h1>
+        <h1>This is file "test3.jsp" even though you tried to access test2.</h1>
     </body>
 </html>
