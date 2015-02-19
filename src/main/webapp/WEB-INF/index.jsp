@@ -30,7 +30,7 @@
             <br>genom JSON.
         </p>
         <p>
-        <h1><a href="/bokforing/public/static">LOGIN</a></h1>
+        <h1><a href="/bokforing/public/static/index.html">LOGIN</a></h1>
         </p>
     </body>
 </html>
