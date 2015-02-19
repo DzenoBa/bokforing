@@ -23,7 +23,7 @@ bok.config(['$routeProvider',
                     controller: 'UserPageCtrl'
                 }).
                 otherwise({
-                    redirectTo: '/index.html'
+                    redirectTo: 'index.html'
                 });
 
     }]);
