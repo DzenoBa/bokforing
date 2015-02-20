@@ -43,9 +43,9 @@ public class DatabaseConfiguration {
         
         Properties properties = new Properties();
         ds.setDriverClassName("org.apache.derby.jdbc.ClientDriver");
-        ds.setUrl("jdbc:derby://localhost:8080/bokforing");
-        ds.setUsername("admin");
-        ds.setPassword("password");
+        ds.setUrl("jdbc:derby://localhost:1527/bokforing;create=true");
+        ds.setUsername("app");
+        ds.setPassword("app");
         
         return ds;
     }
@@ -58,7 +58,7 @@ public class DatabaseConfiguration {
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan("se.chalmers.bokforing.model"); // this is where spring should search for entities
+        factory.setPackagesToScan("se.chalmers.bokforing.rep"); // this is where spring should search for entities
         factory.setJpaProperties(getJPAProperties());
         factory.setDataSource(dataSource());
         factory.afterPropertiesSet();

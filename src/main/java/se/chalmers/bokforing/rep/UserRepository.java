@@ -15,11 +15,12 @@ public interface UserRepository extends JpaRepository<UserEnt,Long> {
     //Get a single user
     UserEnt findById(Integer id);
     List<UserEnt> findByName(String name);
-    List<UserEnt> findByEmailAddress(String emailAddress);
-    List<UserEnt> findByGroup(String group);
+   /* List<UserEnt> findByEmail(String emailAddress);
+    List<UserEnt> findByGroup2(String group);
     @Modifying
     @Query("update UserEnt u set u.date = ?1 where u.id = ?2")
-    int setFixedDateFor(Date d, Integer id);    
+    int setFixedDateFor(Date d, Integer id);
+    */
 }
   
 
