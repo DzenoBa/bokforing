@@ -8,6 +8,7 @@ package se.chalmers.bokforing.springstuff;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -21,7 +22,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "se.chalmers.bokforing")
+@EnableJpaRepositories("se.chalmers.bokforing.rep")
+@ComponentScan(basePackages = {"se.chalmers.bokforing","se.chalmers.bokforing.rep"})
 public class WebConfig extends WebMvcConfigurerAdapter {
     
     @Override
