@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Import;
  * @author Jakob
  */
 @Configuration
-@Import(WebConfig.class)
+@Import({WebConfig.class, DatabaseConfiguration.class})
 public class ApplicationConfig {
     
     /**
