@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author Jakob
  */
 @Configuration
-@EnableJpaRepositories(basePackages = "se.chalmers.bokforing.model")
+@EnableJpaRepositories(basePackages = "se.chalmers.bokforing.rep")
 @PropertySource(value = "classpath:application.properties")
 @EnableTransactionManagement
 public class DatabaseConfiguration {
@@ -55,6 +55,7 @@ public class DatabaseConfiguration {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setGenerateDdl(true);
         vendorAdapter.setDatabase(Database.DERBY);
+        vendorAdapter.setShowSql(true);
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);

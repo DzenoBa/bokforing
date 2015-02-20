@@ -1,6 +1,5 @@
 package se.chalmers.bokforing;
 
-import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
@@ -12,6 +11,9 @@ import se.chalmers.bokforing.rep.UserRepository;
 @Controller
 public class ControllerTest {
 
+    @Autowired
+    private UserRepository userRep;
+    
     /**
      * Request mapping for user
      * @return 
@@ -20,14 +22,15 @@ public class ControllerTest {
     public ModelAndView getUsersView() {
         String stringToSend = "<br><div align='center'>"
                 + "<h3>Hello, World!</h3>Bokföring?<br><br>";
-        userRep.save(new UserEnt());
-        return new ModelAndView("test", "message", userRep.findById(0).toString());
+        UserEnt user = new UserEnt();
+        user.setId(0);
+        user.setName("Johan");
+        
+        UserEnt user2 = new UserEnt();
+        user2.setId(1);
+        user2.setName("Apa");
+        user2.setPass("password");
+        userRep.save(user);
+        return new ModelAndView("test", "message", userRep.findByName("Johan").toString());
     }
-    
-    @Autowired
-    UserRepository userRep;
-    
-    //@Autowired
-    //EntityManager eM;
-
 }

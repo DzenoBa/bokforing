@@ -23,7 +23,6 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
  */
 @Configuration
 @EnableWebMvc
-@EnableJpaRepositories("se.chalmers.bokforing.rep")
 @ComponentScan(basePackages = {"se.chalmers.bokforing","se.chalmers.bokforing.rep"})
 public class WebConfig extends WebMvcConfigurerAdapter {
     

@@ -19,11 +19,12 @@ import javax.persistence.Temporal;
  * @author victor
  */
 @Entity
-public class UserEnt implements Serializable{
+public class UserEnt implements Serializable {
+
     @Id
     @GeneratedValue
     private Integer id;
-    
+
     private Integer sesId;
     private String name;
     private String pass;
@@ -32,27 +33,6 @@ public class UserEnt implements Serializable{
     private String group2;//Group String? Maybe we should define our own Group class. But string will do for now
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastLogIn;
-    
-
-    void updateDate(){
-	Calendar calendar = new GregorianCalendar();
-        setLastLogIn(calendar.getTime());
-    }
-    Date getDate(){
-        return getLastLogIn();
-    }
-    
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Id: " + getId().toString() + "\n");
-        sb.append("Session Id: " + getSesId().toString() + "\n");
-        sb.append("Name: " + getName() + "\n");
-        sb.append("Email: " + getEmail() + "\n");
-        sb.append("Group: " + getGroup2() + "\n");
-        sb.append("Last login: " + getLastLogIn().toString());
-        return sb.toString();
-    }
 
     /**
      * @return the id
@@ -66,20 +46,6 @@ public class UserEnt implements Serializable{
      */
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    /**
-     * @return the sesId
-     */
-    public Integer getSesId() {
-        return sesId;
-    }
-
-    /**
-     * @param sesId the sesId to set
-     */
-    public void setSesId(Integer sesId) {
-        this.sesId = sesId;
     }
 
     /**
@@ -108,6 +74,20 @@ public class UserEnt implements Serializable{
      */
     public void setPass(String pass) {
         this.pass = pass;
+    }
+
+    /**
+     * @return the sesId
+     */
+    public Integer getSesId() {
+        return sesId;
+    }
+
+    /**
+     * @param sesId the sesId to set
+     */
+    public void setSesId(Integer sesId) {
+        this.sesId = sesId;
     }
 
     /**
@@ -151,5 +131,9 @@ public class UserEnt implements Serializable{
     public void setLastLogIn(Date lastLogIn) {
         this.lastLogIn = lastLogIn;
     }
-    
+
+    @Override
+    public String toString() {
+        return "UserEnt{" + "id=" + id + ", sesId=" + sesId + ", name=" + name + ", pass=" + pass + ", email=" + email + ", group2=" + group2 + ", lastLogIn=" + lastLogIn + '}';
+    }
 }
