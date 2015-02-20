@@ -3,6 +3,7 @@ package se.chalmers.bokforing.controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,6 +16,7 @@ import se.chalmers.bokforing.persistence.UserRepository;
  * 
  * @author Dženan
  */
+@Controller
 public class DDCtrl {
     
     @Autowired
@@ -23,7 +25,7 @@ public class DDCtrl {
     /*
      * SET
      */
-    @RequestMapping(value = "/set", method = RequestMethod.GET)
+    @RequestMapping(value = "/dd/set", method = RequestMethod.GET)
     public @ResponseBody FormJSON set() {
         System.out.println("* PING DD/get");
 

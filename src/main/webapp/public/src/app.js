@@ -6,7 +6,9 @@
 var bok = angular.module('Bok', [
     'ngRoute',
     'AuthControllers',
-    'AuthService'
+    'AuthService',
+    'DDControllers',
+    'DDService'
      // More here
 ]);
 
@@ -21,6 +23,10 @@ bok.config(['$routeProvider',
                 when('/userpage', {
                     templateUrl: 'private/userpage.html',
                     controller: 'UserPageCtrl'
+                }).
+                when('/dd', {
+                    templateUrl: 'dd.html',
+                    controller: 'DDCtrl'
                 }).
                 otherwise({
                     redirectTo: 'index.html'
