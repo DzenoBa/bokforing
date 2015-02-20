@@ -20,7 +20,7 @@ import se.chalmers.bokforing.jsonobject.UserJSON;
 @Controller
 @RequestMapping("auth")
 //@ComponentScan("se.chalmers.bokforing")
-public class AuthCtrl {
+public class AuthController {
     
     // TODO
     //@Autowired private AuthSession authSession;
@@ -49,7 +49,7 @@ public class AuthCtrl {
             return form;
         }
         else if(!user.getPasswd().equals("passwd")) {
-            form.addError("passwd", "Lösenorder är fel!");
+            form.addError("passwd", "Lösenordet är fel!");
             return form;
         }
         
