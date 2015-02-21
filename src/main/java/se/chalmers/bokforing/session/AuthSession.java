@@ -47,6 +47,13 @@ public class AuthSession implements Serializable {
         this.level = level;
     }
     
+    public void setSession(String username, String sessionid, String level) {
+        status = true;
+        this.username = username;
+        this.sessionid = sessionid;
+        this.level = level;
+    }
+    
     public void clearSession() {
         status = false;
         username = null;
