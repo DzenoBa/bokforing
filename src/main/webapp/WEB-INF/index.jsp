@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        
+        <base href="${pageContext.request.contextPath}/" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
@@ -30,7 +30,7 @@
             <br>genom JSON.
         </p>
         <p>
-        <h1><a href="/bokforing/public/static">LOGIN</a></h1>
+        <h1><a href="/bokforing/public/static/index.html">LOGIN</a></h1>
         </p>
     </body>
 </html>
