@@ -23,7 +23,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"se.chalmers.bokforing.controller", "se.chalmers.bokforing.persistence"})
+@ComponentScan(basePackages = {"se.chalmers.bokforing.controller", "se.chalmers.bokforing.persistence", "se.chalmers.bokforing.session"})
 public class WebConfig extends WebMvcConfigurerAdapter {
     
     @Override

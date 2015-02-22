@@ -2,7 +2,6 @@
 package se.chalmers.bokforing.controller;
 
 import java.util.List;
-import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
@@ -11,7 +10,7 @@ import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
 import se.chalmers.bokforing.persistence.UserEnt;
 import se.chalmers.bokforing.persistence.UserRepository;
-//import se.chalmers.bokforing.session.AuthSession;
+import se.chalmers.bokforing.session.AuthSession;
 
 /**
  * AUTH-CONTROLLER
@@ -22,8 +21,8 @@ import se.chalmers.bokforing.persistence.UserRepository;
 @Controller
 public class AuthController {
     
-    // TODO
-    //@Autowired private AuthSession authSession;
+    @Autowired 
+    private AuthSession authSession;
     
     @Autowired
     private UserRepository userRepo;
@@ -32,7 +31,7 @@ public class AuthController {
      * LOGIN
      */
     @RequestMapping(value = "/auth/login", method = RequestMethod.POST)
-    public @ResponseBody FormJSON login(HttpSession session, @RequestBody final UserJSON user) {
+    public @ResponseBody FormJSON login(@RequestBody final UserJSON user) {
         System.out.println("* PING auth/login");
         FormJSON form = new FormJSON();
         
@@ -63,7 +62,7 @@ public class AuthController {
         /* LOGIN SUCCESSFUL
          * Store user in session 
          */
-        session.setAttribute("user", new UserJSON(userEnt.getName(), "sesid", userEnt.getGroup2()));
+        authSession.setSession(userEnt.getName(), "randomSesId", userEnt.getGroup2());
         return form;
     }
     
@@ -72,25 +71,22 @@ public class AuthController {
      * Check if the user is online or offline
      */
     @RequestMapping(value = "/auth/status", method = RequestMethod.GET)
-    public @ResponseBody boolean status(HttpSession session) {
+    public @ResponseBody boolean status() {
         System.out.println("* PING auth/status");
 
-        if(session.getAttribute("user") != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return authSession.getStatus();
     }
     
     /*
      * GET
      */
     @RequestMapping(value = "/auth/get", method = RequestMethod.GET)
-    public @ResponseBody UserJSON get(HttpSession session) {
+    public @ResponseBody UserJSON get() {
         System.out.println("* PING auth/get");
 
-        if(session.getAttribute("user") != null) {
-            return (UserJSON) session.getAttribute("user");
+        if(authSession.getStatus()) {
+            return new UserJSON(authSession.getUsername(), 
+                    authSession.getSessionid(), authSession.getLevel());
         } else {
             return null;
         }
@@ -100,10 +96,10 @@ public class AuthController {
      * LOGOUT
      */
     @RequestMapping(value = "/auth/logout", method = RequestMethod.GET) // GET?
-    public @ResponseBody boolean logout(HttpSession session) {
+    public @ResponseBody boolean logout() {
         System.out.println("* PING auth/logout");
         // REMOVE USER FROM SESSION
-        session.removeAttribute("user");
+        authSession.clearSession();
         return true;
     }
 }
