@@ -23,15 +23,10 @@ public class ControllerTest {
         String stringToSend = "<br><div align='center'>"
                 + "<h3>Hello, World!</h3>Bokföring?<br><br>";
         UserEnt user = new UserEnt();
-        user.setId(0);
-        user.setName("Johan");
-        
-        UserEnt user2 = new UserEnt();
-        user2.setId(1);
-        user2.setName("Apa");
-        user2.setPass("password");
+        user.setName("Victor");
+        user.setEmail("whoop");
         userRep.save(user);
-        return new ModelAndView("test", "message", userRep.findByName("Johan").toString());
+        return new ModelAndView("test", "message", userRep.findByName("Victor").toString());
     }
     
     @RequestMapping("/test2")

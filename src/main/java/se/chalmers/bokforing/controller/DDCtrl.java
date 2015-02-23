@@ -35,11 +35,10 @@ public class DDCtrl {
         if(userEntLs == null || userEntLs.isEmpty()) {
             // CREATE A NEW USER
             UserEnt u = new UserEnt();
-            u.setId(2);
             u.setName("Dzeno");
             u.setEmail("dzeno@bazdar.ba");
             u.setPass("passwd");
-            u.setGroup2("Admin");
+            u.setGroup("Admin");
             userRepo.save(u);
             
             return form;

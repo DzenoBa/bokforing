@@ -62,7 +62,7 @@ public class AuthController {
         /* LOGIN SUCCESSFUL
          * Store user in session 
          */
-        authSession.setSession(userEnt.getName(), "randomSesId", userEnt.getGroup2());
+        authSession.setSession(userEnt.getName(), "randomSesId", userEnt.getGroup());
         return form;
     }
     

@@ -1,13 +1,8 @@
 package se.chalmers.bokforing.persistence;
 
-import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.repository.*;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.*;
-
-
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEnt,Long> {
