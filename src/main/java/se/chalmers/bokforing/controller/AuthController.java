@@ -26,7 +26,7 @@ public class AuthController {
     private AuthSession authSession;
     
     @Autowired
-    private UserRepository userRep;
+    private UserDb userDb;
     
     /*
      * LOGIN
@@ -41,7 +41,7 @@ public class AuthController {
             form.addError("username", "Du har inte angett något användarnamn!");
             return form;
         }
-        List<UserEnt> userEntLs = UserDb.getUsersByName(userRep,user.getUsername());
+        List<UserEnt> userEntLs = userDb.getUsersByName(user.getUsername());
         if(userEntLs == null || userEntLs.isEmpty()) {
             form.addError("username", "Användarnamnet existerar inte!");
             return form;

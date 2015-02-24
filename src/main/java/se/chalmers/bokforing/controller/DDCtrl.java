@@ -19,8 +19,9 @@ import se.chalmers.bokforing.persistence.UserRepository;
  */
 @Controller
 public class DDCtrl {
+
     @Autowired
-    private UserRepository userRep;
+    private UserDb userDb;
     
     /*
      * SET
@@ -31,7 +32,7 @@ public class DDCtrl {
 
         FormJSON form = new FormJSON();
 
-        List<UserEnt> userEntLs = UserDb.getUsersByName(userRep,"Dzeno");
+        List<UserEnt> userEntLs = userDb.getUsersByName("Dzeno");
         
         if(userEntLs == null || userEntLs.isEmpty()) {
             // CREATE A NEW USER
@@ -40,7 +41,7 @@ public class DDCtrl {
             u.setEmail("dzeno@bazdar.ba");
             u.setPass("passwd");
             u.setGroup(UserEnt.Group.Admin);
-            UserDb.storeUser(userRep,u);
+            userDb.storeUser(u);
             
             return form;
         }

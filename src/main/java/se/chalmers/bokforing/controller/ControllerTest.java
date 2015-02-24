@@ -11,8 +11,9 @@ import se.chalmers.bokforing.persistence.UserRepository;
 
 @Controller
 public class ControllerTest {
-     @Autowired
-    private UserRepository userRep;
+    
+    @Autowired
+    private UserDb userDb;
 
     /**
      * Request mapping for user
@@ -26,8 +27,8 @@ public class ControllerTest {
         user.setName("Victor");
         user.setEmail("whoop");
         user.setPass("whoop");
-        UserDb.storeUser(userRep,user);
-        return new ModelAndView("test", "message", UserDb.getUsersByName(userRep,"Victor").toString());
+        userDb.storeUser(user);
+        return new ModelAndView("test", "message", userDb.getUsersByName("Victor").toString());
     }
     
     @RequestMapping("/test2")
