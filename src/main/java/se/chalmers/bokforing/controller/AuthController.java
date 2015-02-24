@@ -4,6 +4,7 @@ package se.chalmers.bokforing.controller;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
@@ -37,11 +38,20 @@ public class AuthController {
         System.out.println("* PING auth/login");
         FormJSON form = new FormJSON();
         
-        // USERNAME CHECK
+        // EMAIL CHECK
         if(user.getEmail() == null || user.getEmail().isEmpty()) {
             form.addError("email", "Du har inte angett någon e-post adress!");
             return form;
         }
+        // CHECK IF VALID EMAIL
+        String regexEmail = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        Pattern patternEmail = Pattern.compile(regexEmail);
+        if(!(patternEmail.matcher(user.getEmail()).find())) {
+            form.addError("email", "Vänligen ange en e-post adress!");
+            return form;
+        }
+        // CHECK IF EMAIL EXIST
         UserEnt userEnt= userDb.getUser(user.getEmail());
         if(userEnt == null) {
             form.addError("email", "E-post adressen existerar inte!");
