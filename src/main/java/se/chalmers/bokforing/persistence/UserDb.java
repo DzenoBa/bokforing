@@ -11,43 +11,48 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author victor
  */
+@Service
 public class UserDb {
-
+    
     @Autowired
-    private static UserRepository userRep;
+    private UserRepository userRep;
 
-    public static List<UserEnt> getUsersByName(String name) {
+    public List<UserEnt> getUsersByName(String name) {
         return userRep.findByName(name);
     }
-
+    
     /**
      * Get a user by email
      *
+     * @param userRep
      * @param email of the User
      * @return
      */
-    public static UserEnt getUser(String email) {
+    public UserEnt getUser(String email) {
         return userRep.findByEmail(email);
     }
 
     /**
      * Gets a user by email and password
      *
+     * @param userRep
      * @param email of the User
      * @param pass Unencrypted password of the user
      * @return
      */
-    public static UserEnt getUser(String email, String pass) {
+    public UserEnt getUser(String email, String pass) {
         pass = encryptString(pass);
         return userRep.findByEmailAndPass(email, pass);
     }
 
-    public static void storeUser(UserEnt user) {
+    public void storeUser(UserEnt user) {
         //TODO Check if the user is vaild
         String pass = user.getPass();
         if (user.getEmail() != null && !user.getEmail().equals("")
@@ -61,7 +66,7 @@ public class UserDb {
         }
     }
 
-    private static String encryptString(String stringToEncrypt) {
+    private String encryptString(String stringToEncrypt) {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
             messageDigest.update(stringToEncrypt.getBytes());
