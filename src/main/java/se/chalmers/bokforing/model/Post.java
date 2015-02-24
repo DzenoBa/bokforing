@@ -15,9 +15,10 @@ public class Post {
     private Sum sum;
     private Account account;
     private Calendar date;
+    
     public Post(Calendar date, int sum, int account, enum type){
         this.date = date;
         this.account = new Account(account);
-        this.sum = new Sum(sum);
+        this.sum = new Sum(sum, type);
     }
 }
