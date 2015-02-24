@@ -1,6 +1,8 @@
 
 package se.chalmers.bokforing.controller;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +12,6 @@ import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
 import se.chalmers.bokforing.persistence.UserDb;
 import se.chalmers.bokforing.persistence.UserEnt;
-import se.chalmers.bokforing.persistence.UserRepository;
 import se.chalmers.bokforing.session.AuthSession;
 
 /**
@@ -55,7 +56,8 @@ public class AuthController {
             form.addError("passwd", "Du har inte angett något lösenord!");
             return form;
         }
-        else if(!user.getPasswd().equals(userEnt.getPass())) {
+        String hashPasswd = hash(user.getPasswd());
+        if(!hashPasswd.equals(userEnt.getPass())) {
             form.addError("passwd", "Lösenordet är fel!");
             return form;
         }
@@ -102,5 +104,15 @@ public class AuthController {
         // REMOVE USER FROM SESSION
         authSession.clearSession();
         return true;
+    }
+    
+    private String hash(String plaintext) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(plaintext.getBytes());
+            return new String(hash);
+        } catch(NoSuchAlgorithmException e) {
+            return "";
+        }        
     }
 }
