@@ -18,7 +18,9 @@ import javax.persistence.Temporal;
  */
 @Entity
 public class UserEnt implements Serializable {
-
+public enum Group {
+    Admin,User
+}
     /** Name of the user */
     private String name;
     /** The password of the user */
@@ -29,7 +31,7 @@ public class UserEnt implements Serializable {
     private String email;
     //Group is a taken word. We cannot have it as a column name.
     @Column(name="group2")
-    private String group;//Group String? Maybe we should define our own Group class. But string will do for now
+    private Group group;//Group String? Maybe we should define our own Group class. But string will do for now
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastLogIn;
 
@@ -78,14 +80,14 @@ public class UserEnt implements Serializable {
     /**
      * @return the group
      */
-    public String getGroup() {
+    public Group getGroup() {
         return group;
     }
 
     /**
      * @param group the group to set
      */
-    public void setGroup(String group) {
+    public void setGroup(Group group) {
         this.group = group;
     }
 

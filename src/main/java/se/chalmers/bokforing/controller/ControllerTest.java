@@ -1,15 +1,19 @@
 package se.chalmers.bokforing.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import se.chalmers.bokforing.persistence.UserDb;
 import se.chalmers.bokforing.persistence.UserEnt;
+import se.chalmers.bokforing.persistence.UserRepository;
 
 @Controller
 public class ControllerTest {
-    
+     @Autowired
+    private UserRepository userRep;
+
     /**
      * Request mapping for user
      * @return 
@@ -21,8 +25,9 @@ public class ControllerTest {
         UserEnt user = new UserEnt();
         user.setName("Victor");
         user.setEmail("whoop");
-        UserDb.storeUser(user);
-        return new ModelAndView("test", "message", UserDb.getUser(user.getEmail(), user.getPass()));
+        user.setPass("whoop");
+        UserDb.storeUser(userRep,user);
+        return new ModelAndView("test", "message", UserDb.getUsersByName(userRep,"Victor").toString());
     }
     
     @RequestMapping("/test2")

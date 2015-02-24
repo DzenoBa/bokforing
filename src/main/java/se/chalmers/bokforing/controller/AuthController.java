@@ -10,6 +10,7 @@ import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
 import se.chalmers.bokforing.persistence.UserDb;
 import se.chalmers.bokforing.persistence.UserEnt;
+import se.chalmers.bokforing.persistence.UserRepository;
 import se.chalmers.bokforing.session.AuthSession;
 
 /**
@@ -24,6 +25,8 @@ public class AuthController {
     @Autowired 
     private AuthSession authSession;
     
+    @Autowired
+    private UserRepository userRep;
     
     /*
      * LOGIN
@@ -38,7 +41,7 @@ public class AuthController {
             form.addError("username", "Du har inte angett något användarnamn!");
             return form;
         }
-        List<UserEnt> userEntLs = UserDb.getUsersByName(user.getUsername());
+        List<UserEnt> userEntLs = UserDb.getUsersByName(userRep,user.getUsername());
         if(userEntLs == null || userEntLs.isEmpty()) {
             form.addError("username", "Användarnamnet existerar inte!");
             return form;
@@ -60,7 +63,7 @@ public class AuthController {
         /* LOGIN SUCCESSFUL
          * Store user in session 
          */
-        authSession.setSession(userEnt.getName(), "randomSesId", userEnt.getGroup());
+        authSession.setSession(userEnt.getName(), "randomSesId", userEnt.getGroup().toString());
         return form;
     }
     

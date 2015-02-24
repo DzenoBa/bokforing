@@ -10,7 +10,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
@@ -18,36 +17,35 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class UserDb {
 
-    @Autowired
-    private static UserRepository userRep;
-
-    public static List<UserEnt> getUsersByName(String name) {
+    public static List<UserEnt> getUsersByName(UserRepository userRep,String name) {
         return userRep.findByName(name);
     }
-
+    
     /**
      * Get a user by email
      *
+     * @param userRep
      * @param email of the User
      * @return
      */
-    public static UserEnt getUser(String email) {
+    public static UserEnt getUser(UserRepository userRep,String email) {
         return userRep.findByEmail(email);
     }
 
     /**
      * Gets a user by email and password
      *
+     * @param userRep
      * @param email of the User
      * @param pass Unencrypted password of the user
      * @return
      */
-    public static UserEnt getUser(String email, String pass) {
+    public static UserEnt getUser(UserRepository userRep,String email, String pass) {
         pass = encryptString(pass);
         return userRep.findByEmailAndPass(email, pass);
     }
 
-    public static void storeUser(UserEnt user) {
+    public static void storeUser(UserRepository userRep,UserEnt user) {
         //TODO Check if the user is vaild
         String pass = user.getPass();
         if (user.getEmail() != null && !user.getEmail().equals("")
