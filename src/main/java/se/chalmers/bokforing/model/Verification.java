@@ -11,7 +11,9 @@ package se.chalmers.bokforing.model;
  */
 public class Verification {
     private Post[] posts;
-    public Verification(){
-        
+    private int verificationNbr;
+    public Verification(int verificationNbr, Post[] posts){
+        this.verificationNbr = verifikationNbr;
+        this.posts = posts;
     }
 }

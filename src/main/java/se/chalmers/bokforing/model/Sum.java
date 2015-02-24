@@ -11,9 +11,11 @@ package se.chalmers.bokforing.model;
  */
 public class Sum {
     private int value;
+    private PostType type;
     
-    public Sum(int value){
+    public Sum(int value, enum type){
         this.value = value;
+        this.type = type;
     }
     
 
