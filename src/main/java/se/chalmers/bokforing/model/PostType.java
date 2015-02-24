@@ -9,13 +9,6 @@ package se.chalmers.bokforing.model;
  *
  * @author Isabelle
  */
-public class Sum {
-    private int value;
-    
-    public Sum(int value){
-        this.value = value;
-    }
-    
-
-            
+public enum PostType {
+    DEBET,KREDIT;
 }

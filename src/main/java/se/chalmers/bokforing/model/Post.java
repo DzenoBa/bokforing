@@ -14,7 +14,10 @@ import java.util.Calendar;
 public class Post {
     private Sum sum;
     private Account account;
-    public Post(Calendar date){
-        
+    private Calendar date;
+    public Post(Calendar date, int sum, int account){
+        this.date = date;
+        this.account = new Account(account);
+        this.sum = new Sum(sum);
     }
 }
