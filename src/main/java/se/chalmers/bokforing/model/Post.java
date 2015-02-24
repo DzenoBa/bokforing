@@ -16,7 +16,7 @@ public class Post {
     private Account account;
     private Calendar date;
     
-    public Post(Calendar date, int sum, int account, enum type){
+    public Post(Calendar date, int sum, int account, Enum type){
         this.date = date;
         this.account = new Account(account);
         this.sum = new Sum(sum, type);

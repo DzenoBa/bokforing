@@ -18,7 +18,7 @@ public class Account {
         this.number = number;
         this.name = name;
     }
-    //Constructor for assigning a post an existing account 
+    //Constructor for assigning a post to an existing account 
     public Account(int number){
         this.number = number;
         

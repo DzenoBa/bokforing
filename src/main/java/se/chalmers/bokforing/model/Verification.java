@@ -13,7 +13,7 @@ public class Verification {
     private Post[] posts;
     private int verificationNbr;
     public Verification(int verificationNbr, Post[] posts){
-        this.verificationNbr = verifikationNbr;
+        this.verificationNbr = verificationNbr;
         this.posts = posts;
     }
 }

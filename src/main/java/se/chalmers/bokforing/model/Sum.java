@@ -13,11 +13,9 @@ public class Sum {
     private int value;
     private PostType type;
     
-    public Sum(int value, enum type){
+    public Sum(int value, Enum type){
         this.value = value;
-        this.type = type;
+        this.type = (PostType) type;
     }
-    
-
-            
+              
 }
