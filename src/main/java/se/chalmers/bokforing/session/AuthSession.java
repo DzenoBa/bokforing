@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class AuthSession implements Serializable {
     
     private boolean status = false;
-    private String username;
+    private String email;
     private String sessionid;
     private String level;
     
@@ -26,11 +26,11 @@ public class AuthSession implements Serializable {
         this.status = status;
     }
     
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String email) {
+        this.email = email;
     }
     
     public String getSessionid() {
@@ -47,16 +47,16 @@ public class AuthSession implements Serializable {
         this.level = level;
     }
     
-    public void setSession(String username, String sessionid, String level) {
+    public void setSession(String email, String sessionid, String level) {
         status = true;
-        this.username = username;
+        this.email = email;
         this.sessionid = sessionid;
         this.level = level;
     }
     
     public void clearSession() {
         status = false;
-        username = null;
+        email = null;
         sessionid = null;
         level = null;
     }

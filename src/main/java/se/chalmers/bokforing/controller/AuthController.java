@@ -38,18 +38,15 @@ public class AuthController {
         FormJSON form = new FormJSON();
         
         // USERNAME CHECK
-        if(user.getUsername() == null || user.getUsername().isEmpty()) {
-            form.addError("username", "Du har inte angett något användarnamn!");
+        if(user.getEmail() == null || user.getEmail().isEmpty()) {
+            form.addError("email", "Du har inte angett någon e-post adress!");
             return form;
         }
-        List<UserEnt> userEntLs = userDb.getUsersByName(user.getUsername());
-        if(userEntLs == null || userEntLs.isEmpty()) {
-            form.addError("username", "Användarnamnet existerar inte!");
+        UserEnt userEnt= userDb.getUser(user.getEmail());
+        if(userEnt == null) {
+            form.addError("email", "E-post adressen existerar inte!");
             return form;
         }
-        
-        // GET USER FROM LIST
-        UserEnt userEnt = userEntLs.get(0);
         
         // PASSWORD CHECK
         if(user.getPasswd() == null || user.getPasswd().isEmpty()) {
@@ -65,7 +62,7 @@ public class AuthController {
         /* LOGIN SUCCESSFUL
          * Store user in session 
          */
-        authSession.setSession(userEnt.getName(), "randomSesId", userEnt.getGroup().toString());
+        authSession.setSession(userEnt.getEmail(), "randomSesId", userEnt.getGroup().toString());
         return form;
     }
     
@@ -88,7 +85,7 @@ public class AuthController {
         System.out.println("* PING auth/get");
 
         if(authSession.getStatus()) {
-            return new UserJSON(authSession.getUsername(), 
+            return new UserJSON(authSession.getEmail(), 
                     authSession.getSessionid(), authSession.getLevel());
         } else {
             return null;

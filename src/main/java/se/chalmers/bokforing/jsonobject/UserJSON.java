@@ -11,7 +11,7 @@ public class UserJSON implements Serializable{
     
     private static final long serialVersionUID = 1L;
         
-    private String username;
+    private String email;
     private String passwd;
     private String sessionid;
     private String level;
@@ -19,25 +19,25 @@ public class UserJSON implements Serializable{
     public UserJSON() {
         ;
     }
-    public UserJSON(String username, String passwd) {
-        this.username = username;
+    public UserJSON(String email, String passwd) {
+        this.email = email;
         this.passwd = passwd;
         this.sessionid = null;
         this.level = null;
     }
     
-    public UserJSON(String username, String sessionid, String level) {
-        this.username = username;
+    public UserJSON(String email, String sessionid, String level) {
+        this.email = email;
         this.passwd = null;
         this.sessionid = sessionid;
         this.level = level;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPasswd() {
