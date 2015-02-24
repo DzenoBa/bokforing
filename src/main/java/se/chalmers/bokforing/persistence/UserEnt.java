@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
 
@@ -20,15 +19,13 @@ import javax.persistence.Temporal;
 @Entity
 public class UserEnt implements Serializable {
 
-    @Id
-    @GeneratedValue
-    @Column(unique = true)
-    private Integer id;
-
-    private Integer sesId;
+    /** Name of the user */
     private String name;
+    /** The password of the user */
     private String pass;
+    @Id
     @Column(unique = true)
+    /** The unique email of the users */
     private String email;
     //Group is a taken word. We cannot have it as a column name.
     @Column(name="group2")
@@ -62,20 +59,6 @@ public class UserEnt implements Serializable {
      */
     public void setPass(String pass) {
         this.pass = pass;
-    }
-
-    /**
-     * @return the sesId
-     */
-    public Integer getSesId() {
-        return sesId;
-    }
-
-    /**
-     * @param sesId the sesId to set
-     */
-    public void setSesId(Integer sesId) {
-        this.sesId = sesId;
     }
 
     /**
@@ -122,6 +105,6 @@ public class UserEnt implements Serializable {
 
     @Override
     public String toString() {
-        return "UserEnt{" + "id=" + id + ", sesId=" + sesId + ", name=" + name + ", pass=" + pass + ", email=" + email + ", group2=" + group + ", lastLogIn=" + lastLogIn + '}';
+        return "UserEnt{ name=" + name + ", pass=" + pass + ", email=" + email + ", group=" + group + ", lastLogIn=" + lastLogIn + '}';
     }
 }

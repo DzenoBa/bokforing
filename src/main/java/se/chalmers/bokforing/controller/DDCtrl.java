@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import se.chalmers.bokforing.jsonobject.FormJSON;
+import se.chalmers.bokforing.persistence.UserDb;
 import se.chalmers.bokforing.persistence.UserEnt;
-import se.chalmers.bokforing.persistence.UserRepository;
 
 /**
  * Default Data Controller (DDCtrl)
@@ -19,9 +19,6 @@ import se.chalmers.bokforing.persistence.UserRepository;
 @Controller
 public class DDCtrl {
     
-    @Autowired
-    private UserRepository userRepo;
-    
     /*
      * SET
      */
@@ -30,7 +27,7 @@ public class DDCtrl {
         System.out.println("* PING DD/get");
 
         FormJSON form = new FormJSON();
-        List<UserEnt> userEntLs = userRepo.findByName("Dzeno");
+        List<UserEnt> userEntLs = UserDb.getUsersByName("Dzeno");
         
         if(userEntLs == null || userEntLs.isEmpty()) {
             // CREATE A NEW USER
@@ -39,7 +36,7 @@ public class DDCtrl {
             u.setEmail("dzeno@bazdar.ba");
             u.setPass("passwd");
             u.setGroup("Admin");
-            userRepo.save(u);
+            UserDb.storeUser(u);
             
             return form;
         }

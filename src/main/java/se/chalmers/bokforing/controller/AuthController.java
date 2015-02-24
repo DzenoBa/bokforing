@@ -8,8 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
+import se.chalmers.bokforing.persistence.UserDb;
 import se.chalmers.bokforing.persistence.UserEnt;
-import se.chalmers.bokforing.persistence.UserRepository;
 import se.chalmers.bokforing.session.AuthSession;
 
 /**
@@ -24,8 +24,6 @@ public class AuthController {
     @Autowired 
     private AuthSession authSession;
     
-    @Autowired
-    private UserRepository userRepo;
     
     /*
      * LOGIN
@@ -40,7 +38,7 @@ public class AuthController {
             form.addError("username", "Du har inte angett något användarnamn!");
             return form;
         }
-        List<UserEnt> userEntLs = userRepo.findByName(user.getUsername());
+        List<UserEnt> userEntLs = UserDb.getUsersByName(user.getUsername());
         if(userEntLs == null || userEntLs.isEmpty()) {
             form.addError("username", "Användarnamnet existerar inte!");
             return form;
