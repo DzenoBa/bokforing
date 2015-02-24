@@ -9,11 +9,6 @@ package se.chalmers.bokforing.model;
  *
  * @author Isabelle
  */
-public class Verification {
-    private Post[] posts;
-    private int verificationNbr;
-    public Verification(int verificationNbr, Post[] posts){
-        this.verificationNbr = verifikationNbr;
-        this.posts = posts;
-    }
+public enum PostType {
+    DEBET,KREDIT;
 }
