@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import se.chalmers.bokforing.jsonobject.FormJSON;
+import se.chalmers.bokforing.persistence.Group;
 import se.chalmers.bokforing.persistence.UserDb;
 import se.chalmers.bokforing.persistence.UserEnt;
 import se.chalmers.bokforing.persistence.UserRepository;
@@ -40,7 +41,7 @@ public class DDCtrl {
             u.setName("Dzeno");
             u.setEmail("dzeno@bazdar.ba");
             u.setPass("passwd");
-            u.setGroup(UserEnt.Group.Admin);
+            u.setGroup(Group.Admin);
             userDb.storeUser(u);
             
             return form;

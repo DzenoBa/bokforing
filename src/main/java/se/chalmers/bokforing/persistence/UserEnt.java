@@ -9,7 +9,10 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 
 /**
@@ -18,20 +21,23 @@ import javax.persistence.Temporal;
  */
 @Entity
 public class UserEnt implements Serializable {
-public enum Group {
-    Admin,User
-}
+  
     /** Name of the user */
     private String name;
+    
     /** The password of the user */
     private String pass;
+    
     @Id
     @Column(unique = true)
     /** The unique email of the users */
     private String email;
-    //Group is a taken word. We cannot have it as a column name.
+    
+    //Group is a reserved word. We cannot have it as a column name.   
     @Column(name="group2")
-    private Group group;//Group String? Maybe we should define our own Group class. But string will do for now
+    @Enumerated(EnumType.STRING)
+    private Group group;
+   
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastLogIn;
 
