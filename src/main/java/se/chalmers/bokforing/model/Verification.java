@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.model.verification;
+package se.chalmers.bokforing.model;
 
 /**
  *
  * @author Isabelle
  */
-public class Account {
-    
+public class Verification {
+    private Post[] posts;
+    public Verification(){
+        
+    }
 }
