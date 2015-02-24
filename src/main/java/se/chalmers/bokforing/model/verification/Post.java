@@ -5,10 +5,16 @@
  */
 package se.chalmers.bokforing.model.verification;
 
+import java.util.Calendar;
+
 /**
  *
  * @author Isabelle
  */
 public class Post {
-    
+    private Sum sum;
+    private Account account;
+    public Post(Calendar date){
+        
+    }
 }

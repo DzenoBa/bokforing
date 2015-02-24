@@ -10,5 +10,8 @@ package se.chalmers.bokforing.model.verification;
  * @author Isabelle
  */
 public class Sum {
-    
+    public Sum(){
+        
+    }
+            
 }
