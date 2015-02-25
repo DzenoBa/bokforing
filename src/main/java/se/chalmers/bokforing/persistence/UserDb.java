@@ -56,7 +56,7 @@ public class UserDb {
         //TODO Check if the user is vaild
         String email = user.getEmail();
         String pass = user.getPass();
-        if (email != null && email.equals("")
+        if (email != null && !email.equals("")
                 && pass != null && !pass.equals("")) {
             email = email.toLowerCase();
             user.setEmail(email);
