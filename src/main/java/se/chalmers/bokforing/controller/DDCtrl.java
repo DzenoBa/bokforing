@@ -32,12 +32,11 @@ public class DDCtrl {
 
         FormJSON form = new FormJSON();
 
-        List<UserEnt> userEntLs = userDb.getUsersByName("Dzeno");
+        UserEnt userEnt = userDb.getUser("dzeno@bazdar.ba");
         
-        if(userEntLs == null || userEntLs.isEmpty()) {
+        if(userEnt == null) {
             // CREATE A NEW USER
             UserEnt u = new UserEnt();
-            u.setName("Dzeno");
             u.setEmail("dzeno@bazdar.ba");
             u.setPass("passwd");
             u.setGroup(Group.Admin);
@@ -47,7 +46,7 @@ public class DDCtrl {
         }
         // USER ALREADY EXIST
         else {
-            form.addError("create", "Användaren 'Dzeno' finns redan i databasen!");
+            form.addError("create", "E-post adressen 'dzeno@bazdar.ba' finns redan i databasen!");
             
             return form;
         }

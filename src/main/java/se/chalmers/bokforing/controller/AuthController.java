@@ -1,7 +1,10 @@
 
 package se.chalmers.bokforing.controller;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
@@ -35,26 +38,33 @@ public class AuthController {
         System.out.println("* PING auth/login");
         FormJSON form = new FormJSON();
         
-        // USERNAME CHECK
-        if(user.getUsername() == null || user.getUsername().isEmpty()) {
-            form.addError("username", "Du har inte angett något användarnamn!");
+        // EMAIL CHECK
+        if(user.getEmail() == null || user.getEmail().isEmpty()) {
+            form.addError("email", "Du har inte angett någon e-post adress!");
             return form;
         }
-        List<UserEnt> userEntLs = userDb.getUsersByName(user.getUsername());
-        if(userEntLs == null || userEntLs.isEmpty()) {
-            form.addError("username", "Användarnamnet existerar inte!");
+        // CHECK IF VALID EMAIL
+        String regexEmail = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        Pattern patternEmail = Pattern.compile(regexEmail);
+        if(!(patternEmail.matcher(user.getEmail()).find())) {
+            form.addError("email", "Vänligen ange en e-post adress!");
             return form;
         }
-        
-        // GET USER FROM LIST
-        UserEnt userEnt = userEntLs.get(0);
+        // CHECK IF EMAIL EXIST
+        UserEnt userEnt= userDb.getUser(user.getEmail());
+        if(userEnt == null) {
+            form.addError("email", "E-post adressen existerar inte!");
+            return form;
+        }
         
         // PASSWORD CHECK
         if(user.getPasswd() == null || user.getPasswd().isEmpty()) {
             form.addError("passwd", "Du har inte angett något lösenord!");
             return form;
         }
-        else if(!user.getPasswd().equals(userEnt.getPass())) {
+        String hashPasswd = hash(user.getPasswd());
+        if(!hashPasswd.equals(userEnt.getPass())) {
             form.addError("passwd", "Lösenordet är fel!");
             return form;
         }
@@ -62,7 +72,7 @@ public class AuthController {
         /* LOGIN SUCCESSFUL
          * Store user in session 
          */
-        authSession.setSession(userEnt.getName(), "randomSesId", userEnt.getGroup().toString());
+        authSession.setSession(userEnt.getEmail(), "randomSesId", userEnt.getGroup().toString());
         return form;
     }
     
@@ -85,7 +95,7 @@ public class AuthController {
         System.out.println("* PING auth/get");
 
         if(authSession.getStatus()) {
-            return new UserJSON(authSession.getUsername(), 
+            return new UserJSON(authSession.getEmail(), 
                     authSession.getSessionid(), authSession.getLevel());
         } else {
             return null;
@@ -101,5 +111,15 @@ public class AuthController {
         // REMOVE USER FROM SESSION
         authSession.clearSession();
         return true;
+    }
+    
+    private String hash(String plaintext) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(plaintext.getBytes());
+            return new String(hash);
+        } catch(NoSuchAlgorithmException e) {
+            return "";
+        }        
     }
 }
