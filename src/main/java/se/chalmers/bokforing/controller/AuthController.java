@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import se.chalmers.bokforing.helperfunctions.HelpY;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
 import se.chalmers.bokforing.persistence.UserDb;
@@ -30,6 +31,7 @@ public class AuthController {
     @Autowired
     private UserDb userDb;
     
+    private HelpY helpy = new HelpY();
     /*
      * LOGIN
      */
@@ -72,7 +74,7 @@ public class AuthController {
         /* LOGIN SUCCESSFUL
          * Store user in session 
          */
-        authSession.setSession(userEnt.getEmail(), "randomSesId", userEnt.getGroup().toString());
+        authSession.setSession(userEnt.getEmail(), helpy.randomString(10), userEnt.getGroup().toString());
         return form;
     }
     
