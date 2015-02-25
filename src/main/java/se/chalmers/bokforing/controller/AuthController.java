@@ -1,6 +1,8 @@
 
 package se.chalmers.bokforing.controller;
 
+import java.security.Timestamp;
+import java.util.Date;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +31,7 @@ public class AuthController {
     private UserDb userDb;
     
     private HelpY helpy = new HelpY();
+    
     /*
      * LOGIN
      */
@@ -71,7 +74,13 @@ public class AuthController {
         /* LOGIN SUCCESSFUL
          * Store user in session 
          */
-        authSession.setSession(userEnt.getEmail(), helpy.randomString(10), userEnt.getGroup().toString());
+        String s_id = helpy.randomString(10);
+        authSession.setSession(userEnt.getEmail(), s_id, userEnt.getGroup().toString());
+        //Store session and timestamp in database
+        userEnt.setSessionid(s_id);
+        userEnt.setLastLogIn(new Date());
+        userDb.storeUser(userEnt);
+        
         return form;
     }
     
@@ -83,7 +92,7 @@ public class AuthController {
     public @ResponseBody boolean status() {
         System.out.println("* PING auth/status");
 
-        return authSession.getStatus();
+        return sessionCheck();
     }
     
     /*
@@ -93,7 +102,7 @@ public class AuthController {
     public @ResponseBody UserJSON get() {
         System.out.println("* PING auth/get");
 
-        if(authSession.getStatus()) {
+        if(sessionCheck()) {
             return new UserJSON(authSession.getEmail(), 
                     authSession.getSessionid(), authSession.getLevel());
         } else {
@@ -110,6 +119,30 @@ public class AuthController {
         // REMOVE USER FROM SESSION
         authSession.clearSession();
         return true;
+    }
+    
+    private boolean sessionCheck() {
+        
+        // CHECK IF USER IS ONLINE
+        if(authSession.getStatus()) {
+            UserEnt u = userDb.getUser(authSession.getEmail());
+            
+            // CHECK IF USER EXIST
+            if(u == null) {
+                authSession.clearSession();
+                return false;
+            }
+            
+            // CHECK IF THE SESSION IS CORRECT
+            if(!(u.getSessionid().equals(authSession.getSessionid()))) {
+                authSession.clearSession();
+                return false;
+            }
+            
+            // EVERYTHING SEEMS TO BE IN ORDER
+            return true;
+        }
+        return false;
     }
     
 }

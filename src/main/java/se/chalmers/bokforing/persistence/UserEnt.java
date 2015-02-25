@@ -38,6 +38,8 @@ public class UserEnt implements Serializable {
     @Enumerated(EnumType.STRING)
     private Group group;
    
+    private String sessionid;
+    
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastLogIn;
 
@@ -98,6 +100,20 @@ public class UserEnt implements Serializable {
     }
 
     /**
+     * @return String session id
+     */
+    public String getSessionid() {
+        return sessionid;
+    }
+    
+    /**
+     * @param sessionid 
+     */
+    public void setSessionid(String sessionid) {
+        this.sessionid = sessionid;
+    }
+    
+    /**
      * @return the lastLogIn
      */
     public Date getLastLogIn() {
@@ -113,6 +129,8 @@ public class UserEnt implements Serializable {
 
     @Override
     public String toString() {
-        return "UserEnt{ name=" + name + ", pass=" + pass + ", email=" + email + ", group=" + group + ", lastLogIn=" + lastLogIn + '}';
+        return "UserEnt{ name=" + name + ", pass=" + pass + ", email=" + email 
+                + ", group=" + group + ", sessionid=" + sessionid
+                + ", lastLogIn=" + lastLogIn + '}';
     }
 }
