@@ -11,7 +11,6 @@ import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.persistence.Group;
 import se.chalmers.bokforing.persistence.UserDb;
 import se.chalmers.bokforing.persistence.UserEnt;
-import se.chalmers.bokforing.persistence.UserRepository;
 
 /**
  * Default Data Controller (DDCtrl)

@@ -5,10 +5,6 @@
  */
 package se.chalmers.bokforing.persistence;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-
 /**
  *
  * @author Jakob

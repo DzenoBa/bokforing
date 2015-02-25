@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import se.chalmers.bokforing.persistence.UserDb;
 import se.chalmers.bokforing.persistence.UserEnt;
-import se.chalmers.bokforing.persistence.UserRepository;
 
 @Controller
 public class ControllerTest {
@@ -21,11 +20,18 @@ public class ControllerTest {
      */
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ModelAndView getUsersView() {
-        String stringToSend = "<br><div align='center'>"
-                + "<h3>Hello, World!</h3>Bokföring?<br><br>";
         UserEnt user = new UserEnt();
         user.setName("Victor");
         user.setEmail("whoop");
+        user.setPass("whoop");
+        userDb.storeUser(user);
+        user = new UserEnt();
+        user.setName("Victor");
+        user.setEmail("Whoop");
+        user.setPass("whoop");
+        userDb.storeUser(user);
+        user.setName("Victor");
+        user.setEmail("WHOOP");
         user.setPass("whoop");
         userDb.storeUser(user);
         return new ModelAndView("test", "message", userDb.getUsersByName("Victor").toString());

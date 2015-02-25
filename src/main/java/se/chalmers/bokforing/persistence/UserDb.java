@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
@@ -31,32 +30,36 @@ public class UserDb {
     /**
      * Get a user by email
      *
-     * @param userRep
      * @param email of the User
      * @return
      */
     public UserEnt getUser(String email) {
+        email = email.toLowerCase();
         return userRep.findByEmail(email);
     }
 
     /**
-     * Gets a user by email and password
+     * Gets a user by email and password.
+     * Thought to be used as an login attempt.
      *
-     * @param userRep
      * @param email of the User
      * @param pass Unencrypted password of the user
      * @return
      */
     public UserEnt getUser(String email, String pass) {
+        email = email.toLowerCase();
         pass = encryptString(pass);
         return userRep.findByEmailAndPass(email, pass);
     }
 
     public void storeUser(UserEnt user) {
         //TODO Check if the user is vaild
+        String email = user.getEmail();
         String pass = user.getPass();
-        if (user.getEmail() != null && !user.getEmail().equals("")
+        if (email != null && email.equals("")
                 && pass != null && !pass.equals("")) {
+            email = email.toLowerCase();
+            user.setEmail(email);
             pass = encryptString(pass);
             user.setPass(pass);
             userRep.save(user);

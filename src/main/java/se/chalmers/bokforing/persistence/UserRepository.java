@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEnt,Long> {
+interface UserRepository extends JpaRepository<UserEnt,Long> {
 
     /** Finds all user with this name
      * @param name
