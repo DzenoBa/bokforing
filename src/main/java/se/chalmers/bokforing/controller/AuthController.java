@@ -1,14 +1,14 @@
 
 package se.chalmers.bokforing.controller;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
+import java.security.Timestamp;
+import java.util.Date;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import se.chalmers.bokforing.helperfunctions.HelpY;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
 import se.chalmers.bokforing.persistence.UserDb;
@@ -29,6 +29,8 @@ public class AuthController {
     
     @Autowired
     private UserDb userDb;
+    
+    private HelpY helpy = new HelpY();
     
     /*
      * LOGIN
@@ -63,7 +65,7 @@ public class AuthController {
             form.addError("passwd", "Du har inte angett något lösenord!");
             return form;
         }
-        String hashPasswd = hash(user.getPasswd());
+        String hashPasswd = helpy.hash(user.getPasswd());
         if(!hashPasswd.equals(userEnt.getPass())) {
             form.addError("passwd", "Lösenordet är fel!");
             return form;
@@ -72,7 +74,13 @@ public class AuthController {
         /* LOGIN SUCCESSFUL
          * Store user in session 
          */
-        authSession.setSession(userEnt.getEmail(), "randomSesId", userEnt.getGroup().toString());
+        String s_id = helpy.randomString(10);
+        authSession.setSession(userEnt.getEmail(), s_id, userEnt.getGroup().toString());
+        //Store session and timestamp in database
+        userEnt.setSessionid(s_id);
+        userEnt.setLastLogIn(new Date());
+        userDb.storeUser(userEnt);
+        
         return form;
     }
     
@@ -84,7 +92,7 @@ public class AuthController {
     public @ResponseBody boolean status() {
         System.out.println("* PING auth/status");
 
-        return authSession.getStatus();
+        return sessionCheck();
     }
     
     /*
@@ -94,7 +102,7 @@ public class AuthController {
     public @ResponseBody UserJSON get() {
         System.out.println("* PING auth/get");
 
-        if(authSession.getStatus()) {
+        if(sessionCheck()) {
             return new UserJSON(authSession.getEmail(), 
                     authSession.getSessionid(), authSession.getLevel());
         } else {
@@ -113,13 +121,28 @@ public class AuthController {
         return true;
     }
     
-    private String hash(String plaintext) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hash = md.digest(plaintext.getBytes());
-            return new String(hash);
-        } catch(NoSuchAlgorithmException e) {
-            return "";
-        }        
+    private boolean sessionCheck() {
+        
+        // CHECK IF USER IS ONLINE
+        if(authSession.getStatus()) {
+            UserEnt u = userDb.getUser(authSession.getEmail());
+            
+            // CHECK IF USER EXIST
+            if(u == null) {
+                authSession.clearSession();
+                return false;
+            }
+            
+            // CHECK IF THE SESSION IS CORRECT
+            if(!(u.getSessionid().equals(authSession.getSessionid()))) {
+                authSession.clearSession();
+                return false;
+            }
+            
+            // EVERYTHING SEEMS TO BE IN ORDER
+            return true;
+        }
+        return false;
     }
+    
 }
