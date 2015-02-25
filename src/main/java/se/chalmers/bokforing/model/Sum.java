@@ -5,17 +5,60 @@
  */
 package se.chalmers.bokforing.model;
 
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  *
  * @author Isabelle
  */
-public class Sum {
+@Entity
+public class Sum implements Serializable {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+    
     private int value;
+    
+    @Enumerated(EnumType.STRING)
     private PostType type;
     
-    public Sum(int value, Enum type){
+    public Sum(int value, PostType type){
         this.value = value;
-        this.type = (PostType) type;
+        this.type = type;
     }
-              
+
+    /**
+     * @return the value
+     */
+    public int getValue() {
+        return value;
+    }
+
+    /**
+     * @param value the value to set
+     */
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    /**
+     * @return the type
+     */
+    public PostType getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(PostType type) {
+        this.type = type;
+    }
 }

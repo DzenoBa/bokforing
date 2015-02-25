@@ -10,5 +10,5 @@ package se.chalmers.bokforing.model;
  * @author Isabelle
  */
 public enum PostType {
-    DEBET,KREDIT;
+    Debit, Credit;
 }
