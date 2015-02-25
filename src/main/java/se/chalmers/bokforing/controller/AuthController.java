@@ -1,9 +1,6 @@
 
 package se.chalmers.bokforing.controller;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,7 +62,7 @@ public class AuthController {
             form.addError("passwd", "Du har inte angett något lösenord!");
             return form;
         }
-        String hashPasswd = hash(user.getPasswd());
+        String hashPasswd = helpy.hash(user.getPasswd());
         if(!hashPasswd.equals(userEnt.getPass())) {
             form.addError("passwd", "Lösenordet är fel!");
             return form;
@@ -115,13 +112,4 @@ public class AuthController {
         return true;
     }
     
-    private String hash(String plaintext) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hash = md.digest(plaintext.getBytes());
-            return new String(hash);
-        } catch(NoSuchAlgorithmException e) {
-            return "";
-        }        
-    }
 }
