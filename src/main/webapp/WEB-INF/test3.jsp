@@ -13,5 +13,8 @@
     </head>
     <body>
         <h1>This is file "test3.jsp" even though you tried to access test2.</h1>
+                <p>This is the output of a JSP page that is part of the HelloWorld application.</p>
+        
+        <h1>${message}</h1>
     </body>
 </html>

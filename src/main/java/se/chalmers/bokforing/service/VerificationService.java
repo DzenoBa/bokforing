@@ -17,7 +17,6 @@ import se.chalmers.bokforing.model.Verification;
  * 
  * @author Jakob
  */
-@Service
 public interface VerificationService {
     
     Page<Verification> findAllVerifications(Pageable pageable);

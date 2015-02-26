@@ -8,6 +8,7 @@ package se.chalmers.bokforing.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.persistence.VerificationRepository;
 
@@ -15,6 +16,7 @@ import se.chalmers.bokforing.persistence.VerificationRepository;
  *
  * @author Jakob
  */
+@Service
 public class VerificationServiceImpl implements VerificationService {
 
     @Autowired
@@ -27,7 +29,7 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     public Verification findVerificationById(String id) {
-        return repository.findVerificationById(id);
+        return repository.findById(id);
     }
 
     @Override

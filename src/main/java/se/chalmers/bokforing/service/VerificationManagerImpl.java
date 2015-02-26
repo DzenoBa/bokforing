@@ -13,6 +13,8 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import se.chalmers.bokforing.model.Post;
+import se.chalmers.bokforing.model.Post;
+import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.model.Verification;
 
 /**
@@ -28,7 +30,9 @@ public class VerificationManagerImpl implements VerificationManager {
     @Override
     public Verification createVerification(String verificationNbr, List<Post> posts) {
         if(isVerificationValid(verificationNbr, posts)) {
-            Verification ver = new Verification(verificationNbr, posts);
+            Verification ver = new Verification();
+            ver.setId(verificationNbr);
+            ver.setPosts(posts);
             service.save(ver);
             return ver;
         }
