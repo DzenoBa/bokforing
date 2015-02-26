@@ -7,7 +7,9 @@ package se.chalmers.bokforing.model;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
@@ -19,16 +21,11 @@ import javax.persistence.OneToMany;
 public class Verification implements Serializable {
     
     @Id
-    private String verificationNbr;
+    private String id;
     
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Post> posts;
     
-    public Verification(String verificationNbr, List<Post> posts){
-        this.verificationNbr = verificationNbr;
-        this.posts = posts;
-    }
-
     /**
      * @return the posts
      */
@@ -43,17 +40,23 @@ public class Verification implements Serializable {
         this.posts = posts;
     }
 
-    /**
-     * @return the verificationNbr
-     */
-    public String getVerificationNbr() {
-        return verificationNbr;
+    @Override
+    public String toString() {
+        return "Verification{" + "id=" + id + ", posts=" + getPosts() + '}';
     }
 
     /**
-     * @param verificationNbr the verificationNbr to set
+     * @return the id
      */
-    public void setVerificationNbr(String verificationNbr) {
-        this.verificationNbr = verificationNbr;
+    public String getId() {
+        return id;
     }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+    
 }

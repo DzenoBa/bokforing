@@ -21,16 +21,6 @@ public class Account implements Serializable {
     private String number;
     private String name;
     
-    //Constructor for creating a new account
-    public Account(String number, String name){
-        this.number = number;
-        this.name = name;
-    }
-    //Constructor for assigning a post to an existing account 
-    public Account(String number){
-        this.number = number;
-    }
-
     /**
      * @return the number
      */
