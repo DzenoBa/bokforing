@@ -103,8 +103,10 @@ public class AuthController {
         System.out.println("* PING auth/get");
 
         if(sessionCheck()) {
-            return new UserJSON(authSession.getEmail(), 
-                    authSession.getSessionid(), authSession.getLevel());
+            UserJSON uJSON = new UserJSON();
+            uJSON.setEmail(authSession.getEmail());
+            uJSON.setLevel(authSession.getLevel());
+            return uJSON;
         } else {
             return null;
         }
