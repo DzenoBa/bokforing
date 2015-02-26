@@ -10,7 +10,7 @@ import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.Verification;
 
 /**
- * Manager class for taking care of logic concerning verifications.
+ * Manager class for taking care of logic concerning verifications
  * 
  * @author Jakob
  */
