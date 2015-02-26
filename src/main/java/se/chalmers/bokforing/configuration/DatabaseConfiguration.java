@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  *
+ * 
  * @author Jakob
  */
 @Configuration
@@ -34,8 +35,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class DatabaseConfiguration {
     
+    /** This is where Spring should search for entities. */
+    private static final String PERSISTENCE_PACKAGE = "se.chalmers.bokforing.persistence";
+    
     @Value("${hibernate.dialect}")
     private String hibernateDialect;
+    
+    @Value("${hibernate.hbm2ddl.auto}")
+    private String hibernateHbm2ddlAuto;
 
     @Bean
     public DataSource dataSource() {
@@ -59,7 +66,7 @@ public class DatabaseConfiguration {
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan("se.chalmers.bokforing.persistence"); // this is where spring should search for entities
+        factory.setPackagesToScan(DatabaseConfiguration.PERSISTENCE_PACKAGE, "se.chalmers.bokforing.model"); 
         factory.setJpaProperties(getJPAProperties());
         factory.setDataSource(dataSource());
         factory.afterPropertiesSet();
@@ -77,6 +84,7 @@ public class DatabaseConfiguration {
     private Properties getJPAProperties() {
         Properties properties = new Properties();
         properties.setProperty("hibernate.dialect", hibernateDialect);
+        properties.setProperty("hibernate.hbm2ddl.auto", hibernateHbm2ddlAuto);
         System.out.println(hibernateDialect);
         return properties;
     }
