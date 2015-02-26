@@ -24,12 +24,12 @@ public class Sum implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     
-    private double value;
+    private int value;
     
     @Enumerated(EnumType.STRING)
     private PostType type;
     
-    public Sum(double value, PostType type){
+    public Sum(int value, PostType type){
         this.value = value;
         this.type = type;
     }
