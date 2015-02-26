@@ -28,6 +28,8 @@ public class UserEnt implements Serializable {
     /** The password of the user */
     private String pass;
     
+    private String salt;
+    
     @Id
     @Column(unique = true)
     /** The unique email of the users */
@@ -69,6 +71,20 @@ public class UserEnt implements Serializable {
      */
     public void setPass(String pass) {
         this.pass = pass;
+    }
+    
+    /**
+     * @return the salt
+     */
+    public String getSalt() {
+        return salt;
+    }
+
+    /**
+     * @param salt
+     */
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     /**
