@@ -66,7 +66,7 @@ public class ControllerTest {
         sum.setType(PostType.Credit);
         
         Post post = new Post();
-        post.setDate(cal.getTime());
+        post.setPostDate(cal.getTime());
         post.setSum(sum);
         post.setAccount(account);
         

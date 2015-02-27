@@ -47,7 +47,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class DatabaseConfiguration {
     
     /** This is where Spring should search for entities. */
-    private static final String PERSISTENCE_PACKAGE = "se.chalmers.bokforing.model";
+    private static final String ENTITY_PACKAGE = "se.chalmers.bokforing.model";
     
     @Value("${hibernate.dialect}")
     private String hibernateDialect;
@@ -88,7 +88,7 @@ public class DatabaseConfiguration {
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan(DatabaseConfiguration.PERSISTENCE_PACKAGE); 
+        factory.setPackagesToScan(DatabaseConfiguration.ENTITY_PACKAGE); 
         factory.setJpaProperties(getJPAProperties());
         factory.setDataSource(dataSource());
         factory.afterPropertiesSet();
