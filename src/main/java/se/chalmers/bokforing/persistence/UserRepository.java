@@ -1,11 +1,12 @@
 package se.chalmers.bokforing.persistence;
 
+import se.chalmers.bokforing.model.UserEnt;
 import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
 @Repository
-interface UserRepository extends JpaRepository<UserEnt,Long> {
+public interface UserRepository extends JpaRepository<UserEnt,Long> {
 
     /** Finds all user with this name
      * @param name

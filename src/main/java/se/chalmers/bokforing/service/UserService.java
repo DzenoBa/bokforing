@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.persistence;
+package se.chalmers.bokforing.service;
 
+import se.chalmers.bokforing.model.UserEnt;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -12,13 +13,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.chalmers.bokforing.persistence.UserRepository;
 
 /**
  *
  * @author victor
  */
 @Service
-public class UserDb {
+public class UserService {
     
     @Autowired
     private UserRepository userRep;
@@ -76,7 +78,7 @@ public class UserDb {
             String encryptedString = new String(messageDigest.digest());
             return encryptedString;
         } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(UserDb.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
             return stringToEncrypt;
         }
     }

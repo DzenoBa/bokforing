@@ -25,7 +25,18 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- *
+ * Class for configuring the Spring Data JPA functionality.
+ * 
+ * This class uses @Value tags to retrieve properties from the
+ * application.properties file in the resources folder. This is for convenience,
+ * so that you don't have to search through this class to find database settings.
+ * 
+ * The basePackages attribute for @EnableJpaRepositories tells Spring where to
+ * look for classes tagged @Repository, the classes we use for contacting the
+ * database.
+ * 
+ * The LocalContainerEntityManagerFactoryBean#setPackagesToScan method call below
+ * sets where to look for classes tagged @Entity.
  * 
  * @author Jakob
  */
@@ -36,23 +47,34 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class DatabaseConfiguration {
     
     /** This is where Spring should search for entities. */
-    private static final String PERSISTENCE_PACKAGE = "se.chalmers.bokforing.persistence";
+    private static final String PERSISTENCE_PACKAGE = "se.chalmers.bokforing.model";
     
     @Value("${hibernate.dialect}")
     private String hibernateDialect;
     
     @Value("${hibernate.hbm2ddl.auto}")
     private String hibernateHbm2ddlAuto;
+    
+    @Value("${jdbc.url}")
+    private String jdbcURL;
+    
+    @Value("${jdbc.driver}")
+    private String jdbcDriver;
+        
+    @Value("${jdbc.username}")
+    private String jdbcUsername;
+    
+    @Value("${jdbc.password}")
+    private String jdbcPassword;
 
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource ds = new DriverManagerDataSource();
         
-        Properties properties = new Properties();
-        ds.setDriverClassName("org.apache.derby.jdbc.ClientDriver");
-        ds.setUrl("jdbc:derby://localhost:1527/bokforing;create=true");
-        ds.setUsername("app");
-        ds.setPassword("app");
+        ds.setDriverClassName(jdbcDriver);
+        ds.setUrl(jdbcURL);
+        ds.setUsername(jdbcUsername);
+        ds.setPassword(jdbcPassword);
         
         return ds;
     }
@@ -66,7 +88,7 @@ public class DatabaseConfiguration {
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan(DatabaseConfiguration.PERSISTENCE_PACKAGE, "se.chalmers.bokforing.model"); 
+        factory.setPackagesToScan(DatabaseConfiguration.PERSISTENCE_PACKAGE); 
         factory.setJpaProperties(getJPAProperties());
         factory.setDataSource(dataSource());
         factory.afterPropertiesSet();
@@ -85,7 +107,6 @@ public class DatabaseConfiguration {
         Properties properties = new Properties();
         properties.setProperty("hibernate.dialect", hibernateDialect);
         properties.setProperty("hibernate.hbm2ddl.auto", hibernateHbm2ddlAuto);
-        System.out.println(hibernateDialect);
         return properties;
     }
     

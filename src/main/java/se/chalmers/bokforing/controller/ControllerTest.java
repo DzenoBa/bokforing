@@ -14,8 +14,8 @@ import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
 import se.chalmers.bokforing.model.Verification;
-import se.chalmers.bokforing.persistence.UserDb;
-import se.chalmers.bokforing.persistence.UserEnt;
+import se.chalmers.bokforing.service.UserService;
+import se.chalmers.bokforing.model.UserEnt;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.VerificationService;
 
@@ -23,7 +23,7 @@ import se.chalmers.bokforing.service.VerificationService;
 public class ControllerTest {
     
     @Autowired
-    private UserDb userDb;
+    private UserService userDb;
     
     @Autowired
     private VerificationManager verManager;

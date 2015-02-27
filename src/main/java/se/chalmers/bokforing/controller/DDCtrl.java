@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import se.chalmers.bokforing.jsonobject.FormJSON;
-import se.chalmers.bokforing.persistence.Group;
-import se.chalmers.bokforing.persistence.UserDb;
-import se.chalmers.bokforing.persistence.UserEnt;
+import se.chalmers.bokforing.model.Group;
+import se.chalmers.bokforing.service.UserService;
+import se.chalmers.bokforing.model.UserEnt;
 
 /**
  * Default Data Controller (DDCtrl)
@@ -21,7 +21,7 @@ import se.chalmers.bokforing.persistence.UserEnt;
 public class DDCtrl {
 
     @Autowired
-    private UserDb userDb;
+    private UserService userDb;
     
     /*
      * SET
