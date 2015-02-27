@@ -20,4 +20,5 @@ public interface VerificationManager {
     
     Verification createVerification(String verificationNbr, List<Post> posts);
     
+    
 }

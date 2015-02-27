@@ -5,7 +5,7 @@
  */
 package se.chalmers.bokforing.service;
 
-import se.chalmers.bokforing.model.User;
+import se.chalmers.bokforing.model.UserAccount;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -25,7 +25,7 @@ public class UserService {
     @Autowired
     private UserRepository userRep;
 
-    public List<User> getUsersByName(String name) {
+    public List<UserAccount> getUsersByName(String name) {
         return userRep.findByName(name);
     }
     
@@ -35,7 +35,7 @@ public class UserService {
      * @param email of the User
      * @return
      */
-    public User getUser(String email) {
+    public UserAccount getUser(String email) {
         email = email.toLowerCase();
         return userRep.findByEmail(email);
     }
@@ -48,13 +48,13 @@ public class UserService {
      * @param pass Unencrypted password of the user
      * @return
      */
-    public User getUser(String email, String pass) {
+    public UserAccount getUser(String email, String pass) {
         email = email.toLowerCase();
         pass = encryptString(pass);
         return userRep.findByEmailAndPass(email, pass);
     }
 
-    public void storeUser(User user) {
+    public void storeUser(UserAccount user) {
         //TODO Check if the user is vaild
         String email = user.getEmail();
         String pass = user.getPass();
