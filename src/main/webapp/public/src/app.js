@@ -8,7 +8,7 @@ var bok = angular.module('Bok', [
     'AuthControllers',
     'AuthService',
     'UserControllers',
-    'DDService'
+    'UserService'
      // More here
 ]);
 

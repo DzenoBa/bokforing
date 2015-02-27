@@ -95,6 +95,10 @@ public class UserController {
         }
         
         // CHECK IF VALID PASSWORD
+        if(user.getPasswd() == null || user.getPasswd().isEmpty()) {
+            form.addError("passwd", "Ange ditt nuvarande lösenord!");
+            return form;
+        }
         String hashPasswd = helpy.hash(u.getSalt() + user.getPasswd());
         if(!(hashPasswd.equals(u.getPass()))) {
             form.addError("passwd", "Löseordet är fel!");

@@ -9,10 +9,10 @@
 
 var userControllers = angular.module('UserControllers', []);
 
-userControllers.controller('DDCtrl', ['$scope', 'DDProxy',
-    function($scope, DDProxy) {
+userControllers.controller('DDCtrl', ['$scope', 'UserProxy',
+    function($scope, UserProxy) {
         $scope.set = function() {
-            DDProxy.set()
+            UserProxy.set()
                     .success(function(form) {
                         $scope.form = form;
                     }).error(function() {
@@ -22,7 +22,8 @@ userControllers.controller('DDCtrl', ['$scope', 'DDProxy',
     }]);
 
 userControllers.controller('EditUserCtrl', ['$scope', '$location', 'AuthProxy',
-    function($scope, $location, AuthProxy) {
+    'UserProxy',
+    function($scope, $location, AuthProxy, UserProxy) {
         var init = function() {
             checkLogin();
         };
@@ -38,6 +39,22 @@ userControllers.controller('EditUserCtrl', ['$scope', '$location', 'AuthProxy',
                     }).error(function() {
                 console.log("check: error");
             });
+        };
+        
+        $scope.edit = function() {
+            if(!(angular.isUndefined($scope.user) || $scope.user === null)) {
+                UserProxy.edit($scope.user)
+                        .success(function(form) {
+                            if(form.numErrors === 0) {
+                                $scope.form = form;
+                                $scope.user = null;
+                            } else {
+                                $scope.form = form;
+                            }
+                        }).error(function() {
+                    console.log("edit: error");
+                });
+            }
         };
         
         init();
