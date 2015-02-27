@@ -7,8 +7,8 @@ var bok = angular.module('Bok', [
     'ngRoute',
     'AuthControllers',
     'AuthService',
-    'DDControllers',
-    'DDService'
+    'UserControllers',
+    'UserService'
      // More here
 ]);
 
@@ -27,6 +27,10 @@ bok.config(['$routeProvider',
                 when('/dd', {
                     templateUrl: 'dd.html',
                     controller: 'DDCtrl'
+                }).
+                when('/edituser', {
+                    templateUrl: 'private/edituser.html',
+                    controller: 'EditUserCtrl'
                 }).
                 otherwise({
                     redirectTo: 'index.html'
