@@ -73,7 +73,34 @@ public class Post implements Serializable {
     /**
      * @param postDate the postDate to set
      */
-    public void setDate(Date date) {
+    public void setPostDate(Date postDate) {
         this.postDate = postDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" + "id=" + id + ", postSum=" + postSum + ", account=" + account + ", postDate=" + postDate + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 47 * hash + this.id;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Post other = (Post) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
     }
 }
