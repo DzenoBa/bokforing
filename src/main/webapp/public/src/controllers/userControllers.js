@@ -57,5 +57,26 @@ userControllers.controller('EditUserCtrl', ['$scope', '$location', 'AuthProxy',
             }
         };
         
+        $scope.passwdstrength = function(str) {
+            // CHECK LENGTH
+            if(str.length > 7) {
+                $scope.passwdstrength.one = true;
+            } else {
+                $scope.passwdstrength.one = false;
+            }
+            // CHECK IF IT CONTAINS NUMBERS
+            if(/[0-9]+/.test(str)) {
+                $scope.passwdstrength.two = true;
+            } else {
+                $scope.passwdstrength.two = false;
+            }
+            // CHECK LOWERCASE AND UPPERCASE LETTERS
+            if(/[a-z]+/.test(str) && /[A-Z]+/.test(str)) {
+                $scope.passwdstrength.three = true;
+            } else {
+                $scope.passwdstrength.three = false;
+            }
+        };
+        
         init();
     }]);
