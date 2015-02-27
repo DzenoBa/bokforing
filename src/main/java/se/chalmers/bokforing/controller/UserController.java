@@ -13,12 +13,13 @@ import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.model.UserAccount;
 
 /**
- * Default Data Controller (DDCtrl)
+ * USER-CONTROLLER
+ * Handles JSON requests
  * 
  * @author Dženan
  */
 @Controller
-public class DDCtrl {
+public class UserController {
 
     @Autowired
     private UserService userDb;
@@ -28,9 +29,9 @@ public class DDCtrl {
     /*
      * SET
      */
-    @RequestMapping(value = "/dd/set", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/set", method = RequestMethod.GET)
     public @ResponseBody FormJSON set() {
-        System.out.println("* PING DD/get");
+        System.out.println("* PING user/get");
 
         FormJSON form = new FormJSON();
 
