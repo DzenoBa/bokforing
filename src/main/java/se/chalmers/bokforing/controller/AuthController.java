@@ -1,7 +1,6 @@
 
 package se.chalmers.bokforing.controller;
 
-import java.security.Timestamp;
 import java.util.Date;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +64,8 @@ public class AuthController {
             form.addError("passwd", "Du har inte angett något lösenord!");
             return form;
         }
-        String hashPasswd = helpy.hash(user.getPasswd());
+        //CONCAT SALT + PASSWD; THEN HASH IT
+        String hashPasswd = helpy.hash(userEnt.getSalt() + user.getPasswd());
         if(!hashPasswd.equals(userEnt.getPass())) {
             form.addError("passwd", "Lösenordet är fel!");
             return form;
@@ -103,8 +103,10 @@ public class AuthController {
         System.out.println("* PING auth/get");
 
         if(sessionCheck()) {
-            return new UserJSON(authSession.getEmail(), 
-                    authSession.getSessionid(), authSession.getLevel());
+            UserJSON uJSON = new UserJSON();
+            uJSON.setEmail(authSession.getEmail());
+            uJSON.setLevel(authSession.getLevel());
+            return uJSON;
         } else {
             return null;
         }

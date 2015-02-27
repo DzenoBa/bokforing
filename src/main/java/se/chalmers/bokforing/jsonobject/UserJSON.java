@@ -13,24 +13,10 @@ public class UserJSON implements Serializable{
         
     private String email;
     private String passwd;
-    private String sessionid;
     private String level;
 
     public UserJSON() {
         ;
-    }
-    public UserJSON(String email, String passwd) {
-        this.email = email;
-        this.passwd = passwd;
-        this.sessionid = null;
-        this.level = null;
-    }
-    
-    public UserJSON(String email, String sessionid, String level) {
-        this.email = email;
-        this.passwd = null;
-        this.sessionid = sessionid;
-        this.level = level;
     }
 
     public String getEmail() {
@@ -52,12 +38,5 @@ public class UserJSON implements Serializable{
     }
     public void setLevel(String level) {
         this.level = level;
-    }
-    
-    public String getSessionid() {
-        return sessionid;
-    }
-    public void setSessionid(String sessionid) {
-        this.sessionid = sessionid;
     }
 }
