@@ -7,6 +7,7 @@ require(
     [
         'app',
         'controllers',
+        'controllers/authControllers',
         'services'
         
     ],
