@@ -1,0 +1,72 @@
+<!--Body content-->
+<div>
+    <div ng-show="session.status === 'online'">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Edit user</h2>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <label for="newpasswd">Nytt lösenord</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <input id="newpasswd" class="form-control" ng-model="user.newpasswd" type="password" value="{{user.newpasswd}}" placeholder="Ange ett lösenord"/>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="form.errors.newpasswd !== null">
+                        <div class="col-sm-3"></div><!-- Offset -->
+                        <div class="col-sm-9">
+                            <span class="error">{{form.errors.newpasswd}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <label for="newpasswd2">Bekräfta lösenordet</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <input id="newpasswd2" class="form-control" ng-model="user.newpasswd2" type="password" value="{{user.newpasswd2}}" placeholder="Ange lösenordet igen"/>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="form.errors.newpasswd2 !== null">
+                        <div class="col-sm-3"></div><!-- Offset -->
+                        <div class="col-sm-9">
+                            <span class="error">{{form.errors.newpasswd2}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3"></div><!-- Offset -->
+                        <div class="col-sm-9">
+                            För att kunna ändra lösenordet måste du ange ditt nuvarande lösenord.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <label for="passwd">Nuvarande lösenord</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <input id="passwd" class="form-control" ng-model="user.passwd" type="password" value="{{user.passwd}}" placeholder="Ange ditt nuvarande lösenord"/>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="form.errors.passwd !== null">
+                        <div class="col-sm-3"></div><!-- Offset -->
+                        <div class="col-sm-9">
+                            <span class="error">{{form.errors.passwd}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3"></div><!-- Offset -->
+                        <div class="col-sm-9">
+                            <input type="button" value="Ändra" class="btn btn-primary btn-block" ng-click="edit()"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <h2>Välj ett säkert lösenord!</h2>
+                <ul>
+                    <li>Ett säkert lösenord har både stora och små bokstäver samt siffror.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
