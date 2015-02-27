@@ -6,9 +6,9 @@ require.config({
 require(
     [
         'app',
-        'controllers',
+        'controllers/userControllers',
         'controllers/authControllers',
-        'services',
+        'services/userServices',
         'services/authServices'
         
     ],
