@@ -8,7 +8,8 @@ require(
         'app',
         'controllers',
         'controllers/authControllers',
-        'services'
+        'services',
+        'services/authServices'
         
     ],
     function () {
