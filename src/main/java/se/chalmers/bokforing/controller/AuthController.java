@@ -11,7 +11,7 @@ import se.chalmers.bokforing.helperfunctions.HelpY;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
 import se.chalmers.bokforing.service.UserService;
-import se.chalmers.bokforing.model.UserEnt;
+import se.chalmers.bokforing.model.User;
 import se.chalmers.bokforing.session.AuthSession;
 
 /**
@@ -53,7 +53,7 @@ public class AuthController {
             return form;
         }
         // CHECK IF EMAIL EXIST
-        UserEnt userEnt= userDb.getUser(user.getEmail());
+        User userEnt= userDb.getUser(user.getEmail());
         if(userEnt == null) {
             form.addError("email", "E-post adressen existerar inte!");
             return form;
@@ -127,7 +127,7 @@ public class AuthController {
         
         // CHECK IF USER IS ONLINE
         if(authSession.getStatus()) {
-            UserEnt u = userDb.getUser(authSession.getEmail());
+            User u = userDb.getUser(authSession.getEmail());
             
             // CHECK IF USER EXIST
             if(u == null) {

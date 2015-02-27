@@ -10,7 +10,7 @@ import se.chalmers.bokforing.helperfunctions.HelpY;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.model.Group;
 import se.chalmers.bokforing.service.UserService;
-import se.chalmers.bokforing.model.UserEnt;
+import se.chalmers.bokforing.model.User;
 
 /**
  * Default Data Controller (DDCtrl)
@@ -34,11 +34,11 @@ public class DDCtrl {
 
         FormJSON form = new FormJSON();
 
-        UserEnt userEnt = userDb.getUser("dzeno@bazdar.ba");
+        User userEnt = userDb.getUser("dzeno@bazdar.ba");
         
         if(userEnt == null) {
             // CREATE A NEW USER
-            UserEnt u = new UserEnt();
+            User u = new User();
             u.setEmail("dzeno@bazdar.ba");
             // CREATE A RANDOM SALT
             String salt = helpy.randomString(8);

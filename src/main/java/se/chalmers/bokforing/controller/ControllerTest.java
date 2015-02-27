@@ -15,7 +15,7 @@ import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.service.UserService;
-import se.chalmers.bokforing.model.UserEnt;
+import se.chalmers.bokforing.model.User;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.VerificationService;
 
@@ -37,12 +37,12 @@ public class ControllerTest {
      */
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ModelAndView getUsersView() {
-        UserEnt user = new UserEnt();
+        User user = new User();
         user.setName("Victor");
         user.setEmail("whoop");
         user.setPass("whoop");
         userDb.storeUser(user);
-        user = new UserEnt();
+        user = new User();
         user.setName("Victor");
         user.setEmail("Whoop");
         user.setPass("whoop");

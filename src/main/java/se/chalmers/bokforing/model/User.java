@@ -20,7 +20,7 @@ import javax.persistence.Temporal;
  * @author victor
  */
 @Entity
-public class UserEnt implements Serializable {
+public class User implements Serializable {
   
     /** Name of the user */
     private String name;
