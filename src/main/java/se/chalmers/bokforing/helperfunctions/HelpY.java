@@ -21,7 +21,7 @@ public class HelpY {
      * @param length
      * @return String
      */
-    public String randomString(int length) {
+    public static String randomString(int length) {
         StringBuilder sb = new StringBuilder(length);
         String comb = "0123456789" 
                 + "abcdefghijklmnopqrstuvwxyz";
@@ -37,7 +37,7 @@ public class HelpY {
      * @param plaintext
      * @return String
      */
-    public String hash(String plaintext) {
+    public static String hash(String plaintext) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hash = md.digest(plaintext.getBytes());

@@ -6,13 +6,10 @@
 package se.chalmers.bokforing.service;
 
 import se.chalmers.bokforing.model.UserAccount;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.chalmers.bokforing.model.Group;
 import se.chalmers.bokforing.persistence.UserRepository;
 
 /**
@@ -45,41 +42,51 @@ public class UserService {
      * Thought to be used as an login attempt.
      *
      * @param email of the User
-     * @param pass Unencrypted password of the user
+     * @param pass encrypted password of the user
      * @return
      */
     public UserAccount getUser(String email, String pass) {
         email = email.toLowerCase();
-        pass = encryptString(pass);
         return userRep.findByEmailAndPass(email, pass);
     }
 
     public void storeUser(UserAccount user) {
         //TODO Check if the user is vaild
         String email = user.getEmail();
-        String pass = user.getPass();
-        if (email != null && !email.equals("")
-                && pass != null && !pass.equals("")) {
+        if (email != null && !email.equals("")) {
             email = email.toLowerCase();
             user.setEmail(email);
-            pass = encryptString(pass);
-            user.setPass(pass);
             userRep.save(user);
         } else {
             //Invaild User
             //TODO Throw and exception
         }
     }
+    
+    public int updateName (String name, String email){
+        return userRep.updateName(name,email);
+    }
+    
+    public int updatePass(String pass, String email){
+        return userRep.updatePass(pass, email);
+    }
 
-    private String encryptString(String stringToEncrypt) {
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-            messageDigest.update(stringToEncrypt.getBytes());
-            String encryptedString = new String(messageDigest.digest());
-            return encryptedString;
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
-            return stringToEncrypt;
-        }
+    
+    public int updateEmail (String newEmail, String email){
+        UserAccount u = userRep.findByEmail(email);
+        return userRep.updateEmail(newEmail, u.getId());
+    }
+
+    public int updateSalt(String salt, String email){
+        return userRep.updateSalt(salt, email);
+    }
+    
+    int updateGroup(Group group, String email){        
+return -1;        
+//return userRep.updateGroup(group, email);
+    }
+    
+    int updateSessionid(String sessionid, String email){
+        return userRep.updateSessionid(sessionid, email);
     }
 }

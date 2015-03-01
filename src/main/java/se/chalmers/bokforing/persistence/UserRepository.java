@@ -4,6 +4,7 @@ import se.chalmers.bokforing.model.UserAccount;
 import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
+import se.chalmers.bokforing.model.Group;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserAccount,Long> {
@@ -22,6 +23,30 @@ public interface UserRepository extends JpaRepository<UserAccount,Long> {
      * @param pass
      * @return  */
     UserAccount findByEmailAndPass(String email, String pass);
+    
+    @Modifying(clearAutomatically = true)
+    @Query("update UserAccount u set u.name = ?1 where u.email = ?2")
+    int updateName(String name, String email);
+    
+    @Modifying(clearAutomatically = true)
+    @Query("update UserAccount u set u.pass = ?1 where u.email = ?2")
+    int updatePass(String pass, String email);
+    
+    @Modifying(clearAutomatically = true)
+    @Query("update UserAccount u set u.salt = ?1 where u.email = ?2")
+    int updateSalt(String salt, String email);
+    
+    @Modifying(clearAutomatically = true)
+    @Query("update UserAccount u set u.email = ?1 where u.id = ?2")
+    int updateEmail(String newEmail, int id);
+    /*
+    @Modifying(clearAutomatically = true)
+    @Query("update UserAccount u set u.group2 = ?1 where u.email = ?2")
+    int updateGroup(Group group2, String email);
+    */
+    @Modifying(clearAutomatically = true)
+    @Query("update UserAccount u set u.sessionid = ?1 where u.email = ?2")
+    int updateSessionid(String sessionid, String email);
 }
   
 
