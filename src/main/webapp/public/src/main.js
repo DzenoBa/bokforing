@@ -6,8 +6,10 @@ require.config({
 require(
     [
         'app',
-        'controllers',
-        'services'
+        'controllers/userControllers',
+        'controllers/authControllers',
+        'services/userServices',
+        'services/authServices'
         
     ],
     function () {
