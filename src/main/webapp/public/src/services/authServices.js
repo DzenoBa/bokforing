@@ -11,7 +11,8 @@ var authService = angular.module('AuthService', []);
 
 authService.factory('AuthProxy', ['$http',
     function($http) {
-       var url = 'http://localhost:8080/bokforing/auth';
+        var _isOnline = false;
+        var url = 'http://localhost:8080/bokforing/auth';
         return {
             login: function(user) {
                 return $http.post(url + '/login', user);
@@ -24,6 +25,12 @@ authService.factory('AuthProxy', ['$http',
             },
             logout: function() {
                 return $http.get(url + '/logout');
+            },
+            isOnline: function() {
+                return _isOnline;
+            },
+            setOnline: function(boolean) {
+                _isOnline = boolean;
             }
         };
     }]);
