@@ -50,7 +50,8 @@ public class UserController {
             // CREATE A RANDOM SALT
             String salt = helpy.randomString(8);
             u.setSalt(salt);
-            u.setPass(salt + "passwd");
+            String hashPasswd = helpy.hash(salt + "passwd");
+            u.setPass(hashPasswd);
             u.setGroup(UserGroup.Admin);
             userDb.storeUser(u);
             
@@ -107,7 +108,7 @@ public class UserController {
         
         // EVERYTHING SEEMS TO BE IN ORDER CHANGE USER
         String newSalt = helpy.randomString(8);
-        String newHashPasswd = newSalt + user.getNewpasswd(); // TODO; hash it here or in UserDB
+        String newHashPasswd = helpy.hash(newSalt + user.getNewpasswd());
         u.setSalt(newSalt);
         u.setPass(newHashPasswd);
         userDb.storeUser(u);
