@@ -42,7 +42,14 @@ bok.config(['$routeProvider',
                 }).
                 when('/edituser', {
                     templateUrl: 'private/edituser.html',
-                    controller: 'EditUserCtrl'
+                    controller: 'EditUserCtrl',
+                    auth: true,
+                    resolve: {
+                        init: ['PromiseProxy', function(PromiseProxy) {
+                                PromiseProxy.refresh();
+                                return PromiseProxy.promise();
+                        }]
+                    }
                 }).
                 otherwise({
                     redirectTo: 'index.html'
@@ -64,6 +71,7 @@ bok.run(function($rootScope, $location, $route, $q, AuthProxy, PromiseProxy) {
         };
 
         isOnline().then(function(value) {
+            AuthProxy.setOnline(value); // Set status
             var nextPath = $location.path();
             var nextRoute = $route.routes[nextPath];
             if(nextRoute && nextRoute.auth && !value) {
