@@ -11,7 +11,7 @@ import se.chalmers.bokforing.helperfunctions.HelpY;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
 import se.chalmers.bokforing.model.Group;
-import se.chalmers.bokforing.service.UserService;
+import se.chalmers.bokforing.service.UserServiceImpl;
 import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.session.AuthSession;
 
@@ -25,7 +25,7 @@ import se.chalmers.bokforing.session.AuthSession;
 public class UserController {
 
     @Autowired
-    private UserService userDb;
+    private UserServiceImpl userDb;
     
     @Autowired 
     private AuthSession authSession;

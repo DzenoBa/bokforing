@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import se.chalmers.bokforing.helperfunctions.HelpY;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
-import se.chalmers.bokforing.service.UserService;
+import se.chalmers.bokforing.service.UserServiceImpl;
 import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.session.AuthSession;
 
@@ -27,7 +27,7 @@ public class AuthController {
     private AuthSession authSession;
     
     @Autowired
-    private UserService userDb;
+    private UserServiceImpl userDb;
     
     private HelpY helpy = new HelpY();
     
