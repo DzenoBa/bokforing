@@ -4,7 +4,7 @@ import se.chalmers.bokforing.model.UserAccount;
 import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
-import se.chalmers.bokforing.model.Group;
+import se.chalmers.bokforing.model.UserGroup;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserAccount,Long> {
@@ -39,11 +39,11 @@ public interface UserRepository extends JpaRepository<UserAccount,Long> {
     @Modifying(clearAutomatically = true)
     @Query("update UserAccount u set u.email = ?1 where u.id = ?2")
     int updateEmail(String newEmail, int id);
-    /*
+    
     @Modifying(clearAutomatically = true)
-    @Query("update UserAccount u set u.group2 = ?1 where u.email = ?2")
-    int updateGroup(Group group2, String email);
-    */
+    @Query("update UserAccount u set u.userGroup = ?1 where u.email = ?2")
+    int updateGroup(UserGroup userGroup, String email);
+    
     @Modifying(clearAutomatically = true)
     @Query("update UserAccount u set u.sessionid = ?1 where u.email = ?2")
     int updateSessionid(String sessionid, String email);

@@ -40,9 +40,8 @@ public class UserAccount implements Serializable {
     private String email;
     
     //Group is a reserved word. We cannot have it as a column name.   
-    @Column(name="group2")
     @Enumerated(EnumType.STRING)
-    private Group group;
+    private UserGroup userGroup;
    
     private String sessionid;
     
@@ -111,15 +110,15 @@ public class UserAccount implements Serializable {
     /**
      * @return the group
      */
-    public Group getGroup() {
-        return group;
+    public UserGroup getGroup() {
+        return userGroup;
     }
 
     /**
      * @param group the group to set
      */
-    public void setGroup(Group group) {
-        this.group = group;
+    public void setGroup(UserGroup group) {
+        this.userGroup = group;
     }
 
     /**
@@ -154,7 +153,7 @@ public class UserAccount implements Serializable {
     public String toString() {
         return "UserEnt{ id= " + id + "name=" + name + ", pass=" + pass 
                 + ", salt= "+ salt +", email=" + email 
-                + ", group=" + group + ", sessionid=" + sessionid
+                + ", group=" + userGroup + ", sessionid=" + sessionid
                 + ", lastLogIn=" + lastLogIn + '}';
     }
 }

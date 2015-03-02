@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import se.chalmers.bokforing.helperfunctions.HelpY;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
-import se.chalmers.bokforing.model.Group;
+import se.chalmers.bokforing.model.UserGroup;
 import se.chalmers.bokforing.service.UserServiceImpl;
 import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.session.AuthSession;
@@ -51,7 +51,7 @@ public class UserController {
             String salt = helpy.randomString(8);
             u.setSalt(salt);
             u.setPass(salt + "passwd");
-            u.setGroup(Group.Admin);
+            u.setGroup(UserGroup.Admin);
             userDb.storeUser(u);
             
             return form;

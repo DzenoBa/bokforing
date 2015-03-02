@@ -6,7 +6,7 @@
 package se.chalmers.bokforing.service;
 
 import java.util.List;
-import se.chalmers.bokforing.model.Group;
+import se.chalmers.bokforing.model.UserGroup;
 import se.chalmers.bokforing.model.UserAccount;
 
 /**
@@ -78,7 +78,7 @@ public interface UserService {
      * @param email
      * @return 
      */
-    public int updateGroup(Group group, String email);
+    public int updateGroup(UserGroup group, String email);
     
     /**
      * Update the sessionid of a user

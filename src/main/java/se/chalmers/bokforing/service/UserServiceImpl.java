@@ -9,7 +9,7 @@ import se.chalmers.bokforing.model.UserAccount;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.chalmers.bokforing.model.Group;
+import se.chalmers.bokforing.model.UserGroup;
 import se.chalmers.bokforing.persistence.UserRepository;
 
 /**
@@ -77,9 +77,8 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public int updateGroup(Group group, String email){        
-return -1;        
-//return userRep.updateGroup(group, email);
+    public int updateGroup(UserGroup group, String email){        
+        return userRep.updateGroup(group, email);
     }
     
     @Override
