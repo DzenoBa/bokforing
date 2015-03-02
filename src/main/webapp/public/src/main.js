@@ -9,7 +9,8 @@ require(
         'controllers/userControllers',
         'controllers/authControllers',
         'services/userServices',
-        'services/authServices'
+        'services/authServices',
+        'services/promiseService'
         
     ],
     function () {

@@ -1,14 +1,19 @@
+
+/**
+ * BOKFORING APP
+ * 
+ * @author Dženan
+ */
+
 'use strict';
 
-/* 
- *  The Bokforing App
- */
 var bok = angular.module('Bok', [
     'ngRoute',
     'AuthControllers',
     'AuthService',
     'UserControllers',
-    'UserService'
+    'UserService',
+    'PromiseService'
      // More here
 ]);
 
@@ -22,7 +27,14 @@ bok.config(['$routeProvider',
                 }).
                 when('/userpage', {
                     templateUrl: 'private/userpage.html',
-                    controller: 'UserPageCtrl'
+                    controller: 'UserPageCtrl',
+                    auth: true,
+                    resolve: {
+                        init: ['PromiseProxy', function(PromiseProxy) {
+                                PromiseProxy.refresh();
+                                return PromiseProxy.promise();
+                        }]
+                    }
                 }).
                 when('/dd', {
                     templateUrl: 'dd.html',
@@ -37,5 +49,32 @@ bok.config(['$routeProvider',
                 });
 
     }]);
+
+bok.run(function($rootScope, $location, $route, $q, AuthProxy, PromiseProxy) {
+    $rootScope.$on('$routeChangeStart', function (ev, next, current) {
+        function isOnline() {
+            var dfrd = $q.defer();
+            AuthProxy.status()
+                    .success(function(boolean) {
+                        dfrd.resolve(boolean);
+                    }).error(function() {
+                        console.log("isOnline:error");
+                    });
+            return dfrd.promise;
+        };
+
+        isOnline().then(function(value) {
+            var nextPath = $location.path();
+            var nextRoute = $route.routes[nextPath];
+            if(nextRoute && nextRoute.auth && !value) {
+                // USER NOT ONLINE
+                $location.path("/login");
+            } else if (value) {
+                // ENTER HERE ONLY IF YOU'RE ONLINE
+                PromiseProxy.resolve();
+            }
+        });
+    });
+});
 
 
