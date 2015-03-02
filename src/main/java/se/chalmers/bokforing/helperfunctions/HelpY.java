@@ -3,7 +3,7 @@ package se.chalmers.bokforing.helperfunctions;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Random;
+import java.security.SecureRandom;
 
 /**
  * A class that contains helper functions
@@ -25,7 +25,7 @@ public class HelpY {
         StringBuilder sb = new StringBuilder(length);
         String comb = "0123456789" 
                 + "abcdefghijklmnopqrstuvwxyz";
-        Random rnd = new Random();
+        SecureRandom rnd = new SecureRandom();
         for(int i=0; i<length; i++) {
             sb.append(comb.charAt(rnd.nextInt(comb.length())));
         }
