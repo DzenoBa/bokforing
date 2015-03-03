@@ -9,15 +9,17 @@
 
 var userControllers = angular.module('UserControllers', []);
 
-userControllers.controller('DDCtrl', ['$scope', 'UserProxy',
+userControllers.controller('RegisterCtrl', ['$scope', 'UserProxy',
     function($scope, UserProxy) {
-        $scope.set = function() {
-            UserProxy.set()
-                    .success(function(form) {
-                        $scope.form = form;
-                    }).error(function() {
-                console.log("user:create: error");
-            });
+        $scope.create = function() {
+            if(!(angular.isUndefined($scope.user) || $scope.user === null)) {
+                UserProxy.create($scope.user)
+                        .success(function(form) {
+                            $scope.form = form;
+                        }).error(function() {
+                    console.log("user:create: error");
+                });
+            }
         };
     }]);
 
