@@ -80,6 +80,7 @@ public class UserController {
         userAcc.setEmail(user.getEmail());
         String salt = helpy.randomString(8);
         String hashPasswd = helpy.hash(salt + user.getNewpasswd());
+        userAcc.setSalt(salt);
         userAcc.setPass(hashPasswd);
         userAcc.setGroup(UserGroup.User);
         // STORE
