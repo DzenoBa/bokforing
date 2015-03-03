@@ -13,7 +13,7 @@ userService.factory('UserProxy', ['$http',
        var url = 'http://localhost:8080/bokforing/user';
         return {
             create: function(user) {
-                return $http.get(url + '/create');
+                return $http.post(url + '/create', user);
             },
             edit: function(user) {
                 return $http.post(url + '/edit', user);

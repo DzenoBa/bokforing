@@ -4,14 +4,16 @@
         <div class="col-md-6">
             <h2>Skapa ett användarkonto</h2>
             <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
-                Användarkontot har skapats!
+                Användarkontot har skapats!<br/>
+                Klicka på knappen för att logga in!<br/>
                 <div class="btn-group">
                     <a href="#login" class="btn btn-primary">Logga in</a>
                 </div>
             </div>
             <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
                 <h4>{{form.numErrors}} fel hittades!</h4>
-                <p>{{form.errors.general}}</p>
+                Vänligen rätta till dem!
+                <p ng-show="form.errors.general !== null">{{form.errors.general}}</p>
             </div>
             <form class="form-horizontal">
                 <div class="form-group">
