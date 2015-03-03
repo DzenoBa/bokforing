@@ -36,8 +36,8 @@ bok.config(['$routeProvider',
                         }]
                     }
                 }).
-                when('/dd', {
-                    templateUrl: 'dd.html',
+                when('/register', {
+                    templateUrl: 'register.html',
                     controller: 'DDCtrl'
                 }).
                 when('/edituser', {
