@@ -11,9 +11,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
+import se.chalmers.bokforing.helperfunctions.HelpY;
 
 /**
  *
@@ -22,29 +23,34 @@ import javax.persistence.Temporal;
 @Entity
 public class UserAccount implements Serializable {
   
+    @Id
+    @GeneratedValue
+    private int id;
+    
     /** Name of the user */
     private String name;
     
     /** The password of the user */
     private String pass;
     
-    private String salt;
+    private String salt = HelpY.randomString(8);;
     
-    @Id
     @Column(unique = true)
     /** The unique email of the users */
     private String email;
     
     //Group is a reserved word. We cannot have it as a column name.   
-    @Column(name="group2")
     @Enumerated(EnumType.STRING)
-    private Group group;
+    private UserGroup userGroup;
    
     private String sessionid;
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastLogIn;
 
+    public int getId(){
+        return id;
+    }
     /**
      * @return the name
      */
@@ -104,15 +110,15 @@ public class UserAccount implements Serializable {
     /**
      * @return the group
      */
-    public Group getGroup() {
-        return group;
+    public UserGroup getGroup() {
+        return userGroup;
     }
 
     /**
      * @param group the group to set
      */
-    public void setGroup(Group group) {
-        this.group = group;
+    public void setGroup(UserGroup group) {
+        this.userGroup = group;
     }
 
     /**
@@ -142,11 +148,12 @@ public class UserAccount implements Serializable {
     public void setLastLogIn(Date lastLogIn) {
         this.lastLogIn = lastLogIn;
     }
-
+    
     @Override
     public String toString() {
-        return "UserEnt{ name=" + name + ", pass=" + pass + ", email=" + email 
-                + ", group=" + group + ", sessionid=" + sessionid
+        return "UserEnt{ id= " + id + "name=" + name + ", pass=" + pass 
+                + ", salt= "+ salt +", email=" + email 
+                + ", group=" + userGroup + ", sessionid=" + sessionid
                 + ", lastLogIn=" + lastLogIn + '}';
     }
 }

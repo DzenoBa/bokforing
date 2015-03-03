@@ -1,10 +1,11 @@
-'use strict';
 
-/*
- * Controllers
+/**
+ * AUTH CONTROLLERS
  * 
  * @author Dženan
  */
+
+'use strict';
 
 var authControllers = angular.module('AuthControllers', []);
 
@@ -56,18 +57,4 @@ authControllers.controller('UserPageCtrl', ['$scope', '$location', 'AuthProxy',
         };
         
         init();
-    }]);
-
-var ddControllers = angular.module('DDControllers', []);
-
-ddControllers.controller('DDCtrl', ['$scope', 'DDProxy',
-    function($scope, DDProxy) {
-        $scope.set = function() {
-            DDProxy.set()
-                    .success(function(form) {
-                        $scope.form = form;
-                    }).error(function() {
-                console.log("dd:create: error");
-            });
-        };
     }]);

@@ -1,16 +1,18 @@
-'use strict';
 
-/* 
- * Services 
+/**
+ * AUTH SERVICES
  * 
  * @author Dženan
  */
+
+'use strict';
 
 var authService = angular.module('AuthService', []);
 
 authService.factory('AuthProxy', ['$http',
     function($http) {
-       var url = 'http://localhost:8080/bokforing/auth';
+        var _isOnline = false;
+        var url = 'http://localhost:8080/bokforing/auth';
         return {
             login: function(user) {
                 return $http.post(url + '/login', user);
@@ -23,18 +25,14 @@ authService.factory('AuthProxy', ['$http',
             },
             logout: function() {
                 return $http.get(url + '/logout');
+            },
+            isOnline: function() {
+                return _isOnline;
+            },
+            setOnline: function(boolean) {
+                _isOnline = boolean;
             }
         };
     }]);
 
-var ddService = angular.module('DDService', []);
 
-ddService.factory('DDProxy', ['$http',
-    function($http) {
-       var url = 'http://localhost:8080/bokforing/dd';
-        return {
-            set: function() {
-                return $http.get(url + '/set');
-            }
-        };
-    }]);
