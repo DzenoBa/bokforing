@@ -1,6 +1,7 @@
 
 package se.chalmers.bokforing.controller;
 
+import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,37 +33,59 @@ public class UserController {
     
     HelpY helpy = new HelpY();
     
-    /*
-     * SET
+    /*/
+     * CREATE
      */
-    @RequestMapping(value = "/user/set", method = RequestMethod.GET)
-    public @ResponseBody FormJSON set() {
-        System.out.println("* PING user/get");
-
+    @RequestMapping(value = "/user/create", method = RequestMethod.POST)
+    public @ResponseBody FormJSON create(@RequestBody final UserJSON user) {
+        System.out.println("* PING user/create");
         FormJSON form = new FormJSON();
 
-        UserAccount userEnt = userDb.getUser("dzeno@bazdar.ba");
+        // EMAIL CHECK
+        if(user.getEmail() == null || user.getEmail().isEmpty()) {
+            form.addError("email", "Du har inte angett någon e-post adress!");
+            return form;
+        }
+        // CHECK IF VALID EMAIL
+        String regexEmail = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        Pattern patternEmail = Pattern.compile(regexEmail);
+        if(!(patternEmail.matcher(user.getEmail()).find())) {
+            form.addError("email", "Vänligen ange en e-post adress!");
+            return form;
+        }
+        // CHECK IF EMAIL EXIST
+        UserAccount userAccExist = userDb.getUser(user.getEmail());
+        if(userAccExist != null) {
+            form.addError("email", "E-post adressen är redan registrerad!");
+            return form;
+        }
         
-        if(userEnt == null) {
-            // CREATE A NEW USER
-            UserAccount u = new UserAccount();
-            u.setEmail("dzeno@bazdar.ba");
-            // CREATE A RANDOM SALT
-            String salt = helpy.randomString(8);
-            u.setSalt(salt);
-            String hashPasswd = helpy.hash(salt + "passwd");
-            u.setPass(hashPasswd);
-            u.setGroup(UserGroup.Admin);
-            userDb.storeUser(u);
-            
+        // PASSWORD CHECK
+        if(user.getNewpasswd() == null || user.getNewpasswd().isEmpty()) {
+            form.addError("newpasswd", "Vänligen ange ett lösenord!");
             return form;
         }
-        // USER ALREADY EXIST
-        else {
-            form.addError("create", "E-post adressen 'dzeno@bazdar.ba' finns redan i databasen!");
-            
+        if(user.getNewpasswd2() == null || user.getNewpasswd2().isEmpty()) {
+            form.addError("newpasswd2", "Vänligen ange ett lösenord!");
             return form;
         }
+        if(!(user.getNewpasswd().equals(user.getNewpasswd2()))) {
+            form.addError("newpasswd2", "Lösenordet matchar inte!");
+            return form;
+        }
+        
+        // EVERYTHING SEEMS TO BE IN ORDER CREATE USER
+        UserAccount userAcc = new UserAccount();
+        userAcc.setEmail(user.getEmail());
+        String salt = helpy.randomString(8);
+        String hashPasswd = helpy.hash(salt + user.getNewpasswd());
+        userAcc.setPass(hashPasswd);
+        userAcc.setGroup(UserGroup.User);
+        // STORE
+        userDb.storeUser(userAcc);
+            
+        return form;
     }
     
     @RequestMapping(value = "/user/edit", method = RequestMethod.POST)
