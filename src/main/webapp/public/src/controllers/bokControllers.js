@@ -16,7 +16,7 @@ bokControllers.controller('ManBokCtrl', ['$scope',
             return new Array(num);   
         };
 
-        $scope.post = {debit: {0: 0, 1: 0, length:2}, kredit: {0: 0, 1: 0, length:2}};
+        $scope.post = {debit: {0: 0, 1: 0}, kredit: {0: 0, 1: 0}, length:2};
         
         $scope.sumDebit = function(){
             return sumDebit();
@@ -28,7 +28,7 @@ bokControllers.controller('ManBokCtrl', ['$scope',
         
         function sumDebit() {
             var total = 0;
-            for(var i = 0; i < $scope.post.debit.length; i++){
+            for(var i = 0; i < $scope.post.length; i++){
                 var debit = $scope.post.debit[i];
                 total += debit;
             }
@@ -37,7 +37,7 @@ bokControllers.controller('ManBokCtrl', ['$scope',
         
         function sumKredit() {
             var total = 0;
-            for(var i = 0; i < $scope.post.kredit.length; i++){
+            for(var i = 0; i < $scope.post.length; i++){
                 var kredit = $scope.post.kredit[i];
                 total += kredit;
             }
@@ -57,6 +57,11 @@ bokControllers.controller('ManBokCtrl', ['$scope',
         
         $scope.addRow = function() {
             console.log("jippy");
+            $scope.post.debit[$scope.post.length] = 0;
+            $scope.post.kredit[$scope.post.length] = 0;
+            $scope.post.length = $scope.post.length+1;
+            $scope.rows = $scope.rows+1;
+            console.log($scope.post);
         };
     }
 ]);
