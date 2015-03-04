@@ -8,6 +8,7 @@ require(
         'app',
         'controllers/userControllers',
         'controllers/authControllers',
+        'controllers/bokControllers',
         'services/userServices',
         'services/authServices',
         'services/promiseService'
