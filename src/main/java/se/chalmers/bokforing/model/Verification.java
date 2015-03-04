@@ -6,15 +6,21 @@
 package se.chalmers.bokforing.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
- *
+ * Swedish law about verifications, see especially §6.
+ * http://www.riksdagen.se/sv/Dokument-Lagar/Lagar/Svenskforfattningssamling/
+ * Bokforingslag-19991078_sfs-1999-1078/?bet=1999:1078#K5
+ * 
  * @author Isabelle
  */
 @Entity
@@ -25,6 +31,14 @@ public class Verification implements Serializable {
     
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Post> posts;
+
+    /** The date that the transaction which the verification concerns was made. */
+    @Temporal(TemporalType.DATE)
+    private Date transactionDate;
+    
+    /** The date that this verification was created. */
+    @Temporal(TemporalType.DATE)
+    private Date creationDate;
     
     /**
      * @return the posts
@@ -40,11 +54,6 @@ public class Verification implements Serializable {
         this.posts = posts;
     }
 
-    @Override
-    public String toString() {
-        return "Verification{" + "id=" + id + ", posts=" + getPosts() + '}';
-    }
-
     /**
      * @return the id
      */
@@ -58,5 +67,37 @@ public class Verification implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
+
+    /**
+     * @return the transactionDate
+     */
+    public Date getTransactionDate() {
+        return transactionDate;
+    }
+
+    /**
+     * @param transactionDate the transactionDate to set
+     */
+    public void setTransactionDate(Date transactionDate) {
+        this.transactionDate = transactionDate;
+    }
+
+    /**
+     * @return the creationDate
+     */
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    /**
+     * @param creationDate the creationDate to set
+     */
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
     
+    @Override
+    public String toString() {
+        return "Verification{" + "id=" + id + ", posts=" + posts + ", transactionDate=" + transactionDate + ", creationDate=" + creationDate + '}';
+    }
 }
