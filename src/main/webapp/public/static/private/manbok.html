@@ -1,0 +1,35 @@
+<!--Body content-->
+<div>
+    <h1>Manuell bokföring</h1>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-3">
+                Konto
+            </div>
+            <div class="col-md-3">
+                Debet
+            </div>
+            <div class="col-md-3">
+                Kredit
+            </div>
+            <div class="col-md-3"></div><!-- Offset -->
+        </div>
+        <div ng-repeat="i in getNumber(rows) track by $index">
+            <div class="form-group">
+                <div class="col-md-3">
+                    <select class="form-control">
+                        <option>Account1</option>
+                        <option>Account2</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="number" class="form-control" step="0.01" value="{{post.debit}}" ng-model="debit$index"/>
+                </div>
+                <div class="col-md-3">
+                    <input type="number" class="form-control" step="0.01" value="{{post.kredit}}" ng-model="kredit$index"/>
+                </div>
+                <div class="col-md-3"></div><!-- Offset -->
+            </div>
+        </div>
+    </form>
+</div>
