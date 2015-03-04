@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import se.chalmers.bokforing.config.TestApplicationConfig;
 import se.chalmers.bokforing.model.Account;
+import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
@@ -45,6 +46,10 @@ public class VerificationTest extends AbstractIntegrationTest {
         sum.setSumTotal(100);
         sum.setType(PostType.Credit);
         
+        Customer customer = new Customer();
+        customer.setName("Jakob");
+        customer.setPhoneNumber("031132314");
+        
         Post post = new Post();
         post.setSum(sum);
         post.setAccount(account);
@@ -53,7 +58,7 @@ public class VerificationTest extends AbstractIntegrationTest {
         postList.add(post);
         
         String verNbr = "123";
-        manager.createVerification(verNbr, postList, cal.getTime());
+        manager.createVerification(verNbr, postList, cal.getTime(), customer);
         Verification verification = service.findVerificationById(verNbr);
     }
     

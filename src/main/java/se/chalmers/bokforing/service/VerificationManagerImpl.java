@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
+import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.Verification;
@@ -30,12 +31,13 @@ public class VerificationManagerImpl implements VerificationManager {
     private VerificationService service;
 
     @Override
-    public Verification createVerification(String verificationNbr, List<Post> posts, Date transactionDate) {
+    public Verification createVerification(String verificationNbr, List<Post> posts, Date transactionDate, Customer customer) {
         if(isVerificationValid(verificationNbr, posts, transactionDate)) {
             Verification ver = new Verification();
             ver.setId(verificationNbr);
             ver.setPosts(posts);
             ver.setTransactionDate(transactionDate);
+            ver.setCustomer(customer);
             service.save(ver);
             return ver;
         }

@@ -7,6 +7,7 @@ package se.chalmers.bokforing.service;
 
 import java.util.Date;
 import java.util.List;
+import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.Verification;
@@ -19,6 +20,6 @@ import se.chalmers.bokforing.model.Verification;
  */
 public interface VerificationManager {
     
-    Verification createVerification(String verificationNbr, List<Post> posts, Date transactionDate);
+    Verification createVerification(String verificationNbr, List<Post> posts, Date transactionDate, Customer customer);
     
 }

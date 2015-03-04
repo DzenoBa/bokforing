@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import se.chalmers.bokforing.helperfunctions.HelpY;
 import se.chalmers.bokforing.model.Account;
+import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
@@ -51,6 +52,10 @@ public class ControllerTest {
         account.setName("Egna insättningar");
         account.setNumber("2018");
         
+        Customer customer = new Customer();
+        customer.setName("Jakob");
+        customer.getPhoneNumber("123432525");
+        
         PostSum sum = new PostSum();
         sum.setSumTotal(100);
         sum.setType(PostType.Credit);
@@ -63,7 +68,7 @@ public class ControllerTest {
         postList.add(post);
         
         String verNbr = "123";
-        verManager.createVerification(verNbr, postList, cal.getTime());
+        verManager.createVerification(verNbr, postList, cal.getTime(), customer);
         Verification verification = verService.findVerificationById(verNbr);
         
         return new ModelAndView("test3", "message", verification.toString());

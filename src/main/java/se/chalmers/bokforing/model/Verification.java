@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -39,6 +40,9 @@ public class Verification implements Serializable {
     /** The date that this verification was created. */
     @Temporal(TemporalType.DATE)
     private Date creationDate;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    private Customer customer;
     
     /**
      * @return the posts
@@ -96,8 +100,24 @@ public class Verification implements Serializable {
         this.creationDate = creationDate;
     }
     
+    /**
+     * @return the customer
+     */
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    /**
+     * @param customer the customer to set
+     */
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
     @Override
     public String toString() {
-        return "Verification{" + "id=" + id + ", posts=" + posts + ", transactionDate=" + transactionDate + ", creationDate=" + creationDate + '}';
+        return "Verification{" + "id=" + id + ", posts=" + posts + ", transactionDate=" + transactionDate + ", creationDate=" + creationDate + ", customer=" + customer + '}';
     }
+    
+    
 }
