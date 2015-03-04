@@ -56,7 +56,6 @@ public class ControllerTest {
         sum.setType(PostType.Credit);
         
         Post post = new Post();
-        post.setPostDate(cal.getTime());
         post.setSum(sum);
         post.setAccount(account);
         
@@ -64,7 +63,7 @@ public class ControllerTest {
         postList.add(post);
         
         String verNbr = "123";
-        verManager.createVerification(verNbr, postList);
+        verManager.createVerification(verNbr, postList, cal.getTime());
         Verification verification = verService.findVerificationById(verNbr);
         
         return new ModelAndView("test3", "message", verification.toString());

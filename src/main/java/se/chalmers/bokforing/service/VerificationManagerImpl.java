@@ -5,6 +5,7 @@
  */
 package se.chalmers.bokforing.service;
 
+import java.util.Date;
 import se.chalmers.bokforing.service.VerificationService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.model.Verification;
+import se.chalmers.bokforing.util.DateUtil;
 
 /**
  *
@@ -28,11 +30,12 @@ public class VerificationManagerImpl implements VerificationManager {
     private VerificationService service;
 
     @Override
-    public Verification createVerification(String verificationNbr, List<Post> posts) {
-        if(isVerificationValid(verificationNbr, posts)) {
+    public Verification createVerification(String verificationNbr, List<Post> posts, Date transactionDate) {
+        if(isVerificationValid(verificationNbr, posts, transactionDate)) {
             Verification ver = new Verification();
             ver.setId(verificationNbr);
             ver.setPosts(posts);
+            ver.setTransactionDate(transactionDate);
             service.save(ver);
             return ver;
         }
@@ -40,8 +43,12 @@ public class VerificationManagerImpl implements VerificationManager {
         return null;
     }
 
-    private boolean isVerificationValid(String verificationNbr, List<Post> posts) {
+    private boolean isVerificationValid(String verificationNbr, List<Post> posts, Date transactionDate) {
+        if(DateUtil.isDateBeforeToday(transactionDate)) {
+            return false;
+        }
         // Some more validation here I guess
+        
         
         return true;
     }

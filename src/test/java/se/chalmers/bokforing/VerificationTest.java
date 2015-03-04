@@ -46,7 +46,6 @@ public class VerificationTest extends AbstractIntegrationTest {
         sum.setType(PostType.Credit);
         
         Post post = new Post();
-        post.setPostDate(cal.getTime());
         post.setSum(sum);
         post.setAccount(account);
         
@@ -54,7 +53,7 @@ public class VerificationTest extends AbstractIntegrationTest {
         postList.add(post);
         
         String verNbr = "123";
-        manager.createVerification(verNbr, postList);
+        manager.createVerification(verNbr, postList, cal.getTime());
         Verification verification = service.findVerificationById(verNbr);
     }
     
