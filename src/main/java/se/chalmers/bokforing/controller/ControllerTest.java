@@ -54,7 +54,7 @@ public class ControllerTest {
         
         Customer customer = new Customer();
         customer.setName("Jakob");
-        customer.getPhoneNumber("123432525");
+        customer.setPhoneNumber("123432525");
         
         PostSum sum = new PostSum();
         sum.setSumTotal(100);
