@@ -59,15 +59,12 @@ bokControllers.controller('ManBokCtrl', ['$scope',
             $scope.post.debit[$scope.rows] = 0;
             $scope.post.kredit[$scope.rows] = 0;
             $scope.rows = $scope.rows+1;
-            console.log($scope.post);
         };
         
         $scope.removeRow = function(index) {
-            console.log(index);
             $scope.post.debit[index] = null;
             $scope.post.kredit[index] = null;
             $scope.rows = $scope.rows-1;
-            console.log($scope.post);
         };
     }
 ]);
