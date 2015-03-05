@@ -54,7 +54,7 @@ bok.config(['$routeProvider',
                 }).
                 when('/manbok', {
                     templateUrl: 'private/manbok.html',
-                    controller: 'ManBokCtrl',
+                    controller: 'ManBokCtrl'
                     //auth: true,
                     /*resolve: {
                         init: ['PromiseProxy', function(PromiseProxy) {
