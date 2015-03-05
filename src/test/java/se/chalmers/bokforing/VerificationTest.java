@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -37,14 +38,21 @@ public class VerificationTest extends AbstractIntegrationTest {
     
     @Test
     public void testCreateVerification() {
+        double sum1Amount = 100;
+        double sum2Amount = 100;
+        
         Calendar cal = Calendar.getInstance();
         Account account = new Account();
         account.setName("Egna insättningar");
         account.setNumber("2018");
         
         PostSum sum = new PostSum();
-        sum.setSumTotal(100);
+        sum.setSumTotal(sum1Amount);
         sum.setType(PostType.Credit);
+        
+        PostSum sum2 = new PostSum();
+        sum2.setSumTotal(sum2Amount);
+        sum2.setType(PostType.Debit);
         
         Customer customer = new Customer();
         customer.setName("Jakob");
@@ -54,12 +62,20 @@ public class VerificationTest extends AbstractIntegrationTest {
         post.setSum(sum);
         post.setAccount(account);
         
+        Post post2 = new Post();
+        post2.setSum(sum2);
+        post2.setAccount(account);
+        
         ArrayList<Post> postList = new ArrayList<>();
         postList.add(post);
+        postList.add(post2);
         
-        int verNbr = 123;
-        manager.createVerification(verNbr, postList, cal.getTime(), customer);
-        Verification verification = service.findVerificationById(verNbr);
+        int verNbr = 126; // one higher than the highest inserted row
+        Verification verification = manager.createVerification(verNbr, postList, cal.getTime(), customer);
+        assertNotNull(verification);
+        
+        Verification verificationFromDb = service.findVerificationById(verNbr);
+        assertNotNull(verificationFromDb);
     }
     
     @Test

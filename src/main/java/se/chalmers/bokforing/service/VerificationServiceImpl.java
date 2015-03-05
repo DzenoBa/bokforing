@@ -38,7 +38,7 @@ public class VerificationServiceImpl implements VerificationService {
     }
     
     @Override
-    public long findHighestId() {
+    public Long findHighestId() {
         return repository.findHighestId();
     }
     

@@ -16,6 +16,8 @@ import org.springframework.validation.ValidationUtils;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.Post;
+import se.chalmers.bokforing.model.PostSum;
+import se.chalmers.bokforing.model.PostType;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.util.DateUtil;
@@ -32,27 +34,54 @@ public class VerificationManagerImpl implements VerificationManager {
 
     @Override
     public Verification createVerification(long verificationNbr, List<Post> posts, Date transactionDate, Customer customer) {
-        if(isVerificationValid(verificationNbr, posts, transactionDate)) {
-            Verification ver = new Verification();
-            ver.setId(verificationNbr);
-            ver.setPosts(posts);
-            ver.setTransactionDate(transactionDate);
-            ver.setCustomer(customer);
-            service.save(ver);
-            return ver;
+        if(!isVerificationValid(verificationNbr, posts, transactionDate)) {
+            return null;
         }
         
-        return null;
+        Verification ver = new Verification();
+        ver.setId(verificationNbr);
+        ver.setPosts(posts);
+        ver.setTransactionDate(transactionDate);
+        ver.setCustomer(customer);
+        service.save(ver);
+        
+        return ver;
     }
 
     private boolean isVerificationValid(long verificationNbr, List<Post> posts, Date transactionDate) {
         if(DateUtil.isDateBeforeToday(transactionDate)) {
             return false;
         }
-        // Some more validation here I guess
         
+        Long highestVerificationNumber = service.findHighestId();
+        if(verificationNbr != highestVerificationNumber + 1) {
+            return false;
+        }
+        
+        if(getBalance(posts) != 0) {
+            return false;
+        }
         
         return true;
+    }
+    
+    private double getBalance(List<Post> posts) {
+        double balance = 0;
+        
+        for(Post post : posts) {
+            PostSum sum = post.getPostSum();
+            
+            switch(sum.getType()) {
+                case Credit:
+                    balance -= sum.getSumTotal();
+                    break;
+                case Debit:
+                    balance += sum.getSumTotal();
+                    break;
+            }
+        }
+        
+        return balance;
     }
     
     

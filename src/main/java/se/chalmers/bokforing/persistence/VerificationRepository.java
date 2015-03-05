@@ -18,9 +18,9 @@ import se.chalmers.bokforing.model.Verification;
 @Repository
 public interface VerificationRepository extends JpaRepository<Verification, Long> {
     
-    Verification findById(long id);
+    Verification findById(Long id);
 
     @Query("SELECT MAX(id) FROM Verification")
-    long findHighestId();
+    Long findHighestId();
     
 }

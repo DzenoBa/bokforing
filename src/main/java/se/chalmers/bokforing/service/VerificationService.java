@@ -24,7 +24,7 @@ public interface VerificationService {
     
     Verification findVerificationById(long id);
     
-    long findHighestId();
+    Long findHighestId();
     
     void save(Verification verification);
 }
