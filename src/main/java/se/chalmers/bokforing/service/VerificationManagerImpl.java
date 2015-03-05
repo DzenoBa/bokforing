@@ -54,7 +54,7 @@ public class VerificationManagerImpl implements VerificationManager {
         }
         
         Long highestVerificationNumber = service.findHighestId();
-        if(verificationNbr != highestVerificationNumber + 1) {
+        if(highestVerificationNumber == null || verificationNbr != highestVerificationNumber + 1) {
             return false;
         }
         

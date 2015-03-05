@@ -43,36 +43,5 @@ public class ControllerTest {
         user.setPass("whoop");
         userDb.storeUser(user);
         return new ModelAndView("test", "message", userDb.getUsersByName("Victor").toString());
-    }
-    
-    @RequestMapping("/test2")
-    public ModelAndView getNewPage() {
-        Calendar cal = Calendar.getInstance();
-        Account account = new Account();
-        account.setName("Egna insättningar");
-        account.setNumber("2018");
-        
-        Customer customer = new Customer();
-        customer.setName("Jakob");
-        customer.setPhoneNumber("123432525");
-        
-        PostSum sum = new PostSum();
-        sum.setSumTotal(100);
-        sum.setType(PostType.Credit);
-        
-        Post post = new Post();
-        post.setSum(sum);
-        post.setAccount(account);
-        
-        ArrayList<Post> postList = new ArrayList<>();
-        postList.add(post);
-        
-        long verNbr = 123;
-        verManager.createVerification(verNbr, postList, cal.getTime(), customer);
-        Verification verification = verService.findVerificationById(verNbr);
-        
-        return new ModelAndView("test3", "message", verification.toString());
-    }
-    
-    
+    }    
 }

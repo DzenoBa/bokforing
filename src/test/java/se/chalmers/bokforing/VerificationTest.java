@@ -80,7 +80,7 @@ public class VerificationTest extends AbstractIntegrationTest {
     
     @Test
     public void testFindHighestVerificationId() {
-        long highestId = service.findHighestId();
+        long highestId = service.findHighestId();   
         
         // From the inserted rows
         assertEquals(125, highestId);

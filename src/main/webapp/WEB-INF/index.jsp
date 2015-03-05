@@ -16,7 +16,6 @@
         <h1>Start page</h1>
         <a href="test">Test</a>
         <br>
-        <a href="test2">Test2</a>
         <br><br>
         <a href="users">
             I denna länken kommer JSON-representation av ett objekt visas.
