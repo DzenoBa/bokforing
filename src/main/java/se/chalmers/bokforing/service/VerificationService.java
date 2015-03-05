@@ -7,6 +7,7 @@ package se.chalmers.bokforing.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.model.Verification;
 
@@ -21,7 +22,9 @@ public interface VerificationService {
     
     Page<Verification> findAllVerifications(Pageable pageable);
     
-    Verification findVerificationById(String id);
+    Verification findVerificationById(long id);
+    
+    long findHighestId();
     
     void save(Verification verification);
 }

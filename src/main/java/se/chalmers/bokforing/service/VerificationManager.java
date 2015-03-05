@@ -20,6 +20,6 @@ import se.chalmers.bokforing.model.Verification;
  */
 public interface VerificationManager {
     
-    Verification createVerification(String verificationNbr, List<Post> posts, Date transactionDate, Customer customer);
+    Verification createVerification(long verificationNbr, List<Post> posts, Date transactionDate, Customer customer);
     
 }

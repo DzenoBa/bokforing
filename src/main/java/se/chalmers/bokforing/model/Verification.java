@@ -14,6 +14,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -25,10 +26,11 @@ import javax.persistence.TemporalType;
  * @author Isabelle
  */
 @Entity
+@Table(name = "Verifications")
 public class Verification implements Serializable {
     
     @Id
-    private String id;
+    private Long id;
     
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Post> posts;
@@ -61,14 +63,14 @@ public class Verification implements Serializable {
     /**
      * @return the id
      */
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

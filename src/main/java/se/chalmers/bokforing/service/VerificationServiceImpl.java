@@ -28,13 +28,18 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
-    public Verification findVerificationById(String id) {
+    public Verification findVerificationById(long id) {
         return repository.findById(id);
     }
 
     @Override
     public void save(Verification verification) {
         repository.save(verification);
+    }
+    
+    @Override
+    public long findHighestId() {
+        return repository.findHighestId();
     }
     
 }

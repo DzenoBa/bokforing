@@ -57,9 +57,17 @@ public class VerificationTest extends AbstractIntegrationTest {
         ArrayList<Post> postList = new ArrayList<>();
         postList.add(post);
         
-        String verNbr = "123";
+        int verNbr = 123;
         manager.createVerification(verNbr, postList, cal.getTime(), customer);
         Verification verification = service.findVerificationById(verNbr);
+    }
+    
+    @Test
+    public void testFindHighestVerificationId() {
+        long highestId = service.findHighestId();
+        
+        // From the inserted rows
+        assertEquals(125, highestId);
     }
     
 }

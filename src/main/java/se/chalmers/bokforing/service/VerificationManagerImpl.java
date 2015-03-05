@@ -31,7 +31,7 @@ public class VerificationManagerImpl implements VerificationManager {
     private VerificationService service;
 
     @Override
-    public Verification createVerification(String verificationNbr, List<Post> posts, Date transactionDate, Customer customer) {
+    public Verification createVerification(long verificationNbr, List<Post> posts, Date transactionDate, Customer customer) {
         if(isVerificationValid(verificationNbr, posts, transactionDate)) {
             Verification ver = new Verification();
             ver.setId(verificationNbr);
@@ -45,7 +45,7 @@ public class VerificationManagerImpl implements VerificationManager {
         return null;
     }
 
-    private boolean isVerificationValid(String verificationNbr, List<Post> posts, Date transactionDate) {
+    private boolean isVerificationValid(long verificationNbr, List<Post> posts, Date transactionDate) {
         if(DateUtil.isDateBeforeToday(transactionDate)) {
             return false;
         }

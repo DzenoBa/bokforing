@@ -67,7 +67,7 @@ public class ControllerTest {
         ArrayList<Post> postList = new ArrayList<>();
         postList.add(post);
         
-        String verNbr = "123";
+        long verNbr = 123;
         verManager.createVerification(verNbr, postList, cal.getTime(), customer);
         Verification verification = verService.findVerificationById(verNbr);
         
