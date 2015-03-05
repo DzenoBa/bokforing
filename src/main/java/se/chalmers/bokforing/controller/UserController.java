@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import se.chalmers.bokforing.helperfunctions.HelpY;
+import se.chalmers.bokforing.util.PasswordUtil;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
 import se.chalmers.bokforing.model.UserGroup;
@@ -31,7 +31,7 @@ public class UserController {
     @Autowired 
     private AuthSession authSession;
     
-    HelpY helpy = new HelpY();
+    PasswordUtil helpy = new PasswordUtil();
     
     /*
      * CREATE

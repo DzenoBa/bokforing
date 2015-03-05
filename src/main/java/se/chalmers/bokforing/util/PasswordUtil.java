@@ -1,21 +1,17 @@
 
-package se.chalmers.bokforing.helperfunctions;
+package se.chalmers.bokforing.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 /**
- * A class that contains helper functions
+ * A class that contains helper functions for passwords.
  * 
  * @author Dženan
  */
-public class HelpY {
-    
-    public HelpY() {
-        ;
-    }
-    
+public class PasswordUtil {
+     
     /**
      * RANDOM STRING
      * @param length

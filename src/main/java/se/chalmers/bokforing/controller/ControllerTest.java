@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import se.chalmers.bokforing.helperfunctions.HelpY;
+import se.chalmers.bokforing.util.PasswordUtil;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Post;
@@ -39,7 +39,7 @@ public class ControllerTest {
     public ModelAndView getUsersView() {
         UserAccount user = new UserAccount();
         user.setName("Victor");
-        user.setEmail(HelpY.randomString(8));
+        user.setEmail(PasswordUtil.randomString(8));
         user.setPass("whoop");
         userDb.storeUser(user);
         return new ModelAndView("test", "message", userDb.getUsersByName("Victor").toString());

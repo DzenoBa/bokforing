@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import se.chalmers.bokforing.helperfunctions.HelpY;
+import se.chalmers.bokforing.util.PasswordUtil;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
 import se.chalmers.bokforing.service.UserServiceImpl;
@@ -29,7 +29,7 @@ public class AuthController {
     @Autowired
     private UserServiceImpl userDb;
     
-    private HelpY helpy = new HelpY();
+    private PasswordUtil helpy = new PasswordUtil();
     
     /*
      * LOGIN
