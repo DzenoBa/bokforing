@@ -107,3 +107,20 @@ userControllers.controller('EditUserCtrl', ['$scope', '$location', 'AuthProxy',
         
         init();
     }]);
+
+/**
+ * USER INFO
+ */
+userControllers.controller('UserInfoCtrl', ['$scope',
+    function($scope) {
+        $scope.showmapedit = {name: false};
+        $scope.userinfo = {name: "Dzeno"};
+        
+        $scope.showedit = function(str) {
+            $scope.showmapedit[str] = true;
+        };
+        $scope.hideedit = function(str) {
+            $scope.showmapedit[str] = false;
+        };
+    }
+]);

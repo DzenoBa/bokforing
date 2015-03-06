@@ -1,0 +1,23 @@
+<!--Body content-->
+<div>
+    <h1>Användarinformation</h1>
+    <form class="form-horizontal">
+        <div class="form-group" ng-mouseenter="hover.name = true" ng-mouseleave="hover.name = false">
+            <div class="col-md-3">
+                <label for="name">Namn:</label>
+            </div>
+            <div class="col-md-5">
+                <span ng-show="!showmapedit.name">{{userinfo.name}}</span>
+                <input id="name" class="form-control" ng-model="userinfo.name" type="text" value="{{userinfo.name}}" placeholder="Ange namn" ng-show="showmapedit.name"/>
+            </div>
+            <div class="col-md-4">
+                <button type="button" class="btn btn-info" ng-click="showedit('name')" ng-show="hover.name && !showmapedit.name">
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-success" ng-click="hideedit('name')" ng-show="showmapedit.name">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
