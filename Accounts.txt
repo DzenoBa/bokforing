@@ -1,0 +1,13 @@
+1010 Utvecklingsutgifter 
+1030 Patent 
+2320 Konvertibla lån och liknande 
+2440 Leverantörsskulder 
+2630 Utgående moms, 6 % 
+2880 Skuld erhållna bidrag 
+3590 Övriga fakturerade kostnader
+3910 Hyres- och arrendeintäkter
+4950 Förändring av lager av färdiga varor 
+5170 Reparation och underhål av fastighet 
+6090 Övriga försäljningskostnader 
+7010 Löner till kollektivanställda 
+8030 Resultatandelar från handelsbolag (dotterföretag) 
