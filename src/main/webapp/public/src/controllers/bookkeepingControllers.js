@@ -7,9 +7,9 @@
 
 'use strict';
 
-var bokControllers = angular.module('BokControllers', []);
+var bookkeepingControllers = angular.module('BookkeepingControllers', []);
 
-bokControllers.controller('ManBokCtrl', ['$scope',
+bookkeepingControllers.controller('ManBKCtrl', ['$scope',
     function($scope) {
         $scope.rows = 2;
         $scope.getNumber = function(num) {

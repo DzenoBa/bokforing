@@ -14,7 +14,8 @@ var bok = angular.module('Bok', [
     'UserControllers',
     'UserService',
     'PromiseService',
-    'BokControllers'
+    'BookkeepingControllers',
+    'BookkeepingService'
      // More here
 ]);
 
@@ -54,7 +55,7 @@ bok.config(['$routeProvider',
                 }).
                 when('/manbok', {
                     templateUrl: 'private/manbok.html',
-                    controller: 'ManBokCtrl'
+                    controller: 'ManBKCtrl'
                     //auth: true,
                     /*resolve: {
                         init: ['PromiseProxy', function(PromiseProxy) {
