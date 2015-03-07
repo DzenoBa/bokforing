@@ -20,10 +20,10 @@
                         </select>
                     </td>
                     <td>
-                            <input type="number" class="form-control" step="0.01" value="{{post.debit[$index]}}" ng-model="post.debit[$index]" ng-change="refreshSumDebit()"/>
+                            <input type="number" class="form-control" step="0.01" value="{{verification.posts[$index].debit}}" ng-model="verification.posts[$index].debit"/>
                     </td>
                     <td>
-                            <input type="number" class="form-control" step="0.01" ng-model="post.kredit[$index]"/>
+                            <input type="number" class="form-control" step="0.01" ng-model="verification.posts[$index].credit"/>
                     </td>
                     <td>
                         <button type="button" class="btn btn-danger" ng-click="removeRow($index)" ng-show="$index===(rows-1) && $index>=2">
@@ -35,13 +35,13 @@
             <tfoot>
                 <tr>
                     <td>
-                        <span class="label label-warning" ng-show="sumDebit() !== sumKredit()">Debit och kredit måste vara lika</span> &nbsp;
+                        <span class="label label-warning" ng-show="sumDebit() !== sumCredit()">Debit och kredit måste vara lika</span> &nbsp;
                     </td>
                     <td>
                         Totalt: {{sumDebit()}}
                     </td>
                     <td>
-                        Totalt: {{sumKredit()}}
+                        Totalt: {{sumCredit()}}
                     </td>
                     <td></td>
                 </tr>

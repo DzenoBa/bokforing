@@ -9,62 +9,66 @@
 
 var bookkeepingControllers = angular.module('BookkeepingControllers', []);
 
-bookkeepingControllers.controller('ManBKCtrl', ['$scope',
-    function($scope) {
+bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy',
+    function($scope, BookkeepingProxy) {
         $scope.rows = 2;
         $scope.getNumber = function(num) {
             return new Array(num);   
         };
 
         $scope.post = {debit: {0: 0, 1: 0}, kredit: {0: 0, 1: 0}};
+        $scope.verification = {posts: 
+                    {0: {debit: 0, credit: 0},
+                    1: {debit: 0, credit: 0}}
+            };
         
         $scope.sumDebit = function(){
             return sumDebit();
         };
         
-        $scope.sumKredit = function() {
-            return sumKredit();
+        $scope.sumCredit = function() {
+            return sumCredit();
         };
         
         function sumDebit() {
             var total = 0;
             for(var i = 0; i < $scope.rows; i++){
-                var debit = $scope.post.debit[i];
+                var debit = $scope.verification.posts[i].debit;
                 total += debit;
             }
             return total;
         }
         
-        function sumKredit() {
+        function sumCredit() {
             var total = 0;
             for(var i = 0; i < $scope.rows; i++){
-                var kredit = $scope.post.kredit[i];
-                total += kredit;
+                var credit = $scope.verification.posts[i].credit;
+                total += credit;
             }
             return total;
         }
         
-        $scope.refreshSumDebit = function() {
-            $scope.sumDebit = function(){
-                return sumDebit();
-            };
-        };
-        $scope.refreshSumKredit = function() {
-            $scope.sumKredit = function(){
-                return sumKredit();
-            };
-        };
-        
         $scope.addRow = function() {
-            $scope.post.debit[$scope.rows] = 0;
-            $scope.post.kredit[$scope.rows] = 0;
+            $scope.verification.posts[$scope.rows] = {debit: 0, credit: 0};
             $scope.rows = $scope.rows+1;
         };
         
         $scope.removeRow = function(index) {
-            $scope.post.debit[index] = null;
-            $scope.post.kredit[index] = null;
+            $scope.verification.posts[index].debit = null;
+            $scope.verification.posts[index].credit = null;
             $scope.rows = $scope.rows-1;
+        };
+        
+        $scope.create = function() {
+            BookkeepingProxy.createManBok($scope.verification)
+                    .success(function(form) {
+                        $scope.form = form;
+                        if(form.numErrors === 0) {
+                            $scope.verification = null;
+                        }
+                    }).error(function() {
+                        console.log("mbk:create: error");
+                    });
         };
     }
 ]);
