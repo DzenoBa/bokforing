@@ -44,7 +44,7 @@ public class VerificationTest extends AbstractIntegrationTest {
         Calendar cal = Calendar.getInstance();
         Account account = new Account();
         account.setName("Egna insättningar");
-        account.setNumber("2018");
+        account.setNumber(2018);
         
         PostSum sum = new PostSum();
         sum.setSumTotal(sum1Amount);
