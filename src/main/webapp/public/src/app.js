@@ -63,6 +63,10 @@ bok.config(['$routeProvider',
                         }]
                     }*/
                 }).
+                when('/userinfo', {
+                    templateUrl: 'private/userinfo.html',
+                    controller: 'UserInfoCtrl'
+                }).
                 otherwise({
                     redirectTo: 'index.html'
                 });
