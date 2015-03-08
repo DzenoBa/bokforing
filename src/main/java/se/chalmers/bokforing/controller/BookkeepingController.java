@@ -2,6 +2,7 @@
 package se.chalmers.bokforing.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,9 +14,11 @@ import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.PostJSON;
 import se.chalmers.bokforing.jsonobject.VerificationJSON;
 import se.chalmers.bokforing.model.Account;
+import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
+import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.service.VerificationManagerImpl;
 import se.chalmers.bokforing.session.AuthSession;
 
@@ -50,7 +53,11 @@ public class BookkeepingController {
             form.addError("verificationdate", "Ange ett datum");
             return form;
         }
-        
+        // TODO ACCOUNT
+        Account temp_account = new Account();
+        temp_account.setName("TEST");
+        temp_account.setNumber("123456789");
+            
         // CREATE POSTS
         List<Post> new_posts = new ArrayList();
         for(PostJSON post : verification.getPosts()) {
@@ -58,15 +65,10 @@ public class BookkeepingController {
                 form.addError("todo", "Ett fel inträffades, vänligen försök igen om en liten stund. Code: P01"); // TODO
                 return form;
             }
-            if(post.getAccountid() == 0 || post.getDebit() < 0 || post.getCredit() < 0) {
+            if(post.getDebit() < 0 || post.getCredit() < 0) {
                 form.addError("todo", "Ett fel inträffades, vänligen försök igen om en liten stund. Code: P02"); // TODO
                 return form;
             }
-            
-            // TODO ACCOUNT
-            Account temp_account = new Account();
-            temp_account.setName("TEST");
-            temp_account.setNumber("123456789");
             
             // CREATE A POSTSUM
             PostSum temp_postSum = new PostSum();
@@ -94,8 +96,17 @@ public class BookkeepingController {
             new_posts.add(temp_post);
         }
         
+        Calendar cal = Calendar.getInstance();
         // EVERYTHING SEEMS TO BE IN ORDER; CREATE VERIFICATION
-        verificationManager.createVerification(012315, new_posts, verification.getTransactionDate(), null); // TODO
+        System.out.println("------ PING --------");
+        Customer cust = new Customer();
+        cust.setName("Dzeno");
+        cust.setPhoneNumber("00387");
+        Verification ver = verificationManager.createVerification(556, new_posts, cal.getTime(), cust); // TODO
+        
+        if(ver == null) {
+            form.addError("general", "Ver. error");
+        }
         
         return form;
     }

@@ -42,10 +42,10 @@
                         </select>
                     </td>
                     <td>
-                            <input type="number" class="form-control" step="0.01" value="{{verification.posts[$index].debit}}" ng-model="verification.posts[$index].debit"/>
+                        <input type="number" class="form-control" step="0.01" value="{{verification.posts[$index].debit}}" ng-model="verification.posts[$index].debit"/>
                     </td>
                     <td>
-                            <input type="number" class="form-control" step="0.01" ng-model="verification.posts[$index].credit"/>
+                        <input type="number" class="form-control" step="0.01" ng-model="verification.posts[$index].credit"/>
                     </td>
                     <td>
                         <button type="button" class="btn btn-danger" ng-click="removeRow($index)" ng-show="$index===(rows-1) && $index>=2">
