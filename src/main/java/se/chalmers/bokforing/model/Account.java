@@ -18,20 +18,20 @@ import javax.persistence.Id;
 public class Account implements Serializable {
     
     @Id
-    private String number;
+    private int number;
     private String name;
     
     /**
      * @return the number
      */
-    public String getNumber() {
+    public int getNumber() {
         return number;
     }
 
     /**
      * @param number the number to set
      */
-    public void setNumber(String number) {
+    public void setNumber(int number) {
         this.number = number;
     }
 
