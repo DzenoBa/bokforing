@@ -233,7 +233,7 @@
 1974 Spärrade bankmedel 
 1979 Övriga särskilda bankkonton 
 1980 Valutakonton 
-1990 Redovisningsmedel 2 Eget kapital och skulder
+1990 Redovisningsmedel 
 2010 Eget kapital, delägare 1 
 2011 Egna varuuttag 
 2013 Övriga egna uttag 
