@@ -53,6 +53,7 @@ public class BookkeepingController {
             form.addError("verificationdate", "Ange ett datum");
             return form;
         }
+        
         // TODO ACCOUNT
         Account temp_account = new Account();
         temp_account.setName("TEST");
@@ -96,13 +97,11 @@ public class BookkeepingController {
             new_posts.add(temp_post);
         }
         
-        Calendar cal = Calendar.getInstance();
         // EVERYTHING SEEMS TO BE IN ORDER; CREATE VERIFICATION
-        System.out.println("------ PING --------");
         Customer cust = new Customer();
         cust.setName("Dzeno");
         cust.setPhoneNumber("00387");
-        Verification ver = verificationManager.createVerification(556, new_posts, cal.getTime(), cust); // TODO
+        Verification ver = verificationManager.createVerification(556, new_posts, verification.getTransactionDate(), cust); // TODO
         
         if(ver == null) {
             form.addError("general", "Ver. error");

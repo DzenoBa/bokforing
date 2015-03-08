@@ -49,9 +49,9 @@ public class VerificationManagerImpl implements VerificationManager {
     }
 
     private boolean isVerificationValid(long verificationNbr, List<Post> posts, Date transactionDate) {
-        if(DateUtil.isDateBeforeToday(transactionDate)) {
+        /*if(DateUtil.isDateBeforeToday(transactionDate)) {
             return false;
-        }
+        }*/
         
         Long highestVerificationNumber = service.findHighestId();
         if(highestVerificationNumber == null || verificationNbr != highestVerificationNumber + 1) {

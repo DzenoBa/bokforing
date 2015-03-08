@@ -59,7 +59,6 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy',
         };
         
         $scope.create = function() {
-            console.log($scope.verification);
             BookkeepingProxy.createManBook($scope.verification)
                     .success(function(form) {
                         $scope.form = form;
