@@ -16,10 +16,9 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy',
             return new Array(num);   
         };
 
-        $scope.post = {debit: {0: 0, 1: 0}, kredit: {0: 0, 1: 0}};
         $scope.verification = {posts: 
-                    {0: {debit: 0, credit: 0},
-                    1: {debit: 0, credit: 0}}
+                    [ {debit: 0, credit: 0},
+                    {debit: 0, credit: 0}]
             };
         
         $scope.sumDebit = function(){
@@ -60,11 +59,15 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy',
         };
         
         $scope.create = function() {
-            BookkeepingProxy.createManBok($scope.verification)
+            console.log($scope.verification);
+            BookkeepingProxy.createManBook($scope.verification)
                     .success(function(form) {
                         $scope.form = form;
                         if(form.numErrors === 0) {
-                            $scope.verification = null;
+                            $scope.verification = {posts: 
+                                        [ {debit: 0, credit: 0},
+                                        {debit: 0, credit: 0}]
+                                };
                         }
                     }).error(function() {
                         console.log("mbk:create: error");

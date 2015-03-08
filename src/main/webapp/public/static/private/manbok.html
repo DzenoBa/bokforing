@@ -1,7 +1,29 @@
 <!--Body content-->
 <div>
     <h1>Manuell bokföring</h1>
+    <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
+        Verifikationen har skapats!
+    </div>
+    <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
+        <h4>{{form.numErrors}} fel hittades!</h4>
+        <p>{{form.errors.general}}</p>
+        <p>{{form.errors.todo}}</p>
+    </div>
     <form class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-3">
+                <label>Datum</label>
+            </div>
+            <div class="col-md-9">
+                <input type="date" class="form-control" value="{{verification.transactionDate}}" ng-model="verification.transactionDate"/>
+            </div>
+        </div>
+        <div class="form-group" ng-show="form.errors.newpasswd !== null">
+            <div class="col-sm-3"></div><!-- Offset -->
+            <div class="col-sm-9">
+                <span class="error">{{form.errors.verificationdate}}</span>
+            </div>
+        </div>
         <table class="table">
             <thead>
                 <tr>
