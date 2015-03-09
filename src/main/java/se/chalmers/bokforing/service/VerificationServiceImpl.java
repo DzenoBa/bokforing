@@ -7,8 +7,11 @@ package se.chalmers.bokforing.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import se.chalmers.bokforing.util.Constants;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.persistence.VerificationRepository;
 
@@ -41,5 +44,13 @@ public class VerificationServiceImpl implements VerificationService {
     public Long findHighestId() {
         return repository.findHighestId();
     }
+
+    @Override
+    public Page<Verification> findAllVerifications(Integer pageNumber, String fieldToSortBy, Boolean ascendingSort) {
+        PageRequest request = PageRequestParser.getPageRequest(pageNumber, ascendingSort, fieldToSortBy);
+        
+        return repository.findAll(request);
+    }
+
     
 }
