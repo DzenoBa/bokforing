@@ -1,6 +1,7 @@
 
 package se.chalmers.bokforing;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import static org.junit.Assert.assertEquals;
@@ -51,6 +52,9 @@ public class AccountTest extends AbstractIntegrationTest {
         // TEST FIND ALL
         Page<Account> accls = service.findAllAccounts(0, "name", false);
         assertEquals(10, accls.getNumberOfElements());
+        
+        List<Account> accls2 = service.findAccountBetween(1002, 1008);
+        assertEquals(7, accls2.size());
     }
     
 }
