@@ -9,12 +9,14 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author Isabelle
  */
 @Entity
+@Table(name = "Accounts")
 public class Account implements Serializable {
     
     @Id
