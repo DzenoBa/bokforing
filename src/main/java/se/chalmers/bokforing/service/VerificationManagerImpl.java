@@ -79,14 +79,15 @@ public class VerificationManagerImpl implements VerificationManager {
         
         for(Post post : posts) {
             PostSum sum = post.getPostSum();
-            
-            switch(sum.getType()) {
-                case Credit:
-                    balance -= sum.getSumTotal();
-                    break;
-                case Debit:
-                    balance += sum.getSumTotal();
-                    break;
+            if(sum != null && sum.getType() != null) {
+                switch(sum.getType()) {
+                    case Credit:
+                        balance -= sum.getSumTotal();
+                        break;
+                    case Debit:
+                        balance += sum.getSumTotal();
+                        break;
+                }
             }
         }
         

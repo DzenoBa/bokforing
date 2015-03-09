@@ -57,7 +57,7 @@ public class BookkeepingController {
         // TODO ACCOUNT
         Account temp_account = new Account();
         temp_account.setName("TEST");
-        temp_account.setNumber("123456789");
+        temp_account.setNumber(123456);
             
         // CREATE POSTS
         List<Post> new_posts = new ArrayList();
@@ -101,7 +101,7 @@ public class BookkeepingController {
         Customer cust = new Customer();
         cust.setName("Dzeno");
         cust.setPhoneNumber("00387");
-        Verification ver = verificationManager.createVerification(556, new_posts, verification.getTransactionDate(), cust); // TODO
+        Verification ver = verificationManager.createVerification(new_posts, verification.getTransactionDate(), cust); // TODO
         
         if(ver == null) {
             form.addError("general", "Ver. error");
