@@ -33,6 +33,15 @@ public class VerificationManagerImpl implements VerificationManager {
     private VerificationService service;
 
     @Override
+    public Verification createVerification(List<Post> posts, Date transactionDate, Customer customer) {
+        // Set to one higher than the highest ID, as Verification have to be
+        // perfectly chronological
+        long verificationNbr = service.findHighestId() + 1;
+        
+        return createVerification(verificationNbr, posts, transactionDate, customer);
+    }
+    
+    @Override
     public Verification createVerification(long verificationNbr, List<Post> posts, Date transactionDate, Customer customer) {
         if(!isVerificationValid(verificationNbr, posts, transactionDate)) {
             return null;
