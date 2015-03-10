@@ -14,9 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class InitializationUtil {
         
-        @Autowired
-        public  EntityManager em;
-    	public  void insertDefaultAccounts() {
+//        @Autowired
+//        public  EntityManager em;
+    	public  void insertDefaultAccounts(EntityManager em) {
 		String line;
 	//	EntityManager em = getEntityManager();
 		try (BufferedReader br = new BufferedReader(new FileReader("Accounts.txt"))) {
