@@ -4,18 +4,21 @@ package se.chalmers.bokforing.util;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import javax.management.Query;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  *
  * @author Isabelle
  */
 public class InitializationUtil {
-        EntityManager em;
-    	public static void insertDefaultAccounts() {
+        
+        @Autowired
+        public  EntityManager em;
+    	public  void insertDefaultAccounts() {
 		String line;
-		// EntityManager em = getEntityManager();
+	//	EntityManager em = getEntityManager();
 		try (BufferedReader br = new BufferedReader(new FileReader("Accounts.txt"))) {
 			line = br.readLine();
 
@@ -26,9 +29,9 @@ public class InitializationUtil {
 					String name = line.substring(4);
 					
 					line = br.readLine();
-                                //       Query query = em.createNativeQuery(
-                                //                "INSERT INTO Accounts (id, name) VALUES (" + id + ", '" + name + "')");
-                                //        query.executeUpdate();
+                                        Query query = em.createNativeQuery(
+                                                "INSERT INTO Accounts (id, name) VALUES (" + id + ", '" + name + "')");
+                                        query.executeUpdate();
 				}
 			
 				
@@ -47,8 +50,8 @@ public class InitializationUtil {
 				}
 			}
 
-		} catch (IOException e) {
-			line = "nothing";
+		} 
+                catch (IOException e) {
 		}
 	}
 }
