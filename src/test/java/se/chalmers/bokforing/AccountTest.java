@@ -30,7 +30,7 @@ public class AccountTest extends AbstractIntegrationTest {
     
     @Test
     public void testInsertDefaultAccounts(){
-        InitializationUtil.insertDefaultAccounts(em);
+       // InitializationUtil.insertDefaultAccounts(em);
               //  assertNotNull();
 
     }

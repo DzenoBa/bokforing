@@ -16,7 +16,7 @@ public class InitializationUtil {
         
 //        @Autowired
 //        public  EntityManager em;
-    	public static void insertDefaultAccounts(EntityManager em) {
+    	public void insertDefaultAccounts(EntityManager em) {
 		String line;
 	//	EntityManager em = getEntityManager();
 		try (BufferedReader br = new BufferedReader(new FileReader("Accounts.txt"))) {

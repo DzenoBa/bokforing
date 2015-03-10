@@ -14,6 +14,8 @@ import javax.persistence.Table;
 /**
  *
  * @author Isabelle
+ * To be called from a controller, though only ones to avoid duplicates.
+ * 
  */
 @Entity
 @Table(name = "Accounts")
