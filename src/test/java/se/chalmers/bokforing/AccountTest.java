@@ -1,4 +1,3 @@
-
 package se.chalmers.bokforing;
 
 import java.util.List;
@@ -14,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.config.TestApplicationConfig;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.service.AccountService;
+import se.chalmers.bokforing.util.InitializationUtil;
 
 /**
  *
@@ -57,4 +57,11 @@ public class AccountTest extends AbstractIntegrationTest {
         assertEquals(7, accls2.size());
     }
     
+    @Transactional
+    @Test
+    public void testInsertDefaultAccounts(){
+        //InitializationUtil.insertDefaultAccounts(em);
+              //  assertNotNull();
+
+    }   
 }
