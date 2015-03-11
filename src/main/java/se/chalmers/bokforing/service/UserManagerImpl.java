@@ -7,24 +7,22 @@ package se.chalmers.bokforing.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import se.chalmers.bokforing.model.UserAccount;
-import se.chalmers.bokforing.model.UserGroup;
-import se.chalmers.bokforing.util.InitializationUtil;
-import se.chalmers.bokforing.util.PasswordUtil;
 
 /**
  *
  * @author Isabelle
  * Move code from create in UserController here to match service/manager pattern?
  */
-public class UserManagerImpl implements UserManger{
+public class UserManagerImpl implements UserManager{
     
     @Autowired 
-    private InitializationUtil initUtil;
+    private UserService userService;
     
     @Override
-    public void createUser(){
+    public void createUser(UserAccount userAcc){
         
-        //STORE DEAFULT ACCOUNTS
-        initUtil.insertDefaultAccounts();
+        //STORE DEAFULT ACCOUNTS AND USER
+        
+        userService.storeUser(userAcc);
     }
 }

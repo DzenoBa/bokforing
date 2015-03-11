@@ -86,8 +86,7 @@ public class UserController {
         userAcc.setPass(hashPasswd);
         userAcc.setGroup(UserGroup.User);
         // STORE
-        userDb.storeUser(userAcc);
-        userManager.createUser();
+        userManager.createUser(userAcc);
             
         return form;
     }

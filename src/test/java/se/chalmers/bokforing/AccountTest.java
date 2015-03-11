@@ -21,50 +21,49 @@ import se.chalmers.bokforing.util.InitializationUtil;
  */
 @ContextConfiguration(classes = TestApplicationConfig.class)
 public class AccountTest extends AbstractIntegrationTest {
-    
+
     @Autowired
     private AccountService service;
-    
+
     @Autowired
     EntityManager em;
-    
+
     @Autowired
     private InitializationUtil initUtil;
-    
+
     @Transactional
     @Test
     public void testGetAccountPage() {
-        
+
         Query query = null;
-        for(int i=0; i<10; i++) {
+        for (int i = 0; i < 10; i++) {
             int number = 1000 + i;
-            String name = "Konto"+i;
-            
+            String name = "Konto" + i;
+
             query = em.createNativeQuery(
                     "INSERT INTO Accounts (number, name) VALUES (?, ?)")
                     .setParameter(1, number)
                     .setParameter(2, name);
             query.executeUpdate();
         }
-        
+
         // TEST FIND ACCOUNT BY NUMBER
         Account acc1 = service.findAccountByNumber(1005);
         assertNotNull(acc1);
-        assertEquals("Konto5",acc1.getName());
-        
+        assertEquals("Konto5", acc1.getName());
+
         // TEST FIND ALL
         Page<Account> accls = service.findAllAccounts(0, "name", false);
         assertEquals(10, accls.getNumberOfElements());
-        
+
         List<Account> accls2 = service.findAccountBetween(1002, 1008);
         assertEquals(7, accls2.size());
     }
-    
+
     @Transactional
     @Test
-    public void testInsertDefaultAccounts(){
-
-              //  assertNotNull();
-
-    }   
+    public void testInsertDefaultAccounts() {
+        initUtil.insertDefaultAccounts();
+        
+    }
 }

@@ -5,16 +5,18 @@
  */
 package se.chalmers.bokforing.service;
 
+import se.chalmers.bokforing.model.UserAccount;
+
 /**
  *
  * @author Isabelle
  * 
  * Interface for UserManagerImpl
  */
-public interface UserManger {
+public interface UserManager {
     
      /**
      * Called from the frontend when a new user is created
      */
-    public void createUser();
+    public void createUser(UserAccount userAcc);
 }

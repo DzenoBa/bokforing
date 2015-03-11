@@ -16,6 +16,7 @@ import se.chalmers.bokforing.model.UserGroup;
 import se.chalmers.bokforing.model.UserInfo;
 import se.chalmers.bokforing.persistence.UserInfoRepository;
 import se.chalmers.bokforing.persistence.UserRepository;
+import se.chalmers.bokforing.util.InitializationUtil;
 
 /**
  *
@@ -29,6 +30,10 @@ public class UserServiceImpl implements UserService {
     
     @Autowired
     private UserInfoRepository infoRep;
+    
+    @Autowired
+    private InitializationUtil initUtil;
+
 
     @Override
     public List<UserAccount> getUsersByName(String name) {
@@ -66,6 +71,7 @@ public class UserServiceImpl implements UserService {
             
             infoRep.save(ui);
             userRep.save(user);
+            initUtil.insertDefaultAccounts();
         } else {
             //Invaild User
             //TODO Throw and exception
