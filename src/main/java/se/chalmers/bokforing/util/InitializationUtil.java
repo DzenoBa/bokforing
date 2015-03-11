@@ -16,7 +16,6 @@ public class InitializationUtil {
 
 //    @Autowired
 //    public EntityManager em;
-
     @Autowired
     private AccountRepository userRep;
 
@@ -40,12 +39,10 @@ public class InitializationUtil {
 //                    Query query = em.createNativeQuery(
 //                            "INSERT INTO Accounts (id, name) VALUES (" + id + ", '" + name + "')");
 //                    query.executeUpdate();
-                } //
-                // em.getTransaction().begin();
-                // em.persist(account);
-                //
-                // em.getTransaction().commit();
-                finally {
+//                    em.getTransaction().begin();
+//                    em.persist(account);
+//                    em.getTransaction().commit();
+                } finally {
 
                 }
             }

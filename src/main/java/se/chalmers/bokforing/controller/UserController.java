@@ -33,7 +33,7 @@ public class UserController {
     private AuthSession authSession;
     
     @Autowired 
-    private InitializationUtil util;
+    private InitializationUtil initUtil;
     
     /*
      * CREATE
@@ -89,7 +89,7 @@ public class UserController {
         userDb.storeUser(userAcc);
         
         //STORE DEAFULT ACCOUNTS
-        util.insertDefaultAccounts();
+        initUtil.insertDefaultAccounts();
         
             
         return form;
