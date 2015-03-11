@@ -7,10 +7,10 @@
 
 'use strict';
 
-var bookkeepingControllers = angular.module('BookkeepingControllers', []);
+var bookkeepingControllers = angular.module('BookkeepingControllers', ['ui.bootstrap']);
 
-bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy',
-    function($scope, BookkeepingProxy) {
+bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$modal',
+    function($scope, BookkeepingProxy, $modal) {
         $scope.rows = 2;
         $scope.getNumber = function(num) {
             return new Array(num);   
@@ -72,5 +72,42 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy',
                         console.log("mbk:create: error");
                     });
         };
+        
+        $scope.items = ['item1', 'item2', 'item3'];
+
+        $scope.open = function (index) {
+
+            var modalInstance = $modal.open({
+                templateUrl: 'myModalContent.html',
+                controller: 'ModalInstanceAccountCtrl',
+                size: 'lg',
+                resolve: {
+                    items: function () {
+                      return $scope.items;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.verification.posts[index].account = selectedItem;
+            });
+        };
+            
     }
 ]);
+
+bookkeepingControllers.controller('ModalInstanceAccountCtrl', function ($scope, $modalInstance, items) {
+
+    $scope.items = items;
+    $scope.selected = function(item) {
+        item: item;
+    };
+
+    $scope.ok = function () {
+      $modalInstance.close($scope.selected.item);
+    };
+
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+});

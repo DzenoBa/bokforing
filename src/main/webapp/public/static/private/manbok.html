@@ -36,10 +36,14 @@
             <tbody>
                 <tr ng-repeat="i in getNumber(rows) track by $index">
                     <td>
-                        <select class="form-control">
-                            <option>Account1</option>
-                            <option>Account2</option>
-                        </select>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <input class="form-control" type="text" value="{{verification.posts[$index].account}}" readonly>
+                            </div>
+                            <div class="col-sm-4">
+                                <button class="btn btn-primary" ng-click="open($index)">Välj</button>
+                            </div>
+                        </div>    
                     </td>
                     <td>
                         <input type="number" class="form-control" step="0.01" value="{{verification.posts[$index].debit}}" ng-model="verification.posts[$index].debit"/>
@@ -77,4 +81,35 @@
                 <input type="button" value="Skapa" class="btn btn-primary" ng-click="create()"/>
             </div>
     </form>
+    <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Välj konto</h3>
+        </div>
+        <div class="modal-body">
+            <table class="table">
+                <thead>
+                    <th style="width:40%;">Konto nummer</th>
+                    <th style="width:40%;">Konto namn</th>
+                    <th style="width:20%;"></th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in items">
+                        <td>{{ item }}</td>
+                        <td>TODO namn</td>
+                        <td><button class="btn btn-success" ng-click="selected.item = item">Välj</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+        </div>
+        <div class="modal-footer">
+            <div class="col-sm-6" style="text-align:left;">
+                Du har valt: <b>{{ selected.item }}</b>
+            </div>
+            <div class="col-sm-6">
+                <button class="btn btn-primary" ng-click="ok()" ng-disabled="!selected.item">OK</button>
+                <button class="btn btn-warning" ng-click="cancel()">Avbryt</button>
+            </div>
+        </div>
+    </script>
 </div>
