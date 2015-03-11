@@ -15,6 +15,7 @@ import se.chalmers.bokforing.model.UserGroup;
 import se.chalmers.bokforing.service.UserServiceImpl;
 import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.session.AuthSession;
+import se.chalmers.bokforing.util.InitializationUtil;
 
 /**
  * USER-CONTROLLER
@@ -30,6 +31,9 @@ public class UserController {
     
     @Autowired 
     private AuthSession authSession;
+    
+    @Autowired 
+    private InitializationUtil util;
     
     /*
      * CREATE
@@ -83,6 +87,10 @@ public class UserController {
         userAcc.setGroup(UserGroup.User);
         // STORE
         userDb.storeUser(userAcc);
+        
+        //STORE DEAFULT ACCOUNTS
+        util.insertDefaultAccounts();
+        
             
         return form;
     }
