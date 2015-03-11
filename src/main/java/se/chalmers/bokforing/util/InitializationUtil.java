@@ -17,7 +17,7 @@ public class InitializationUtil {
 //    @Autowired
 //    public EntityManager em;
     @Autowired
-    private AccountRepository userRep;
+    private AccountRepository accountRep;
 
     public void insertDefaultAccounts() {
         String line;
@@ -33,7 +33,7 @@ public class InitializationUtil {
                     Account account = new Account();
                     account.setNumber(id);
                     account.setName(name);
-                    userRep.save(account);
+                    accountRep.save(account);
                     line = br.readLine();
 
 //                    Query query = em.createNativeQuery(

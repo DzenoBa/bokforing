@@ -28,6 +28,9 @@ public class AccountTest extends AbstractIntegrationTest {
     @Autowired
     EntityManager em;
     
+    @Autowired
+    private InitializationUtil initUtil;
+    
     @Transactional
     @Test
     public void testGetAccountPage() {

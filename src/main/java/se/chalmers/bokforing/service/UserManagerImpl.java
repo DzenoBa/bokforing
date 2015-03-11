@@ -16,13 +16,13 @@ import se.chalmers.bokforing.util.PasswordUtil;
  * @author Isabelle
  * Move code from create in UserController here to match service/manager pattern?
  */
-public class UserManager {
+public class UserManagerImpl implements UserManger{
     
     @Autowired 
     private InitializationUtil initUtil;
     
+    @Override
     public void createUser(){
-       
         
         //STORE DEAFULT ACCOUNTS
         initUtil.insertDefaultAccounts();
