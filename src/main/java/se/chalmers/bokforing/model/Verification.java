@@ -12,11 +12,13 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import se.chalmers.bokforing.model.UserAccount;
 
 /**
  * Swedish law about verifications, see especially §6.
@@ -39,12 +41,16 @@ public class Verification implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date transactionDate;
     
-    /** The date that this verification was created. */
+    /** The date that this verification was created. */ 
     @Temporal(TemporalType.DATE)
     private Date creationDate;
     
     @OneToOne(cascade = CascadeType.ALL)
     private Customer customer;
+    
+    @ManyToOne
+    private UserAccount userAccount;
+    
     
     /**
      * @return the posts
@@ -118,7 +124,21 @@ public class Verification implements Serializable {
 
     @Override
     public String toString() {
-        return "Verification{" + "id=" + id + ", posts=" + posts + ", transactionDate=" + transactionDate + ", creationDate=" + creationDate + ", customer=" + customer + '}';
+        return "Verification{" + "id=" + getId() + ", posts=" + getPosts() + ", transactionDate=" + getTransactionDate() + ", creationDate=" + getCreationDate() + ", customer=" + getCustomer() + '}';
+    }
+
+    /**
+     * @return the userAccount
+     */
+    public UserAccount getUserAccount() {
+        return userAccount;
+    }
+
+    /**
+     * @param userAccount the userAccount to set
+     */
+    public void setUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
     }
     
     

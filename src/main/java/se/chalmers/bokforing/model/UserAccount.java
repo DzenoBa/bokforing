@@ -7,12 +7,15 @@ package se.chalmers.bokforing.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import se.chalmers.bokforing.util.PasswordUtil;
 
@@ -28,15 +31,16 @@ public class UserAccount implements Serializable {
     private int id;
     
     /** Name of the user */
+    @Column(unique = true)
     private String name;
     
     /** The password of the user */
     private String pass;
     
-    private String salt = PasswordUtil.randomString(8);;
+    private String salt = PasswordUtil.randomString(8);
     
-    @Column(unique = true)
     /** The unique email of the users */
+    @Column(unique = true)
     private String email;
     
     //Group is a reserved word. We cannot have it as a column name.   
@@ -47,6 +51,9 @@ public class UserAccount implements Serializable {
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastLogIn;
+    
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<Verification> verifications;
 
     public int getId(){
         return id;
@@ -155,5 +162,26 @@ public class UserAccount implements Serializable {
                 + ", salt= "+ salt +", email=" + email 
                 + ", group=" + userGroup + ", sessionid=" + sessionid
                 + ", lastLogIn=" + lastLogIn + '}';
+    }
+
+    /**
+     * @return the verifications
+     */
+    public List<Verification> getVerifications() {
+        return verifications;
+    }
+
+    /**
+     * @param verifications the verifications to set
+     */
+    public void setVerifications(List<Verification> verifications) {
+        this.verifications = verifications;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
     }
 }
