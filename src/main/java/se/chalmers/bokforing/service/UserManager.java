@@ -17,6 +17,7 @@ public interface UserManager {
     
      /**
      * Called from the frontend when a new user is created
+     * @param userAcc of type UserAccount with email and name
      */
     public void createUser(UserAccount userAcc);
 }

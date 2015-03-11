@@ -1,5 +1,8 @@
 package se.chalmers.bokforing;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -65,5 +68,29 @@ public class AccountTest extends AbstractIntegrationTest {
     public void testInsertDefaultAccounts() {
         initUtil.insertDefaultAccounts();
         
+        //MAKE SURE ALL DEFAULT ACCOUNTS EXIST IN DATABASE
+        try (BufferedReader br = new BufferedReader(new FileReader("Accounts.txt"))) {
+            String line = br.readLine();
+            try {
+                    while(line != null){
+                    int id = Integer.parseInt(line.substring(0, 4));
+                    String name = line.substring(4);
+                    Account acc = service.findAccountByNumber(id);
+                    assertNotNull(acc);
+                    assertEquals(name, acc.getName());
+                    line = br.readLine();
+                    }
+            }
+            finally{
+                
+            }
+        
+         } 
+            
+
+         catch (IOException e) {
+            //TODO: Catch exception if file with default accounts doesn't exist
+        }
+
     }
 }
