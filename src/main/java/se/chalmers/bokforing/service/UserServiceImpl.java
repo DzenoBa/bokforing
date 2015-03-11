@@ -60,6 +60,11 @@ public class UserServiceImpl implements UserService {
         if (email != null && !email.equals("")) {
             email = email.toLowerCase();
             user.setEmail(email);
+            UserInfo ui = new UserInfo();
+            
+            user.setUserInfo(ui);
+            
+            infoRep.save(ui);
             userRep.save(user);
         } else {
             //Invaild User

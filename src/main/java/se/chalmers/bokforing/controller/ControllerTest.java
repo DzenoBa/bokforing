@@ -45,18 +45,10 @@ public class ControllerTest {
     public ModelAndView getUsersView() {
         UserAccount user = new UserAccount();
 
-        UserInfo ui = new UserInfo();
-        ui.setName("victor");
-        ui.setCompanyName("whoops");
-        ui.setPhoneNumber("0123456789");
-        userInfoRep.save(ui);
-
         String email = "whoop";
         user.setEmail(email);
         user.setPass(PasswordUtil.randomString(8));
-        user.setUserInfo(ui);
         StringBuilder sb = new StringBuilder();
-        sb.append("UserInfo " + ui.getUserInfoId() + " was added.\n");
         try {
             userDb.storeUser(user);
         } catch (Exception e) {
@@ -78,14 +70,14 @@ public class ControllerTest {
         Calendar cal = Calendar.getInstance();
         Account account = new Account();
         account.setName("Egna insättningar");
-        account.setNumber("2018");
+        //account.setNumber("2018");
 
         PostSum sum = new PostSum();
         sum.setSumTotal(100);
         sum.setType(PostType.Credit);
 
         Post post = new Post();
-        post.setPostDate(cal.getTime());
+        //post.setPostDate(cal.getTime());
         post.setSum(sum);
         post.setAccount(account);
 
@@ -93,9 +85,9 @@ public class ControllerTest {
         postList.add(post);
 
         String verNbr = "123";
-        verManager.createVerification(verNbr, postList);
-        Verification verification = verService.findVerificationById(verNbr);
+        //verManager.createVerification(verNbr, postList);
+        //Verification verification = verService.findVerificationById(verNbr);
 
-        return new ModelAndView("test3", "message", verification.toString());
+        return new ModelAndView("test3", "message", /*verification.toString()*/ "no");
     }
 }
