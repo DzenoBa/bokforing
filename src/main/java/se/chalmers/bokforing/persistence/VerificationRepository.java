@@ -9,6 +9,7 @@ import java.util.Date;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import se.chalmers.bokforing.model.Account;
@@ -20,7 +21,7 @@ import se.chalmers.bokforing.model.Verification;
  * @author Jakob
  */
 @Repository
-public interface VerificationRepository extends JpaRepository<Verification, Long> {
+public interface VerificationRepository extends JpaRepository<Verification, Long>, JpaSpecificationExecutor<Verification> {
     
     Verification findById(Long id);
 
