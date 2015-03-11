@@ -6,14 +6,14 @@
 package se.chalmers.bokforing.model;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import se.chalmers.bokforing.helperfunctions.HelpY;
 
 /**
@@ -28,7 +28,9 @@ public class UserAccount implements Serializable {
     private int id;
     
     /** Name of the user */
-    private String name;
+    @OneToOne
+    @JoinColumn(name="userInfoId")
+    private UserInfo userInfo;
     
     /** The password of the user */
     private String pass;
@@ -44,25 +46,19 @@ public class UserAccount implements Serializable {
     private UserGroup userGroup;
    
     private String sessionid;
-    
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date lastLogIn;
 
     public int getId(){
         return id;
     }
+    
+    public void setUserInfo(UserInfo userInfo){
+        this.userInfo = userInfo;
+    }
     /**
      * @return the name
      */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
+    public UserInfo getUseInfo() {
+        return userInfo;
     }
 
     /**
@@ -135,25 +131,20 @@ public class UserAccount implements Serializable {
         this.sessionid = sessionid;
     }
     
-    /**
-     * @return the lastLogIn
-     */
-    public Date getLastLogIn() {
-        return lastLogIn;
-    }
-
-    /**
-     * @param lastLogIn the lastLogIn to set
-     */
-    public void setLastLogIn(Date lastLogIn) {
-        this.lastLogIn = lastLogIn;
-    }
-    
     @Override
     public String toString() {
-        return "UserEnt{ id= " + id + "name=" + name + ", pass=" + pass 
-                + ", salt= "+ salt +", email=" + email 
-                + ", group=" + userGroup + ", sessionid=" + sessionid
-                + ", lastLogIn=" + lastLogIn + '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("UserEnt{ id= ").append(id);
+        sb.append(", userInfo=");
+        if(userInfo != null)
+            sb.append(userInfo.toStringLight());
+        else
+            sb.append("null");
+        sb.append(", pass=").append(pass);
+        sb.append(", salt= ").append(salt);
+        sb.append(", email=").append(email);
+        sb.append(", group=").append(userGroup);
+        sb.append(", sessionid=").append(sessionid);
+        return  sb.toString();
     }
 }
