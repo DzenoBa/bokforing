@@ -31,9 +31,7 @@ public class Post implements Serializable {
     private PostSum postSum;
     @OneToOne(cascade = CascadeType.ALL)
     private Account account;
-    
-    @Temporal(TemporalType.DATE)
-    private Date postDate;
+
     
     /**
      * @return the postSum
@@ -63,23 +61,9 @@ public class Post implements Serializable {
         this.account = account;
     }
 
-    /**
-     * @return the postDate
-     */
-    public Date getPostDate() {
-        return postDate;
-    }
-
-    /**
-     * @param postDate the postDate to set
-     */
-    public void setPostDate(Date postDate) {
-        this.postDate = postDate;
-    }
-
     @Override
     public String toString() {
-        return "Post{" + "id=" + id + ", postSum=" + postSum + ", account=" + account + ", postDate=" + postDate + '}';
+        return "Post{" + "id=" + id + ", postSum=" + postSum + ", account=" + account + '}';
     }
 
     @Override

@@ -5,14 +5,17 @@
  */
 package se.chalmers.bokforing.service;
 
+import java.util.Date;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.model.Verification;
 
 /**
  * Service for querying the database for verification entities.
- * Note that this interface must not provide any delete or update methods,
+ * Note that this interface must not provide any methods for deleting or updating,
  * as this would violate Swedish accounting laws.
  * 
  * @author Jakob
@@ -21,7 +24,11 @@ public interface VerificationService {
     
     Page<Verification> findAllVerifications(Pageable pageable);
     
-    Verification findVerificationById(String id);
+    Page<Verification> findAllVerifications(Integer pageNumber, String fieldToSortBy, Boolean ascendingSort);
+    
+    Verification findVerificationById(long id);
+    
+    Long findHighestId();
     
     void save(Verification verification);
 }

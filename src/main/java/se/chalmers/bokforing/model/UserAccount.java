@@ -14,7 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import se.chalmers.bokforing.helperfunctions.HelpY;
+import se.chalmers.bokforing.util.PasswordUtil;
 
 /**
  *
@@ -35,7 +35,7 @@ public class UserAccount implements Serializable {
     /** The password of the user */
     private String pass;
     
-    private String salt = HelpY.randomString(8);;
+    private String salt = PasswordUtil.randomString(8);;
     
     @Column(unique = true)
     /** The unique email of the users */

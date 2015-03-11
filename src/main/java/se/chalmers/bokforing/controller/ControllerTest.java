@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import se.chalmers.bokforing.helperfunctions.HelpY;
+import se.chalmers.bokforing.util.PasswordUtil;
 import se.chalmers.bokforing.model.Account;
+import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
@@ -52,7 +53,7 @@ public class ControllerTest {
 
         String email = "whoop";
         user.setEmail(email);
-        user.setPass(HelpY.randomString(8));
+        user.setPass(PasswordUtil.randomString(8));
         user.setUserInfo(ui);
         StringBuilder sb = new StringBuilder();
         sb.append("UserInfo " + ui.getUserInfoId() + " was added.\n");
@@ -97,5 +98,4 @@ public class ControllerTest {
 
         return new ModelAndView("test3", "message", verification.toString());
     }
-
 }

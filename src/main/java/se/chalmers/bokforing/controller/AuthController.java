@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import se.chalmers.bokforing.helperfunctions.HelpY;
+import se.chalmers.bokforing.util.PasswordUtil;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
 import se.chalmers.bokforing.service.UserServiceImpl;
@@ -28,8 +28,6 @@ public class AuthController {
     
     @Autowired
     private UserServiceImpl userDb;
-    
-    private HelpY helpy = new HelpY();
     
     /*
      * LOGIN
@@ -65,7 +63,7 @@ public class AuthController {
             return form;
         }
         //CONCAT SALT + PASSWD; THEN HASH IT
-        String hashPasswd = helpy.hash(userEnt.getSalt() + user.getPasswd());
+        String hashPasswd = PasswordUtil.hash(userEnt.getSalt() + user.getPasswd());
         if(!hashPasswd.equals(userEnt.getPass())) {
             form.addError("passwd", "Lösenordet är fel!");
             return form;
@@ -74,7 +72,7 @@ public class AuthController {
         /* LOGIN SUCCESSFUL
          * Store user in session 
          */
-        String s_id = helpy.randomString(10);
+        String s_id = PasswordUtil.randomString(10);
         authSession.setSession(userEnt.getEmail(), s_id, userEnt.getGroup().toString());
         //Store session and timestamp in database
         userEnt.setSessionid(s_id);

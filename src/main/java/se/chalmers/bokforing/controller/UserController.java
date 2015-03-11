@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import se.chalmers.bokforing.helperfunctions.HelpY;
+import se.chalmers.bokforing.util.PasswordUtil;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
 import se.chalmers.bokforing.model.UserGroup;
@@ -30,8 +30,6 @@ public class UserController {
     
     @Autowired 
     private AuthSession authSession;
-    
-    HelpY helpy = new HelpY();
     
     /*
      * CREATE
@@ -78,8 +76,8 @@ public class UserController {
         // EVERYTHING SEEMS TO BE IN ORDER CREATE USER
         UserAccount userAcc = new UserAccount();
         userAcc.setEmail(user.getEmail());
-        String salt = helpy.randomString(8);
-        String hashPasswd = helpy.hash(salt + user.getNewpasswd());
+        String salt = PasswordUtil.randomString(8);
+        String hashPasswd = PasswordUtil.hash(salt + user.getNewpasswd());
         userAcc.setSalt(salt);
         userAcc.setPass(hashPasswd);
         userAcc.setGroup(UserGroup.User);
@@ -124,15 +122,15 @@ public class UserController {
             form.addError("passwd", "Ange ditt nuvarande lösenord!");
             return form;
         }
-        String hashPasswd = helpy.hash(u.getSalt() + user.getPasswd());
+        String hashPasswd = PasswordUtil.hash(u.getSalt() + user.getPasswd());
         if(!(hashPasswd.equals(u.getPass()))) {
             form.addError("passwd", "Löseordet är fel!");
             return form;
         }
         
         // EVERYTHING SEEMS TO BE IN ORDER CHANGE USER
-        String newSalt = helpy.randomString(8);
-        String newHashPasswd = helpy.hash(newSalt + user.getNewpasswd());
+        String newSalt = PasswordUtil.randomString(8);
+        String newHashPasswd = PasswordUtil.hash(newSalt + user.getNewpasswd());
         u.setSalt(newSalt);
         u.setPass(newHashPasswd);
         userDb.storeUser(u);

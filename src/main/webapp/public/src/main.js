@@ -8,9 +8,11 @@ require(
         'app',
         'controllers/userControllers',
         'controllers/authControllers',
+        'controllers/bookkeepingControllers',
         'services/userServices',
         'services/authServices',
-        'services/promiseService'
+        'services/promiseService',
+        'services/bookkeepingService'
         
     ],
     function () {

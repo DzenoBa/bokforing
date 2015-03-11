@@ -8,35 +8,36 @@ package se.chalmers.bokforing.model;
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  *
- * @author Isabelle
- * To be called from a controller, though only ones to avoid duplicates.
- * 
+ * @author Jakob
  */
 @Entity
-@Table(name = "Accounts")
-public class Account implements Serializable {
+public class Customer implements Serializable {
     
     @Id
-    private int number;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+    
     private String name;
     
+    private String phoneNumber;
+
     /**
-     * @return the number
+     * @return the id
      */
-    public int getNumber() {
-        return number;
+    public int getId() {
+        return id;
     }
 
     /**
-     * @param number the number to set
+     * @param id the id to set
      */
-    public void setNumber(int number) {
-        this.number = number;
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**
@@ -52,4 +53,21 @@ public class Account implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+    /**
+     * @return the phoneNumber
+     */
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    /**
+     * @param phoneNumber the phoneNumber to set
+     */
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+    
+    
+    
 }

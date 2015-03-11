@@ -1,0 +1,80 @@
+<!--Body content-->
+<div>
+    <h1>Manuell bokföring</h1>
+    <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
+        Verifikationen har skapats!
+    </div>
+    <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
+        <h4>{{form.numErrors}} fel hittades!</h4>
+        <p>{{form.errors.general}}</p>
+        <p>{{form.errors.todo}}</p>
+    </div>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-3">
+                <label>Datum</label>
+            </div>
+            <div class="col-md-9">
+                <input type="date" class="form-control" value="{{verification.transactionDate}}" ng-model="verification.transactionDate"/>
+            </div>
+        </div>
+        <div class="form-group" ng-show="form.errors.newpasswd !== null">
+            <div class="col-sm-3"></div><!-- Offset -->
+            <div class="col-sm-9">
+                <span class="error">{{form.errors.verificationdate}}</span>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width:30%">Konto</th>
+                    <th style="width:30%">Debet</th>
+                    <th style="width:30%">Kredit</th>
+                    <th style="width:10%"></th><!-- Offset -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="i in getNumber(rows) track by $index">
+                    <td>
+                        <select class="form-control">
+                            <option>Account1</option>
+                            <option>Account2</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" step="0.01" value="{{verification.posts[$index].debit}}" ng-model="verification.posts[$index].debit"/>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" step="0.01" ng-model="verification.posts[$index].credit"/>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger" ng-click="removeRow($index)" ng-show="$index===(rows-1) && $index>=2">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Ta bort
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        <span class="label label-warning" ng-show="sumDebit() !== sumCredit()">Debit och kredit måste vara lika</span> &nbsp;
+                    </td>
+                    <td>
+                        Totalt: {{sumDebit()}}
+                    </td>
+                    <td>
+                        Totalt: {{sumCredit()}}
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="btn-group">
+                <a href="#userpage" class="btn btn-default">Tillbaka</a>
+                <button type="button" class="btn btn-success" ng-click="addRow()">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Lägg till en rad!
+                </button>
+                <input type="button" value="Skapa" class="btn btn-primary" ng-click="create()"/>
+            </div>
+    </form>
+</div>

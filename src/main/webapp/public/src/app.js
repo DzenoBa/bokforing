@@ -13,7 +13,9 @@ var bok = angular.module('Bok', [
     'AuthService',
     'UserControllers',
     'UserService',
-    'PromiseService'
+    'PromiseService',
+    'BookkeepingControllers',
+    'BookkeepingService'
      // More here
 ]);
 
@@ -50,6 +52,21 @@ bok.config(['$routeProvider',
                                 return PromiseProxy.promise();
                         }]
                     }
+                }).
+                when('/manbok', {
+                    templateUrl: 'private/manbok.html',
+                    controller: 'ManBKCtrl'
+                    //auth: true,
+                    /*resolve: {
+                        init: ['PromiseProxy', function(PromiseProxy) {
+                                PromiseProxy.refresh();
+                                return PromiseProxy.promise();
+                        }]
+                    }*/
+                }).
+                when('/userinfo', {
+                    templateUrl: 'private/userinfo.html',
+                    controller: 'UserInfoCtrl'
                 }).
                 otherwise({
                     redirectTo: 'index.html'
