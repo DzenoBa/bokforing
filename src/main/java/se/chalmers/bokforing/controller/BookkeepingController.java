@@ -19,6 +19,7 @@ import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
 import se.chalmers.bokforing.model.Verification;
+import se.chalmers.bokforing.service.AccountService;
 import se.chalmers.bokforing.service.VerificationManagerImpl;
 import se.chalmers.bokforing.session.AuthSession;
 
@@ -31,6 +32,9 @@ public class BookkeepingController {
     
     @Autowired
     private VerificationManagerImpl verificationManager;
+    
+    @Autowired
+    AccountService accountService;
     
     @Autowired 
     private AuthSession authSession;
@@ -108,5 +112,20 @@ public class BookkeepingController {
         }
         
         return form;
+    }
+    
+    @RequestMapping(value = "/bookkeeping/searchaccount", method = RequestMethod.POST)
+    public @ResponseBody List<Account> searchaccount(@RequestBody final Account account) {
+        List<Account> accLs;
+        
+        if(account.getNumber() > 0) {
+            accLs = accountService.findByNumberLike(account.getNumber());
+        } else if (!(account.getName().isEmpty())) {
+            accLs = accountService.findByNameLike(account.getName());
+        } else {
+            // Return a empty list
+            accLs = new ArrayList();
+        }
+        return accLs;
     }
 }
