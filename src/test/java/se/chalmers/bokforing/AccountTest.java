@@ -59,6 +59,37 @@ public class AccountTest extends AbstractIntegrationTest {
     
     @Transactional
     @Test
+    public void testSearchAccount() {
+        
+        int[] numberls = new int[3];
+        String[] namels = new String[3];
+        
+        numberls[0] = 1230;
+        namels[0] = "Krki";
+        numberls[1] = 1235;
+        namels[1] = "Dzeno";
+        numberls[2] = 5230;
+        namels[2] = "Dzenan";
+        
+        Query query;
+        for(int i=0; i<3; i++) {        
+            query = em.createNativeQuery(
+                    "INSERT INTO Accounts (number, name) VALUES (?, ?)")
+                    .setParameter(1, numberls[i])
+                    .setParameter(2, namels[i]);
+            query.executeUpdate();
+        }
+        
+        List<Account> accls1 = service.findByNumberLike(123);
+        assertEquals(2, accls1.size());
+        
+        List<Account> accls2 = service.findByNameLike("zen");
+        assertEquals(2, accls2.size());
+        
+    }
+    
+    @Transactional
+    @Test
     public void testInsertDefaultAccounts(){
 
               //  assertNotNull();
