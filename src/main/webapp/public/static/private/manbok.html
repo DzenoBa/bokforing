@@ -15,7 +15,12 @@
                 <label>Datum</label>
             </div>
             <div class="col-md-9">
-                <input type="date" class="form-control" value="{{verification.transactionDate}}" ng-model="verification.transactionDate"/>
+                <div class="input-group">
+                    <input type="date" class="form-control" value="{{verification.transactionDate}}" ng-model="verification.transactionDate" is-open="opened" datepicker-popup="yyyy-MM-dd" datepicker-options="dateOptions" min-date="2014-01-01" max-date="'2015-06-22'"  date-disabled="disabled(date, mode)" ng-required="true"/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="opencal($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
             </div>
         </div>
         <div class="form-group" ng-show="form.errors.newpasswd !== null">

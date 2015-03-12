@@ -85,7 +85,21 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$
                 $scope.verification.posts[index].account = selectedItem;
             });
         };
-            
+        
+        $scope.opencal = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            $scope.opened = true;
+        };
+        
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1,
+            yearRange: 1,
+            maxMode: 'month',
+            currentText: 'Idag'
+        };            
     }
 ]);
 
