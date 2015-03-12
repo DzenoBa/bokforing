@@ -9,8 +9,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -32,7 +34,14 @@ import se.chalmers.bokforing.model.UserAccount;
 public class Verification implements Serializable {
     
     @Id
+    @GeneratedValue
     private Long id;
+
+    @ManyToOne
+    private UserAccount userAccount;
+    
+    @Column(nullable = false)
+    private Long verificationNumber;
     
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Post> posts;
@@ -47,10 +56,6 @@ public class Verification implements Serializable {
     
     @OneToOne(cascade = CascadeType.ALL)
     private Customer customer;
-    
-    @ManyToOne
-    private UserAccount userAccount;
-    
     
     /**
      * @return the posts
@@ -139,6 +144,20 @@ public class Verification implements Serializable {
      */
     public void setUserAccount(UserAccount userAccount) {
         this.userAccount = userAccount;
+    }
+
+    /**
+     * @return the verificationNumber
+     */
+    public long getVerificationNumber() {
+        return verificationNumber;
+    }
+
+    /**
+     * @param verificationNumber the verificationNumber to set
+     */
+    public void setVerificationNumber(long verificationNumber) {
+        this.verificationNumber = verificationNumber;
     }
     
     

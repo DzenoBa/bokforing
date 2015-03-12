@@ -10,6 +10,7 @@ import java.util.List;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.Post;
+import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.model.Verification;
 
@@ -20,8 +21,8 @@ import se.chalmers.bokforing.model.Verification;
  */
 public interface VerificationManager {
     
-    Verification createVerification(List<Post> posts, Date transactionDate, Customer customer);
+    Verification createVerification(UserAccount user, List<Post> posts, Date transactionDate, Customer customer);
     
-    Verification createVerification(long verificationNbr, List<Post> posts, Date transactionDate, Customer customer);
+    Verification createVerification(UserAccount user, long verificationNbr, List<Post> posts, Date transactionDate, Customer customer);
     
 }

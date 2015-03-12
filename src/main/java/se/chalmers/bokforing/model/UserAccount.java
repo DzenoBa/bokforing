@@ -13,6 +13,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -28,7 +29,7 @@ public class UserAccount implements Serializable {
   
     @Id
     @GeneratedValue
-    private int id;
+    private Long id;
     
     /** Name of the user */
     @Column(unique = true)
@@ -52,10 +53,10 @@ public class UserAccount implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastLogIn;
     
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Verification> verifications;
 
-    public int getId(){
+    public Long getId(){
         return id;
     }
     /**
@@ -181,7 +182,7 @@ public class UserAccount implements Serializable {
     /**
      * @param id the id to set
      */
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }

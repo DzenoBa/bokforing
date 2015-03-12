@@ -18,6 +18,7 @@ import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
+import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.util.DateUtil;
@@ -33,37 +34,38 @@ public class VerificationManagerImpl implements VerificationManager {
     private VerificationService service;
 
     @Override
-    public Verification createVerification(List<Post> posts, Date transactionDate, Customer customer) {
+    public Verification createVerification(UserAccount user, List<Post> posts, Date transactionDate, Customer customer) {
         // Set to one higher than the highest ID, as Verification have to be
         // perfectly chronological
-        long verificationNbr = service.findHighestId() + 1;
+        long verificationNbr = service.findHighestVerificationNumber(user) + 1;
         
-        return createVerification(verificationNbr, posts, transactionDate, customer);
+        return createVerification(user, verificationNbr, posts, transactionDate, customer);
     }
     
     @Override
-    public Verification createVerification(long verificationNbr, List<Post> posts, Date transactionDate, Customer customer) {
-        if(!isVerificationValid(verificationNbr, posts, transactionDate)) {
+    public Verification createVerification(UserAccount user, long verificationNumber, List<Post> posts, Date transactionDate, Customer customer) {
+        if(!isVerificationValid(user, verificationNumber, posts, transactionDate)) {
             return null;
         }
         
         Verification ver = new Verification();
-        ver.setId(verificationNbr);
         ver.setPosts(posts);
         ver.setTransactionDate(transactionDate);
         ver.setCustomer(customer);
+        ver.setUserAccount(user);
+        ver.setVerificationNumber(verificationNumber);
         service.save(ver);
         
         return ver;
     }
 
-    private boolean isVerificationValid(long verificationNbr, List<Post> posts, Date transactionDate) {
+    private boolean isVerificationValid(UserAccount user, long verificationNumber, List<Post> posts, Date transactionDate) {
         /*if(DateUtil.isDateBeforeToday(transactionDate)) {
             return false;
         }*/
         
-        Long highestVerificationNumber = service.findHighestId();
-        if(highestVerificationNumber == null || verificationNbr != highestVerificationNumber + 1) {
+        Long highestVerificationNumber = service.findHighestVerificationNumber(user);
+        if(highestVerificationNumber == null || verificationNumber != highestVerificationNumber + 1) {
             return false;
         }
         

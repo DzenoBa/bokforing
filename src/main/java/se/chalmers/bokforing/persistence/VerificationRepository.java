@@ -11,8 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import se.chalmers.bokforing.model.Account;
+import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.model.Verification;
 
 
@@ -23,16 +25,18 @@ import se.chalmers.bokforing.model.Verification;
 @Repository
 public interface VerificationRepository extends JpaRepository<Verification, Long>, JpaSpecificationExecutor<Verification> {
     
-    Verification findById(Long id);
+    Verification findByIdAndUserAccount(Long id, UserAccount userAccount);
 
-    @Query("SELECT MAX(id) FROM Verification")
-    Long findHighestId();
+    @Query("SELECT MAX(verificationNumber) FROM Verification v WHERE v.userAccount.id = :userId")
+    Long findHighestId(@Param("userId") long userId);
     
-    Page<Verification> findByCreationDateBetween(Date startDate, Date endDate, Pageable pageable);
+    Page<Verification> findByUserAccountAndCreationDateBetween(UserAccount userAccount, Date startDate, Date endDate, Pageable pageable);
     
-    Page<Verification> findByOrderByCreationDateAsc(Pageable pageable);
+    Page<Verification> findByUserAccountOrderByCreationDateAsc(UserAccount userAccount, Pageable pageable);
     
-    Page<Verification> findByOrderByCreationDateDesc(Pageable pageable);
+    Page<Verification> findByUserAccountOrderByCreationDateDesc(UserAccount userAccount, Pageable pageable);
+    
+    Verification findByUserAccountAndVerificationNumber(UserAccount userAccount, Long verificationNumber);
     
     // it's not this simple since account is in post. maybe we don't want this anyway?
     // Page<Verification> findByAccount(Account account, Pageable pageable);

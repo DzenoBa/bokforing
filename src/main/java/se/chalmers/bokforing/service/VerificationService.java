@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
+import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.model.Verification;
 
 /**
@@ -22,13 +23,15 @@ import se.chalmers.bokforing.model.Verification;
  */
 public interface VerificationService {
     
-    Page<Verification> findAllVerifications(Pageable pageable);
+    Page<Verification> findAllVerifications(UserAccount user, Pageable pageable);
     
-    Page<Verification> findAllVerifications(Integer pageNumber, String fieldToSortBy, Boolean ascendingSort);
+    Page<Verification> findAllVerifications(UserAccount user, Integer pageNumber, String fieldToSortBy, Boolean ascendingSort);
     
-    Verification findVerificationById(long id);
+    Verification findVerificationById(UserAccount user, long id);
     
-    Long findHighestId();
+    long findHighestVerificationNumber(UserAccount user);
+    
+    Verification findByUserAndVerificationNumber(UserAccount user, long verNbr);
     
     void save(Verification verification);
 }

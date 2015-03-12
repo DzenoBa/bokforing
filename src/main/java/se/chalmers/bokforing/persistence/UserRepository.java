@@ -38,7 +38,7 @@ public interface UserRepository extends JpaRepository<UserAccount,Long> {
     
     @Modifying(clearAutomatically = true)
     @Query("update UserAccount u set u.email = ?1 where u.id = ?2")
-    int updateEmail(String newEmail, int id);
+    int updateEmail(String newEmail, Long id);
     
     @Modifying(clearAutomatically = true)
     @Query("update UserAccount u set u.userGroup = ?1 where u.email = ?2")

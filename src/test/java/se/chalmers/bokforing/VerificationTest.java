@@ -16,6 +16,8 @@ import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +46,7 @@ import se.chalmers.bokforing.util.Constants;
 @ContextConfiguration(classes = TestApplicationConfig.class)
 public class VerificationTest extends AbstractIntegrationTest {
     
-    private static final int INSERTED_VERIFICATION_ROWS_BEFORE = 2;
+    private static final int INSERTED_VERIFICATION_ROWS_BEFORE = 5;
     
     @Autowired
     VerificationManager manager;
@@ -57,6 +59,14 @@ public class VerificationTest extends AbstractIntegrationTest {
     
     @Autowired
     VerificationRepository repository;
+    
+    private static UserAccount user;
+    
+    @Before
+    public void setup() {
+        user = new UserAccount();
+        user.setId(1L);
+    }
     
     @Test
     public void testCreateVerification() {
@@ -92,20 +102,20 @@ public class VerificationTest extends AbstractIntegrationTest {
         postList.add(post);
         postList.add(post2);
         
-        int verNbr = 126; // one higher than the highest inserted row
-        Verification verification = manager.createVerification(verNbr, postList, cal.getTime(), customer);
+        int verNbr = 7372; // one higher than the highest inserted row
+        Verification verification = manager.createVerification(user, verNbr, postList, cal.getTime(), customer);
         assertNotNull(verification);
         
-        Verification verificationFromDb = service.findVerificationById(verNbr);
+        Verification verificationFromDb = service.findByUserAndVerificationNumber(user, verNbr);
         assertNotNull(verificationFromDb);
     }
     
     @Test
     public void testFindHighestVerificationId() {
-        long highestId = service.findHighestId();   
+        long highestId = service.findHighestVerificationNumber(user);   
         
         // From the inserted rows
-        assertEquals(125, highestId);
+        assertEquals(7371, highestId);
     }
     
     @Transactional
@@ -129,23 +139,23 @@ public class VerificationTest extends AbstractIntegrationTest {
         Date endDate = cal.getTime();
         
         Query query1 = em.createNativeQuery(
-                "INSERT INTO Verifications (id, creationDate) VALUES (999, ?)")
+                "INSERT INTO Verifications (id, creationDate, userAccount_id, verificationNumber) VALUES (999, ?, 1, 555)")
                 .setParameter(1, creationDateInsideRange, TemporalType.DATE);
         query1.executeUpdate();
         
         Query query2 = em.createNativeQuery(
-                "INSERT INTO Verifications (id, creationDate) VALUES (1000, ?)")
+                "INSERT INTO Verifications (id, creationDate, userAccount_id, verificationNumber) VALUES (1000, ?, 1, 556)")
                 .setParameter(1, creationDateJustAfterRange, TemporalType.DATE);
         query2.executeUpdate();
         
         Query query3 = em.createNativeQuery(
-                "INSERT INTO Verifications (id, creationDate) VALUES (1001, ?)")
+                "INSERT INTO Verifications (id, creationDate, userAccount_id, verificationNumber) VALUES (1001, ?, 1, 557)")
                 .setParameter(1, creationDateJustBeforeRange, TemporalType.DATE);
         query3.executeUpdate();
         
         assertEquals(INSERTED_VERIFICATION_ROWS_BEFORE + 3, repository.findAll().size());
         
-        Page<Verification> vers = repository.findByCreationDateBetween(startDate, endDate, null);
+        Page<Verification> vers = repository.findByUserAccountAndCreationDateBetween(user, startDate, endDate, null);
         
         assertEquals(1, vers.getTotalElements());
     }
@@ -162,12 +172,12 @@ public class VerificationTest extends AbstractIntegrationTest {
             creationDate = cal.getTime();
             
             query = em.createNativeQuery(
-                "INSERT INTO Verifications (id, creationDate) VALUES (55555" + i + ", ?)")
+                "INSERT INTO Verifications (id, creationDate, verificationNumber) VALUES (55555" + i + ", ?, 557)")
                 .setParameter(1, creationDate, TemporalType.DATE);
             query.executeUpdate();
         }
         
-        Page<Verification> verifications = service.findAllVerifications(0, "creationDate", false);
+        Page<Verification> verifications = service.findAllVerifications(user, 0, "creationDate", false);
         
         assertEquals(Constants.DEFAULT_PAGE_SIZE, verifications.getNumberOfElements());
         assertEquals(INSERTED_VERIFICATION_ROWS_BEFORE + 100, verifications.getTotalElements());
@@ -190,7 +200,7 @@ public class VerificationTest extends AbstractIntegrationTest {
     public void testGetVerificationForUser() {
         // Have a user account
         UserAccount userAccount = new UserAccount();
-        userAccount.setId(1);
+        userAccount.setId(1L);
         
         // This is pretty much:
         //  select * 

@@ -1,4 +1,4 @@
-insert into Verifications (id) values (555);
+--insert into Verifications (id) values (555);
 
 insert into Accounts (id, account_name) values (1010, 'Utvecklingsutgifter');
 insert into Accounts (id, account_name) values (1011, 'Balanserade utgifter för forskning och utveckling');

@@ -18,7 +18,9 @@ import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
+import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.model.Verification;
+import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.VerificationManagerImpl;
 import se.chalmers.bokforing.session.AuthSession;
 
@@ -34,6 +36,9 @@ public class BookkeepingController {
     
     @Autowired 
     private AuthSession authSession;
+    
+    @Autowired
+    private UserService userService;
     
     /*
      * CREATE
@@ -101,11 +106,18 @@ public class BookkeepingController {
         Customer cust = new Customer();
         cust.setName("Dzeno");
         cust.setPhoneNumber("00387");
-        Verification ver = verificationManager.createVerification(new_posts, verification.getTransactionDate(), cust); // TODO
+        
+        UserAccount user = userService.getUser(authSession.getEmail());
+        
+        Verification ver = verificationManager.createVerification(user, new_posts, verification.getTransactionDate(), cust); // TODO
+        user.getVerifications().add(ver);
+        userService.storeUser(user);
         
         if(ver == null) {
             form.addError("general", "Ver. error");
         }
+        
+        System.out.println(userService.getUser(authSession.getEmail()).getVerifications().get(0));
         
         return form;
     }

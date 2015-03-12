@@ -22,7 +22,7 @@ public class AuthSession implements Serializable {
     public boolean getStatus() {
         return status;
     }
-    public void setSatus(boolean status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
     
