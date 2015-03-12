@@ -72,20 +72,13 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$
                         console.log("mbk:create: error");
                     });
         };
-        
-        $scope.items = ['item1', 'item2', 'item3'];
 
         $scope.open = function (index) {
 
             var modalInstance = $modal.open({
                 templateUrl: 'myModalContent.html',
                 controller: 'ModalInstanceAccountCtrl',
-                size: 'lg',
-                resolve: {
-                    items: function () {
-                      return $scope.items;
-                    }
-                }
+                size: 'lg'
             });
 
             modalInstance.result.then(function (selectedItem) {
@@ -96,18 +89,51 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$
     }
 ]);
 
-bookkeepingControllers.controller('ModalInstanceAccountCtrl', function ($scope, $modalInstance, items) {
+bookkeepingControllers.controller('ModalInstanceAccountCtrl', 
+    function ($scope, $modalInstance, BookkeepingProxy) {
 
-    $scope.items = items;
-    $scope.selected = function(item) {
-        item: item;
+    $scope.radioModel = 0;
+    
+    $scope.selected = function(account) {
+        account: account;
     };
 
     $scope.ok = function () {
-      $modalInstance.close($scope.selected.item);
+      $modalInstance.close($scope.selected.account);
     };
 
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };
+    
+    $scope.search = function() {
+        search();
+    };
+    
+    $scope.autosearch = function() {
+        if($scope.radioModel === 0 && $scope.account.number > 9 || 
+                $scope.radioModel === 1 && $scope.account.name.length > 2) {
+            search();
+        }
+    };
+    
+    function search() {
+        if($scope.radioModel === 0 && $scope.account.number) {
+            var account = {number: $scope.account.number};
+            BookkeepingProxy.searchAccount(account)
+                    .success(function(accounts) {
+                        $scope.accounts = accounts;
+                    }).error(function() {
+                        console.log("mbk:searchAccNumber: error");
+                    });
+        } else if($scope.radioModel === 1 && $scope.account.name) {
+            var account = {name: $scope.account.name};
+            BookkeepingProxy.searchAccount(account)
+                    .success(function(accounts) {
+                        $scope.accounts = accounts;
+                    }).error(function() {
+                        console.log("mbk:searchAccName: error");
+                    });
+        }
+    }
 });

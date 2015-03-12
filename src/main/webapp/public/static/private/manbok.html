@@ -38,7 +38,7 @@
                     <td>
                         <div class="row">
                             <div class="col-sm-8">
-                                <input class="form-control" type="text" value="{{verification.posts[$index].account}}" readonly>
+                                <input class="form-control" type="text" value="{{verification.posts[$index].account.name}}" readonly>
                             </div>
                             <div class="col-sm-4">
                                 <button class="btn btn-primary" ng-click="open($index)">Välj</button>
@@ -86,6 +86,23 @@
             <h3 class="modal-title">Välj konto</h3>
         </div>
         <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="btn-group">
+                        <label class="btn btn-primary" ng-model="radioModel" btn-radio="0">Nummer</label>
+                        <label class="btn btn-primary" ng-model="radioModel" btn-radio="1">Namn</label>
+                    </div>
+                </div>
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input type="number" class="form-control" ng-model="account.number" ng-show="radioModel == 0" ng-change="autosearch()"/>
+                        <input type="text" class="form-control" ng-model="account.name" ng-show="radioModel == 1" ng-change="autosearch()"/>
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary" ng-click="search()" ng-disabled="!account.number && !account.name">Sök</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <table class="table">
                 <thead>
                     <th style="width:40%;">Konto nummer</th>
@@ -93,10 +110,10 @@
                     <th style="width:20%;"></th>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="item in items">
-                        <td>{{ item }}</td>
-                        <td>TODO namn</td>
-                        <td><button class="btn btn-success" ng-click="selected.item = item">Välj</button></td>
+                    <tr ng-repeat="account in accounts">
+                        <td>{{account.number}}</td>
+                        <td>{{account.name}}</td>
+                        <td><button class="btn btn-success" ng-click="selected.account = account">Välj</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -104,10 +121,10 @@
         </div>
         <div class="modal-footer">
             <div class="col-sm-6" style="text-align:left;">
-                Du har valt: <b>{{ selected.item }}</b>
+                Du har valt: <b>{{selected.account.name}}</b>
             </div>
             <div class="col-sm-6">
-                <button class="btn btn-primary" ng-click="ok()" ng-disabled="!selected.item">OK</button>
+                <button class="btn btn-primary" ng-click="ok()" ng-disabled="!selected.account">OK</button>
                 <button class="btn btn-warning" ng-click="cancel()">Avbryt</button>
             </div>
         </div>
