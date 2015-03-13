@@ -2,9 +2,12 @@
 package se.chalmers.bokforing.session;
 
 import java.io.Serializable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import se.chalmers.bokforing.model.UserAccount;
+import se.chalmers.bokforing.service.UserService;
 
 /**
  *
@@ -13,6 +16,9 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(value="session", proxyMode=ScopedProxyMode.TARGET_CLASS)
 public class AuthSession implements Serializable {
+    
+    @Autowired
+    private UserService userDb;
     
     private boolean status = false;
     private String email;
@@ -59,5 +65,35 @@ public class AuthSession implements Serializable {
         email = null;
         sessionid = null;
         level = null;
+    }
+    
+    /**
+     * SESSION CHECK
+     * 
+     * Checks if the session is valid
+     * @return boolean; true if user is online
+     */
+    public boolean sessionCheck() {
+        
+        // CHECK IF VALID USER
+        if(getStatus()) {
+            UserAccount u = userDb.getUser(getEmail());
+            
+            // CHECK IF USER EXIST
+            if(u == null) {
+                clearSession();
+                return false;
+            }
+            
+            // CHECK IF THE SESSION IS CORRECT
+            if(!(u.getSessionid().equals(getSessionid()))) {
+                clearSession();
+                return false;
+            }
+            
+            // EVERYTHING SEEMS TO BE IN ORDER
+            return true;
+        }
+        return false;
     }
 }
