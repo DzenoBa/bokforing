@@ -5,7 +5,7 @@ require.config({
 
 require(
     [
-        '//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.1.js',
+        '../libs/bootstrap/js/ui-bootstrap-tpls-0.12.1.min',
         'app',
         'controllers/userControllers',
         'controllers/authControllers',
