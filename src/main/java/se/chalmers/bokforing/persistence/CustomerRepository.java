@@ -23,5 +23,4 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Customer findByUserAccountAndCustomerNumber(UserAccount user, long customerNumber);
 
     Page<Customer> findByUserAccount(UserAccount user, Pageable request);
-    
 }

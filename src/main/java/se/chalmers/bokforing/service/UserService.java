@@ -5,9 +5,12 @@
  */
 package se.chalmers.bokforing.service;
 
+import java.net.URI;
+import java.util.Date;
 import java.util.List;
 import se.chalmers.bokforing.model.UserGroup;
 import se.chalmers.bokforing.model.UserAccount;
+import se.chalmers.bokforing.model.UserInfo;
 
 /**
  *
@@ -41,13 +44,6 @@ public interface UserService {
      */
     public void storeUser(UserAccount user);
     
-    /**
-     * Update the name of a user
-     * @param name
-     * @param email
-     * @return number of lines changed. Should always be one.
-     */
-    public int updateName (String name, String email);
     /**
      * Update the password of a user
      * @param pass
@@ -87,4 +83,28 @@ public interface UserService {
      * @return 
      */
     public int updateSessionid(String sessionid, String email);
+    
+    public int updateInfo(UserInfo userInfo,String email);
+    /**
+     * Update the last log in date of a user to the curret moment.
+     * @param email
+     * @return 
+     */
+    public int updateLastLogIn(String email);
+    
+    /**
+     * Set the last log in date to date.
+     * @param date
+     * @param email
+     * @return 
+     */
+    public int updateLastLogIn(Date date, String email);
+    
+    public int updateName(String name, String email);
+    
+    public int updatePhoneNumber(String Number, String email);
+    
+    public int updateCompanyName(String companyName, String email);
+    
+    public int updateLogo(URI logo, String email);
 }

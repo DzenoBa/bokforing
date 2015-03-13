@@ -15,33 +15,79 @@ import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.model.UserAccount;
+import se.chalmers.bokforing.model.UserInfo;
+import se.chalmers.bokforing.persistence.UserInfoRepository;
 import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.VerificationService;
 
 @Controller
 public class ControllerTest {
-    
+
     @Autowired
     private UserService userDb;
-    
+
+    @Autowired
+    private UserInfoRepository userInfoRep;
+
     @Autowired
     private VerificationManager verManager;
-    
+
     @Autowired
     private VerificationService verService;
 
     /**
      * Request mapping for user
-     * @return 
+     *
+     * @return
      */
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public ModelAndView getUsersView() {
         UserAccount user = new UserAccount();
-        user.setName("Victor");
-        user.setEmail(PasswordUtil.randomString(8));
-        user.setPass("whoop");
-        userDb.storeUser(user);
-        return new ModelAndView("test", "message", userDb.getUsersByName("Victor").toString());
-    }    
+
+        String email = "whoop";
+        user.setEmail(email);
+        user.setPass(PasswordUtil.randomString(8));
+        StringBuilder sb = new StringBuilder();
+        try {
+            userDb.storeUser(user);
+        } catch (Exception e) {
+            sb.append("Error: user is already in db. ");
+        }
+
+        UserAccount ua = userDb.getUser("whoop");
+        if (ua != null) {
+            sb.append(ua.toString());
+        } else {
+            sb.append("null");
+        }
+
+        return new ModelAndView("test", "message", sb.toString());
+    }
+
+    @RequestMapping("/test2")
+    public ModelAndView getNewPage() {
+        Calendar cal = Calendar.getInstance();
+        Account account = new Account();
+        account.setName("Egna insättningar");
+        //account.setNumber("2018");
+
+        PostSum sum = new PostSum();
+        sum.setSumTotal(100);
+        sum.setType(PostType.Credit);
+
+        Post post = new Post();
+        //post.setPostDate(cal.getTime());
+        post.setSum(sum);
+        post.setAccount(account);
+
+        ArrayList<Post> postList = new ArrayList<>();
+        postList.add(post);
+
+        String verNbr = "123";
+        //verManager.createVerification(verNbr, postList);
+        //Verification verification = verService.findVerificationById(verNbr);
+
+        return new ModelAndView("test3", "message", /*verification.toString()*/ "no");
+    }
 }

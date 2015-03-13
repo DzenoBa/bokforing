@@ -1,6 +1,7 @@
 
 package se.chalmers.bokforing.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,5 +48,34 @@ public class AccountServiceImpl implements AccountService {
             return null;
         else
             return repository.findByNumberBetween(first, last);
+    }
+    
+    @Override
+    public List<Account> findByNumberLike(int number) {
+        if(number > 999) {
+            List<Account> ls = new ArrayList();
+            ls.add(repository.findByNumber(number));
+            return ls;
+        }
+        int first;
+        int last;
+        if(number > 99) {
+            first = number * 10;
+            last = first + 9;
+            return repository.findByNumberBetween(first, last);
+        } else if(number >9) {
+            first = number * 100;
+            last = first + 99;
+        } else {
+            first = number * 1000;
+            last = first + 999;
+        }
+        return repository.findByNumberBetween(first, last);
+    }
+    
+    @Override
+    public List<Account> findByNameLike(String name) {
+        String tmp = "%"+ name + "%";
+        return repository.findByNameLike(tmp);
     }
 }

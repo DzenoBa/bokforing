@@ -1,10 +1,10 @@
 package se.chalmers.bokforing.persistence;
 
 import se.chalmers.bokforing.model.UserAccount;
-import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 import se.chalmers.bokforing.model.UserGroup;
+import se.chalmers.bokforing.model.UserInfo;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserAccount,Long> {
@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<UserAccount,Long> {
     /** Finds all user with this name
      * @param name
      * @return  */
-    List<UserAccount> findByName(String name);
+    //List<UserAccount> findByName(String name);
     /** Finds the user with a certain name
      * @param email
      * @return  */
@@ -23,10 +23,6 @@ public interface UserRepository extends JpaRepository<UserAccount,Long> {
      * @param pass
      * @return  */
     UserAccount findByEmailAndPass(String email, String pass);
-    
-    @Modifying(clearAutomatically = true)
-    @Query("update UserAccount u set u.name = ?1 where u.email = ?2")
-    int updateName(String name, String email);
     
     @Modifying(clearAutomatically = true)
     @Query("update UserAccount u set u.pass = ?1 where u.email = ?2")
@@ -47,6 +43,10 @@ public interface UserRepository extends JpaRepository<UserAccount,Long> {
     @Modifying(clearAutomatically = true)
     @Query("update UserAccount u set u.sessionid = ?1 where u.email = ?2")
     int updateSessionid(String sessionid, String email);
+
+    @Modifying(clearAutomatically = true)
+    @Query("update UserAccount u set u.userInfo = ?1 where u.email = ?2")
+    int updateUserInfo(UserInfo userInfo, String email);
 }
   
 

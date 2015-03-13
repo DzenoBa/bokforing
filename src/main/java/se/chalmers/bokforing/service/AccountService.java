@@ -21,4 +21,8 @@ public interface AccountService {
     
     List<Account> findAccountBetween(int first, int last);
     
+    List<Account> findByNumberLike(int number);
+    
+    List<Account> findByNameLike(String name);
+    
 }

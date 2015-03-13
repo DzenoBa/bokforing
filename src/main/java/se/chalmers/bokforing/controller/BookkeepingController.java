@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import se.chalmers.bokforing.jsonobject.AccountJSON;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.PostJSON;
 import se.chalmers.bokforing.jsonobject.VerificationJSON;
@@ -25,6 +26,7 @@ import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.CustomerService;
 import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.VerificationManager;
+import se.chalmers.bokforing.service.AccountService;
 import se.chalmers.bokforing.session.AuthSession;
 
 /**
@@ -36,6 +38,9 @@ public class BookkeepingController {
     
     @Autowired
     private VerificationManager verificationManager;
+    
+    @Autowired
+    AccountService accountService;
     
     @Autowired 
     private AuthSession authSession;
@@ -130,5 +135,20 @@ public class BookkeepingController {
         System.out.println(userService.getUser(authSession.getEmail()).getVerifications().get(0));
         
         return form;
+    }
+    
+    @RequestMapping(value = "/bookkeeping/searchaccount", method = RequestMethod.POST)
+    public @ResponseBody List<Account> searchaccount(@RequestBody final AccountJSON account) {
+        List<Account> accLs;
+        
+        if(account.getNumber() > 0) {
+            accLs = accountService.findByNumberLike(account.getNumber());
+        } else if (!(account.getName().isEmpty())) {
+            accLs = accountService.findByNameLike(account.getName());
+        } else {
+            // Return a empty list
+            accLs = new ArrayList();
+        }
+        return accLs;
     }
 }

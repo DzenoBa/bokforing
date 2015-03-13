@@ -76,8 +76,9 @@ public class AuthController {
         authSession.setSession(userEnt.getEmail(), s_id, userEnt.getGroup().toString());
         //Store session and timestamp in database
         userEnt.setSessionid(s_id);
-        userEnt.setLastLogIn(new Date());
-        userDb.storeUser(userEnt);
+        userDb.updateSessionid(s_id, userEnt.getEmail());
+        userDb.updateLastLogIn(userEnt.getEmail());
+        //userDb.storeUser(userEnt);
         
         return form;
     }

@@ -5,8 +5,8 @@
  */
 package se.chalmers.bokforing.util;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
+//import java.time.LocalDate;
+//import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -37,12 +37,12 @@ public class DateUtil {
      * @return 
      */
     public static boolean isDateBeforeToday(Date inputDate) {
-        LocalDate today = LocalDate.now();
+//        LocalDate today = LocalDate.now();
         
         // Convert the java.util.Date to java.time.LocalDate
-        LocalDate date = inputDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); 
+//        LocalDate date = inputDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); 
 
-        return date.isBefore(today);
+        return false;
     }
 
 }

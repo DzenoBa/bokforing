@@ -18,6 +18,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import se.chalmers.bokforing.util.PasswordUtil;
 
 /**
@@ -34,6 +36,10 @@ public class UserAccount implements Serializable {
     /** Name of the user */
     @Column(unique = true)
     private String name;
+
+    @OneToOne
+    @JoinColumn(name="userInfoId")
+    private UserInfo userInfo;
     
     /** The password of the user */
     private String pass;
@@ -62,18 +68,15 @@ public class UserAccount implements Serializable {
     public Long getId(){
         return id;
     }
+    
+    public void setUserInfo(UserInfo userInfo){
+        this.userInfo = userInfo;
+    }
     /**
      * @return the name
      */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
+    public UserInfo getUseInfo() {
+        return userInfo;
     }
 
     /**
@@ -145,28 +148,6 @@ public class UserAccount implements Serializable {
     public void setSessionid(String sessionid) {
         this.sessionid = sessionid;
     }
-    
-    /**
-     * @return the lastLogIn
-     */
-    public Date getLastLogIn() {
-        return lastLogIn;
-    }
-
-    /**
-     * @param lastLogIn the lastLogIn to set
-     */
-    public void setLastLogIn(Date lastLogIn) {
-        this.lastLogIn = lastLogIn;
-    }
-    
-    @Override
-    public String toString() {
-        return "UserEnt{ id= " + getId() + "name=" + getName() + ", pass=" + getPass() 
-                + ", salt= "+ getSalt() +", email=" + getEmail() 
-                + ", group=" + getUserGroup() + ", sessionid=" + getSessionid()
-                + ", lastLogIn=" + getLastLogIn() + '}';
-    }
 
     /**
      * @return the verifications
@@ -215,5 +196,24 @@ public class UserAccount implements Serializable {
      */
     public void setCustomers(List<Customer> customers) {
         this.customers = customers;
+    }
+        
+            
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("UserEnt{ id= ").append(id);
+        sb.append(", userInfo=");
+        if(userInfo != null)
+            sb.append(userInfo.toStringLight());
+        else
+            sb.append("null");
+        sb.append(", pass=").append(pass);
+        sb.append(", salt= ").append(salt);
+        sb.append(", email=").append(email);
+        sb.append(", group=").append(userGroup);
+        sb.append(", sessionid=").append(sessionid);
+        return  sb.toString();
+        
     }
 }

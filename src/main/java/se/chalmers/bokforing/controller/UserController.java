@@ -13,6 +13,7 @@ import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
 import se.chalmers.bokforing.model.UserGroup;
 import se.chalmers.bokforing.model.UserAccount;
+import se.chalmers.bokforing.service.UserManager;
 import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.session.AuthSession;
 
@@ -30,6 +31,9 @@ public class UserController {
     
     @Autowired 
     private AuthSession authSession;
+    
+    @Autowired 
+    private UserManager userManager;
     
     /*
      * CREATE
@@ -82,7 +86,7 @@ public class UserController {
         userAcc.setPass(hashPasswd);
         userAcc.setGroup(UserGroup.User);
         // STORE
-        userDb.storeUser(userAcc);
+        userManager.createUser(userAcc);
             
         return form;
     }
