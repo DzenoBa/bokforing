@@ -16,9 +16,8 @@ public class InitializationUtil {
 
 //    @Autowired
 //    public EntityManager em;
-
     @Autowired
-    private AccountRepository userRep;
+    private AccountRepository accountRep;
 
     public void insertDefaultAccounts() {
         String line;
@@ -34,21 +33,19 @@ public class InitializationUtil {
                     Account account = new Account();
                     account.setNumber(id);
                     account.setName(name);
-                    
-                    //Not sure if this line works
-                    userRep.save(account);
+
+                    accountRep.save(account);
+
                     line = br.readLine();
 
 //                    Query query = em.createNativeQuery(
 //                            "INSERT INTO Accounts (id, name) VALUES (" + id + ", '" + name + "')");
 //                    query.executeUpdate();
-                } //
-                // em.getTransaction().begin();
-                // em.persist(account);
-                //
-                // em.getTransaction().commit();
-                finally {
-
+//                    em.getTransaction().begin();
+//                    em.persist(account);
+//                    em.getTransaction().commit();
+                } finally {
+            //TODO: Catch exception if first four chars aren't numbers 
                 }
             }
 

@@ -7,10 +7,10 @@
 
 'use strict';
 
-var bookkeepingControllers = angular.module('BookkeepingControllers', []);
+var bookkeepingControllers = angular.module('BookkeepingControllers', ['ui.bootstrap']);
 
-bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy',
-    function($scope, BookkeepingProxy) {
+bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$modal',
+    function($scope, BookkeepingProxy, $modal) {
         $scope.rows = 2;
         $scope.getNumber = function(num) {
             return new Array(num);   
@@ -72,5 +72,82 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy',
                         console.log("mbk:create: error");
                     });
         };
+
+        $scope.open = function (index) {
+
+            var modalInstance = $modal.open({
+                templateUrl: 'myModalContent.html',
+                controller: 'ModalInstanceAccountCtrl',
+                size: 'lg'
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $scope.verification.posts[index].account = selectedItem;
+            });
+        };
+        
+        $scope.opencal = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            $scope.opened = true;
+        };
+        
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1,
+            yearRange: 1,
+            maxMode: 'month',
+            currentText: 'Idag'
+        };            
     }
 ]);
+
+bookkeepingControllers.controller('ModalInstanceAccountCtrl', 
+    function ($scope, $modalInstance, BookkeepingProxy) {
+
+    $scope.radioModel = 0;
+    
+    $scope.selected = function(account) {
+        account: account;
+    };
+
+    $scope.ok = function () {
+      $modalInstance.close($scope.selected.account);
+    };
+
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+    
+    $scope.search = function() {
+        search();
+    };
+    
+    $scope.autosearch = function() {
+        if($scope.radioModel === 0 && $scope.account.number > 9 || 
+                $scope.radioModel === 1 && $scope.account.name.length > 2) {
+            search();
+        }
+    };
+    
+    function search() {
+        if($scope.radioModel === 0 && $scope.account.number) {
+            var account = {number: $scope.account.number};
+            BookkeepingProxy.searchAccount(account)
+                    .success(function(accounts) {
+                        $scope.accounts = accounts;
+                    }).error(function() {
+                        console.log("mbk:searchAccNumber: error");
+                    });
+        } else if($scope.radioModel === 1 && $scope.account.name) {
+            var account = {name: $scope.account.name};
+            BookkeepingProxy.searchAccount(account)
+                    .success(function(accounts) {
+                        $scope.accounts = accounts;
+                    }).error(function() {
+                        console.log("mbk:searchAccName: error");
+                    });
+        }
+    }
+});
