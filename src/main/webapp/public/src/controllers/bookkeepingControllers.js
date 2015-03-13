@@ -54,27 +54,27 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$
         };
         
         $scope.removeRow = function(index) {
-            $scope.verification.posts[index].debit = null;
-            $scope.verification.posts[index].credit = null;
+            $scope.verification.posts.splice(index, 1);
             $scope.rows = $scope.rows-1;
         };
         
         $scope.create = function() {
-            console.log($scope.verification.transactionDate);
             BookkeepingProxy.createManBook($scope.verification)
                     .success(function(form) {
                         $scope.form = form;
                         if(form.numErrors === 0) {
                             $scope.verification = {posts: 
                                         [ {debit: 0, credit: 0},
-                                        {debit: 0, credit: 0}]
+                                        {debit: 0, credit: 0}],
+                                        transactionDate: $filter('date')(new Date(),'yyyy-MM-dd')
                                 };
                         }
                     }).error(function() {
                         console.log("mbk:create: error");
                     });
         };
-
+        
+        $scope.accountls = [];
         $scope.open = function (index) {
 
             var modalInstance = $modal.open({
@@ -83,8 +83,9 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$
                 size: 'lg'
             });
 
-            modalInstance.result.then(function (selectedItem) {
-                $scope.verification.posts[index].account = selectedItem;
+            modalInstance.result.then(function (selectedAccount) {
+                $scope.verification.posts[index].accountid = selectedAccount.number;
+                $scope.accountls[index] = selectedAccount.number + ' - ' + selectedAccount.name;
             });
         };
                 
