@@ -16,5 +16,7 @@ public interface AccountRepository extends JpaRepository<Account,Long> {
     Account findByNumber(int number);
     
     List<Account> findByNumberBetween(int first, int last);
+    
+    List<Account> findByNameLike(String name);
        
 }
