@@ -9,8 +9,8 @@
 
 var bookkeepingControllers = angular.module('BookkeepingControllers', ['ui.bootstrap']);
 
-bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$modal',
-    function($scope, BookkeepingProxy, $modal) {
+bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$modal', '$filter',
+    function($scope, BookkeepingProxy, $modal, $filter) {
         $scope.rows = 2;
         $scope.getNumber = function(num) {
             return new Array(num);   
@@ -18,7 +18,8 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$
 
         $scope.verification = {posts: 
                     [ {debit: 0, credit: 0},
-                    {debit: 0, credit: 0}]
+                    {debit: 0, credit: 0}],
+                    transactionDate: $filter('date')(new Date(),'yyyy-MM-dd')
             };
         
         $scope.sumDebit = function(){
@@ -59,6 +60,7 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$
         };
         
         $scope.create = function() {
+            console.log($scope.verification.transactionDate);
             BookkeepingProxy.createManBook($scope.verification)
                     .success(function(form) {
                         $scope.form = form;
@@ -85,11 +87,11 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$
                 $scope.verification.posts[index].account = selectedItem;
             });
         };
-        
+                
         $scope.opencal = function($event) {
             $event.preventDefault();
             $event.stopPropagation();
-
+            
             $scope.opened = true;
         };
         
