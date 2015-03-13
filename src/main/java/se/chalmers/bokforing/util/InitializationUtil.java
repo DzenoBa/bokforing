@@ -34,6 +34,8 @@ public class InitializationUtil {
                     Account account = new Account();
                     account.setNumber(id);
                     account.setName(name);
+                    
+                    //Not sure if this line works
                     userRep.save(account);
                     line = br.readLine();
 
