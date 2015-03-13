@@ -7,14 +7,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.persistence.AccountRepository;
+import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 
 /**
  *
  * @author Dženan
  */
 @Service
+@Transactional
 public class AccountServiceImpl implements AccountService {
 
     @Autowired
@@ -26,8 +29,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Page<Account> findAllAccounts(Integer pageNumber, String fieldToSortBy, Boolean ascendingSort) {
-        PageRequest request = PageRequestParser.getPageRequest(pageNumber, ascendingSort, fieldToSortBy);
+    public Page<Account> findAllAccounts(PagingAndSortingTerms terms) {
+        PageRequest request = terms.getPageRequest();
         return repository.findAll(request);
     }
 

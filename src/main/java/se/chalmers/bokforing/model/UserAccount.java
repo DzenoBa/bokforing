@@ -55,6 +55,9 @@ public class UserAccount implements Serializable {
     
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Verification> verifications;
+    
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    private List<Customer> customers;
 
     public Long getId(){
         return id;
@@ -119,14 +122,14 @@ public class UserAccount implements Serializable {
      * @return the group
      */
     public UserGroup getGroup() {
-        return userGroup;
+        return getUserGroup();
     }
 
     /**
      * @param group the group to set
      */
     public void setGroup(UserGroup group) {
-        this.userGroup = group;
+        this.setUserGroup(group);
     }
 
     /**
@@ -159,10 +162,10 @@ public class UserAccount implements Serializable {
     
     @Override
     public String toString() {
-        return "UserEnt{ id= " + id + "name=" + name + ", pass=" + pass 
-                + ", salt= "+ salt +", email=" + email 
-                + ", group=" + userGroup + ", sessionid=" + sessionid
-                + ", lastLogIn=" + lastLogIn + '}';
+        return "UserEnt{ id= " + getId() + "name=" + getName() + ", pass=" + getPass() 
+                + ", salt= "+ getSalt() +", email=" + getEmail() 
+                + ", group=" + getUserGroup() + ", sessionid=" + getSessionid()
+                + ", lastLogIn=" + getLastLogIn() + '}';
     }
 
     /**
@@ -184,5 +187,33 @@ public class UserAccount implements Serializable {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    /**
+     * @return the userGroup
+     */
+    public UserGroup getUserGroup() {
+        return userGroup;
+    }
+
+    /**
+     * @param userGroup the userGroup to set
+     */
+    public void setUserGroup(UserGroup userGroup) {
+        this.userGroup = userGroup;
+    }
+
+    /**
+     * @return the customers
+     */
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    /**
+     * @param customers the customers to set
+     */
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
     }
 }

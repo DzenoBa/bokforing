@@ -9,6 +9,7 @@ import se.chalmers.bokforing.model.UserAccount;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.UserGroup;
 import se.chalmers.bokforing.persistence.UserRepository;
 
@@ -17,6 +18,7 @@ import se.chalmers.bokforing.persistence.UserRepository;
  * @author victor
  */
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
     
     @Autowired

@@ -54,7 +54,7 @@ public class Verification implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date creationDate;
     
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Customer customer;
     
     /**

@@ -12,9 +12,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.util.Constants;
 import se.chalmers.bokforing.model.Verification;
+import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.persistence.VerificationRepository;
 import se.chalmers.bokforing.persistence.VerificationSpecs;
 
@@ -23,23 +25,15 @@ import se.chalmers.bokforing.persistence.VerificationSpecs;
  * @author Jakob
  */
 @Service
+@Transactional
 public class VerificationServiceImpl implements VerificationService {
 
     @Autowired
     private VerificationRepository repository;
-    
-    @Override
-    public Page<Verification> findAllVerifications(UserAccount user, Pageable pageable) {
-        if(user == null) {
-            return repository.findAll(pageable);
-        } else {
-            return repository.findAll(whereUser(user), pageable);
-        }
-    }
 
     @Override
     public Verification findVerificationById(UserAccount user, long id) {
-        return repository.findByIdAndUserAccount(id, user);
+        return repository.findByIdAndUserAccount(user, id);
     }
 
     @Override
@@ -49,15 +43,15 @@ public class VerificationServiceImpl implements VerificationService {
     
     @Override
     public long findHighestVerificationNumber(UserAccount user) {
-        Long res = repository.findHighestId(user.getId());
+        Long res = repository.findHighestVerificationNumber(user.getId());
         return res == null ? 0 : res;
     }
 
     @Override
-    public Page<Verification> findAllVerifications(UserAccount user, Integer pageNumber, String fieldToSortBy, Boolean ascendingSort) {
-        PageRequest request = PageRequestParser.getPageRequest(pageNumber, ascendingSort, fieldToSortBy);
+    public Page<Verification> findAllVerifications(UserAccount user, PagingAndSortingTerms terms) {
+        PageRequest request = terms.getPageRequest();
         
-        return repository.findAll(request);
+        return repository.findByUserAccount(user, request);
     }
     
     private Specifications<Verification> whereUser(UserAccount userAccount) {

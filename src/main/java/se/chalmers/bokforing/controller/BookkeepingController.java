@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,8 +21,10 @@ import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
 import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.model.Verification;
+import se.chalmers.bokforing.service.CustomerManager;
+import se.chalmers.bokforing.service.CustomerService;
 import se.chalmers.bokforing.service.UserService;
-import se.chalmers.bokforing.service.VerificationManagerImpl;
+import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.session.AuthSession;
 
 /**
@@ -32,13 +35,19 @@ import se.chalmers.bokforing.session.AuthSession;
 public class BookkeepingController {
     
     @Autowired
-    private VerificationManagerImpl verificationManager;
+    private VerificationManager verificationManager;
     
     @Autowired 
     private AuthSession authSession;
     
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private CustomerManager customerManager;
+    
+    @Autowired
+    private CustomerService customerService;
     
     /*
      * CREATE
@@ -103,13 +112,14 @@ public class BookkeepingController {
         }
         
         // EVERYTHING SEEMS TO BE IN ORDER; CREATE VERIFICATION
-        Customer cust = new Customer();
-        cust.setName("Dzeno");
-        cust.setPhoneNumber("00387");
-        
         UserAccount user = userService.getUser(authSession.getEmail());
+        //userService.storeUser(user);
         
-        Verification ver = verificationManager.createVerification(user, new_posts, verification.getTransactionDate(), cust); // TODO
+        long customerNumber = 123;
+        Customer customer = customerManager.createCustomer(user, customerNumber, "Dzeno", "00387", null);
+        Customer customerFromDb = customerService.findByCustomerNumber(user, customerNumber);
+        
+        Verification ver = verificationManager.createVerification(user, new_posts, verification.getTransactionDate(), customerFromDb); // TODO
         user.getVerifications().add(ver);
         userService.storeUser(user);
         

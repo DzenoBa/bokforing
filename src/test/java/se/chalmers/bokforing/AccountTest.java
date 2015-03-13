@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.config.TestApplicationConfig;
 import se.chalmers.bokforing.model.Account;
+import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.service.AccountService;
 import se.chalmers.bokforing.util.InitializationUtil;
 
@@ -50,14 +51,15 @@ public class AccountTest extends AbstractIntegrationTest {
         assertEquals("Konto5",acc1.getName());
         
         // TEST FIND ALL
-        Page<Account> accls = service.findAllAccounts(0, "name", false);
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, false, "name");
+        Page<Account> accls = service.findAllAccounts(terms);
         assertEquals(10, accls.getNumberOfElements());
         
         List<Account> accls2 = service.findAccountBetween(1002, 1008);
         assertEquals(7, accls2.size());
     }
     
-    @Transactional
+   // @Transactional
     @Test
     public void testInsertDefaultAccounts(){
         //InitializationUtil.insertDefaultAccounts(em);

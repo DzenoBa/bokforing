@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import se.chalmers.bokforing.model.Account;
+import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 
 /**
  *
@@ -14,7 +15,7 @@ public interface AccountService {
     
     Page<Account> findAllAccounts(Pageable pageable);
     
-    Page<Account> findAllAccounts(Integer pageNumber, String fieldToSortBy, Boolean ascendingSort);
+    Page<Account> findAllAccounts(PagingAndSortingTerms terms);
     
     Account findAccountByNumber(int number);
     

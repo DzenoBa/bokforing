@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.model.Verification;
+import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 
 /**
  * Service for querying the database for verification entities.
@@ -23,9 +24,7 @@ import se.chalmers.bokforing.model.Verification;
  */
 public interface VerificationService {
     
-    Page<Verification> findAllVerifications(UserAccount user, Pageable pageable);
-    
-    Page<Verification> findAllVerifications(UserAccount user, Integer pageNumber, String fieldToSortBy, Boolean ascendingSort);
+    Page<Verification> findAllVerifications(UserAccount user, PagingAndSortingTerms terms);
     
     Verification findVerificationById(UserAccount user, long id);
     

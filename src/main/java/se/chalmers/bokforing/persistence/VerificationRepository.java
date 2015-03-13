@@ -25,10 +25,12 @@ import se.chalmers.bokforing.model.Verification;
 @Repository
 public interface VerificationRepository extends JpaRepository<Verification, Long>, JpaSpecificationExecutor<Verification> {
     
-    Verification findByIdAndUserAccount(Long id, UserAccount userAccount);
-
+    Verification findByIdAndUserAccount(UserAccount userAccount, Long id);
+    
     @Query("SELECT MAX(verificationNumber) FROM Verification v WHERE v.userAccount.id = :userId")
-    Long findHighestId(@Param("userId") long userId);
+    Long findHighestVerificationNumber(@Param("userId") long userId);
+    
+    Page<Verification> findByUserAccount(UserAccount userAccount, Pageable pageable);
     
     Page<Verification> findByUserAccountAndCreationDateBetween(UserAccount userAccount, Date startDate, Date endDate, Pageable pageable);
     

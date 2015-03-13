@@ -6,37 +6,52 @@
 package se.chalmers.bokforing.model;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author Jakob
  */
 @Entity
+@Table(name = "Customers")
 public class Customer implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
+    
+    @Column(nullable = false)
+    private Long customerNumber;
     
     private String name;
-    
     private String phoneNumber;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address address;
+    
+    @ManyToOne
+    private UserAccount userAccount;
 
     /**
      * @return the id
      */
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -66,6 +81,48 @@ public class Customer implements Serializable {
      */
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    /**
+     * @return the address
+     */
+    public Address getAddress() {
+        return address;
+    }
+
+    /**
+     * @param address the address to set
+     */
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    /**
+     * @return the customerNumber
+     */
+    public Long getCustomerNumber() {
+        return customerNumber;
+    }
+
+    /**
+     * @param customerNumber the customerNumber to set
+     */
+    public void setCustomerNumber(Long customerNumber) {
+        this.customerNumber = customerNumber;
+    }
+
+    /**
+     * @return the userAccount
+     */
+    public UserAccount getUserAccount() {
+        return userAccount;
+    }
+
+    /**
+     * @param userAccount the userAccount to set
+     */
+    public void setUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
     }
     
     

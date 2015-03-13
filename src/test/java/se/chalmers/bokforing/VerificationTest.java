@@ -33,8 +33,10 @@ import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
 import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.model.Verification;
+import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.persistence.VerificationRepository;
 import se.chalmers.bokforing.persistence.VerificationSpecs;
+import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.VerificationService;
 import se.chalmers.bokforing.util.Constants;
@@ -59,6 +61,9 @@ public class VerificationTest extends AbstractIntegrationTest {
     
     @Autowired
     VerificationRepository repository;
+    
+    @Autowired
+    CustomerManager customerManager;
     
     private static UserAccount user;
     
@@ -86,7 +91,8 @@ public class VerificationTest extends AbstractIntegrationTest {
         sum2.setSumTotal(sum2Amount);
         sum2.setType(PostType.Debit);
         
-        Customer customer = new Customer();
+        Customer customer = customerManager.createCustomer(user, 123, null, null, null);
+        customer.setCustomerNumber(1L);
         customer.setName("Jakob");
         customer.setPhoneNumber("031132314");
         
@@ -102,7 +108,7 @@ public class VerificationTest extends AbstractIntegrationTest {
         postList.add(post);
         postList.add(post2);
         
-        int verNbr = 7372; // one higher than the highest inserted row
+        Long verNbr = 7372L; // one higher than the highest inserted row
         Verification verification = manager.createVerification(user, verNbr, postList, cal.getTime(), customer);
         assertNotNull(verification);
         
@@ -172,12 +178,13 @@ public class VerificationTest extends AbstractIntegrationTest {
             creationDate = cal.getTime();
             
             query = em.createNativeQuery(
-                "INSERT INTO Verifications (id, creationDate, verificationNumber) VALUES (55555" + i + ", ?, 557)")
+                "INSERT INTO Verifications (id, creationDate, verificationNumber, userAccount_id) VALUES (55555" + i + ", ?, 557, 1)")
                 .setParameter(1, creationDate, TemporalType.DATE);
             query.executeUpdate();
         }
         
-        Page<Verification> verifications = service.findAllVerifications(user, 0, "creationDate", false);
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate");
+        Page<Verification> verifications = service.findAllVerifications(user, terms);
         
         assertEquals(Constants.DEFAULT_PAGE_SIZE, verifications.getNumberOfElements());
         assertEquals(INSERTED_VERIFICATION_ROWS_BEFORE + 100, verifications.getTotalElements());
