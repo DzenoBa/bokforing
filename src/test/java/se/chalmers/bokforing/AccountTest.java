@@ -67,28 +67,24 @@ public class AccountTest extends AbstractIntegrationTest {
     @Test
     public void testInsertDefaultAccounts() {
         initUtil.insertDefaultAccounts();
-        
+
         //MAKE SURE ALL DEFAULT ACCOUNTS EXIST IN DATABASE
         try (BufferedReader br = new BufferedReader(new FileReader("Accounts.txt"))) {
             String line = br.readLine();
             try {
-                    while(line != null){
+                while (line != null) {
                     int id = Integer.parseInt(line.substring(0, 4));
                     String name = line.substring(4);
                     Account acc = service.findAccountByNumber(id);
                     assertNotNull(acc);
                     assertEquals(name, acc.getName());
                     line = br.readLine();
-                    }
+                }
+            } finally {
+                //TODO: Fail if first four chars aren't numbers
             }
-            finally{
-                
-            }
-        
-         } 
-            
 
-         catch (IOException e) {
+        } catch (IOException e) {
             //TODO: Catch exception if file with default accounts doesn't exist
         }
 

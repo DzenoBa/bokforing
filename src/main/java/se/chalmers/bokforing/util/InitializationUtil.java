@@ -43,7 +43,7 @@ public class InitializationUtil {
 //                    em.persist(account);
 //                    em.getTransaction().commit();
                 } finally {
-
+            //TODO: Catch exception if first four chars aren't numbers 
                 }
             }
 
