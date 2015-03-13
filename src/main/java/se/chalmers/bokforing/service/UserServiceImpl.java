@@ -118,7 +118,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int updateLastLogIn(Date date, String email) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //return userRep.update
+        return 0;
     }
 
     @Override
