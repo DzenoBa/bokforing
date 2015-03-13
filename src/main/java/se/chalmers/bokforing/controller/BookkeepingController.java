@@ -63,30 +63,47 @@ public class BookkeepingController {
         System.out.println("* PING bookkeeping/createman");
         FormJSON form = new FormJSON();
         
-        if(verification.getPosts() == null || verification.getPosts().isEmpty()) { // TODO sessionCheck
-            form.addError("general", "Ett fel inträffades vänligen försök igenom om en liten stund");
+        // CHECK SESSION
+        if(!(authSession.sessionCheck())) {
+            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
             return form;
         }
+        String email = authSession.getEmail();
         
+        // CHECK DATE
         if(verification.getTransactionDate() == null) {
             form.addError("verificationdate", "Ange ett datum");
             return form;
         }
         
-        // TODO ACCOUNT
-        Account temp_account = new Account();
-        temp_account.setName("TEST");
-        temp_account.setNumber(123456);
+        // CHECK POSTS
+        if(verification.getPosts() == null || verification.getPosts().isEmpty()) {
+            form.addError("general", "Ett fel inträffades vänligen försök igenom om en liten stund");
+            return form;
+        }
             
         // CREATE POSTS
         List<Post> new_posts = new ArrayList();
         for(PostJSON post : verification.getPosts()) {
             if(post == null) {
-                form.addError("todo", "Ett fel inträffades, vänligen försök igen om en liten stund. Code: P01"); // TODO
+                form.addError("general", "Ett fel inträffades, vänligen försök igen om en liten stund.");
                 return form;
             }
+            
+            int index = new_posts.size() + 1;
+            // CHECK ACCOUNT
+            if(!(post.getAccountid() > 0)) {
+                form.addError("general", "Vänligen välj ett konto för rad " + index + "!");
+                return form;
+            } 
+            Account temp_account = accountService.findAccountByNumber(post.getAccountid());
+            // THIS SHOULD'NT HAPPEN 
+            if(temp_account == null) {
+                form.addError("general", "Något gick fel, vänligen försök igen om en liten stund");
+            }
+            // CHECK DEBIT AND CREDIT
             if(post.getDebit() < 0 || post.getCredit() < 0) {
-                form.addError("todo", "Ett fel inträffades, vänligen försök igen om en liten stund. Code: P02"); // TODO
+                form.addError("general", "Både debet och kredit måste innehålla en siffra i rad " + index + "!");
                 return form;
             }
             
@@ -105,7 +122,7 @@ public class BookkeepingController {
             }
             // SOMETHING WRONG
             else {
-                form.addError("todo", "Ett fel inträffades, vänligen försök igen om en liten stund. Code: DC01"); // TODO
+                form.addError("todo", "Ett fel inträffades, vänligen försök igen om en liten stund. Code: DC01; Rad: " + index); // TODO
             }
             
             // EVERYTHING SEEMS TO BE IN ORDER; CREATE POST
@@ -117,22 +134,20 @@ public class BookkeepingController {
         }
         
         // EVERYTHING SEEMS TO BE IN ORDER; CREATE VERIFICATION
-        UserAccount user = userService.getUser(authSession.getEmail());
+        UserAccount user = userService.getUser(email);
         //userService.storeUser(user);
         
+        // TODO
         long customerNumber = 123;
         Customer customer = customerManager.createCustomer(user, customerNumber, "Dzeno", "00387", null);
         Customer customerFromDb = customerService.findByCustomerNumber(user, customerNumber);
         
-        Verification ver = verificationManager.createVerification(user, new_posts, verification.getTransactionDate(), customerFromDb); // TODO
+        // CREATE VERIFICATION
+        Verification ver = verificationManager.createVerification(user, new_posts, verification.getTransactionDate(), customerFromDb);
         user.getVerifications().add(ver);
         userService.storeUser(user);
         
-        if(ver == null) {
-            form.addError("general", "Ver. error");
-        }
-        
-        System.out.println(userService.getUser(authSession.getEmail()).getVerifications().get(0));
+        // System.out.println(userService.getUser(authSession.getEmail()).getVerifications().get(0));
         
         return form;
     }
