@@ -122,7 +122,8 @@ public class BookkeepingController {
             }
             // SOMETHING WRONG
             else {
-                form.addError("todo", "Ett fel inträffades, vänligen försök igen om en liten stund. Code: DC01; Rad: " + index); // TODO
+                form.addError("general", "Debet och Kredit får ej vara lika eller en av dem måste vara 0; Rad: " + index);
+                return form;
             }
             
             // EVERYTHING SEEMS TO BE IN ORDER; CREATE POST
