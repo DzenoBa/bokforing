@@ -55,14 +55,14 @@ bok.config(['$routeProvider',
                 }).
                 when('/manbok', {
                     templateUrl: 'private/manbok.html',
-                    controller: 'ManBKCtrl'
-                    //auth: true,
-                    /*resolve: {
+                    controller: 'ManBKCtrl',
+                    auth: true,
+                    resolve: {
                         init: ['PromiseProxy', function(PromiseProxy) {
                                 PromiseProxy.refresh();
                                 return PromiseProxy.promise();
                         }]
-                    }*/
+                    }
                 }).
                 when('/userinfo', {
                     templateUrl: 'private/userinfo.html',
