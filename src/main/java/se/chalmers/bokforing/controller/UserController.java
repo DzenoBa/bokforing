@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import se.chalmers.bokforing.util.PasswordUtil;
 import se.chalmers.bokforing.jsonobject.FormJSON;
+import se.chalmers.bokforing.jsonobject.UserInfoJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
 import se.chalmers.bokforing.model.UserGroup;
 import se.chalmers.bokforing.model.UserAccount;
+import se.chalmers.bokforing.model.UserInfo;
 import se.chalmers.bokforing.service.UserManager;
 import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.session.AuthSession;
@@ -34,6 +36,9 @@ public class UserController {
     
     @Autowired 
     private UserManager userManager;
+    
+    @Autowired
+    private UserService userService;
     
     /*
      * CREATE
@@ -139,6 +144,73 @@ public class UserController {
         u.setPass(newHashPasswd);
         userDb.storeUser(u);
         
+        return form;
+    }
+    
+    @RequestMapping(value = "/user/getuserinfo", method = RequestMethod.GET)
+    public @ResponseBody UserInfoJSON getUserInfo() {
+        
+        UserInfoJSON userInfo = new UserInfoJSON();
+        // CHECK SESSION
+        if(!(authSession.sessionCheck())) {
+            return userInfo;
+        }
+        String email = authSession.getEmail();
+        
+        UserAccount ua = userService.getUser(email);
+        UserInfo ui = ua.getUseInfo();
+        
+        if(ui == null) {
+            return userInfo;
+        }
+        
+        // SET
+        userInfo.setFirstname(ui.getName());
+        userInfo.setPhonenumber(ui.getPhoneNumber());
+        userInfo.setCompanyname(ui.getCompanyName());
+        
+        return userInfo;
+    }
+    
+    @RequestMapping(value = "/user/edituserinfo", method = RequestMethod.PUT)
+    public @ResponseBody FormJSON editUserInfo(@RequestBody final UserInfoJSON userInfo) {
+        
+        FormJSON form = new FormJSON();
+        
+        // CHECK SESSION
+        if(!(authSession.sessionCheck())) {
+            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            return form;
+        }
+        String email = authSession.getEmail();
+
+        
+        // USER REQUESTED TO CHANGE FIRSNAME
+        if(!(userInfo.getFirstname().isEmpty())) {
+            userService.updateName(userInfo.getFirstname(), email);
+            return form;
+        }
+        
+        // USER REQUESTED TO CHANGE LASTNAME
+        if(!(userInfo.getLastname().isEmpty())) {
+            form.addError("general", "Ej implementerad"); // TODO
+            return form;
+        }
+        
+        // USER REQUESTED TO CHANGE PHONE-NUMBER
+        if(!(userInfo.getPhonenumber().isEmpty())) {
+            userService.updatePhoneNumber(userInfo.getPhonenumber(), email);
+            return form;
+        }
+        
+        // USER REQUESTED TO CHANGE COMPANY NAME
+        if(!(userInfo.getCompanyname().isEmpty())) {
+            userService.updateCompanyName(userInfo.getCompanyname(), email);
+            return form;
+        }
+        
+        // YOU SHOULD NOT BE ABLE TO REACH THIS PART
+        form.addError("general", "Någon gick fel, vänligen försök igen om en liten stund");
         return form;
     }
 }
