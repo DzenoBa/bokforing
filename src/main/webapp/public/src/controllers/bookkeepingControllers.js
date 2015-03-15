@@ -68,6 +68,7 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$
                                         {debit: 0, credit: 0}],
                                         transactionDate: $filter('date')(new Date(),'yyyy-MM-dd')
                                 };
+                            $scope.accountls = [];
                         }
                     }).error(function() {
                         console.log("mbk:create: error");
