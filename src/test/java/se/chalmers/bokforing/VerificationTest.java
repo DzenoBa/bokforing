@@ -34,6 +34,7 @@ import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.persistence.VerificationRepository;
 import se.chalmers.bokforing.persistence.VerificationSpecs;
+import se.chalmers.bokforing.service.AccountService;
 import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.VerificationService;
@@ -63,6 +64,9 @@ public class VerificationTest extends AbstractIntegrationTest {
     @Autowired
     CustomerManager customerManager;
     
+    @Autowired
+    AccountService accountService;
+    
     private static UserAccount user;
     
     @Before
@@ -71,15 +75,21 @@ public class VerificationTest extends AbstractIntegrationTest {
         user.setId(1L);
     }
     
+    @Transactional
     @Test
     public void testCreateVerification() {
         double sum1Amount = 100;
         double sum2Amount = 100;
         
+        double sum3Amount = 200;
+        double sum4Amount = 200;
+       
         Calendar cal = Calendar.getInstance();
         Account account = new Account();
         account.setName("Egna insättningar");
         account.setNumber(2018);
+        
+        accountService.save(account);
         
         PostSum sum = new PostSum();
         sum.setSumTotal(sum1Amount);
@@ -88,6 +98,14 @@ public class VerificationTest extends AbstractIntegrationTest {
         PostSum sum2 = new PostSum();
         sum2.setSumTotal(sum2Amount);
         sum2.setType(PostType.Debit);
+        
+        PostSum sum3 = new PostSum();
+        sum3.setSumTotal(sum3Amount);
+        sum3.setType(PostType.Debit);
+        
+        PostSum sum4 = new PostSum();
+        sum4.setSumTotal(sum4Amount);
+        sum4.setType(PostType.Credit);
         
         Customer customer = customerManager.createCustomer(user, 123, null, null, null);
         customer.setCustomerNumber(1L);
@@ -101,14 +119,29 @@ public class VerificationTest extends AbstractIntegrationTest {
         Post post2 = new Post();
         post2.setSum(sum2);
         post2.setAccount(account);
+
+        Post post3 = new Post();
+        post3.setSum(sum3);
+        post3.setAccount(account);
+        
+        Post post4 = new Post();
+        post4.setSum(sum4);
+        post4.setAccount(account);
         
         ArrayList<Post> postList = new ArrayList<>();
         postList.add(post);
         postList.add(post2);
         
+        ArrayList<Post> postList2 = new ArrayList<>();
+        postList.add(post3);
+        postList.add(post4);
+        
         Long verNbr = 7372L; // one higher than the highest inserted row
         Verification verification = manager.createVerification(user, verNbr, postList, cal.getTime(), customer);
         assertNotNull(verification);
+        
+        Verification verification2 = manager.createVerification(user, verNbr+1, postList2, cal.getTime(), customer);
+        assertNotNull(verification2);
         
         Verification verificationFromDb = service.findByUserAndVerificationNumber(user, verNbr);
         assertNotNull(verificationFromDb);

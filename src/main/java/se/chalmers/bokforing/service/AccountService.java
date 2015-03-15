@@ -25,4 +25,6 @@ public interface AccountService {
     
     List<Account> findByNameLike(String name);
     
+    void save(Account account);
+    
 }
