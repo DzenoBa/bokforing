@@ -17,6 +17,12 @@ userService.factory('UserProxy', ['$http',
             },
             edit: function(user) {
                 return $http.post(url + '/edit', user);
+            },
+            getUserInfo: function() {
+                return $http.get(url + '/getuserinfo');
+            },
+            editUserInfo: function(userInfo) {
+                return $http.put(url + '/edituserinfo', userInfo);
             }
         };
     }]);

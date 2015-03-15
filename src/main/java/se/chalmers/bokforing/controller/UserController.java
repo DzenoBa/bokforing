@@ -175,7 +175,13 @@ public class UserController {
     @RequestMapping(value = "/user/edituserinfo", method = RequestMethod.PUT)
     public @ResponseBody FormJSON editUserInfo(@RequestBody final UserInfoJSON userInfo) {
         
+        System.out.println("* PING user/editUserInfo");
         FormJSON form = new FormJSON();
+        
+        if(userInfo == null) {
+            form.addError("general", "Ett fel inträffades, vänligen försök igen om en liten stund!");
+            return form;
+        }
         
         // CHECK SESSION
         if(!(authSession.sessionCheck())) {
@@ -186,25 +192,25 @@ public class UserController {
 
         
         // USER REQUESTED TO CHANGE FIRSNAME
-        if(!(userInfo.getFirstname().isEmpty())) {
+        if(userInfo.getFirstname() != null) {
             userService.updateName(userInfo.getFirstname(), email);
             return form;
         }
         
         // USER REQUESTED TO CHANGE LASTNAME
-        if(!(userInfo.getLastname().isEmpty())) {
+        if(userInfo.getLastname() != null) {
             form.addError("general", "Ej implementerad"); // TODO
             return form;
         }
         
         // USER REQUESTED TO CHANGE PHONE-NUMBER
-        if(!(userInfo.getPhonenumber().isEmpty())) {
+        if(userInfo.getPhonenumber() != null) {
             userService.updatePhoneNumber(userInfo.getPhonenumber(), email);
             return form;
         }
         
         // USER REQUESTED TO CHANGE COMPANY NAME
-        if(!(userInfo.getCompanyname().isEmpty())) {
+        if(userInfo.getCompanyname() != null) {
             userService.updateCompanyName(userInfo.getCompanyname(), email);
             return form;
         }

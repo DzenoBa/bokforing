@@ -111,12 +111,25 @@ userControllers.controller('EditUserCtrl', ['$scope', '$location', 'AuthProxy',
 /**
  * USER INFO
  */
-userControllers.controller('UserInfoCtrl', ['$scope',
-    function($scope) {
+userControllers.controller('UserInfoCtrl', ['$scope', 'UserProxy',
+    function($scope, UserProxy) {
+              
+        var init = function() {
+            getUserInfo();
+        };
         
-        $scope.userinfo = {firstname: "Dzeno", phonenumber: "00387", companyname: "Trollhättan AB"};
+        function getUserInfo() {
+            UserProxy.getUserInfo()
+                    .success(function(userInfo) {
+                        $scope.userinfo = userInfo;
+                    }).error(function() {
+                console.log("getUserInfo: error");
+            });
+        };
         
+        init();
         $scope.showmapedit = createShowMap();
+        $scope.userinfoShadow = {};
         
         function createShowMap() {
             var keys = ['firstname', 'lastname', 'phonenumber', 'city', 'address', 'companyname'];
@@ -129,8 +142,29 @@ userControllers.controller('UserInfoCtrl', ['$scope',
 
         $scope.showedit = function(str) {
             $scope.showmapedit[str] = true;
+            $scope.userinfoShadow[str] = $scope.userinfo[str];
         };
-        $scope.hideedit = function(str) {
+        $scope.canceledit = function(str) {
+            $scope.userinfo[str] = $scope.userinfoShadow[str];
+            $scope.showmapedit[str] = false;
+        };
+        
+        $scope.edit = function(str) {
+            if(!(angular.isUndefined($scope.userinfo[str]) || $scope.userinfo[str] === null)) {
+                var temp_object = {};
+                temp_object[str] = $scope.userinfo[str];
+                UserProxy.editUserInfo(temp_object)
+                        .success(function(form) {
+                            if(form.numErrors === 0) {
+                                $scope.form = form;
+                                getUserInfo();
+                            } else {
+                                $scope.form = form;
+                            }
+                        }).error(function() {
+                    console.log("editUserInfo: error");
+                });
+            }
             $scope.showmapedit[str] = false;
         };
     }
