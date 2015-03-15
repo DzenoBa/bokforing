@@ -114,18 +114,19 @@ userControllers.controller('EditUserCtrl', ['$scope', '$location', 'AuthProxy',
 userControllers.controller('UserInfoCtrl', ['$scope',
     function($scope) {
         
-        $scope.userinfo = {firstname: "Dzeno", lastname: "Bazdar", city: "Trollhättan"};
+        $scope.userinfo = {firstname: "Dzeno", phonenumber: "00387", companyname: "Trollhättan AB"};
         
-        $scope.showmapedit = createShowMap($scope.userinfo);
+        $scope.showmapedit = createShowMap();
         
-        function createShowMap(object) {
+        function createShowMap() {
+            var keys = ['firstname', 'lastname', 'phonenumber', 'city', 'address', 'companyname'];
             var output = {};
-            for (var key in object) {
-                output[key] = false;
+            for (var key in keys) {
+                output[keys[key]] = false;
             }
             return output;
         }
-        
+
         $scope.showedit = function(str) {
             $scope.showmapedit[str] = true;
         };
