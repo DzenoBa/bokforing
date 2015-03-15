@@ -66,7 +66,14 @@ bok.config(['$routeProvider',
                 }).
                 when('/userinfo', {
                     templateUrl: 'private/userinfo.html',
-                    controller: 'UserInfoCtrl'
+                    controller: 'UserInfoCtrl',
+                    auth: true,
+                    resolve: {
+                        init: ['PromiseProxy', function(PromiseProxy) {
+                                PromiseProxy.refresh();
+                                return PromiseProxy.promise();
+                        }]
+                    }
                 }).
                 otherwise({
                     redirectTo: 'index.html'
