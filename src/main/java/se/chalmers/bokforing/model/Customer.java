@@ -5,6 +5,7 @@
  */
 package se.chalmers.bokforing.model;
 
+import se.chalmers.bokforing.model.user.UserAccount;
 import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

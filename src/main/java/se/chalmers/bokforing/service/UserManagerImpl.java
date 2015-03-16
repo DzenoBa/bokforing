@@ -5,9 +5,10 @@
  */
 package se.chalmers.bokforing.service;
 
+import se.chalmers.bokforing.persistence.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.chalmers.bokforing.model.UserAccount;
+import se.chalmers.bokforing.model.user.UserAccount;
 
 /**
  *

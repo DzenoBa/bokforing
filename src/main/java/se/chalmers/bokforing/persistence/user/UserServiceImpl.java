@@ -3,23 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.service;
+package se.chalmers.bokforing.persistence.user;
 
 import java.net.URI;
 import java.util.Date;
 import java.util.LinkedList;
-import se.chalmers.bokforing.model.UserAccount;
+import se.chalmers.bokforing.model.user.UserAccount;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import se.chalmers.bokforing.model.UserGroup;
-import se.chalmers.bokforing.model.UserInfo;
-import se.chalmers.bokforing.persistence.UserInfoRepository;
-import se.chalmers.bokforing.persistence.UserRepository;
+import se.chalmers.bokforing.model.user.UserGroup;
+import se.chalmers.bokforing.model.user.UserInfo;
+import se.chalmers.bokforing.service.InitializationUtil;
 
 /**
- *
+ * Implimentation of userService.
+ * This service acts as a proxy to the userAccount and userInfo repository.
+ * In a way when function calls are done in java there are sent here to be translateded into sql querrys.
  * @author victor
  */
 @Service
@@ -60,8 +61,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    /**
+     * storeUser.
+     * Will store a user to the database.
+     * Will throw an exception if the user already exists.
+     * @user the user to store.
+     */
     public void storeUser(UserAccount user) {
-        //TODO Check if the user is vaild
         String email = user.getEmail();
         if (email != null && !email.equals("")) {
             email = email.toLowerCase();
@@ -74,8 +80,8 @@ public class UserServiceImpl implements UserService {
             userRep.save(user);
             initUtil.insertDefaultAccounts();
         } else {
-            //Invaild User
-            //TODO Throw and exception
+            //A very simple errorcheck.
+            throw new IllegalArgumentException("\"" + email + "\"" + "is not a vaild email.");
         }
     }
     
@@ -84,7 +90,6 @@ public class UserServiceImpl implements UserService {
         return userRep.updatePass(pass, email);
     }
 
-    
     @Override
     public int updateEmail (String newEmail, String email){
         UserAccount u = userRep.findByEmail(email);
@@ -118,8 +123,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int updateLastLogIn(Date date, String email) {
-        //return userRep.update
-        return 0;
+        UserInfo ui = userRep.findByEmail(email).getUseInfo();
+        return infoRep.updateLastLogIn(date, ui.getUserInfoId());
     }
 
     @Override

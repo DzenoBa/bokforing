@@ -14,10 +14,8 @@ import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
 import se.chalmers.bokforing.model.Verification;
-import se.chalmers.bokforing.model.UserAccount;
-import se.chalmers.bokforing.model.UserInfo;
-import se.chalmers.bokforing.persistence.UserInfoRepository;
-import se.chalmers.bokforing.service.UserService;
+import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.VerificationService;
 
@@ -26,9 +24,6 @@ public class ControllerTest {
 
     @Autowired
     private UserService userDb;
-
-    @Autowired
-    private UserInfoRepository userInfoRep;
 
     @Autowired
     private VerificationManager verManager;
@@ -51,7 +46,7 @@ public class ControllerTest {
         StringBuilder sb = new StringBuilder();
         try {
             userDb.storeUser(user);
-        } catch (Exception e) {
+        } catch (javax.persistence.PersistenceException e) {
             sb.append("Error: user is already in db. ");
         }
 

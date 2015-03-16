@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.service;
+package se.chalmers.bokforing.persistence.user;
 
 import java.net.URI;
 import java.util.Date;
 import java.util.List;
-import se.chalmers.bokforing.model.UserGroup;
-import se.chalmers.bokforing.model.UserAccount;
-import se.chalmers.bokforing.model.UserInfo;
+import se.chalmers.bokforing.model.user.UserGroup;
+import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.user.UserInfo;
 
 /**
  *

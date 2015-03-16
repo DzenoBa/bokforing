@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.model.Address;
 import se.chalmers.bokforing.model.Customer;
-import se.chalmers.bokforing.model.UserAccount;
+import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.persistence.CustomerRepository;
 
 /**

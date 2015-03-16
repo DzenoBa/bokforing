@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import se.chalmers.bokforing.util.PasswordUtil;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
-import se.chalmers.bokforing.model.UserAccount;
-import se.chalmers.bokforing.service.UserService;
+import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.session.AuthSession;
 
 /**
@@ -75,7 +75,6 @@ public class AuthController {
         String s_id = PasswordUtil.randomString(10);
         authSession.setSession(userEnt.getEmail(), s_id, userEnt.getGroup().toString());
         //Store session and timestamp in database
-        userEnt.setSessionid(s_id);
         userDb.updateSessionid(s_id, userEnt.getEmail());
         userDb.updateLastLogIn(userEnt.getEmail());
         //userDb.storeUser(userEnt);

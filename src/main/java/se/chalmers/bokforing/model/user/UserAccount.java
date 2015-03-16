@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.model;
+package se.chalmers.bokforing.model.user;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,6 +20,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import se.chalmers.bokforing.model.Customer;
+import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.util.PasswordUtil;
 
 /**
@@ -32,10 +34,6 @@ public class UserAccount implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
-    
-    /** Name of the user */
-    @Column(unique = true)
-    private String name;
 
     @OneToOne
     @JoinColumn(name="userInfoId")
@@ -55,9 +53,6 @@ public class UserAccount implements Serializable {
     private UserGroup userGroup;
    
     private String sessionid;
-    
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date lastLogIn;
     
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Verification> verifications;
@@ -101,13 +96,6 @@ public class UserAccount implements Serializable {
     }
 
     /**
-     * @param salt
-     */
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
-    /**
      * @return the email
      */
     public String getEmail() {
@@ -129,24 +117,10 @@ public class UserAccount implements Serializable {
     }
 
     /**
-     * @param group the group to set
-     */
-    public void setGroup(UserGroup group) {
-        this.setUserGroup(group);
-    }
-
-    /**
      * @return String session id
      */
     public String getSessionid() {
         return sessionid;
-    }
-    
-    /**
-     * @param sessionid 
-     */
-    public void setSessionid(String sessionid) {
-        this.sessionid = sessionid;
     }
 
     /**
@@ -197,8 +171,11 @@ public class UserAccount implements Serializable {
     public void setCustomers(List<Customer> customers) {
         this.customers = customers;
     }
-        
-            
+    
+    String toStringLight(){
+        return id + ":" + email;
+    }
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -213,7 +190,6 @@ public class UserAccount implements Serializable {
         sb.append(", email=").append(email);
         sb.append(", group=").append(userGroup);
         sb.append(", sessionid=").append(sessionid);
-        return  sb.toString();
-        
+        return  sb.toString();  
     }
 }
