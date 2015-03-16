@@ -75,7 +75,6 @@ public class AuthController {
         String s_id = PasswordUtil.randomString(10);
         authSession.setSession(userEnt.getEmail(), s_id, userEnt.getGroup().toString());
         //Store session and timestamp in database
-        userEnt.setSessionid(s_id);
         userDb.updateSessionid(s_id, userEnt.getEmail());
         userDb.updateLastLogIn(userEnt.getEmail());
         //userDb.storeUser(userEnt);

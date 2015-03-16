@@ -54,9 +54,6 @@ public class UserAccount implements Serializable {
    
     private String sessionid;
     
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date lastLogIn;
-    
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Verification> verifications;
     
@@ -99,13 +96,6 @@ public class UserAccount implements Serializable {
     }
 
     /**
-     * @param salt
-     */
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
-    /**
      * @return the email
      */
     public String getEmail() {
@@ -127,24 +117,10 @@ public class UserAccount implements Serializable {
     }
 
     /**
-     * @param group the group to set
-     */
-    public void setGroup(UserGroup group) {
-        this.setUserGroup(group);
-    }
-
-    /**
      * @return String session id
      */
     public String getSessionid() {
         return sessionid;
-    }
-    
-    /**
-     * @param sessionid 
-     */
-    public void setSessionid(String sessionid) {
-        this.sessionid = sessionid;
     }
 
     /**
@@ -195,11 +171,11 @@ public class UserAccount implements Serializable {
     public void setCustomers(List<Customer> customers) {
         this.customers = customers;
     }
-        
-            
+    
     String toStringLight(){
         return id + ":" + email;
     }
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

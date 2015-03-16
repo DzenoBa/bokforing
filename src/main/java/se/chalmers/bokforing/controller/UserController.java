@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import se.chalmers.bokforing.util.PasswordUtil;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
-import se.chalmers.bokforing.model.user.UserGroup;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.service.UserManager;
 import se.chalmers.bokforing.persistence.user.UserService;
@@ -80,11 +79,8 @@ public class UserController {
         // EVERYTHING SEEMS TO BE IN ORDER CREATE USER
         UserAccount userAcc = new UserAccount();
         userAcc.setEmail(user.getEmail());
-        String salt = PasswordUtil.randomString(8);
-        String hashPasswd = PasswordUtil.hash(salt + user.getNewpasswd());
-        userAcc.setSalt(salt);
+        String hashPasswd = PasswordUtil.hash(userAcc.getSalt() + user.getNewpasswd());
         userAcc.setPass(hashPasswd);
-        userAcc.setGroup(UserGroup.User);
         // STORE
         userManager.createUser(userAcc);
             
@@ -133,9 +129,7 @@ public class UserController {
         }
         
         // EVERYTHING SEEMS TO BE IN ORDER CHANGE USER
-        String newSalt = PasswordUtil.randomString(8);
-        String newHashPasswd = PasswordUtil.hash(newSalt + user.getNewpasswd());
-        u.setSalt(newSalt);
+        String newHashPasswd = PasswordUtil.hash(u.getSalt() + user.getNewpasswd());
         u.setPass(newHashPasswd);
         userDb.storeUser(u);
         

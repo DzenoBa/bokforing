@@ -15,11 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.user.UserGroup;
 import se.chalmers.bokforing.model.user.UserInfo;
-
 import se.chalmers.bokforing.service.InitializationUtil;
 
 /**
- *
+ * Implimentation of userService.
+ * This service acts as a proxy to the userAccount and userInfo repository.
+ * In a way when function calls are done in java there are sent here to be translateded into sql querrys.
  * @author victor
  */
 @Service
