@@ -13,6 +13,7 @@ import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserInfoJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
 import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.user.UserGroup;
 import se.chalmers.bokforing.model.user.UserInfo;
 import se.chalmers.bokforing.service.UserManager;
 import se.chalmers.bokforing.persistence.user.UserService;
@@ -86,6 +87,7 @@ public class UserController {
         userAcc.setEmail(user.getEmail());
         String hashPasswd = PasswordUtil.hash(userAcc.getSalt() + user.getNewpasswd());
         userAcc.setPass(hashPasswd);
+        userAcc.setUserGroup(UserGroup.User);
         // STORE
         userManager.createUser(userAcc);
             
