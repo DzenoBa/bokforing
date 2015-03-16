@@ -12,13 +12,8 @@ import se.chalmers.bokforing.util.PasswordUtil;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserInfoJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
-<<<<<<< HEAD
-import se.chalmers.bokforing.model.UserGroup;
-import se.chalmers.bokforing.model.UserAccount;
-import se.chalmers.bokforing.model.UserInfo;
-=======
 import se.chalmers.bokforing.model.user.UserAccount;
->>>>>>> 0431ef495c29b305eb8445c1efdd86aea1cf4aa2
+import se.chalmers.bokforing.model.user.UserInfo;
 import se.chalmers.bokforing.service.UserManager;
 import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.session.AuthSession;
