@@ -1,23 +1,19 @@
-package se.chalmers.bokforing.persistence;
+package se.chalmers.bokforing.persistence.user;
 
-import se.chalmers.bokforing.model.UserAccount;
+import se.chalmers.bokforing.model.user.UserAccount;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
-import se.chalmers.bokforing.model.UserGroup;
-import se.chalmers.bokforing.model.UserInfo;
+import se.chalmers.bokforing.model.user.UserGroup;
+import se.chalmers.bokforing.model.user.UserInfo;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserAccount,Long> {
+interface UserRepository extends JpaRepository<UserAccount,Long> {
 
-    /** Finds all user with this name
-     * @param name
-     * @return  */
-    //List<UserAccount> findByName(String name);
     /** Finds the user with a certain name
      * @param email
      * @return  */
     UserAccount findByEmail(String email);
-    //TODO Redundant to have a name & pass fetch.
+
     /** Finds a user with name and password
      * @param email
      * @param pass

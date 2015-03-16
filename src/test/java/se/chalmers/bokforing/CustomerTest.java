@@ -16,7 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.config.TestApplicationConfig;
 import se.chalmers.bokforing.model.Customer;
-import se.chalmers.bokforing.model.UserAccount;
+import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.CustomerService;

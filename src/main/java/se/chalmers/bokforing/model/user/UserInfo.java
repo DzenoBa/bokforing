@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.model;
+package se.chalmers.bokforing.model.user;
 
 import java.io.Serializable;
 import java.net.URI;
@@ -50,24 +50,10 @@ public class UserInfo implements Serializable {
     }
 
     /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.userName = name;
-    }
-
-    /**
      * @return the phoneNumber
      */
     public String getPhoneNumber() {
         return phoneNumber;
-    }
-
-    /**
-     * @param phoneNumber the phoneNumber to set
-     */
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     /**
@@ -78,24 +64,10 @@ public class UserInfo implements Serializable {
     }
 
     /**
-     * @param companyName the companyName to set
-     */
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    /**
      * @return the logo
      */
     public URI getLogo() {
         return logo;
-    }
-
-    /**
-     * @param logo the logo to set
-     */
-    public void setLogo(URI logo) {
-        this.logo = logo;
     }
 
     /**
@@ -104,26 +76,12 @@ public class UserInfo implements Serializable {
     public UserAccount getUa() {
         return ua;
     }
-
-    /**
-     * @param ua the ua to set
-     */
-    public void setUa(UserAccount ua) {
-        this.ua = ua;
-    }
     
         /**
      * @return the lastLogIn
      */
     public Date getLastLogIn() {
         return lastLogIn;
-    }
-
-    /**
-     * @param lastLogIn the lastLogIn to set
-     */
-    public void setLastLogIn(Date lastLogIn) {
-        this.lastLogIn = lastLogIn;
     }
     
     String toStringLight(){
@@ -132,7 +90,19 @@ public class UserInfo implements Serializable {
     
     @Override
     public String toString(){
-        return toStringLight();
+        StringBuilder sb = new StringBuilder();
+        sb.append("UserInfo{ id= ").append(userInfoId);
+        sb.append(", userAccount=");
+        if(ua != null)
+            sb.append(ua.toStringLight());
+        else
+            sb.append("null");
+        sb.append(", username=").append(userName);
+        sb.append(", phonenumber= ").append(phoneNumber);
+        sb.append(", companyname=").append(companyName);
+        sb.append(", lastLogIn=").append(lastLogIn);
+        sb.append(", logo=").append(logo);
+        return  sb.toString();  
     }
 
 }

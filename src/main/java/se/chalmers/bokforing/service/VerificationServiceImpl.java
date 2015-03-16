@@ -13,7 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import se.chalmers.bokforing.model.UserAccount;
+import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.util.Constants;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.model;
+package se.chalmers.bokforing.model.user;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,6 +20,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import se.chalmers.bokforing.model.Customer;
+import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.util.PasswordUtil;
 
 /**
@@ -32,10 +34,6 @@ public class UserAccount implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
-    
-    /** Name of the user */
-    @Column(unique = true)
-    private String name;
 
     @OneToOne
     @JoinColumn(name="userInfoId")
@@ -199,6 +197,9 @@ public class UserAccount implements Serializable {
     }
         
             
+    String toStringLight(){
+        return id + ":" + email;
+    }
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -213,7 +214,6 @@ public class UserAccount implements Serializable {
         sb.append(", email=").append(email);
         sb.append(", group=").append(userGroup);
         sb.append(", sessionid=").append(sessionid);
-        return  sb.toString();
-        
+        return  sb.toString();  
     }
 }

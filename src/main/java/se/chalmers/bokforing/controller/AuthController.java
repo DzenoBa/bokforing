@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import se.chalmers.bokforing.util.PasswordUtil;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
-import se.chalmers.bokforing.model.UserAccount;
-import se.chalmers.bokforing.service.UserService;
+import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.session.AuthSession;
 
 /**
