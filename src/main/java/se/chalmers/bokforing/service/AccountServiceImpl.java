@@ -78,4 +78,9 @@ public class AccountServiceImpl implements AccountService {
         String tmp = "%"+ name + "%";
         return repository.findByNameLike(tmp);
     }
+
+    @Override
+    public void save(Account account) {
+        repository.save(account);
+    }
 }

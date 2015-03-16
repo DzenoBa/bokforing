@@ -5,6 +5,7 @@
  */
 package se.chalmers.bokforing.service;
 
+import java.util.Calendar;
 import java.util.Date;
 import se.chalmers.bokforing.service.VerificationService;
 import java.util.List;
@@ -48,9 +49,18 @@ public class VerificationManagerImpl implements VerificationManager {
             return null;
         }
         
+        Date todaysDate = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(todaysDate);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        
         Verification ver = new Verification();
         ver.setPosts(posts);
         ver.setTransactionDate(transactionDate);
+        ver.setCreationDate(todaysDate);
         ver.setCustomer(customer);
         ver.setUserAccount(user);
         ver.setVerificationNumber(verificationNumber);
@@ -95,6 +105,4 @@ public class VerificationManagerImpl implements VerificationManager {
         
         return balance;
     }
-    
-    
 }
