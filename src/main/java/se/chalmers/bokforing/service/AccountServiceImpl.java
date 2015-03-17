@@ -83,4 +83,9 @@ public class AccountServiceImpl implements AccountService {
     public void save(Account account) {
         repository.save(account);
     }
+
+    @Override
+    public void delete(Account account) {
+        repository.delete(account);
+    }
 }

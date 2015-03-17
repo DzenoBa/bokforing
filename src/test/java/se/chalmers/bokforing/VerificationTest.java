@@ -34,6 +34,7 @@ import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.persistence.VerificationRepository;
 import se.chalmers.bokforing.persistence.VerificationSpecs;
+import se.chalmers.bokforing.service.AccountManager;
 import se.chalmers.bokforing.service.AccountService;
 import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.VerificationManager;
@@ -65,7 +66,7 @@ public class VerificationTest extends AbstractIntegrationTest {
     CustomerManager customerManager;
     
     @Autowired
-    AccountService accountService;
+    AccountManager accountManager;
     
     private static UserAccount user;
     
@@ -85,11 +86,8 @@ public class VerificationTest extends AbstractIntegrationTest {
         double sum4Amount = 200;
        
         Calendar cal = Calendar.getInstance();
-        Account account = new Account();
-        account.setName("Egna insättningar");
-        account.setNumber(2018);
-        
-        accountService.save(account);
+
+        Account account = accountManager.createAccount(2018, "Egna insättningar");
         
         PostSum sum = new PostSum();
         sum.setSumTotal(sum1Amount);

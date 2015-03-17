@@ -25,6 +25,7 @@ import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.CustomerService;
 import se.chalmers.bokforing.persistence.user.UserService;
+import se.chalmers.bokforing.service.AccountManager;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.AccountService;
 import se.chalmers.bokforing.session.AuthSession;
@@ -53,6 +54,9 @@ public class BookkeepingController {
     
     @Autowired
     private CustomerService customerService;
+    
+    @Autowired
+    private AccountManager accountManager;
     
     /*
      * CREATE
