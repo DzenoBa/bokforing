@@ -45,7 +45,7 @@ public class CustomerManagerImpl implements CustomerManager {
     }
 
     @Override
-    public void removeCustomer(Customer customer) {
+    public void deleteCustomer(Customer customer) {
         if(customer != null) {
             service.delete(customer);
         }

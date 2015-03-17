@@ -17,6 +17,6 @@ public interface CustomerManager {
     
     Customer createCustomer(UserAccount user, long number, String name, String phoneNumber, Address address);
     
-    void removeCustomer(Customer customer);
+    void deleteCustomer(Customer customer);
     
 }
