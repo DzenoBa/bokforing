@@ -3,9 +3,7 @@ package se.chalmers.bokforing.service;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.persistence.AccountRepository;
@@ -17,8 +15,6 @@ import se.chalmers.bokforing.persistence.AccountRepository;
 @Service
 public class InitializationUtilImpl implements InitializationUtil {
 
-//    @Autowired
-//    public EntityManager em;
     @Autowired
     private AccountRepository accountRep;
 
@@ -42,12 +38,7 @@ public class InitializationUtilImpl implements InitializationUtil {
 
                     line = br.readLine();
 
-//                    Query query = em.createNativeQuery(
-//                            "INSERT INTO Accounts (id, name) VALUES (" + id + ", '" + name + "')");
-//                    query.executeUpdate();
-//                    em.getTransaction().begin();
-//                    em.persist(account);
-//                    em.getTransaction().commit();
+
                 } finally {
             //TODO: Catch exception if first four chars aren't numbers 
                 }
