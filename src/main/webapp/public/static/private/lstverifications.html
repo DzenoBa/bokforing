@@ -13,7 +13,14 @@
             </tr>
         </thead>
         <tbody>
-            
+            <tr ng-repeat="verification in verifications">
+                <td>{{verification.id}}</td>
+                <td>{{verification.transactionDate}}</td>
+                <td>Från</td>
+                <td>Till</td>
+                <td>Summa</td>
+                <td>{{verification.creationDate}}</td>
+            </tr>
         </tbody>
     </table>
 </div>

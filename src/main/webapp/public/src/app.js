@@ -77,7 +77,7 @@ bok.config(['$routeProvider',
                 }).
                 when('/lstverifications', {
                     templateUrl: 'private/lstverifications.html',
-                    //controller: 'UserInfoCtrl',
+                    controller: 'LstVerCtrl',
                     auth: true,
                     resolve: {
                         init: ['PromiseProxy', function(PromiseProxy) {
