@@ -1,13 +1,12 @@
 <!--Body content-->
 <div>
     <h2>Dina verifikationer</h2>
-    <table class="table table-striped">
+    <table class="table">
         <thead>
             <tr>
                 <th style="width:10%;">Nr</th>
                 <th style="width:17%;">Transaktion datum</th>
-                <th style="width:23%;">Från</th>
-                <th style="width:23%;">Till</th>
+                <th style="width:46%;">Konton</th>
                 <th style="width:10%;">Summa</th>
                 <th style="width:17%;">Skapades</th>
             </tr>
@@ -16,9 +15,28 @@
             <tr ng-repeat="verification in verifications">
                 <td>{{verification.id}}</td>
                 <td>{{verification.transactionDate}}</td>
-                <td>Från</td>
-                <td>Till</td>
-                <td>Summa</td>
+                <td style="padding:0">
+                    <table class="table" style="margin:0">
+                        <thead ng-show="show">
+                            <tr>
+                                <th style="width:40%;">Id</th>
+                                <th style="width:40%;">Namn</th>
+                                <th style="width:20%;">[<a href="" ng-click="show = false">Dölj</a>]</th>
+                            </tr>
+                        </thead>
+                        <tr ng-show="!show">
+                            <td style="width:40%;">{{verification.posts.length}} st konton</td>
+                            <td style="width:40%;"></td><!-- offset -->
+                            <td style="width:20%;">[<a href="" ng-click="show = true">Visa</a>]</td>
+                        </tr>
+                        <tr ng-repeat="post in verification.posts" ng-show="show">
+                            <td>{{post.accountid}}</td>
+                            <td>{{post.accountname}}</td>
+                            <td></td><!-- Offset -->
+                        </tr>
+                    </table>
+                </td>
+                <td>{{verification.sum}}</td>
                 <td>{{verification.creationDate}}</td>
             </tr>
         </tbody>
