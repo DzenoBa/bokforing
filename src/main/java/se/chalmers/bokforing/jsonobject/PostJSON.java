@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class PostJSON implements Serializable {
     
     private int accountid;
+    private String accountname;
     private double debit;
     private double credit;
     
@@ -18,6 +19,13 @@ public class PostJSON implements Serializable {
     }
     public void setAccountid(int accountid) {
         this.accountid = accountid;
+    }
+    
+    public String getAccountname() {
+        return accountname;
+    }
+    public void setAccountname(String accountname) {
+        this.accountname = accountname;
     }
     
     public double getDebit() {

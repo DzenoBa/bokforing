@@ -175,19 +175,39 @@ public class BookkeepingController {
     }
     
     @RequestMapping(value = "/bookkeeping/getverifications", method = RequestMethod.GET)
-    public @ResponseBody List<Verification> getVerifications() {
-        List<Verification> verLs;
+    public @ResponseBody List<VerificationJSON> getVerifications() {
+        List<VerificationJSON> verJSONLs = new ArrayList();
         
         if(!authSession.sessionCheck()) {
-            return verLs = new ArrayList();
+            return verJSONLs;
         } 
         UserAccount ua = userService.getUser(authSession.getEmail());
         
         PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate"); // TODO
         Page<Verification> verPage = verificationService.findAllVerifications(ua, terms);
         
-        verLs = verPage.getContent();
+        List<Verification> verLs = verPage.getContent();
         
-        return verLs;
+        for (Verification ver : verLs) {
+            VerificationJSON tempVer = new VerificationJSON();
+            
+            tempVer.setId(ver.getId());
+            tempVer.setTransactionDate(ver.getTransactionDate());
+            tempVer.setCreationDate(ver.getCreationDate());
+            
+            List<PostJSON> postJSONLs = new ArrayList();
+            for (Post post : ver.getPosts()) {
+                PostJSON tempPost = new PostJSON();
+                tempPost.setAccountid(post.getAccount().getNumber());
+                tempPost.setAccountname(post.getAccount().getName());
+                tempVer.setSum(post.getPostSum().getSumTotal()); // TODO
+                
+                postJSONLs.add(tempPost);
+            }
+            tempVer.setPosts(postJSONLs);
+            
+            verJSONLs.add(tempVer);
+        }
+        return verJSONLs;
     }
 }
