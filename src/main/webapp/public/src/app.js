@@ -75,6 +75,17 @@ bok.config(['$routeProvider',
                         }]
                     }
                 }).
+                when('/lstverifications', {
+                    templateUrl: 'private/lstverifications.html',
+                    //controller: 'UserInfoCtrl',
+                    auth: true,
+                    resolve: {
+                        init: ['PromiseProxy', function(PromiseProxy) {
+                                PromiseProxy.refresh();
+                                return PromiseProxy.promise();
+                        }]
+                    }
+                }).
                 otherwise({
                     redirectTo: 'index.html'
                 });
