@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,11 +23,13 @@ import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.Verification;
+import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.CustomerService;
 import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.AccountService;
+import se.chalmers.bokforing.service.VerificationService;
 import se.chalmers.bokforing.session.AuthSession;
 
 /**
@@ -38,6 +41,9 @@ public class BookkeepingController {
     
     @Autowired
     private VerificationManager verificationManager;
+    
+    @Autowired
+    private VerificationService verificationService;
     
     @Autowired
     AccountService accountService;
@@ -166,5 +172,22 @@ public class BookkeepingController {
             accLs = new ArrayList();
         }
         return accLs;
+    }
+    
+    @RequestMapping(value = "/bookkeeping/getverifications", method = RequestMethod.GET)
+    public @ResponseBody List<Verification> getVerifications() {
+        List<Verification> verLs;
+        
+        if(!authSession.sessionCheck()) {
+            return verLs = new ArrayList();
+        } 
+        UserAccount ua = userService.getUser(authSession.getEmail());
+        
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate"); // TODO
+        Page<Verification> verPage = verificationService.findAllVerifications(ua, terms);
+        
+        verLs = verPage.getContent();
+        
+        return verLs;
     }
 }
