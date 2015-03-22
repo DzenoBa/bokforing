@@ -13,6 +13,7 @@ public class PostJSON implements Serializable {
     private String accountname;
     private double debit;
     private double credit;
+    private double sum;
     
     public int getAccountid() {
         return accountid;
@@ -40,6 +41,13 @@ public class PostJSON implements Serializable {
     }
     public void setCredit(double credit) {
         this.credit = credit;
+    }
+    
+    public double getSum() {
+        return sum;
+    }
+    public void setSum(double sum) {
+        this.sum = sum;
     }
     
 }

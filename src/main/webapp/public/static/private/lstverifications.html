@@ -6,7 +6,8 @@
             <tr>
                 <th style="width:10%;">Nr</th>
                 <th style="width:17%;">Transaktion datum</th>
-                <th style="width:46%;">Konton</th>
+                <th style="width:23%;">Debet</th>
+                <th style="width:23%;">Kredit</th>
                 <th style="width:10%;">Summa</th>
                 <th style="width:17%;">Skapades</th>
             </tr>
@@ -17,22 +18,29 @@
                 <td>{{verification.transactionDate}}</td>
                 <td style="padding:0">
                     <table class="table" style="margin:0">
-                        <thead ng-show="show">
+                        <thead>
                             <tr>
-                                <th style="width:40%;">Id</th>
-                                <th style="width:40%;">Namn</th>
-                                <th style="width:20%;">[<a href="" ng-click="show = false">Dölj</a>]</th>
+                                <th>Konto</th>
+                                <th>Belopp</th>
                             </tr>
                         </thead>
-                        <tr ng-show="!show">
-                            <td style="width:40%;">{{verification.posts.length}} st konton</td>
-                            <td style="width:40%;"></td><!-- offset -->
-                            <td style="width:20%;">[<a href="" ng-click="show = true">Visa</a>]</td>
+                        <tr ng-repeat="debitpost in verification.debitposts">
+                            <td>{{debitpost.accountid}} - {{debitpost.accountname}}</td>
+                            <td>{{debitpost.sum}}</td>
                         </tr>
-                        <tr ng-repeat="post in verification.posts" ng-show="show">
-                            <td>{{post.accountid}}</td>
-                            <td>{{post.accountname}}</td>
-                            <td></td><!-- Offset -->
+                    </table>
+                </td>
+                <td style="padding:0">
+                    <table class="table" style="margin:0">
+                        <thead>
+                            <tr>
+                                <th>Konto</th>
+                                <th>Belopp</th>
+                            </tr>
+                        </thead>
+                        <tr ng-repeat="creditpost in verification.creditposts">
+                            <td>{{creditpost.accountid}} - {{creditpost.accountname}}</td>
+                            <td>{{creditpost.sum}} <span ng-show="creditpost.accountid == 9980">({{creditpost.sum/verification.sum*100| number:0}}%)</span></td>
                         </tr>
                     </table>
                 </td>

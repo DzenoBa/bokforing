@@ -15,6 +15,8 @@ public class VerificationJSON implements Serializable {
     
     private Long id;
     private List<PostJSON> posts;
+    private List<PostJSON> debitposts; 
+    private List<PostJSON> creditposts;
     private double sum;
     private Date transactionDate;
     private Date creationDate;
@@ -31,6 +33,20 @@ public class VerificationJSON implements Serializable {
     }
     public void setPosts(List<PostJSON> posts) {
         this.posts = posts;
+    }
+    
+    public List<PostJSON> getDebitposts() {
+        return debitposts;
+    }
+    public void setDebitposts(List<PostJSON> debitposts) {
+        this.debitposts = debitposts;
+    }
+    
+    public List<PostJSON> getCreditposts() {
+        return creditposts;
+    }
+    public void setCreditposts(List<PostJSON> creditposts) {
+        this.creditposts = creditposts;
     }
     
     public double getSum() {

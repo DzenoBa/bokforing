@@ -188,25 +188,42 @@ public class BookkeepingController {
         
         List<Verification> verLs = verPage.getContent();
         
+        // TRANSLATE VERIFICATION TO VERIFICATION JSON
         for (Verification ver : verLs) {
-            VerificationJSON tempVer = new VerificationJSON();
+            VerificationJSON verJSON = new VerificationJSON();
             
-            tempVer.setId(ver.getId());
-            tempVer.setTransactionDate(ver.getTransactionDate());
-            tempVer.setCreationDate(ver.getCreationDate());
+            verJSON.setId(ver.getId());
+            verJSON.setTransactionDate(ver.getTransactionDate());
+            verJSON.setCreationDate(ver.getCreationDate());
             
-            List<PostJSON> postJSONLs = new ArrayList();
+            // CREATE POST-JSON'S
+            List<PostJSON> debitPostJSONLs = new ArrayList();
+            List<PostJSON> creditPostJSONLs = new ArrayList();
             for (Post post : ver.getPosts()) {
-                PostJSON tempPost = new PostJSON();
-                tempPost.setAccountid(post.getAccount().getNumber());
-                tempPost.setAccountname(post.getAccount().getName());
-                tempVer.setSum(post.getPostSum().getSumTotal()); // TODO
+                PostJSON postJSON = new PostJSON();
+                postJSON.setAccountid(post.getAccount().getNumber());
+                postJSON.setAccountname(post.getAccount().getName());
+                postJSON.setSum(post.getPostSum().getSumTotal());
                 
-                postJSONLs.add(tempPost);
+                // ADD POST TO RIGHT LS
+                if(post.getPostSum().getType().equals(PostType.Debit)) {
+                    debitPostJSONLs.add(postJSON);
+                } else if(post.getPostSum().getType().equals(PostType.Credit)) {
+                    creditPostJSONLs.add(postJSON);
+                }
             }
-            tempVer.setPosts(postJSONLs);
+            verJSON.setDebitposts(debitPostJSONLs);
+            verJSON.setCreditposts(creditPostJSONLs);
             
-            verJSONLs.add(tempVer);
+            // CALC THE TOTAL SUM
+            // TOTAL DEBIT AND TOTAL CREDIT SHOULD BE EQUAL
+            double totalSum = 0;
+            for(PostJSON postJSON : verJSON.getDebitposts()) {
+                totalSum = totalSum + postJSON.getSum();
+            }
+            verJSON.setSum(totalSum);
+            
+            verJSONLs.add(verJSON);
         }
         return verJSONLs;
     }
