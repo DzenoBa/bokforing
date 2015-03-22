@@ -19,6 +19,9 @@ bookkeepingService.factory('BookkeepingProxy', ['$http',
             },
             searchAccount: function(account) {
                 return $http.post(url + '/searchaccount', account);
+            },
+            getVerifications: function() {
+                return $http.get(url + '/getverifications');
             }
         };
     }

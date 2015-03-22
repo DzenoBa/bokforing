@@ -1,0 +1,52 @@
+<!--Body content-->
+<div>
+    <h2>Dina verifikationer</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width:10%;">Nr</th>
+                <th style="width:17%;">Transaktion datum</th>
+                <th style="width:23%;">Debet</th>
+                <th style="width:23%;">Kredit</th>
+                <th style="width:10%;">Summa</th>
+                <th style="width:17%;">Skapades</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="verification in verifications">
+                <td>{{verification.id}}</td>
+                <td>{{verification.transactionDate}}</td>
+                <td style="padding:0">
+                    <table class="table" style="margin:0">
+                        <thead>
+                            <tr>
+                                <th>Konto</th>
+                                <th>Belopp</th>
+                            </tr>
+                        </thead>
+                        <tr ng-repeat="debitpost in verification.debitposts">
+                            <td>{{debitpost.accountid}} - {{debitpost.accountname}}</td>
+                            <td>{{debitpost.sum}}</td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="padding:0">
+                    <table class="table" style="margin:0">
+                        <thead>
+                            <tr>
+                                <th>Konto</th>
+                                <th>Belopp</th>
+                            </tr>
+                        </thead>
+                        <tr ng-repeat="creditpost in verification.creditposts">
+                            <td>{{creditpost.accountid}} - {{creditpost.accountname}}</td>
+                            <td>{{creditpost.sum}} <span ng-show="creditpost.accountid == 9980">({{creditpost.sum/verification.sum*100| number:0}}%)</span></td>
+                        </tr>
+                    </table>
+                </td>
+                <td>{{verification.sum}}</td>
+                <td>{{verification.creationDate}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
