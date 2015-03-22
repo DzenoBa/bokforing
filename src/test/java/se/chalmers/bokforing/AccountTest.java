@@ -61,8 +61,9 @@ public class AccountTest extends AbstractIntegrationTest {
         Page<Account> accls = service.findAllAccounts(terms);
         assertEquals(10, accls.getNumberOfElements());
 
-        List<Account> accls2 = service.findAccountBetween(1002, 1008);
-        assertEquals(7, accls2.size());
+        PagingAndSortingTerms terms2 = new PagingAndSortingTerms(0, Boolean.FALSE, "number");
+        Page<Account> accls2 = service.findAccountBetween(1002, 1008, terms2);
+        assertEquals(7, accls2.getNumberOfElements());
     }
 
     @Transactional
@@ -88,11 +89,16 @@ public class AccountTest extends AbstractIntegrationTest {
             query.executeUpdate();
         }
         
-        List<Account> accls1 = service.findByNumberLike(123);
-        assertEquals(2, accls1.size());
+        PagingAndSortingTerms terms1 = new PagingAndSortingTerms(0, Boolean.FALSE, "number");
+        Page<Account> accls1 = service.findByNumberLike(123, terms1);
+        assertEquals(2, accls1.getNumberOfElements());
         
-        List<Account> accls2 = service.findByNameLike("zen");
-        assertEquals(2, accls2.size());
+        PagingAndSortingTerms terms2 = new PagingAndSortingTerms(0, Boolean.FALSE, "name");
+        Page<Account> accls2 = service.findByNameLike("zen", terms2);
+        assertEquals(2, accls2.getNumberOfElements());
+        
+        accls1 = service.findByNumberLike(1230, terms1);
+        assertEquals(1, accls1.getNumberOfElements());
         
     }
     
