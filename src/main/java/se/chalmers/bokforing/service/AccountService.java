@@ -19,11 +19,11 @@ public interface AccountService {
     
     Account findAccountByNumber(int number);
     
-    List<Account> findAccountBetween(int first, int last);
+    Page<Account> findAccountBetween(int first, int last, PagingAndSortingTerms terms);
     
-    List<Account> findByNumberLike(int number);
+    Page<Account> findByNumberLike(int number, PagingAndSortingTerms terms);
     
-    List<Account> findByNameLike(String name);
+    Page<Account> findByNameLike(String name, PagingAndSortingTerms terms);
     
     void save(Account account);
     

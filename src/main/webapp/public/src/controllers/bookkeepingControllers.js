@@ -133,6 +133,8 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
         if($scope.radioModel === 0 && $scope.account.number > 9 || 
                 $scope.radioModel === 1 && $scope.account.name.length > 2) {
             search();
+        } else {
+            $scope.accounts = {};
         }
     };
     
