@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,12 +23,14 @@ import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.Verification;
+import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.CustomerService;
 import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.service.AccountManager;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.AccountService;
+import se.chalmers.bokforing.service.VerificationService;
 import se.chalmers.bokforing.session.AuthSession;
 
 /**
@@ -39,6 +42,9 @@ public class BookkeepingController {
     
     @Autowired
     private VerificationManager verificationManager;
+    
+    @Autowired
+    private VerificationService verificationService;
     
     @Autowired
     AccountService accountService;
@@ -170,5 +176,59 @@ public class BookkeepingController {
             accLs = new ArrayList();
         }
         return accLs;
+    }
+    
+    @RequestMapping(value = "/bookkeeping/getverifications", method = RequestMethod.GET)
+    public @ResponseBody List<VerificationJSON> getVerifications() {
+        List<VerificationJSON> verJSONLs = new ArrayList();
+        
+        if(!authSession.sessionCheck()) {
+            return verJSONLs;
+        } 
+        UserAccount ua = userService.getUser(authSession.getEmail());
+        
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate"); // TODO
+        Page<Verification> verPage = verificationService.findAllVerifications(ua, terms);
+        
+        List<Verification> verLs = verPage.getContent();
+        
+        // TRANSLATE VERIFICATION TO VERIFICATION JSON
+        for (Verification ver : verLs) {
+            VerificationJSON verJSON = new VerificationJSON();
+            
+            verJSON.setId(ver.getId());
+            verJSON.setTransactionDate(ver.getTransactionDate());
+            verJSON.setCreationDate(ver.getCreationDate());
+            
+            // CREATE POST-JSON'S
+            List<PostJSON> debitPostJSONLs = new ArrayList();
+            List<PostJSON> creditPostJSONLs = new ArrayList();
+            for (Post post : ver.getPosts()) {
+                PostJSON postJSON = new PostJSON();
+                postJSON.setAccountid(post.getAccount().getNumber());
+                postJSON.setAccountname(post.getAccount().getName());
+                postJSON.setSum(post.getPostSum().getSumTotal());
+                
+                // ADD POST TO RIGHT LS
+                if(post.getPostSum().getType().equals(PostType.Debit)) {
+                    debitPostJSONLs.add(postJSON);
+                } else if(post.getPostSum().getType().equals(PostType.Credit)) {
+                    creditPostJSONLs.add(postJSON);
+                }
+            }
+            verJSON.setDebitposts(debitPostJSONLs);
+            verJSON.setCreditposts(creditPostJSONLs);
+            
+            // CALC THE TOTAL SUM
+            // TOTAL DEBIT AND TOTAL CREDIT SHOULD BE EQUAL
+            double totalSum = 0;
+            for(PostJSON postJSON : verJSON.getDebitposts()) {
+                totalSum = totalSum + postJSON.getSum();
+            }
+            verJSON.setSum(totalSum);
+            
+            verJSONLs.add(verJSON);
+        }
+        return verJSONLs;
     }
 }
