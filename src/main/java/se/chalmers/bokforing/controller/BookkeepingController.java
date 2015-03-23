@@ -168,9 +168,11 @@ public class BookkeepingController {
         List<Account> accLs;
         
         if(account.getNumber() > 0) {
-            accLs = accountService.findByNumberLike(account.getNumber());
+            PagingAndSortingTerms terms = new PagingAndSortingTerms(0, true, "number");
+            accLs = accountService.findByNumberLike(account.getNumber(), terms).getContent();
         } else if (!(account.getName().isEmpty())) {
-            accLs = accountService.findByNameLike(account.getName());
+            PagingAndSortingTerms terms = new PagingAndSortingTerms(0, true, "name");
+            accLs = accountService.findByNameLike(account.getName(), terms).getContent();
         } else {
             // Return a empty list
             accLs = new ArrayList();

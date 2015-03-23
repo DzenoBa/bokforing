@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -41,28 +42,33 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Account> findAccountBetween(int first, int last) {
+    public Page<Account> findAccountBetween(int first, int last, PagingAndSortingTerms terms) {
+        PageRequest request = terms.getPageRequest();
+        
         if (first < 0 || last < 0)
             return null;
         else if (first > last)
             return null;
         else
-            return repository.findByNumberBetween(first, last);
+            return repository.findByNumberBetween(first, last, request);
     }
     
     @Override
-    public List<Account> findByNumberLike(int number) {
+    public Page<Account> findByNumberLike(int number, PagingAndSortingTerms terms) {
+        PageRequest request = terms.getPageRequest();
+        
         if(number > 999) {
             List<Account> ls = new ArrayList();
             ls.add(repository.findByNumber(number));
-            return ls;
+            Page<Account> pageLs = new PageImpl(ls);
+            return pageLs;
         }
         int first;
         int last;
         if(number > 99) {
             first = number * 10;
             last = first + 9;
-            return repository.findByNumberBetween(first, last);
+            return repository.findByNumberBetween(first, last, request);
         } else if(number >9) {
             first = number * 100;
             last = first + 99;
@@ -70,13 +76,14 @@ public class AccountServiceImpl implements AccountService {
             first = number * 1000;
             last = first + 999;
         }
-        return repository.findByNumberBetween(first, last);
+        return repository.findByNumberBetween(first, last, request);
     }
     
     @Override
-    public List<Account> findByNameLike(String name) {
+    public Page<Account> findByNameLike(String name, PagingAndSortingTerms terms) {
+        PageRequest request = terms.getPageRequest();
         String tmp = "%"+ name + "%";
-        return repository.findByNameLike(tmp);
+        return repository.findByNameLike(tmp, request);
     }
 
     @Override
