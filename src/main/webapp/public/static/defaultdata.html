@@ -1,0 +1,22 @@
+
+<div>
+    <h2>Default Data</h2>
+    <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
+        Din request lyckades!
+    </div>
+    <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
+        <h4>{{form.numErrors}} fel hittades!</h4>
+        <p>{{form.errors.general}}</p>
+    </div>
+    <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-8">
+                    När du klickar på skapa kommer alla accounts som finns i 'Accounts.txt' att läggas
+                    in i databasen. Denna funktion funkar endast om tabellen 'Accounts' är tom.
+                </div>
+                <div class="col-sm-4">
+                    <input type="button" value="Skapa accounts" class="btn btn-primary" ng-click="accounts()"/>
+                </div>
+            </div>
+        </form>
+</div>
