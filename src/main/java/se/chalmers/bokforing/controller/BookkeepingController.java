@@ -162,18 +162,37 @@ public class BookkeepingController {
     @RequestMapping(value = "/bookkeeping/searchaccount", method = RequestMethod.POST)
     public @ResponseBody List<Account> searchaccount(@RequestBody final AccountJSON account) {
         List<Account> accLs;
+        int start = 0;
+        
+        if(account.getStartrange() > 0) {
+            start = account.getStartrange();
+        }
         
         if(account.getNumber() > 0) {
-            PagingAndSortingTerms terms = new PagingAndSortingTerms(0, true, "number");
+            PagingAndSortingTerms terms = new PagingAndSortingTerms(start, true, "number");
             accLs = accountService.findByNumberLike(account.getNumber(), terms).getContent();
         } else if (!(account.getName().isEmpty())) {
-            PagingAndSortingTerms terms = new PagingAndSortingTerms(0, true, "name");
+            PagingAndSortingTerms terms = new PagingAndSortingTerms(start, true, "name");
             accLs = accountService.findByNameLike(account.getName(), terms).getContent();
         } else {
             // Return a empty list
             accLs = new ArrayList();
         }
         return accLs;
+    }
+    
+    @RequestMapping(value = "/bookkeeping/countsearchaccount", method = RequestMethod.POST)
+    public @ResponseBody long countsearchaccount(@RequestBody final AccountJSON account) {
+        long size = 0;
+        
+        if(account.getNumber() > 0) {
+            PagingAndSortingTerms terms = new PagingAndSortingTerms(0, true, "number");
+            size = accountService.findByNumberLike(account.getNumber(), terms).getTotalElements();
+        } else if (!(account.getName().isEmpty())) {
+            PagingAndSortingTerms terms = new PagingAndSortingTerms(0, true, "name");
+            size = accountService.findByNameLike(account.getName(), terms).getTotalElements();
+        } 
+        return size;
     }
     
     @RequestMapping(value = "/bookkeeping/getverifications", method = RequestMethod.GET)
