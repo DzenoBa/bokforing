@@ -28,11 +28,12 @@ public class InitializationUtilImpl implements InitializationUtil {
     public boolean insertDefaultAccounts() {
         String line;
 
+        // The substring at the end is to remove the "file:\" part added to the
+        // front of the File-object's path. Doesn't work without removing that,
+        // path will be invalid.
+        // I think we have to do it this way because of maven, it handles
+        // resources such as text files in a special way.
         File input = new File(getClass().getResource("/accounts.txt").toString().substring(6));
-        //System.out.println(input.getAbsolutePath());
-
-    
-        //System.out.println(new File(getClass().getResource("accounts.txt").toString()).getAbsolutePath());
 
         try (BufferedReader br = new BufferedReader(new FileReader(input))) {
             line = br.readLine();
