@@ -9,6 +9,7 @@ import javax.persistence.Query;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -70,64 +71,60 @@ public class AccountTest extends AbstractIntegrationTest {
     @Transactional
     @Test
     public void testSearchAccount() {
-        
+
         int[] numberls = new int[3];
         String[] namels = new String[3];
-        
+
         numberls[0] = 1230;
         namels[0] = "Krki";
         numberls[1] = 1235;
         namels[1] = "Dzeno";
         numberls[2] = 5230;
         namels[2] = "Dzenan";
-        
+
         Query query;
-        for(int i=0; i<3; i++) {        
+        for (int i = 0; i < 3; i++) {
             query = em.createNativeQuery(
                     "INSERT INTO Accounts (number, name) VALUES (?, ?)")
                     .setParameter(1, numberls[i])
                     .setParameter(2, namels[i]);
             query.executeUpdate();
         }
-        
+
         PagingAndSortingTerms terms1 = new PagingAndSortingTerms(0, Boolean.FALSE, "number");
         Page<Account> accls1 = service.findByNumberLike(123, terms1);
         assertEquals(2, accls1.getNumberOfElements());
-        
+
         PagingAndSortingTerms terms2 = new PagingAndSortingTerms(0, Boolean.FALSE, "name");
         Page<Account> accls2 = service.findByNameLike("zen", terms2);
         assertEquals(2, accls2.getNumberOfElements());
-        
+
         accls1 = service.findByNumberLike(1230, terms1);
         assertEquals(1, accls1.getNumberOfElements());
-        
+
     }
-    
+
     @Transactional
     @Test
-    public void testInsertDefaultAccounts(){
-
+    public void testInsertDefaultAccounts() {
 
         //MAKE SURE ALL DEFAULT ACCOUNTS EXIST IN DATABASE
         File input = new File(getClass().getResource("/accounts.txt").toString().substring(6));
         assertTrue(initUtil.insertDefaultAccounts());
         try (BufferedReader br = new BufferedReader(new FileReader(input))) {
             String line = br.readLine();
-            try {
-                while (line != null) {
-                    int id = Integer.parseInt(line.substring(0, 4));
-                    String name = line.substring(4);
-                    Account acc = service.findAccountByNumber(id);
-                    assertNotNull(acc);
-                    assertEquals(name, acc.getName());
-                    line = br.readLine();
-                }
-            } finally {
-                //TODO: Fail if first four chars aren't numbers
+            while (line != null) {
+                int id = Integer.parseInt(line.substring(0, 4));
+                String name = line.substring(4);
+                Account acc = service.findAccountByNumber(id);
+                assertNotNull(acc);
+                assertEquals(name, acc.getName());
+                assertEquals(id, acc.getNumber());
+                line = br.readLine();
             }
 
         } catch (IOException e) {
-            //TODO: Catch exception if file with default accounts doesn't exist
+            fail("File Account.txt does not exist");
         }
 
     }
