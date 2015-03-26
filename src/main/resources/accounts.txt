@@ -289,7 +289,8 @@
 2151 Ackumulerade överavskrivningar på immateriella anläggningstillgångar 
 2152 Ackumulerade överavskrivningar på byggnader och markanläggningar 
 2153 Ackumulerade överavskrivningar på maskiner och inventarier 
-2160 Ersättningsfond 2161 Ersättningsfond maskiner och inventarier 
+2160 Ersättningsfond 
+2161 Ersättningsfond maskiner och inventarier 
 2162 Ersättningsfond byggnader och markanläggningar 
 2163 Ersättningsfond mark 
 2164 Ersättningsfond för djurlager i jordbruk och renskötsel 
@@ -430,7 +431,8 @@
 2811 Avräkning för factoring 
 2812 Avräkning för belånade kontraktsfordringar 
 2820 Kortfristiga skulder till anställda 
-2821 Löneskulder 2822 Reseräkningar 
+2821 Löneskulder 
+2822 Reseräkningar 
 2823 Tantiem, gratifikationer 
 2829 Övriga kortfristiga skulder till anställda 
 2830 Avräkning för annans räkning 
@@ -681,7 +683,7 @@
 5222 Leasing av inventarier och verktyg 
 5250 Hyra av datorer 
 5251 Korttidshyra av datorer 
-5252 Leasing av datorer K
+5252 Leasing av datorer 
 5290 Övriga hyreskostnader för anläggningstillgångar 
 5300 Energikostnader (gruppkonto) 
 5310 El för drift 
