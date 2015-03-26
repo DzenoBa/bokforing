@@ -1,13 +1,14 @@
 package se.chalmers.bokforing;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,8 +33,8 @@ public class AccountTest extends AbstractIntegrationTest {
     @Autowired
     EntityManager em;
 
-    //@Autowired
-    //private InitializationUtil initUtil;
+    @Autowired
+    private InitializationUtilImpl initUtil;
 
     @Transactional
     @Test
@@ -108,15 +109,17 @@ public class AccountTest extends AbstractIntegrationTest {
 
 
         //MAKE SURE ALL DEFAULT ACCOUNTS EXIST IN DATABASE
-        try (BufferedReader br = new BufferedReader(new FileReader("Accounts.txt"))) {
+        File input = new File(getClass().getResource("/accounts.txt").toString().substring(6));
+        assertTrue(initUtil.insertDefaultAccounts());
+        try (BufferedReader br = new BufferedReader(new FileReader(input))) {
             String line = br.readLine();
             try {
                 while (line != null) {
                     int id = Integer.parseInt(line.substring(0, 4));
                     String name = line.substring(4);
                     Account acc = service.findAccountByNumber(id);
-                    //assertNotNull(acc);
-                    //assertEquals(name, acc.getName());
+                    assertNotNull(acc);
+                    assertEquals(name, acc.getName());
                     line = br.readLine();
                 }
             } finally {
