@@ -272,7 +272,6 @@
 2097 Överkursfond 
 2098 Vinst eller förlust från föregående år 
 2099 Årets resultat
-2110 Periodiseringsfonder 
 2110 Periodiseringsfond vid 2010 års taxering 
 2111 Periodiseringsfond vid 2011 års taxering 
 2112 Periodiseringsfond vid 2012 års taxering 
