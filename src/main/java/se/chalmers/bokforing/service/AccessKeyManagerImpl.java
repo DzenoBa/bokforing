@@ -4,6 +4,7 @@ package se.chalmers.bokforing.service;
 import java.util.Calendar;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.model.AccessKey;
 import se.chalmers.bokforing.model.AccessKeyType;
 import se.chalmers.bokforing.model.user.UserAccount;
@@ -12,6 +13,7 @@ import se.chalmers.bokforing.model.user.UserAccount;
  *
  * @author Dženan
  */
+@Service
 public class AccessKeyManagerImpl implements AccessKeyManager {
 
     @Autowired
