@@ -108,7 +108,7 @@
                     </div>
                 </div>
             </div>
-            <table class="table">
+            <table class="table table-condensed">
                 <thead>
                     <th style="width:40%;">Konto nummer</th>
                     <th style="width:40%;">Konto namn</th>
@@ -122,7 +122,7 @@
                     </tr>
                 </tbody>
             </table>
-            
+            <pagination total-items="maxsize" items-per-page="21" ng-model="currentPage" max-size="5" class="pagination-sm" boundary-links="true" ng-change="pageChanged()" ng-show="maxsize > 20"></pagination>
         </div>
         <div class="modal-footer">
             <div class="col-sm-6" style="text-align:left;">
