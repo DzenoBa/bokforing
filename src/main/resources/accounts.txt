@@ -314,8 +314,6 @@
 2323 Vinstandelslån 
 2324 Kapitalandelslån 
 2330 Checkräkningskredit 
-2331 Checkräkningskredit 1 
-2332 Checkräkningskredit 2 
 2331 Utnyttjad checkräkningskredit 1 
 2332 Utnyttjad checkräkningskredit 2 
 2335 Beviljad checkräkningskredit 1 
