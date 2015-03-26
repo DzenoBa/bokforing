@@ -10,10 +10,12 @@ require(
         'controllers/userControllers',
         'controllers/authControllers',
         'controllers/bookkeepingControllers',
+        'controllers/defaultDataController',
         'services/userServices',
         'services/authServices',
         'services/promiseService',
-        'services/bookkeepingService'
+        'services/bookkeepingService',
+        'services/defaultDataService'
         
     ],
     function () {

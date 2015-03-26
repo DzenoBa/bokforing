@@ -12,10 +12,12 @@ var bok = angular.module('Bok', [
     'AuthControllers',
     'AuthService',
     'UserControllers',
+    'DefaultDataControllers',
     'UserService',
     'PromiseService',
     'BookkeepingControllers',
-    'BookkeepingService'
+    'BookkeepingService',
+    'DefaultDataService'
      // More here
 ]);
 
@@ -26,6 +28,10 @@ bok.config(['$routeProvider',
                 when('/login', {
                     templateUrl: 'login.html',
                     controller: 'LoginCtrl'
+                }).
+                when('/defaultdata', {
+                    templateUrl: 'defaultdata.html',
+                    controller: 'DefaultDataCtrl'
                 }).
                 when('/userpage', {
                     templateUrl: 'private/userpage.html',
