@@ -1,6 +1,8 @@
 
 package se.chalmers.bokforing.controller;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,11 +14,15 @@ import se.chalmers.bokforing.util.PasswordUtil;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserInfoJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
+import se.chalmers.bokforing.model.AccessKey;
+import se.chalmers.bokforing.model.AccessKeyType;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.user.UserGroup;
 import se.chalmers.bokforing.model.user.UserInfo;
 import se.chalmers.bokforing.service.UserManager;
 import se.chalmers.bokforing.persistence.user.UserService;
+import se.chalmers.bokforing.service.AccessKeyManager;
+import se.chalmers.bokforing.service.AccessKeyService;
 import se.chalmers.bokforing.session.AuthSession;
 
 /**
@@ -39,6 +45,12 @@ public class UserController {
     
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private AccessKeyService accessKeyService;
+    
+    @Autowired
+    private AccessKeyManager accessKeyManager;
     
     /*
      * CREATE
@@ -213,6 +225,61 @@ public class UserController {
         
         // YOU SHOULD NOT BE ABLE TO REACH THIS PART
         form.addError("general", "Någon gick fel, vänligen försök igen om en liten stund");
+        return form;
+    }
+    
+    /**
+     * REQUEST KEY FOR PASSWORD RESET
+     * @param user
+     * @return 
+     */
+    @RequestMapping(value = "/user/passwdreset", method = RequestMethod.POST)
+    public @ResponseBody FormJSON requestKeyPasswdReset(@RequestBody final UserJSON user) {
+        
+        System.out.println("* PING accesskey/forgotpasswd");
+        FormJSON form = new FormJSON();
+        
+        if(user.getEmail() == null) {
+            form.addError("general", "Vänligen ange en e-post adress.");
+            return form;
+        }
+        
+        // CHECK IF EMAIL EXIST
+        UserAccount userAccount = userService.getUser(user.getEmail());
+        if(userAccount == null) {
+            form.addError("general", "Det finns inget konto registrerat med den angivna e-post adressen.");
+            return form;
+        }
+        
+        // CHECK IF USER ALREADE REQUESTED A KEY
+        AccessKey freshKey = accessKeyService.findByUserAccountAndType(userAccount, AccessKeyType.FORGOTPASSWD);
+        if(freshKey != null) {
+            Date todaysDate = new Date();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(todaysDate);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            // PREVENT USER GENERATING A NEW KEY
+            // IF THE DIFFERENCE BETWEEN NOW-TIME AND PREVIOUS KEYS DATE
+            // IS LESSER THAN 20 MIN
+            if((freshKey.getCreationDate().getTime() - cal.getTimeInMillis()) <= 20*60*1000) {
+                form.addError("general", "Du har redan skickat en nyckel till din e-post adress!");
+                return form;
+            }
+        }
+        
+        // EVERYTHING SEEMS TO BE IN ORDER; CREATE KEY
+        String randomKey = PasswordUtil.randomString(15);
+        String hashedKey = randomKey; // TODO
+        AccessKey newAccessKey = accessKeyManager.create(hashedKey, AccessKeyType.FORGOTPASSWD, userAccount);
+        if(newAccessKey == null) {
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund");
+            return form;
+        }
+        
+        // EMAIL THE USER
+        // TO-DO
+        
         return form;
     }
 }

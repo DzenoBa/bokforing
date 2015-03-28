@@ -23,6 +23,9 @@ userService.factory('UserProxy', ['$http',
             },
             editUserInfo: function(userInfo) {
                 return $http.put(url + '/edituserinfo', userInfo);
+            },
+            passwdReset: function(user) {
+                return $http.post(url + '/passwdreset', user);
             }
         };
     }]);

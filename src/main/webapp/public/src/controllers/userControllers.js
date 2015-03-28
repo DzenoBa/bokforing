@@ -169,3 +169,21 @@ userControllers.controller('UserInfoCtrl', ['$scope', 'UserProxy',
         };
     }
 ]);
+
+/**
+ * PASSWORD RECOVERY
+ */
+userControllers.controller('PasswdResetCtrl', ['$scope', 'UserProxy',
+    function($scope, UserProxy) {
+        $scope.submit = function() {
+            if(!(angular.isUndefined($scope.user) || $scope.user === null)) {
+                UserProxy.passwdReset($scope.user)
+                        .success(function(form) {
+                            $scope.form = form;
+                        }).error(function() {
+                    console.log("passwdrecovery: error");
+                });
+            }
+        };
+    }
+]);
