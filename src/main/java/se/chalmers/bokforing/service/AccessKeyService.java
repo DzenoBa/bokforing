@@ -16,6 +16,8 @@ public interface AccessKeyService {
     
     AccessKey findByUserAccountAndType(UserAccount userAccount, AccessKeyType type);
     
+    AccessKey findByKey(String key);
+    
     void save(AccessKey accessKey);
     
     void delete(AccessKey accessKey);

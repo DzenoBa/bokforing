@@ -19,5 +19,7 @@ public interface AccessKeyRepository extends JpaRepository<AccessKey,Long> {
     
     AccessKey findByUserAccountAndKtype(UserAccount userAccount, AccessKeyType type);
     
+    AccessKey findByAkey(String akey);
+    
     void removeByUserAccount(UserAccount userAccount);
 }

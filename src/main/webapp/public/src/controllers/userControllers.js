@@ -171,7 +171,7 @@ userControllers.controller('UserInfoCtrl', ['$scope', 'UserProxy',
 ]);
 
 /**
- * PASSWORD RECOVERY
+ * PASSWORD RESET
  */
 userControllers.controller('PasswdResetCtrl', ['$scope', 'UserProxy',
     function($scope, UserProxy) {
@@ -180,6 +180,52 @@ userControllers.controller('PasswdResetCtrl', ['$scope', 'UserProxy',
                 UserProxy.passwdReset($scope.user)
                         .success(function(form) {
                             $scope.form = form;
+                        }).error(function() {
+                    console.log("passwdreset: error");
+                });
+            }
+        };
+    }
+]);
+
+/**
+ * PASSWORD RECOVERY
+ */
+userControllers.controller('PasswdRecoveryCtrl', ['$scope', '$location', 'UserProxy',
+    function($scope, $location, UserProxy) {
+        
+        var init = function() {
+            getEmail();
+        };
+        
+        $scope.user = {};
+        $scope.show = false;
+        init();
+        
+        function getEmail() {
+            if(!angular.isUndefined($location.search().key)) {
+                $scope.user = {accesskey: $location.search().key};
+                UserProxy.keyExist($scope.user)
+                        .success(function(user) {
+                            $scope.user = user;
+                            if(!angular.isUndefined($scope.user.email)) {
+                                if($scope.user.email !== null) {
+                                    $scope.show = true;
+                                }
+                            }
+                        }).error(function() {
+                    console.log("keyExist: error");
+                });
+            }
+        };
+        
+        $scope.submit = function() {
+            if(!(angular.isUndefined($scope.user) || $scope.user === null)) {
+                $scope.user.accesskey = $location.search().key;
+                UserProxy.passwdRecovery($scope.user)
+                        .success(function(form) {
+                            $scope.form = form;
+                            $scope.user = {};
                         }).error(function() {
                     console.log("passwdrecovery: error");
                 });

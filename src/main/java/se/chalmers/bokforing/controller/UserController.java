@@ -243,6 +243,14 @@ public class UserController {
             form.addError("general", "Vänligen ange en e-post adress.");
             return form;
         }
+        // CHECK IF VALID EMAIL
+        String regexEmail = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        Pattern patternEmail = Pattern.compile(regexEmail);
+        if(!(patternEmail.matcher(user.getEmail()).find())) {
+            form.addError("general", "Vänligen ange en e-post adress!");
+            return form;
+        }
         
         // CHECK IF EMAIL EXIST
         UserAccount userAccount = userService.getUser(user.getEmail());
@@ -282,4 +290,79 @@ public class UserController {
         
         return form;
     }
+    
+    /**
+     * PASSWORD RESET KEY EXIST
+     * @param user
+     * @return String
+     */
+    @RequestMapping(value = "/user/keyexist", method = RequestMethod.POST)
+    public @ResponseBody UserJSON passwdResetKeyExist(@RequestBody final UserJSON user) {
+        
+        UserJSON userJSON = new UserJSON();
+        
+        if(user.getAccesskey() == null) {
+            return userJSON;
+        }
+        // CHECK KEY
+        AccessKey accessKey = accessKeyService.findByKey(user.getAccesskey());
+        if(accessKey == null) {
+            return userJSON;
+        } else if(accessKey.getType().equals(AccessKeyType.FORGOTPASSWD)) {
+            // KEY EXIST
+            userJSON.setEmail(accessKey.getUserAccount().getEmail());
+            return userJSON;
+        }
+
+        return userJSON;
+    }
+    
+    @RequestMapping(value = "/user/passwdrecovery", method = RequestMethod.POST)
+    public @ResponseBody FormJSON passwdRecovery(@RequestBody final UserJSON user) {
+        
+        FormJSON form = new FormJSON();
+        
+        // GET USER
+        UserAccount userAccount = userService.getUser(user.getEmail());
+        if(userAccount == null) {
+            form.addError("general", "Något gick fel, vängligen försök igen om en liten stund");
+            return form;
+        }
+        
+        // GET KEY
+        AccessKey accessKey = accessKeyService.findByUserAccountAndType(userAccount, AccessKeyType.FORGOTPASSWD);
+        if(accessKey == null) {
+            form.addError("general", "Något gick fel, vängligen försök igen om en liten stund");
+            return form;
+        } else if(!accessKey.getKey().equals(user.getAccesskey())) {
+            form.addError("general", "Något gick fel, vängligen försök igen om en liten stund");
+            return form;
+        }
+        
+        // PASSWORD CHECK
+        if(user.getNewpasswd() == null || user.getNewpasswd().isEmpty()) {
+            form.addError("newpasswd", "Vänligen ange ett lösenord!");
+            return form;
+        }
+        if(user.getNewpasswd2() == null || user.getNewpasswd2().isEmpty()) {
+            form.addError("newpasswd2", "Vänligen ange ett lösenord!");
+            return form;
+        }
+        if(!(user.getNewpasswd().equals(user.getNewpasswd2()))) {
+            form.addError("newpasswd2", "Lösenordet matchar inte!");
+            return form;
+        }
+
+        // EVERYTHING SEEMS TO BE IN ORDER CHANGE PASSWORD
+        String newHashPasswd = PasswordUtil.hash(userAccount.getSalt() + user.getNewpasswd()); //TO DO
+        userAccount.setPass(newHashPasswd);
+        userDb.storeUser(userAccount);
+        
+        // DELETE ACCESS KEY
+        accessKeyService.removeByUserAccount(userAccount);
+        
+        return form;
+    }
+    
+    
 }

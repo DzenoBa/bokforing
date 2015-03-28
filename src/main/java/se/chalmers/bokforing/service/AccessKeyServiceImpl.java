@@ -30,6 +30,11 @@ public class AccessKeyServiceImpl implements AccessKeyService {
     public AccessKey findByUserAccountAndType(UserAccount userAccount, AccessKeyType type) {
         return repository.findByUserAccountAndKtype(userAccount, type);
     }
+    
+    @Override
+    public AccessKey findByKey(String key) {
+        return repository.findByAkey(key);
+    }
 
     @Override
     public void save(AccessKey accessKey) {

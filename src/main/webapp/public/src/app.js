@@ -52,6 +52,10 @@ bok.config(['$routeProvider',
                     templateUrl: 'passwdreset.html',
                     controller: 'PasswdResetCtrl'
                 }).
+                when('/passwdrecovery', {
+                    templateUrl: 'passwdrecovery.html',
+                    controller: 'PasswdRecoveryCtrl'
+                }).
                 when('/edituser', {
                     templateUrl: 'private/edituser.html',
                     controller: 'EditUserCtrl',

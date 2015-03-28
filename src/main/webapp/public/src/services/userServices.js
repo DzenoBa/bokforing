@@ -26,6 +26,12 @@ userService.factory('UserProxy', ['$http',
             },
             passwdReset: function(user) {
                 return $http.post(url + '/passwdreset', user);
+            },
+            keyExist: function(user) {
+                return $http.post(url + '/keyexist', user);
+            },
+            passwdRecovery: function(user) {
+                return $http.post(url + '/passwdrecovery', user);
             }
         };
     }]);
