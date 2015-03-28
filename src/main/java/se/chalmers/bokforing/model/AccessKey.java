@@ -19,17 +19,17 @@ import se.chalmers.bokforing.model.user.UserAccount;
  * @author Dženan
  */
 @Entity
-@Table(name = "AccessKeys")
+@Table(name = "Accesskeys")
 public class AccessKey implements Serializable {
     
     @Id
     @GeneratedValue
     private Long id;
     
-    private String accesskey;
+    private String akey;
     
     @Enumerated(EnumType.STRING)
-    private AccessKeyType type;
+    private AccessKeyType ktype;
     
     @OneToOne
     private UserAccount userAccount;
@@ -44,18 +44,18 @@ public class AccessKey implements Serializable {
         this.id = id;
     }
     
-    public String getAccesskey() {
-        return accesskey;
+    public String getKey() {
+        return akey;
     }
-    public void setAccecsskey(String accesskey) {
-        this.accesskey = accesskey;
+    public void setKey(String akey) {
+        this.akey = akey;
     }
     
     public AccessKeyType getType() {
-        return type;
+        return ktype;
     }
-    public void setType(AccessKeyType type) {
-        this.type = type;
+    public void setType(AccessKeyType aktype) {
+        this.ktype = aktype;
     }
     
     public UserAccount getUserAccount() {

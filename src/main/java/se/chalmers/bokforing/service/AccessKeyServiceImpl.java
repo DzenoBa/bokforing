@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package se.chalmers.bokforing.service;
 
 import java.util.List;
@@ -32,7 +28,7 @@ public class AccessKeyServiceImpl implements AccessKeyService {
 
     @Override
     public AccessKey findByUserAccountAndType(UserAccount userAccount, AccessKeyType type) {
-        return repository.findByUserAccountAndType(userAccount, type);
+        return repository.findByUserAccountAndKtype(userAccount, type);
     }
 
     @Override
@@ -43,6 +39,15 @@ public class AccessKeyServiceImpl implements AccessKeyService {
     @Override
     public void delete(AccessKey accessKey) {
         repository.delete(accessKey);
+    }
+    
+    @Override
+    public void removeByUserAccount(UserAccount userAccount) {
+        List<AccessKey> ls = findByUserAccount(userAccount);
+        
+        if(ls.size() > 0) {
+            repository.removeByUserAccount(userAccount);
+        }
     }
     
 }

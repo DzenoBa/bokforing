@@ -17,5 +17,7 @@ public interface AccessKeyRepository extends JpaRepository<AccessKey,Long> {
     
     List<AccessKey> findByUserAccount(UserAccount userAccount);
     
-    AccessKey findByUserAccountAndType(UserAccount userAccount, AccessKeyType type);
+    AccessKey findByUserAccountAndKtype(UserAccount userAccount, AccessKeyType type);
+    
+    void removeByUserAccount(UserAccount userAccount);
 }

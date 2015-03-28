@@ -19,4 +19,6 @@ public interface AccessKeyService {
     void save(AccessKey accessKey);
     
     void delete(AccessKey accessKey);
+    
+    void removeByUserAccount(UserAccount userAccount);
 }

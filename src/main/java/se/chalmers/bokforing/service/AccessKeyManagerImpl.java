@@ -22,8 +22,11 @@ public class AccessKeyManagerImpl implements AccessKeyManager {
     @Override
     public AccessKey create(String key, AccessKeyType type, UserAccount userAccount) {
         
+        // IT SHOULD ONLY BE ONE KEY PER USER
+        service.removeByUserAccount(userAccount);
+        
         AccessKey accessKey = new AccessKey();
-        accessKey.setAccecsskey(key);
+        accessKey.setKey(key);
         accessKey.setType(type);
         accessKey.setUserAccount(userAccount);
         
