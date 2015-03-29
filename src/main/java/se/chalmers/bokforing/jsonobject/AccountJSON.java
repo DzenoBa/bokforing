@@ -13,6 +13,7 @@ public class AccountJSON implements Serializable {
     
     private int number;
     private String name;
+    private int startrange;
     
     public int getNumber() {
         return number;
@@ -26,5 +27,12 @@ public class AccountJSON implements Serializable {
     }
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public int getStartrange() {
+        return startrange;
+    }
+    public void setStartragne(int startrange) {
+        this.startrange = startrange;
     }
 }

@@ -272,7 +272,6 @@
 2097 Överkursfond 
 2098 Vinst eller förlust från föregående år 
 2099 Årets resultat
-2110 Periodiseringsfonder 
 2110 Periodiseringsfond vid 2010 års taxering 
 2111 Periodiseringsfond vid 2011 års taxering 
 2112 Periodiseringsfond vid 2012 års taxering 
@@ -289,7 +288,8 @@
 2151 Ackumulerade överavskrivningar på immateriella anläggningstillgångar 
 2152 Ackumulerade överavskrivningar på byggnader och markanläggningar 
 2153 Ackumulerade överavskrivningar på maskiner och inventarier 
-2160 Ersättningsfond 2161 Ersättningsfond maskiner och inventarier 
+2160 Ersättningsfond 
+2161 Ersättningsfond maskiner och inventarier 
 2162 Ersättningsfond byggnader och markanläggningar 
 2163 Ersättningsfond mark 
 2164 Ersättningsfond för djurlager i jordbruk och renskötsel 
@@ -314,8 +314,6 @@
 2323 Vinstandelslån 
 2324 Kapitalandelslån 
 2330 Checkräkningskredit 
-2331 Checkräkningskredit 1 
-2332 Checkräkningskredit 2 
 2331 Utnyttjad checkräkningskredit 1 
 2332 Utnyttjad checkräkningskredit 2 
 2335 Beviljad checkräkningskredit 1 
@@ -430,7 +428,8 @@
 2811 Avräkning för factoring 
 2812 Avräkning för belånade kontraktsfordringar 
 2820 Kortfristiga skulder till anställda 
-2821 Löneskulder 2822 Reseräkningar 
+2821 Löneskulder 
+2822 Reseräkningar 
 2823 Tantiem, gratifikationer 
 2829 Övriga kortfristiga skulder till anställda 
 2830 Avräkning för annans räkning 
@@ -681,7 +680,7 @@
 5222 Leasing av inventarier och verktyg 
 5250 Hyra av datorer 
 5251 Korttidshyra av datorer 
-5252 Leasing av datorer K
+5252 Leasing av datorer 
 5290 Övriga hyreskostnader för anläggningstillgångar 
 5300 Energikostnader (gruppkonto) 
 5310 El för drift 

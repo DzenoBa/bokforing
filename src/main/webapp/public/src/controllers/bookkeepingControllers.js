@@ -112,6 +112,7 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
     function ($scope, $modalInstance, BookkeepingProxy) {
 
     $scope.radioModel = 0;
+    $scope.currentPage = 1;
     
     $scope.selected = function(account) {
         account: account;
@@ -126,37 +127,49 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
     };
     
     $scope.search = function() {
+        $scope.currentPage = 1;
         search();
     };
     
     $scope.autosearch = function() {
+        $scope.currentPage = 1;
         if($scope.radioModel === 0 && $scope.account.number > 9 || 
                 $scope.radioModel === 1 && $scope.account.name.length > 2) {
             search();
         } else {
             $scope.accounts = {};
+            $scope.maxsize = 0;
         }
     };
     
     function search() {
+        var account;
+        var currentPage = $scope.currentPage - 1;
         if($scope.radioModel === 0 && $scope.account.number) {
-            var account = {number: $scope.account.number};
-            BookkeepingProxy.searchAccount(account)
-                    .success(function(accounts) {
-                        $scope.accounts = accounts;
-                    }).error(function() {
-                        console.log("mbk:searchAccNumber: error");
-                    });
+            account = {number: $scope.account.number, startrange: currentPage};
         } else if($scope.radioModel === 1 && $scope.account.name) {
-            var account = {name: $scope.account.name};
-            BookkeepingProxy.searchAccount(account)
+            account = {name: $scope.account.name, startrange: currentPage};
+        } else {
+            return;
+        }
+        BookkeepingProxy.searchAccount(account)
                     .success(function(accounts) {
                         $scope.accounts = accounts;
                     }).error(function() {
                         console.log("mbk:searchAccName: error");
                     });
-        }
+        BookkeepingProxy.countSearchAccount(account)
+                    .success(function(size) {
+                        $scope.maxsize = size;
+                    }).error(function() {
+                        console.log("mbk:countSearchAccName: error");
+                    });
     }
+    
+    $scope.pageChanged = function() {
+        search();
+    };
+    
 });
 
 bookkeepingControllers.controller('LstVerCtrl', ['$scope', 'BookkeepingProxy',
