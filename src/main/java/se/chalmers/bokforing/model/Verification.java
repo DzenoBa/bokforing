@@ -37,7 +37,7 @@ public class Verification implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private UserAccount userAccount;
     
     @Column(nullable = false)

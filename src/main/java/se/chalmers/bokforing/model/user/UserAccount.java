@@ -15,6 +15,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -32,7 +33,7 @@ import se.chalmers.bokforing.util.PasswordUtil;
 public class UserAccount implements Serializable {
   
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @OneToOne
@@ -54,10 +55,10 @@ public class UserAccount implements Serializable {
    
     private String sessionid;
     
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "userAccount", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Verification> verifications;
     
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "userAccount", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Customer> customers;
 
     public Long getId(){

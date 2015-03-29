@@ -35,6 +35,7 @@ import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.persistence.PostRepository;
 import se.chalmers.bokforing.persistence.VerificationRepository;
 import se.chalmers.bokforing.persistence.VerificationSpecs;
+import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.service.AccountManager;
 import se.chalmers.bokforing.service.AccountService;
 import se.chalmers.bokforing.service.CustomerManager;
@@ -75,12 +76,14 @@ public class VerificationTest extends AbstractIntegrationTest {
     @Autowired
     PostRepository postRepository;
     
-    private static UserAccount user;
+    @Autowired
+    UserService userService;
+    
+    private UserAccount user;
     
     @Before
     public void setup() {
-        user = new UserAccount();
-        user.setId(1L);
+        user = userService.getUser("tester@tester.com");
     }
     
     @Transactional
@@ -209,7 +212,9 @@ public class VerificationTest extends AbstractIntegrationTest {
         Date creationDate = null;
         Query query = null;
         
-        for(int i = 0; i < 100; ++i) {
+        int rowsToInsert = 30;
+        
+        for(int i = 0; i < rowsToInsert; ++i) {
             cal.set(2014 + i, 5, 10);
             creationDate = cal.getTime();
             
@@ -223,9 +228,9 @@ public class VerificationTest extends AbstractIntegrationTest {
         Page<Verification> verifications = service.findAllVerifications(user, terms);
         
         assertEquals(Constants.DEFAULT_PAGE_SIZE, verifications.getNumberOfElements());
-        assertEquals(INSERTED_VERIFICATION_ROWS_BEFORE + 100, verifications.getTotalElements());
+        assertEquals(INSERTED_VERIFICATION_ROWS_BEFORE + rowsToInsert, verifications.getTotalElements());
         
-        int expectedPages = (int)Math.ceil((INSERTED_VERIFICATION_ROWS_BEFORE + 100) / (double)Constants.DEFAULT_PAGE_SIZE);
+        int expectedPages = (int)Math.ceil((INSERTED_VERIFICATION_ROWS_BEFORE + rowsToInsert) / (double)Constants.DEFAULT_PAGE_SIZE);
         assertEquals(expectedPages, verifications.getTotalPages());
         
         
@@ -237,32 +242,17 @@ public class VerificationTest extends AbstractIntegrationTest {
         // dates should be "lower" the farther we go down the list
         assertTrue(firstDate.after(secondDate));
     }
-    
-    @Transactional
-    @Test
-    public void testGetVerificationForUser() {
-        // Have a user account
-        UserAccount userAccount = new UserAccount();
-        userAccount.setId(1L);
-        
-        // This is pretty much:
-        //  select * 
-        //  from Verifications v 
-        //  where v.userAccount = userAccount
-        List<Verification> vers = repository.findAll(Specifications.where(VerificationSpecs.hasUserAccount(userAccount)));
-        assertTrue(vers.get(0).getUserAccount().getId() == 1);
-    }
-    
+     
     @Test
     public void testHuvudbok() {
-        createVerification();
+        createVerificationHelper();
         Account accountFromDb = accountService.findAccountByNumber(2018);
 
         List<Post> posts = postRepository.findPostsForUserAndAccount(user.getId(), accountFromDb.getNumber());
         assertEquals(4, posts.size());
     }
     
-    public void createVerification() {
+    public void createVerificationHelper() {
         double sum1Amount = 100;
         double sum2Amount = 100;
         
