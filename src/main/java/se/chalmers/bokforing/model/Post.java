@@ -12,8 +12,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -22,6 +24,7 @@ import javax.persistence.TemporalType;
  * @author Isabelle
  */
 @Entity
+@Table(name = "Posts")
 public class Post implements Serializable {
     
     @Id
@@ -33,6 +36,9 @@ public class Post implements Serializable {
     
     @ManyToOne
     private Account account;
+    
+    @ManyToOne
+    private Verification verification;
 
     
     /**
@@ -46,7 +52,7 @@ public class Post implements Serializable {
      * @param postSum the postSum to set
      */
     public void setSum(PostSum postSum) {
-        this.postSum = postSum;
+        this.setPostSum(postSum);
     }
 
     /**
@@ -65,13 +71,13 @@ public class Post implements Serializable {
 
     @Override
     public String toString() {
-        return "Post{" + "id=" + id + ", postSum=" + postSum + ", account=" + account + '}';
+        return "Post{" + "id=" + getId() + ", postSum=" + getPostSum() + ", account=" + getAccount() + '}';
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 47 * hash + this.id;
+        hash = 47 * hash + this.getId();
         return hash;
     }
 
@@ -84,9 +90,44 @@ public class Post implements Serializable {
             return false;
         }
         final Post other = (Post) obj;
-        if (this.id != other.id) {
+        if (this.getId() != other.getId()) {
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /**
+     * @param postSum the postSum to set
+     */
+    public void setPostSum(PostSum postSum) {
+        this.postSum = postSum;
+    }
+
+    /**
+     * @return the verification
+     */
+    public Verification getVerification() {
+        return verification;
+    }
+
+    /**
+     * @param verification the verification to set
+     */
+    public void setVerification(Verification verification) {
+        this.verification = verification;
     }
 }
