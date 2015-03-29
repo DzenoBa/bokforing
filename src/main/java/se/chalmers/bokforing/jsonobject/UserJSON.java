@@ -16,6 +16,7 @@ public class UserJSON implements Serializable{
     private String newpasswd;
     private String newpasswd2;
     private String level;
+    private String accesskey;
 
     public UserJSON() {
         ;
@@ -54,5 +55,12 @@ public class UserJSON implements Serializable{
     }
     public void setLevel(String level) {
         this.level = level;
+    }
+    
+    public String getAccesskey() {
+        return accesskey;
+    }
+    public void setAccesskey(String accesskey) {
+        this.accesskey = accesskey;
     }
 }
