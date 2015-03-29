@@ -1,0 +1,61 @@
+<!--Body content-->
+<div ng-show="show">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Återställ lösenord</h2>
+            <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
+                Lösenordet har ändrats!
+            </div>
+            <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
+                <h4>{{form.numErrors}} fel hittades!</h4>
+                Vänligen rätta till dem!
+                <p ng-show="form.errors.general !== null">{{form.errors.general}}</p>
+            </div>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        E-post adress
+                    </div>
+                    <div class="col-sm-9">
+                        {{user.email}}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <label for="newpasswd">Lösenord</label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input id="newpasswd" class="form-control" ng-model="user.newpasswd" ng-change="passwdstrength(user.newpasswd)" type="password" value="{{user.newpasswd}}" placeholder="Ange ett lösenord"/>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="form.errors.newpasswd !== null">
+                    <div class="col-sm-3"></div><!-- Offset -->
+                    <div class="col-sm-9">
+                        <span class="error">{{form.errors.newpasswd}}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <label for="newpasswd2">Bekräfta lösenordet</label>
+                    </div>
+                    <div class="col-sm-9">
+                        <input id="newpasswd2" class="form-control" ng-model="user.newpasswd2" type="password" value="{{user.newpasswd2}}" placeholder="Ange lösenordet igen"/>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="form.errors.newpasswd2 !== null">
+                    <div class="col-sm-3"></div><!-- Offset -->
+                    <div class="col-sm-9">
+                        <span class="error">{{form.errors.newpasswd2}}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3"></div><!-- Offset -->
+                    <div class="col-sm-9">
+                        <input type="button" value="Ändra lösenordet!" class="btn btn-primary btn-block" ng-click="submit()"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6"></div><!-- Offset -->
+    </div>
+</div>
