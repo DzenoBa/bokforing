@@ -262,15 +262,11 @@ public class UserController {
         // CHECK IF USER ALREADE REQUESTED A KEY
         AccessKey freshKey = accessKeyService.findByUserAccountAndType(userAccount, AccessKeyType.FORGOTPASSWD);
         if(freshKey != null) {
-            Date todaysDate = new Date();
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(todaysDate);
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
+            Date now = new Date();
             // PREVENT USER GENERATING A NEW KEY
             // IF THE DIFFERENCE BETWEEN NOW-TIME AND PREVIOUS KEYS DATE
             // IS LESSER THAN 20 MIN
-            if((freshKey.getCreationDate().getTime() - cal.getTimeInMillis()) <= 20*60*1000) {
+            if((now.getTime() - freshKey.getCreationDate().getTime()) <= 20*60*1000) {
                 form.addError("general", "Du har redan skickat en nyckel till din e-post adress!");
                 return form;
             }

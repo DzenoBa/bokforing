@@ -11,7 +11,7 @@
                 Vänligen rätta till dem!
                 <p ng-show="form.errors.general !== null">{{form.errors.general}}</p>
             </div>
-            <form class="form-horizontal">
+            <form class="form-horizontal" ng-show="form.numErrors !== 0">
                 <div class="form-group">
                     <div class="col-sm-3">
                         E-post adress
