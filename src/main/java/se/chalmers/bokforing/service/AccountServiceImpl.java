@@ -26,8 +26,8 @@ public class AccountServiceImpl implements AccountService {
     private AccountRepository repository;
     
     @Override
-    public Page<Account> findAllAccounts(Pageable pageable) {
-        return repository.findAll(pageable);
+    public List<Account> findAllAccounts() {
+        return repository.findAll();
     }
 
     @Override
