@@ -34,7 +34,7 @@ public class AccessKey implements Serializable {
     @OneToOne
     private UserAccount userAccount;
     
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
     
     public Long getId() {
