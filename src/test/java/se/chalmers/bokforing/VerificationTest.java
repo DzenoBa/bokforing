@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
@@ -39,6 +40,7 @@ import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.service.AccountManager;
 import se.chalmers.bokforing.service.AccountService;
 import se.chalmers.bokforing.service.CustomerManager;
+import se.chalmers.bokforing.service.PostService;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.VerificationService;
 import se.chalmers.bokforing.util.Constants;
@@ -78,6 +80,9 @@ public class VerificationTest extends AbstractIntegrationTest {
     
     @Autowired
     UserService userService;
+    
+    @Autowired
+    PostService postService;
     
     private UserAccount user;
     
@@ -244,12 +249,22 @@ public class VerificationTest extends AbstractIntegrationTest {
     }
      
     @Test
-    public void testHuvudbok() {
+    public void testGeneralLedger() {
         createVerificationHelper();
         Account accountFromDb = accountService.findAccountByNumber(2018);
 
         List<Post> posts = postRepository.findPostsForUserAndAccount(user.getId(), accountFromDb.getNumber());
         assertEquals(4, posts.size());
+        
+        long begin = System.currentTimeMillis();
+        Map<Account, List<Post>> generalLedger = postService.getGeneralLedger(user);
+        System.out.println("Time to get general ledger: " + (System.currentTimeMillis() - begin));
+        
+        
+        assertTrue(generalLedger != null);
+        assertEquals(1, generalLedger.size());
+        assertTrue(generalLedger.keySet().iterator().next().getNumber() == 2018);
+        assertEquals(4, generalLedger.get(accountFromDb).size());
     }
     
     public void createVerificationHelper() {
