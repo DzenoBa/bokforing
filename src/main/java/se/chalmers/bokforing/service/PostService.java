@@ -7,8 +7,6 @@ package se.chalmers.bokforing.service;
 
 import java.util.List;
 import java.util.Map;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.user.UserAccount;
