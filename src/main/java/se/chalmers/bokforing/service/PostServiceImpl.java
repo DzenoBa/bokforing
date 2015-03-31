@@ -15,6 +15,7 @@ import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.persistence.PostRepository;
+import static se.chalmers.bokforing.util.Constants.REVENUE_ACCOUNTS;
 
 /**
  *
@@ -44,16 +45,24 @@ public class PostServiceImpl implements PostService {
         return generalLedger;
     }
 
+    /**
+     *
+     * @param user
+     * @return
+     */
     @Override
-    public Map<Account, List<Post>> getBalanceSheet(UserAccount user) {
-        Map<Account, List<Post>> balanceSheet = new HashMap<>();
+    public Map<Account, Integer> getBalanceSheet(UserAccount user) {
+        Map<Account, Integer> balanceSheet = new HashMap<>();
         List<Account> accounts = accountService.findAllAccounts();
         for (Account account : accounts) {
-            if (account.getNumber() >= 3000) {
+            if (account.getNumber() >= REVENUE_ACCOUNTS) {
                 return balanceSheet;
             }
             List<Post> posts = repo.findPostsForUserAndAccount(user.getId(), account.getNumber());
-            balanceSheet.put(account, posts);
+            int balance = 0;
+            for (Post post : posts) {
+                balanceSheet.put(account, balance);
+            }
         }
         return balanceSheet;
     }
