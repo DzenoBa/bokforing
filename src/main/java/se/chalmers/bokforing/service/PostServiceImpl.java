@@ -26,21 +26,21 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private PostRepository repo;
-    
+
     @Autowired
     private AccountService accountService;
-    
+
     @Override
     public Map<Account, List<Post>> getGeneralLedger(UserAccount user) {
         Map<Account, List<Post>> generalLedger = new HashMap<>();
-        
+
         List<Account> accounts = accountService.findAllAccounts();
-        for(Account account : accounts) {
+        for (Account account : accounts) {
             List<Post> posts = repo.findPostsForUserAndAccount(user.getId(), account.getNumber());
-            
+
             generalLedger.put(account, posts);
         }
-        
+
         return generalLedger;
     }
 
@@ -48,8 +48,8 @@ public class PostServiceImpl implements PostService {
     public Map<Account, List<Post>> getBalanceSheet(UserAccount user) {
         Map<Account, List<Post>> balanceSheet = new HashMap<>();
         List<Account> accounts = accountService.findAllAccounts();
-        for(Account account : accounts) {
-            if(account.getNumber() >= 3000){
+        for (Account account : accounts) {
+            if (account.getNumber() >= 3000) {
                 return balanceSheet;
             }
             List<Post> posts = repo.findPostsForUserAndAccount(user.getId(), account.getNumber());
@@ -57,7 +57,5 @@ public class PostServiceImpl implements PostService {
         }
         return balanceSheet;
     }
-    
-    
-    
+
 }
