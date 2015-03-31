@@ -20,5 +20,6 @@ import se.chalmers.bokforing.model.user.UserAccount;
 public interface PostService {
     
     Map<Account, List<Post>> getGeneralLedger(UserAccount user);
+    Map<Account, List<Post>> getBalanceSheet(UserAccount user);
     
 }

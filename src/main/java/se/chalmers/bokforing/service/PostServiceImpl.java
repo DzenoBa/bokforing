@@ -8,9 +8,7 @@ package se.chalmers.bokforing.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.Account;
@@ -44,6 +42,20 @@ public class PostServiceImpl implements PostService {
         }
         
         return generalLedger;
+    }
+
+    @Override
+    public Map<Account, List<Post>> getBalanceSheet(UserAccount user) {
+        Map<Account, List<Post>> balanceSheet = new HashMap<>();
+        List<Account> accounts = accountService.findAllAccounts();
+        for(Account account : accounts) {
+            if(account.getNumber() >= 3000){
+                return balanceSheet;
+            }
+            List<Post> posts = repo.findPostsForUserAndAccount(user.getId(), account.getNumber());
+            balanceSheet.put(account, posts);
+        }
+        return balanceSheet;
     }
     
     

@@ -12,7 +12,9 @@ import org.springframework.data.domain.Sort;
  * @author Jakob
  */
 public class Constants {
-    
+
     public static final int DEFAULT_PAGE_SIZE = 20;
+
     public static final Sort.Direction DEFAULT_SORT_DIRECTION = Sort.Direction.ASC;
+
 }
