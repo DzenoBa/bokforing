@@ -14,6 +14,7 @@ import se.chalmers.bokforing.jsonobject.UserInfoJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.user.UserGroup;
+import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.model.user.UserInfo;
 import se.chalmers.bokforing.service.UserManager;
 import se.chalmers.bokforing.persistence.user.UserService;
@@ -62,7 +63,7 @@ public class UserController {
             return form;
         }
         // CHECK IF EMAIL EXIST
-        UserAccount userAccExist = userDb.getUser(user.getEmail());
+        UserHandler userAccExist = userDb.getUser(user.getEmail());
         if(userAccExist != null) {
             form.addError("email", "E-post adressen är redan registrerad!");
             return form;
@@ -83,13 +84,12 @@ public class UserController {
         }
         
         // EVERYTHING SEEMS TO BE IN ORDER CREATE USER
-        UserAccount userAcc = new UserAccount();
-        userAcc.setEmail(user.getEmail());
-        String hashPasswd = PasswordUtil.hash(userAcc.getSalt() + user.getNewpasswd());
-        userAcc.setPass(hashPasswd);
-        userAcc.setUserGroup(UserGroup.User);
+        UserHandler uh = new UserHandler();
+        uh.setEmail(user.getEmail());
+        String hashPasswd = PasswordUtil.hash(uh.getSalt() + user.getNewpasswd());
+        uh.setPass(hashPasswd);
         // STORE
-        userManager.createUser(userAcc);
+        userManager.createUser(uh);
             
         return form;
     }
@@ -118,8 +118,8 @@ public class UserController {
             form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
             return form;
         }
-        UserAccount u = userDb.getUser(email);
-        if(u == null) {
+        UserHandler uh =userDb.getUser(email);
+        if(uh == null) {
             form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
             return form;
         }
@@ -129,16 +129,16 @@ public class UserController {
             form.addError("passwd", "Ange ditt nuvarande lösenord!");
             return form;
         }
-        String hashPasswd = PasswordUtil.hash(u.getSalt() + user.getPasswd());
-        if(!(hashPasswd.equals(u.getPass()))) {
+        String hashPasswd = PasswordUtil.hash(uh.getSalt() + user.getPasswd());
+        if(!(hashPasswd.equals(uh.getPass()))) {
             form.addError("passwd", "Löseordet är fel!");
             return form;
         }
         
         // EVERYTHING SEEMS TO BE IN ORDER CHANGE USER
-        String newHashPasswd = PasswordUtil.hash(u.getSalt() + user.getNewpasswd());
-        u.setPass(newHashPasswd);
-        userDb.storeUser(u);
+        String newHashPasswd = PasswordUtil.hash(uh.getSalt() + user.getNewpasswd());
+        uh.setPass(newHashPasswd);
+        userDb.storeUser(uh);
         
         return form;
     }
@@ -153,17 +153,12 @@ public class UserController {
         }
         String email = authSession.getEmail();
         
-        UserAccount ua = userService.getUser(email);
-        UserInfo ui = ua.getUseInfo();
-        
-        if(ui == null) {
-            return userInfo;
-        }
+        UserHandler ua = userService.getUser(email);
         
         // SET
-        userInfo.setFirstname(ui.getName());
-        userInfo.setPhonenumber(ui.getPhoneNumber());
-        userInfo.setCompanyname(ui.getCompanyName());
+        userInfo.setFirstname(ua.getName());
+        userInfo.setPhonenumber(ua.getPhoneNumber());
+        userInfo.setCompanyname(ua.getCompanyName());
         
         return userInfo;
     }
@@ -185,11 +180,13 @@ public class UserController {
             return form;
         }
         String email = authSession.getEmail();
+        UserHandler uh = userService.getUser(email);
 
         
         // USER REQUESTED TO CHANGE FIRSNAME
         if(userInfo.getFirstname() != null) {
-            userService.updateName(userInfo.getFirstname(), email);
+            uh.setName(userInfo.getFirstname());
+            userDb.storeUser(uh);
             return form;
         }
         
@@ -201,13 +198,15 @@ public class UserController {
         
         // USER REQUESTED TO CHANGE PHONE-NUMBER
         if(userInfo.getPhonenumber() != null) {
-            userService.updatePhoneNumber(userInfo.getPhonenumber(), email);
+            uh.setPhoneNumber(userInfo.getPhonenumber());
+            userDb.storeUser(uh);
             return form;
         }
         
         // USER REQUESTED TO CHANGE COMPANY NAME
         if(userInfo.getCompanyname() != null) {
-            userService.updateCompanyName(userInfo.getCompanyname(), email);
+            uh.setPhoneNumber(userInfo.getCompanyname());
+            userDb.storeUser(uh);
             return form;
         }
         

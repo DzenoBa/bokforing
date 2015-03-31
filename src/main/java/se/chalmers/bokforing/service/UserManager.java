@@ -5,7 +5,7 @@
  */
 package se.chalmers.bokforing.service;
 
-import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.user.UserHandler;
 
 /**
  *
@@ -19,5 +19,5 @@ public interface UserManager {
      * Called from the frontend when a new user is created
      * @param userAcc of type UserAccount with email and name
      */
-    public void createUser(UserAccount userAcc);
+    public void createUser(UserHandler userAcc);
 }

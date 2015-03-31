@@ -8,6 +8,7 @@ package se.chalmers.bokforing.service;
 import se.chalmers.bokforing.model.Address;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.user.UserHandler;
 
 /**
  *

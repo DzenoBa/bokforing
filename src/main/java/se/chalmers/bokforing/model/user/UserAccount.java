@@ -6,8 +6,8 @@
 package se.chalmers.bokforing.model.user;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,9 +15,9 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import se.chalmers.bokforing.model.Customer;
@@ -32,7 +32,7 @@ import se.chalmers.bokforing.util.PasswordUtil;
 public class UserAccount implements Serializable {
   
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
@@ -50,7 +50,7 @@ public class UserAccount implements Serializable {
     
     //Group is a reserved word. We cannot have it as a column name.   
     @Enumerated(EnumType.STRING)
-    private UserGroup userGroup;
+    private UserGroup userGroup = UserGroup.User;
    
     private String sessionid;
     
@@ -59,18 +59,21 @@ public class UserAccount implements Serializable {
     
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Customer> customers;
-
+    
+    protected UserAccount(){
+        
+    }
     public Long getId(){
         return id;
     }
     
-    public void setUserInfo(UserInfo userInfo){
+    void setUserInfo(UserInfo userInfo){
         this.userInfo = userInfo;
     }
     /**
      * @return the name
      */
-    public UserInfo getUseInfo() {
+    public UserInfo getUserInfo() {
         return userInfo;
     }
 
@@ -84,10 +87,13 @@ public class UserAccount implements Serializable {
     /**
      * @param pass the pass to set
      */
-    public void setPass(String pass) {
+    void setPass(String pass) {
         this.pass = pass;
     }
     
+    void setSalt(String salt){
+        this.salt = salt;
+    }
     /**
      * @return the salt
      */
@@ -105,15 +111,9 @@ public class UserAccount implements Serializable {
     /**
      * @param email the email to set
      */
-    public void setEmail(String email) {
+    void setEmail(String email) {
+        email = email.toLowerCase();
         this.email = email;
-    }
-
-    /**
-     * @return the group
-     */
-    public UserGroup getGroup() {
-        return getUserGroup();
     }
 
     /**
@@ -121,6 +121,9 @@ public class UserAccount implements Serializable {
      */
     public String getSessionid() {
         return sessionid;
+    }
+    void setSessionid(String sessionid) {
+        this.sessionid = sessionid;
     }
 
     /**
@@ -133,14 +136,14 @@ public class UserAccount implements Serializable {
     /**
      * @param verifications the verifications to set
      */
-    public void setVerifications(List<Verification> verifications) {
+    void setVerifications(List<Verification> verifications) {
         this.verifications = verifications;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(Long id) {
+    void setId(Long id) {
         this.id = id;
     }
 
@@ -154,7 +157,9 @@ public class UserAccount implements Serializable {
     /**
      * @param userGroup the userGroup to set
      */
-    public void setUserGroup(UserGroup userGroup) {
+    void setUserGroup(UserGroup userGroup) {
+        if(userGroup == null)
+            throw new IllegalArgumentException("null is not allowed");
         this.userGroup = userGroup;
     }
 
@@ -168,7 +173,7 @@ public class UserAccount implements Serializable {
     /**
      * @param customers the customers to set
      */
-    public void setCustomers(List<Customer> customers) {
+    void setCustomers(List<Customer> customers) {
         this.customers = customers;
     }
     
@@ -190,6 +195,43 @@ public class UserAccount implements Serializable {
         sb.append(", email=").append(email);
         sb.append(", group=").append(userGroup);
         sb.append(", sessionid=").append(sessionid);
+        sb.append(" }");
         return  sb.toString();  
+    }
+    
+    @Override
+    public boolean equals(Object obj){
+    if(obj == this)
+            return true;
+    else if((obj == null) || (obj.getClass() != this.getClass()))
+        return false;
+    else{
+        UserAccount other = (UserAccount) obj; 
+            return (id == null ? other.id == null : id.equals(other.id))
+                && (email == null ? other.email == null : email.equals(other.email))
+                && (pass == null ? other.pass == null : pass.equals(other.pass))
+                && (salt == null ? other.salt == null : salt.equals(other.salt))
+                && (sessionid == null ? other.sessionid == null : sessionid.equals(other.sessionid))
+                && (userGroup == null ? other.userGroup == null : userGroup.equals(other.userGroup))
+                //&& (userInfo == other.userInfo || (userInfo != null && userInfo.equals(other.userInfo)))
+                //&& (verifications == null ? other.verifications == null : verifications.equals(other.verifications))
+                //&& (customers == null ? other.customers == null : customers.equals(other.customers))
+                ;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 83 * hash + Objects.hashCode(this.id);
+        hash = 83 * hash + Objects.hashCode(this.userInfo);
+        hash = 83 * hash + Objects.hashCode(this.pass);
+        hash = 83 * hash + Objects.hashCode(this.salt);
+        hash = 83 * hash + Objects.hashCode(this.email);
+        hash = 83 * hash + Objects.hashCode(this.userGroup);
+        hash = 83 * hash + Objects.hashCode(this.sessionid);
+        hash = 83 * hash + Objects.hashCode(this.verifications);
+        hash = 83 * hash + Objects.hashCode(this.customers);
+        return hash;
     }
 }

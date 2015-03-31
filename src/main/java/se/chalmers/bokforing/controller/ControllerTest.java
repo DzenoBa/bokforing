@@ -31,35 +31,6 @@ public class ControllerTest {
     @Autowired
     private VerificationService verService;
 
-    /**
-     * Request mapping for user
-     *
-     * @return
-     */
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public ModelAndView getUsersView() {
-        UserAccount user = new UserAccount();
-
-        String email = "whoop";
-        user.setEmail(email);
-        user.setPass(PasswordUtil.randomString(8));
-        StringBuilder sb = new StringBuilder();
-        try {
-            userDb.storeUser(user);
-        } catch (javax.persistence.PersistenceException e) {
-            sb.append("Error: user is already in db. ");
-        }
-
-        UserAccount ua = userDb.getUser("whoop");
-        if (ua != null) {
-            sb.append(ua.toString());
-        } else {
-            sb.append("null");
-        }
-
-        return new ModelAndView("test", "message", sb.toString());
-    }
-
     @RequestMapping("/test2")
     public ModelAndView getNewPage() {
         Calendar cal = Calendar.getInstance();

@@ -1,7 +1,6 @@
 
 package se.chalmers.bokforing.controller;
 
-import java.util.Date;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import se.chalmers.bokforing.util.PasswordUtil;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
-import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.session.AuthSession;
 
@@ -51,7 +50,7 @@ public class AuthController {
             return form;
         }
         // CHECK IF EMAIL EXIST
-        UserAccount userEnt= userDb.getUser(user.getEmail());
+        UserHandler userEnt= userDb.getUser(user.getEmail());
         if(userEnt == null) {
             form.addError("email", "E-post adressen existerar inte!");
             return form;
@@ -73,11 +72,11 @@ public class AuthController {
          * Store user in session 
          */
         String s_id = PasswordUtil.randomString(10);
-        authSession.setSession(userEnt.getEmail(), s_id, userEnt.getGroup().toString());
+        authSession.setSession(userEnt.getEmail(), s_id, userEnt.getUserGroup().toString());
         //Store session and timestamp in database
-        userDb.updateSessionid(s_id, userEnt.getEmail());
-        userDb.updateLastLogIn(userEnt.getEmail());
-        //userDb.storeUser(userEnt);
+        userEnt.setSessionid(s_id);
+        userEnt.setLastLogIn();
+        userDb.storeUser(userEnt);
         
         return form;
     }
@@ -125,7 +124,7 @@ public class AuthController {
         
         // CHECK IF USER IS ONLINE
         if(authSession.getStatus()) {
-            UserAccount u = userDb.getUser(authSession.getEmail());
+            UserHandler u = userDb.getUser(authSession.getEmail());
             
             // CHECK IF USER EXIST
             if(u == null) {

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.persistence.user.UserService;
 
 /**
@@ -77,7 +78,7 @@ public class AuthSession implements Serializable {
         
         // CHECK IF VALID USER
         if(getStatus()) {
-            UserAccount u = userDb.getUser(getEmail());
+            UserHandler u = userDb.getUser(getEmail());
             
             // CHECK IF USER EXIST
             if(u == null) {

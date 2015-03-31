@@ -8,9 +8,9 @@ package se.chalmers.bokforing.model.user;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Date;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -22,9 +22,11 @@ import javax.persistence.Temporal;
  */
 @Entity
 public class UserInfo implements Serializable {
-
+protected UserInfo(){
+    
+}
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userInfoId;
     @OneToOne
     private UserAccount ua;
@@ -48,12 +50,18 @@ public class UserInfo implements Serializable {
     public String getName() {
         return userName;
     }
+    void setName(String name){
+        this.userName = name;
+    }
 
     /**
      * @return the phoneNumber
      */
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+    void setPhoneNumber(String number){
+        this.phoneNumber = number;
     }
 
     /**
@@ -62,12 +70,18 @@ public class UserInfo implements Serializable {
     public String getCompanyName() {
         return companyName;
     }
+    void setCompanyName(String name){
+        this.companyName = name;
+    }
 
     /**
      * @return the logo
      */
     public URI getLogo() {
         return logo;
+    }
+    void setLogo(URI logo){
+        this.logo = logo;
     }
 
     /**
@@ -76,12 +90,21 @@ public class UserInfo implements Serializable {
     public UserAccount getUa() {
         return ua;
     }
+    void setUa(UserAccount ua){
+        this.ua = ua;
+    }
     
         /**
      * @return the lastLogIn
      */
     public Date getLastLogIn() {
         return lastLogIn;
+    }
+    void setLastLogIn(){
+        setLastLogIn(new Date());
+    }
+    void setLastLogIn(Date date){
+        lastLogIn = date;
     }
     
     String toStringLight(){
@@ -102,6 +125,7 @@ public class UserInfo implements Serializable {
         sb.append(", companyname=").append(companyName);
         sb.append(", lastLogIn=").append(lastLogIn);
         sb.append(", logo=").append(logo);
+        sb.append(" }");
         return  sb.toString();  
     }
 

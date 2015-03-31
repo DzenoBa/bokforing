@@ -13,10 +13,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,11 +31,12 @@ import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.Verification;
+import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.persistence.VerificationRepository;
 import se.chalmers.bokforing.persistence.VerificationSpecs;
 import se.chalmers.bokforing.service.AccountManager;
-import se.chalmers.bokforing.service.AccountService;
+import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.VerificationService;
@@ -48,7 +49,10 @@ import se.chalmers.bokforing.util.Constants;
 @ContextConfiguration(classes = TestApplicationConfig.class)
 public class VerificationTest extends AbstractIntegrationTest {
     
-    private static final int INSERTED_VERIFICATION_ROWS_BEFORE = 5;
+    private static int INSERTED_VERIFICATION_ROWS_BEFORE;
+    
+    @Autowired
+    private UserService userDb;
     
     @Autowired
     VerificationManager manager;
@@ -72,8 +76,14 @@ public class VerificationTest extends AbstractIntegrationTest {
     
     @Before
     public void setup() {
-        user = new UserAccount();
-        user.setId(1L);
+        UserHandler uh = new UserHandler();
+        uh.setEmail("VerificationTest");
+        userDb.storeUser(uh);
+        user = uh.getUA();
+        //user.setId(1L);
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate");
+        Page<Verification> verifications = service.findAllVerifications(user, terms);
+        INSERTED_VERIFICATION_ROWS_BEFORE = verifications.getNumberOfElements();
     }
     
     @Transactional
@@ -235,14 +245,19 @@ public class VerificationTest extends AbstractIntegrationTest {
     @Test
     public void testGetVerificationForUser() {
         // Have a user account
-        UserAccount userAccount = new UserAccount();
-        userAccount.setId(1L);
+        UserHandler uh = new UserHandler();
+        uh.setEmail("VerificationTest2");
+        userDb.storeUser(uh);
+        UserAccount userAccount = uh.getUA();
+        Long id = userAccount.getId();
         
         // This is pretty much:
         //  select * 
         //  from Verifications v 
         //  where v.userAccount = userAccount
         List<Verification> vers = repository.findAll(Specifications.where(VerificationSpecs.hasUserAccount(userAccount)));
-        assertTrue(vers.get(0).getUserAccount().getId() == 1);
+        assertFalse(vers.isEmpty());
+        System.out.println("UserId: " + vers.get(0).getUserAccount().getId());
+        assertEquals(vers.get(0).getUserAccount().getId(), id);
     }
 }

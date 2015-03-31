@@ -9,6 +9,7 @@ import se.chalmers.bokforing.persistence.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.user.UserHandler;
 
 /**
  *
@@ -22,7 +23,7 @@ public class UserManagerImpl implements UserManager{
     private UserService userService;
     
     @Override
-    public void createUser(UserAccount userAcc){
+    public void createUser(UserHandler userAcc){
         
         //STORE DEAFULT ACCOUNTS AND USER
         

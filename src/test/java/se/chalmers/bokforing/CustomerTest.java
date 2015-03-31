@@ -17,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.config.TestApplicationConfig;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
+import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.CustomerService;
 
@@ -41,8 +43,11 @@ import se.chalmers.bokforing.config.TestApplicationConfig;
 @ContextConfiguration(classes = TestApplicationConfig.class)
 public class CustomerTest extends AbstractIntegrationTest {
     
-    static final int INSERTED_BEFORE_TEST = 1;
+    static int INSERTED_BEFORE_TEST;
 
+    @Autowired
+    private UserService userDb;
+    
     @Autowired
     CustomerManager manager;
     
@@ -54,10 +59,20 @@ public class CustomerTest extends AbstractIntegrationTest {
     
     private UserAccount user;
     
+    private Long id;
+    
     @Before
     public void setup() {
-        user = new UserAccount();
-        user.setId(1L);
+        UserHandler uh = new UserHandler();
+        uh.setEmail("CustomerTest");
+        userDb.storeUser(uh);
+        user = uh.getUA();
+        
+        id = user.getId();
+        
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "customerNumber");
+        Page<Customer> customers = service.findAllCustomers(user, terms);
+        INSERTED_BEFORE_TEST = customers.getNumberOfElements();
     }
     
     @Transactional
@@ -67,14 +82,13 @@ public class CustomerTest extends AbstractIntegrationTest {
         
         Customer customer = manager.createCustomer(user, number, null, null, null);
         Customer customerFromDb = service.findByCustomerNumber(user, number);
-        
         assertEquals(customer.getCustomerNumber(), customerFromDb.getCustomerNumber());
     }
     
     @Transactional
     @Test
     public void testGetCustomerPage() {
-        Query query = null;
+        Query query;
         
         int inserted = 10;
         
@@ -83,15 +97,16 @@ public class CustomerTest extends AbstractIntegrationTest {
             String name = "Jakob"+i;
             
             query = em.createNativeQuery(
-                    "INSERT INTO Customers (userAccount_id, customerNumber, name) VALUES (1, ?, ?)")
-                    .setParameter(1, number)
-                    .setParameter(2, name);
+                    "INSERT INTO Customers (userAccount_id, customerNumber, name) VALUES (?, ?, ?)")
+                    .setParameter(1, id)
+                    .setParameter(2, number)
+                    .setParameter(3, name);
             query.executeUpdate();
         }
         
         PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "customerNumber");
         Page<Customer> customers = service.findAllCustomers(user, terms);
-        
+        System.out.println("inserted= " + inserted + " customers= " + customers.getTotalElements());
         assertEquals(inserted + INSERTED_BEFORE_TEST, customers.getTotalElements());
     }
     

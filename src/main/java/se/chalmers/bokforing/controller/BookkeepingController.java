@@ -2,12 +2,10 @@
 package se.chalmers.bokforing.controller;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,9 +19,9 @@ import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
-import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
+import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.CustomerService;
 import se.chalmers.bokforing.persistence.user.UserService;
@@ -145,18 +143,18 @@ public class BookkeepingController {
         }
         
         // EVERYTHING SEEMS TO BE IN ORDER; CREATE VERIFICATION
-        UserAccount user = userService.getUser(email);
+        UserHandler uh = userService.getUser(email);
         //userService.storeUser(user);
         
         // TODO
         long customerNumber = 123;
-        Customer customer = customerManager.createCustomer(user, customerNumber, "Dzeno", "00387", null);
-        Customer customerFromDb = customerService.findByCustomerNumber(user, customerNumber);
+        Customer customer = customerManager.createCustomer(uh.getUA(), customerNumber, "Dzeno", "00387", null);
+        Customer customerFromDb = customerService.findByCustomerNumber(uh.getUA(), customerNumber);
         
         // CREATE VERIFICATION
-        Verification ver = verificationManager.createVerification(user, new_posts, verification.getTransactionDate(), customerFromDb);
-        user.getVerifications().add(ver);
-        userService.storeUser(user);
+        Verification ver = verificationManager.createVerification(uh.getUA(), new_posts, verification.getTransactionDate(), customerFromDb);
+        uh.getVerifications().add(ver);
+        userService.storeUser(uh);
         
         // System.out.println(userService.getUser(authSession.getEmail()).getVerifications().get(0));
         
@@ -206,10 +204,10 @@ public class BookkeepingController {
         if(!authSession.sessionCheck()) {
             return verJSONLs;
         } 
-        UserAccount ua = userService.getUser(authSession.getEmail());
+        UserHandler ua = userService.getUser(authSession.getEmail());
         
         PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate"); // TODO
-        Page<Verification> verPage = verificationService.findAllVerifications(ua, terms);
+        Page<Verification> verPage = verificationService.findAllVerifications(ua.getUA(), terms);
         
         List<Verification> verLs = verPage.getContent();
         
