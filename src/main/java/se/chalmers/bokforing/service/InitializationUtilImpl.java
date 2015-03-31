@@ -33,7 +33,7 @@ public class InitializationUtilImpl implements InitializationUtil {
         // path will be invalid.
         // I think we have to do it this way because of maven, it handles
         // resources such as text files in a special way.
-        File input = new File(getClass().getResource("/accounts.txt").toString().substring(6));
+        File input = new File("/" + getClass().getResource("/accounts.txt").toString().substring(6));
 
         try (BufferedReader br = new BufferedReader(new FileReader(input))) {
             line = br.readLine();

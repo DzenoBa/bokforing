@@ -32,10 +32,10 @@ import se.chalmers.bokforing.util.PasswordUtil;
 public class UserAccount implements Serializable {
   
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="userInfoId")
     private UserInfo userInfo;
     

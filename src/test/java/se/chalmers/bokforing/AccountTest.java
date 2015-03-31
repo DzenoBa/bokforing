@@ -109,7 +109,7 @@ public class AccountTest extends AbstractIntegrationTest {
     public void testInsertDefaultAccounts() {
 
         //MAKE SURE ALL DEFAULT ACCOUNTS EXIST IN DATABASE
-        File input = new File(getClass().getResource("/accounts.txt").toString().substring(6));
+        File input = new File("/" + getClass().getResource("/accounts.txt").toString().substring(6));
         assertTrue(initUtil.insertDefaultAccounts());
         try (BufferedReader br = new BufferedReader(new FileReader(input))) {
             String line = br.readLine();

@@ -75,9 +75,9 @@ public class VerificationManagerImpl implements VerificationManager {
         }*/
         
         Long highestVerificationNumber = service.findHighestVerificationNumber(user);
-        if(highestVerificationNumber == null || verificationNumber != highestVerificationNumber + 1) {
-            return false;
-        }
+//        if(highestVerificationNumber == null || verificationNumber != highestVerificationNumber + 1) {
+//            return false;
+//        }
         
         if(getBalance(posts) != 0) {
             return false;
