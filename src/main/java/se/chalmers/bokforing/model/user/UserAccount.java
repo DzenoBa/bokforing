@@ -54,10 +54,10 @@ public class UserAccount implements Serializable {
    
     private String sessionid;
     
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "userAccount", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Verification> verifications;
     
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "userAccount", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Customer> customers;
     
     protected UserAccount(){

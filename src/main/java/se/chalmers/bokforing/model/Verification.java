@@ -37,13 +37,13 @@ public class Verification implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private UserAccount userAccount;
     
     @Column(nullable = false)
     private Long verificationNumber;
     
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "verification", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Post> posts;
 
     /** The date that the transaction which the verification concerns was made. */

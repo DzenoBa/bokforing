@@ -13,7 +13,7 @@ import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
  */
 public interface AccountService {
     
-    Page<Account> findAllAccounts(Pageable pageable);
+    List<Account> findAllAccounts();
     
     Page<Account> findAllAccounts(PagingAndSortingTerms terms);
     

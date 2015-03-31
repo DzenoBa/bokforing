@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
@@ -33,11 +34,15 @@ import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
+import se.chalmers.bokforing.persistence.PostRepository;
 import se.chalmers.bokforing.persistence.VerificationRepository;
 import se.chalmers.bokforing.persistence.VerificationSpecs;
+import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.service.AccountManager;
 import se.chalmers.bokforing.persistence.user.UserService;
+import se.chalmers.bokforing.service.AccountService;
 import se.chalmers.bokforing.service.CustomerManager;
+import se.chalmers.bokforing.service.PostService;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.VerificationService;
 import se.chalmers.bokforing.util.Constants;
@@ -73,9 +78,18 @@ public class VerificationTest extends AbstractIntegrationTest {
     AccountManager accountManager;
     
     @Autowired
+    AccountService accountService;
+    
+    @Autowired
+    PostRepository postRepository;
+    
+    @Autowired
     UserService userService;
     
-    private static UserAccount user;
+    @Autowired
+    PostService postService;
+    
+    private UserAccount user;
     
     @Before
     public void setup() {
@@ -143,8 +157,8 @@ public class VerificationTest extends AbstractIntegrationTest {
         postList.add(post2);
         
         ArrayList<Post> postList2 = new ArrayList<>();
-        postList.add(post3);
-        postList.add(post4);
+        postList2.add(post3);
+        postList2.add(post4);
         
         Long verNbr = 7372L; // one higher than the highest inserted row
         Verification verification = manager.createVerification(user, verNbr, postList, cal.getTime(), customer);
@@ -214,7 +228,9 @@ public class VerificationTest extends AbstractIntegrationTest {
         Date creationDate = null;
         Query query = null;
         
-        for(int i = 0; i < 100; ++i) {
+        int rowsToInsert = 30;
+        
+        for(int i = 0; i < rowsToInsert; ++i) {
             cal.set(2014 + i, 5, 10);
             creationDate = cal.getTime();
             
@@ -228,9 +244,9 @@ public class VerificationTest extends AbstractIntegrationTest {
         Page<Verification> verifications = service.findAllVerifications(user, terms);
         
         assertEquals(Constants.DEFAULT_PAGE_SIZE, verifications.getNumberOfElements());
-        assertEquals(INSERTED_VERIFICATION_ROWS_BEFORE + 100, verifications.getTotalElements());
+        assertEquals(INSERTED_VERIFICATION_ROWS_BEFORE + rowsToInsert, verifications.getTotalElements());
         
-        int expectedPages = (int)Math.ceil((INSERTED_VERIFICATION_ROWS_BEFORE + 100) / (double)Constants.DEFAULT_PAGE_SIZE);
+        int expectedPages = (int)Math.ceil((INSERTED_VERIFICATION_ROWS_BEFORE + rowsToInsert) / (double)Constants.DEFAULT_PAGE_SIZE);
         assertEquals(expectedPages, verifications.getTotalPages());
         
         
@@ -242,24 +258,90 @@ public class VerificationTest extends AbstractIntegrationTest {
         // dates should be "lower" the farther we go down the list
         assertTrue(firstDate.after(secondDate));
     }
+
+    @Test
+    public void testGeneralLedger() {
+        createVerificationHelper();
+        Account accountFromDb = accountService.findAccountByNumber(2018);
+
+        List<Post> posts = postRepository.findPostsForUserAndAccount(user.getId(), accountFromDb.getNumber());
+        assertEquals(4, posts.size());
+        
+        long begin = System.currentTimeMillis();
+        Map<Account, List<Post>> generalLedger = postService.getGeneralLedger(user);
+        System.out.println("Time to get general ledger: " + (System.currentTimeMillis() - begin));
+        
+        
+        assertTrue(generalLedger != null);
+        assertEquals(1, generalLedger.size());
+        assertTrue(generalLedger.keySet().iterator().next().getNumber() == 2018);
+        assertEquals(4, generalLedger.get(accountFromDb).size());
+    }
     
-//    @Transactional
-//    @Test
-//    public void testGetVerificationForUser() {
-//        // Have a user account
-//        UserHandler uh = new UserHandler();
-//        uh.setEmail("VerificationTest2");
-//        userDb.storeUser(uh);
-//        UserAccount userAccount = uh.getUA();
-//        Long id = userAccount.getId();
-//        
-//        // This is pretty much:
-//        //  select * 
-//        //  from Verifications v 
-//        //  where v.userAccount = userAccount
-//        List<Verification> vers = repository.findAll(Specifications.where(VerificationSpecs.hasUserAccount(userAccount)));
-//        assertFalse(vers.isEmpty());
-//        System.out.println("UserId: " + vers.get(0).getUserAccount().getId());
-//        assertEquals(vers.get(0).getUserAccount().getId(), id);
-//    }
+    public void createVerificationHelper() {
+        double sum1Amount = 100;
+        double sum2Amount = 100;
+        
+        double sum3Amount = 200;
+        double sum4Amount = 200;
+       
+        Calendar cal = Calendar.getInstance();
+
+        Account account = accountManager.createAccount(2018, "Egna insättningar");
+        
+        PostSum sum = new PostSum();
+        sum.setSumTotal(sum1Amount);
+        sum.setType(PostType.Credit);
+        
+        PostSum sum2 = new PostSum();
+        sum2.setSumTotal(sum2Amount);
+        sum2.setType(PostType.Debit);
+        
+        PostSum sum3 = new PostSum();
+        sum3.setSumTotal(sum3Amount);
+        sum3.setType(PostType.Debit);
+        
+        PostSum sum4 = new PostSum();
+        sum4.setSumTotal(sum4Amount);
+        sum4.setType(PostType.Credit);
+        
+        Customer customer = customerManager.createCustomer(user, 123, null, null, null);
+        customer.setCustomerNumber(1L);
+        customer.setName("Jakob");
+        customer.setPhoneNumber("031132314");
+        
+        Post post = new Post();
+        post.setSum(sum);
+        post.setAccount(account);
+        
+        Post post2 = new Post();
+        post2.setSum(sum2);
+        post2.setAccount(account);
+
+        Post post3 = new Post();
+        post3.setSum(sum3);
+        post3.setAccount(account);
+        
+        Post post4 = new Post();
+        post4.setSum(sum4);
+        post4.setAccount(account);
+        
+        ArrayList<Post> postList = new ArrayList<>();
+        postList.add(post);
+        postList.add(post2);
+        
+        ArrayList<Post> postList2 = new ArrayList<>();
+        postList2.add(post3);
+        postList2.add(post4);
+        
+        Long verNbr = 7372L; // one higher than the highest inserted row
+        Verification verification = manager.createVerification(user, verNbr, postList, cal.getTime(), customer);
+        assertNotNull(verification);
+        
+        Verification verification2 = manager.createVerification(user, verNbr+1, postList2, cal.getTime(), customer);
+        assertNotNull(verification2);
+        
+        Verification verificationFromDb = service.findByUserAndVerificationNumber(user, verNbr);
+        assertNotNull(verificationFromDb);
+    }
 }

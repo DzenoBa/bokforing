@@ -26,19 +26,6 @@ import se.chalmers.bokforing.service.CustomerService;
 /**
  *
  * @author Jakob
-=======
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.springframework.test.context.ContextConfiguration;
-import se.chalmers.bokforing.config.TestApplicationConfig;
-
-/**
- *
- * @author Jakob
  */
 @ContextConfiguration(classes = TestApplicationConfig.class)
 public class CustomerTest extends AbstractIntegrationTest {

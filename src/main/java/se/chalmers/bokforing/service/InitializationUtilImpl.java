@@ -22,41 +22,48 @@ import se.chalmers.bokforing.persistence.AccountRepository;
 public class InitializationUtilImpl implements InitializationUtil {
 
     @Autowired
-    private AccountRepository accountRep;
+    private AccountService service;
+    
+    @Autowired
+    private AccountManager accMan;
 
     @Override
     public boolean insertDefaultAccounts() {
-        String line;
 
         // The substring at the end is to remove the "file:\" part added to the
         // front of the File-object's path. Doesn't work without removing that,
         // path will be invalid.
         // I think we have to do it this way because of maven, it handles
         // resources such as text files in a special way.
-        File input = new File("/" + getClass().getResource("/accounts.txt").toString().substring(6));
+        File input = new File(getClass().getResource("/accounts.txt").toString().substring(6));
 
-        try (BufferedReader br = new BufferedReader(new FileReader(input))) {
-            line = br.readLine();
-            while (line != null) {
-                int id = Integer.parseInt(line.substring(0, 4));
+        BufferedReader br;
+        try {
+            br = new BufferedReader(new FileReader(input));
+            helper(br);
 
-                String name = line.substring(4);
-
-                Account account = new Account();
-                account.setNumber(id);
-                account.setName(name);
-
-                accountRep.save(account);
-
-                line = br.readLine();
+        }catch (IOException e){
+            input = new File("/" + getClass().getResource("/accounts.txt").toString().substring(6));
+            try{
+            br = new BufferedReader(new FileReader(input));
+            helper(br);
+            }catch (IOException e1){
+                return false;
             }
-
-        } catch (IOException e) {
-            //TODO: Catch exception if file with default accounts doesn't exist
-            System.out.println(e.toString());
-            return false;
         }
 
         return true;
     }
+    
+    
+    private void helper(BufferedReader br) throws NumberFormatException, IOException {
+        String line = br.readLine().trim();
+        while (line != null) {
+            int id = Integer.parseInt(line.substring(0, 4));
+            String name = line.substring(4);
+            accMan.createAccount(id, name);
+            line = br.readLine();
+        }
+    }
+
 }

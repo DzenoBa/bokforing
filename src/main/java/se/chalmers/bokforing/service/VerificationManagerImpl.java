@@ -58,6 +58,11 @@ public class VerificationManagerImpl implements VerificationManager {
         cal.set(Calendar.MILLISECOND, 0);
         
         Verification ver = new Verification();
+        
+        for(Post post : posts) {
+            post.setVerification(ver);
+        }
+        
         ver.setPosts(posts);
         ver.setTransactionDate(transactionDate);
         ver.setCreationDate(todaysDate);
