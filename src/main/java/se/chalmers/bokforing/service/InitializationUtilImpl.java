@@ -36,7 +36,7 @@ public class InitializationUtilImpl implements InitializationUtil {
         File input = new File(getClass().getResource("/accounts.txt").toString().substring(6));
 
         try (BufferedReader br = new BufferedReader(new FileReader(input))) {
-            line = br.readLine();
+            line = br.readLine().trim();
             while (line != null) {
                 int id = Integer.parseInt(line.substring(0, 4));
 

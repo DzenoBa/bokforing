@@ -112,7 +112,7 @@ public class AccountTest extends AbstractIntegrationTest {
         File input = new File(getClass().getResource("/accounts.txt").toString().substring(6));
         assertTrue(initUtil.insertDefaultAccounts());
         try (BufferedReader br = new BufferedReader(new FileReader(input))) {
-            String line = br.readLine();
+            String line = br.readLine().trim();
             while (line != null) {
                 int id = Integer.parseInt(line.substring(0, 4));
                 String name = line.substring(4);
