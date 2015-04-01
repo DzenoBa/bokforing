@@ -56,6 +56,9 @@ public class PostServiceImpl implements PostService {
     /**
      *
      * @param user
+     * @param startDate
+     * @param endDate
+     * @param pageable
      * @return balanceSheet, a mapping from account to the sum of all posts
      * using that account and the opening balance. Other things needed to create
      * the full balanceSheet is title, company name, period and so on.
@@ -64,6 +67,7 @@ public class PostServiceImpl implements PostService {
     public Map<Account, List<Double>> getBalanceSheet(UserAccount user, Date startDate, Date endDate, Pageable pageable) {
         Map<Account, List<Double>> balanceSheet = new HashMap<>();
         List<Verification> verifications = verRepo.findByUserAccountAndCreationDateBetween(user, startDate, endDate, pageable).getContent();
+        // May use later perhaps when adding opening balance
         List<Account> accounts = accountService.findAllAccounts();
         for (Verification verification : verifications) {
             List<Post> posts = verification.getPosts();
@@ -77,26 +81,8 @@ public class PostServiceImpl implements PostService {
                     balanceList.add(post.getPostSum().getSumTotal());
                     balanceSheet.put(account, balanceList);
                 } else {
-                    //TODO: FELFELFEL
-                    List<Double> balanceList = balanceSheet.get(account);
-                    double  balance = balanceList.get(0);
-                    balance += post.getPostSum().getSumTotal();
-                    balanceList.clear();
-                    balanceList.add(balance);
-                    balanceSheet.put(account, balanceList);
+                    balanceSheet.get(account).set(0, balanceSheet.get(account).get(0) + post.getPostSum().getSumTotal());
                 }
-            }
-
-            for (Account account : accounts) {
-
-                List<Double> balances = new ArrayList<>();
-                double balance = 0;
-                for (Post post : posts) {
-                    balance += post.getPostSum().getSumTotal();
-
-                }
-                balances.add(balance);
-                balanceSheet.put(account, balances);
             }
         }
         return balanceSheet;
