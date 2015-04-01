@@ -5,6 +5,7 @@
  */
 package se.chalmers.bokforing.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,25 +49,28 @@ public class PostServiceImpl implements PostService {
     /**
      *
      * @param user
-     * @return balanceSheet, a mapping from account to 
-     *  the sum of all posts using that account.
-     *  Other things needed to create the full balanceSheet is title, period and so on.   
+     * @return balanceSheet, a mapping from account to the sum of all posts
+     * using that account and the opening balance. Returns null if the account
+     * hasn't been used. Other things needed to create the full balanceSheet is
+     * title, period and so on.
      */
     @Override
-    public Map<Account, Double> getBalanceSheet(UserAccount user) {
-        Map<Account, Double> balanceSheet = new HashMap<>();
+    public Map<Account, List<Double>> getBalanceSheet(UserAccount user) {
+        Map<Account, List<Double>> balanceSheet = new HashMap<>();
         List<Account> accounts = accountService.findAllAccounts();
         for (Account account : accounts) {
             if (account.getNumber() >= REVENUE_ACCOUNTS) {
                 return balanceSheet;
             }
             List<Post> posts = repo.findPostsForUserAndAccount(user.getId(), account.getNumber());
+            List<Double> balances = new ArrayList<>();
             double balance = 0;
             for (Post post : posts) {
                 balance += post.getPostSum().getSumTotal();
-                
+
             }
-            balanceSheet.put(account, balance);
+            balances.add(balance);
+            balanceSheet.put(account, balances);
         }
         return balanceSheet;
     }
