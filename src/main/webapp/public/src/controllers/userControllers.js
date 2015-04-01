@@ -48,25 +48,8 @@ userControllers.controller('RegisterCtrl', ['$scope', 'UserProxy',
         };
     }]);
 
-userControllers.controller('EditUserCtrl', ['$scope', '$location', 'AuthProxy',
-    'UserProxy',
-    function($scope, $location, AuthProxy, UserProxy) {
-        var init = function() {
-            checkLogin();
-        };
-        
-        function checkLogin() {
-            AuthProxy.get()
-                    .success(function(user) {
-                        if (angular.isObject(user)) {
-                            $scope.session = {status: "online", user: user};
-                        } else {
-                            $scope.session = {status: "offline"};
-                        }
-                    }).error(function() {
-                console.log("check: error");
-            });
-        };
+userControllers.controller('EditUserCtrl', ['$scope', 'UserProxy',
+    function($scope, UserProxy) {
         
         $scope.edit = function() {
             if(!(angular.isUndefined($scope.user) || $scope.user === null)) {
@@ -104,8 +87,6 @@ userControllers.controller('EditUserCtrl', ['$scope', '$location', 'AuthProxy',
                 $scope.passwdstrength.three = false;
             }
         };
-        
-        init();
     }]);
 
 /**

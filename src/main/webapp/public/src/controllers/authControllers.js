@@ -17,7 +17,10 @@ authControllers.controller('LoginCtrl', ['$scope',
                 AuthProxy.login($scope.user)
                         .success(function(form) {
                             if(form.numErrors === 0) {
-                                $location.path('/userpage');
+                                // UPDATE THE SESSION
+                                AuthProxy.class().getAuthentication().then(function(value) {
+                                    $location.path('/userpage');
+                                });                                
                             } else {
                                 $scope.form = form;
                             }
@@ -26,30 +29,19 @@ authControllers.controller('LoginCtrl', ['$scope',
                 });
             }
         };
-    }]);
+    }
+]);
 
-authControllers.controller('UserPageCtrl', ['$scope', '$location', 'AuthProxy',
-    function($scope, $location, AuthProxy) {
+authControllers.controller('UserPageCtrl', ['$scope', '$location', 'AuthProxy', 'Session',
+    function($scope, $location, AuthProxy, Session) {
         var init = function() {
-            checkLogin();
+            $scope.session = AuthProxy.class().getSession();
         };
-        
-        function checkLogin() {
-            AuthProxy.get()
-                    .success(function(user) {
-                        if (angular.isObject(user)) {
-                            $scope.session = {status: "online", user: user};
-                        } else {
-                            $scope.session = {status: "offline"};
-                        }
-                    }).error(function() {
-                console.log("check: error");
-            });
-        };
-        
+
         $scope.logout = function() {
             AuthProxy.logout()
                     .success(function(boolean) {
+                        Session.destroy();
                         $location.path('/login');
                     }).error(function() {
                 console.log("logout: error");
@@ -57,4 +49,5 @@ authControllers.controller('UserPageCtrl', ['$scope', '$location', 'AuthProxy',
         };
         
         init();
-    }]);
+    }
+]);

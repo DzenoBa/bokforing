@@ -80,32 +80,20 @@ public class AuthController {
         
         return form;
     }
-    
+        
     /*
-     * STATUS
-     * Check if the user is online or offline
+     * GET AUTHENTICATION
      */
-    @RequestMapping(value = "/auth/status", method = RequestMethod.GET)
-    public @ResponseBody boolean status() {
-        System.out.println("* PING auth/status");
-
-        return sessionCheck();
-    }
-    
-    /*
-     * GET
-     */
-    @RequestMapping(value = "/auth/get", method = RequestMethod.GET)
-    public @ResponseBody UserJSON get() {
+    @RequestMapping(value = "/auth/getauthentication", method = RequestMethod.GET)
+    public @ResponseBody UserJSON getauthentication() {
         System.out.println("* PING auth/get");
-
+        UserJSON uJSON = new UserJSON();
         if(sessionCheck()) {
-            UserJSON uJSON = new UserJSON();
             uJSON.setEmail(authSession.getEmail());
             uJSON.setLevel(authSession.getLevel());
             return uJSON;
         } else {
-            return null;
+            return uJSON;
         }
     }
     
