@@ -48,21 +48,25 @@ public class PostServiceImpl implements PostService {
     /**
      *
      * @param user
-     * @return
+     * @return balanceSheet, a mapping from account to 
+     *  the sum of all posts using that account.
+     *  Other things needed to create the full balanceSheet is title, period and so on.   
      */
     @Override
-    public Map<Account, Integer> getBalanceSheet(UserAccount user) {
-        Map<Account, Integer> balanceSheet = new HashMap<>();
+    public Map<Account, Double> getBalanceSheet(UserAccount user) {
+        Map<Account, Double> balanceSheet = new HashMap<>();
         List<Account> accounts = accountService.findAllAccounts();
         for (Account account : accounts) {
             if (account.getNumber() >= REVENUE_ACCOUNTS) {
                 return balanceSheet;
             }
             List<Post> posts = repo.findPostsForUserAndAccount(user.getId(), account.getNumber());
-            int balance = 0;
+            double balance = 0;
             for (Post post : posts) {
-                balanceSheet.put(account, balance);
+                balance += post.getPostSum().getSumTotal();
+                
             }
+            balanceSheet.put(account, balance);
         }
         return balanceSheet;
     }
