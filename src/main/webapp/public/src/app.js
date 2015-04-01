@@ -14,7 +14,7 @@ var bok = angular.module('Bok', [
     'UserControllers',
     'DefaultDataControllers',
     'UserService',
-    'PromiseService',
+    'AuthResolverService',
     'BookkeepingControllers',
     'BookkeepingService',
     'DefaultDataService'
@@ -22,81 +22,81 @@ var bok = angular.module('Bok', [
 ]);
 
 
-bok.config(['$routeProvider',
-    function($routeProvider) {  // Injected object $routeProvider
+bok.config(['$routeProvider', 'USER_LEVELS',
+    function($routeProvider, USER_LEVELS) {  // Injected object $routeProvider
         $routeProvider.
                 when('/login', {
                     templateUrl: 'login.html',
-                    controller: 'LoginCtrl'
+                    controller: 'LoginCtrl',
+                    auth: USER_LEVELS.guest
                 }).
                 when('/defaultdata', {
                     templateUrl: 'defaultdata.html',
-                    controller: 'DefaultDataCtrl'
+                    controller: 'DefaultDataCtrl',
+                    auth: USER_LEVELS.all
                 }).
                 when('/userpage', {
                     templateUrl: 'private/userpage.html',
                     controller: 'UserPageCtrl',
-                    auth: true,
+                    auth: USER_LEVELS.user,
                     resolve: {
-                        init: ['PromiseProxy', function(PromiseProxy) {
-                                PromiseProxy.refresh();
-                                return PromiseProxy.promise();
+                        auth: ['AuthResolver', function(AuthResolver) {
+                                return AuthResolver.promise();
                         }]
                     }
                 }).
                 when('/register', {
                     templateUrl: 'register.html',
-                    controller: 'RegisterCtrl'
+                    controller: 'RegisterCtrl',
+                    auth: USER_LEVELS.guest
                 }).
                 when('/passwdreset', {
                     templateUrl: 'passwdreset.html',
-                    controller: 'PasswdResetCtrl'
+                    controller: 'PasswdResetCtrl',
+                    auth: USER_LEVELS.guest
                 }).
                 when('/passwdrecovery', {
                     templateUrl: 'passwdrecovery.html',
-                    controller: 'PasswdRecoveryCtrl'
+                    controller: 'PasswdRecoveryCtrl',
+                    auth: USER_LEVELS.guest
                 }).
                 when('/edituser', {
                     templateUrl: 'private/edituser.html',
                     controller: 'EditUserCtrl',
-                    auth: true,
+                    auth: USER_LEVELS.user,
                     resolve: {
-                        init: ['PromiseProxy', function(PromiseProxy) {
-                                PromiseProxy.refresh();
-                                return PromiseProxy.promise();
+                        auth: ['AuthResolver', function(AuthResolver) {
+                                return AuthResolver.promise();
                         }]
                     }
                 }).
                 when('/manbok', {
                     templateUrl: 'private/manbok.html',
                     controller: 'ManBKCtrl',
-                    auth: true,
+                    auth: USER_LEVELS.user,
                     resolve: {
-                        init: ['PromiseProxy', function(PromiseProxy) {
-                                PromiseProxy.refresh();
-                                return PromiseProxy.promise();
+                        auth: ['AuthResolver', function(AuthResolver) {
+                                return AuthResolver.promise();
                         }]
                     }
                 }).
                 when('/userinfo', {
                     templateUrl: 'private/userinfo.html',
                     controller: 'UserInfoCtrl',
-                    auth: true,
+                    auth: USER_LEVELS.user,
                     resolve: {
-                        init: ['PromiseProxy', function(PromiseProxy) {
-                                PromiseProxy.refresh();
-                                return PromiseProxy.promise();
+                        auth: ['AuthResolver', function(AuthResolver) {
+                                return AuthResolver.promise();
                         }]
                     }
                 }).
                 when('/lstverifications', {
                     templateUrl: 'private/lstverifications.html',
                     controller: 'LstVerCtrl',
-                    auth: true,
+                    auth: USER_LEVELS.user,
                     resolve: {
-                        init: ['PromiseProxy', function(PromiseProxy) {
-                                PromiseProxy.refresh();
-                                return PromiseProxy.promise();
+                        auth: ['AuthResolver', function(AuthResolver) {
+                                return AuthResolver.promise();
                         }]
                     }
                 }).
@@ -106,31 +106,25 @@ bok.config(['$routeProvider',
 
     }]);
 
-bok.run(function($rootScope, $location, $route, $q, AuthProxy, PromiseProxy) {
+bok.run(function($rootScope, $location, $route, AuthProxy, AuthResolver) {
     $rootScope.$on('$routeChangeStart', function (ev, next, current) {
-        function isOnline() {
-            var dfrd = $q.defer();
-            AuthProxy.status()
-                    .success(function(boolean) {
-                        dfrd.resolve(boolean);
-                    }).error(function() {
-                        console.log("isOnline:error");
-                    });
-            return dfrd.promise;
-        };
 
-        isOnline().then(function(value) {
-            AuthProxy.setOnline(value); // Set status
-            var nextPath = $location.path();
-            var nextRoute = $route.routes[nextPath];
-            if(nextRoute && nextRoute.auth && !value) {
-                // USER NOT ONLINE
-                $location.path("/login");
-            } else if (value) {
-                // ENTER HERE ONLY IF YOU'RE ONLINE
-                PromiseProxy.resolve();
-            }
-        });
+        var nextPath = $location.path();
+        var nextRoute = $route.routes[nextPath];
+        
+        // CHECK IF THE SESSION IS DEFINED
+        // IF NOT LOAD SESSION FROM SERVER
+        if(!angular.isDefined(AuthProxy.class().getSession().level)) {
+            AuthProxy.class().getAuthentication().then(function() {
+                // CHECK IF AUTHORIZED
+                if(nextRoute && !AuthProxy.class().isAuthorized(nextRoute.auth)) {
+                    AuthResolver.redirect(AuthProxy.class().getSession().level);
+                }
+            });
+        } // CHECK IF AUTHORIZED 
+        else if(nextRoute && !AuthProxy.class().isAuthorized(nextRoute.auth)) {
+            AuthResolver.redirect(AuthProxy.class().getSession().level);
+        }
     });
 });
 
