@@ -174,9 +174,11 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
 
 bookkeepingControllers.controller('LstVerCtrl', ['$scope', 'BookkeepingProxy',
     function($scope, BookkeepingProxy) {
-        var init = function() {
-            getVerifications();
-        };
+        
+        $scope.verifications = getVerifications();
+        
+        $scope.showverinfoboolean = false;
+        $scope.verinfo = {};
         
         function getVerifications() {
             BookkeepingProxy.getVerifications()
@@ -187,6 +189,11 @@ bookkeepingControllers.controller('LstVerCtrl', ['$scope', 'BookkeepingProxy',
             });
         };
         
-        init();
+        $scope.showverinfo = function(id) {
+            var no_ver_per_page = 20;
+            var array_id = $scope.verifications.length % no_ver_per_page - id;
+            $scope.verinfo = $scope.verifications[array_id];
+            $scope.showverinfoboolean = true;
+        };
     }
 ]);

@@ -90,8 +90,8 @@ bok.config(['$routeProvider', 'USER_LEVELS',
                         }]
                     }
                 }).
-                when('/lstverifications', {
-                    templateUrl: 'private/lstverifications.html',
+                when('/verifications', {
+                    templateUrl: 'private/verifications.html',
                     controller: 'LstVerCtrl',
                     auth: USER_LEVELS.user,
                     resolve: {
