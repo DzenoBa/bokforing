@@ -18,6 +18,6 @@ public interface AccountRepository extends JpaRepository<Account,Long> {
     
     Page<Account> findByNumberBetween(int first, int last, Pageable pageable);
     
-    Page<Account> findByNameLike(String name, Pageable pageable);
+    Page<Account> findByNameLikeIgnoreCase(String name, Pageable pageable);
        
 }

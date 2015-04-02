@@ -137,7 +137,7 @@ public class BookkeepingController {
             // EVERYTHING SEEMS TO BE IN ORDER; CREATE POST
             Post temp_post = new Post();
             temp_post.setAccount(temp_account);
-            temp_post.setSum(temp_postSum);
+            temp_post.setPostSum(temp_postSum);
             
             new_posts.add(temp_post);
         }
