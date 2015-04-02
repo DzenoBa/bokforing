@@ -5,6 +5,7 @@
  */
 package se.chalmers.bokforing.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import se.chalmers.bokforing.service.VerificationService;
@@ -60,6 +61,7 @@ public class VerificationManagerImpl implements VerificationManager {
         Verification ver = new Verification();
         
         for(Post post : posts) {
+            post.setCorrection(false); // safeguard
             post.setVerification(ver);
         }
         
@@ -84,11 +86,15 @@ public class VerificationManagerImpl implements VerificationManager {
 //            return false;
 //        }
         
-        if(getBalance(posts) != 0) {
+        if(!arePostsValid(posts)) {
             return false;
         }
         
         return true;
+    }
+
+    private boolean arePostsValid(List<Post> posts) {
+        return getBalance(posts) == 0;
     }
     
     private double getBalance(List<Post> posts) {
@@ -109,5 +115,55 @@ public class VerificationManagerImpl implements VerificationManager {
         }
         
         return balance;
+    }
+
+    @Override
+    public boolean replacePost(Verification verification, Post oldPost, Post newPost) {
+        List<Post> oldPosts = new ArrayList<>();
+        oldPosts.add(oldPost);
+        
+        List<Post> newPosts = new ArrayList<>();
+        newPosts.add(newPost);
+        
+        return replacePost(verification, oldPosts, newPosts);
+        
+//        List<Post> tempPosts = new ArrayList<>(verification.getPosts());
+//        List<Post> tempPosts = new ArrayList<>(verification.getPosts());
+//        tempPosts.remove(oldPost);
+//        tempPosts.add(newPost);
+//        
+//        if(arePostsValid(tempPosts)) {
+//            oldPost.setCorrection(true); // safeguard
+//            verification.setPosts(tempPosts);
+//            service.save(verification);
+//            return true;
+//        } else {
+//            return false;
+//        }
+    }
+    
+    @Override
+    public boolean replacePost(Verification verification, List<Post> oldPosts, List<Post> newPosts) {
+        List<Post> tempPosts = new ArrayList<>(verification.getPosts());
+        
+        for(Post oldPost : oldPosts) {
+            tempPosts.remove(oldPost);
+        }
+        
+        for(Post newPost : newPosts) {
+            tempPosts.add(newPost);
+        }
+        
+        if(arePostsValid(tempPosts)) {
+            for(Post post : tempPosts) {
+                post.setCorrection(true); // safeguard
+            }
+
+            verification.setPosts(tempPosts);
+            service.save(verification);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

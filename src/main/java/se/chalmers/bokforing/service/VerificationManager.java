@@ -25,4 +25,7 @@ public interface VerificationManager {
     
     Verification createVerification(UserAccount user, long verificationNbr, List<Post> posts, Date transactionDate, Customer customer);
     
+    boolean replacePost(Verification verification, Post oldPost, Post newPost);
+    
+    boolean replacePost(Verification verification, List<Post> oldPosts, List<Post> newPosts);
 }
