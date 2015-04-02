@@ -13,7 +13,7 @@ require(
         'controllers/defaultDataController',
         'services/userServices',
         'services/authServices',
-        'services/promiseService',
+        'services/authHandler',
         'services/bookkeepingService',
         'services/defaultDataService'
         

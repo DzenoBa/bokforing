@@ -3,36 +3,25 @@
 <div>
    
     <h2>User page</h2>
-    <div ng-show="session.status === 'online'">
-        <table class="table">
-            <tr>
-                <td>Status:</td>
-                <td>
-                    {{session.status}}
-                </td>
-            </tr>
-            <tr>
-                <td>Email:</td>
-                <td>
-                    {{session.user.email}}
-                </td>
-            </tr>
-            <tr>
-                <td>Level:</td>
-                <td>
-                    {{session.user.level}}
-                </td>
-            </tr>
-        </table>
-        <div class="btn-group">
-            <input type="button" value="Log out" class="btn btn-primary" ng-click="logout()"/>
-            <a href="#edituser" class="btn btn-default">Edit user</a>
-            <a href="#manbok" class="btn btn-default">Man. bokföring</a>
-            <a href="#userinfo" class="btn btn-default">Användarinformation</a>
-            <a href="#lstverifications" class="btn btn-default">Dina verifikationer</a>
-        </div>
-    </div>
-    <div class="alert alert-danger" ng-show="session.status === 'offline'">
-        Du måste vara inloggad för att visa denna sida!
+    <table class="table">
+        <tr>
+            <td>Email:</td>
+            <td>
+                {{session.email}}
+            </td>
+        </tr>
+        <tr>
+            <td>Level:</td>
+            <td>
+                {{session.level}}
+            </td>
+        </tr>
+    </table>
+    <div class="btn-group">
+        <input type="button" value="Log out" class="btn btn-primary" ng-click="logout()"/>
+        <a href="#edituser" class="btn btn-default">Edit user</a>
+        <a href="#manbok" class="btn btn-default">Man. bokföring</a>
+        <a href="#userinfo" class="btn btn-default">Användarinformation</a>
+        <a href="#verifications" class="btn btn-default">Dina verifikationer</a>
     </div>
 </div>
