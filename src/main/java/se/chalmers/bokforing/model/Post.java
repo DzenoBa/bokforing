@@ -7,6 +7,7 @@ package se.chalmers.bokforing.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,6 +40,13 @@ public class Post implements Serializable {
     
     @ManyToOne
     private Verification verification;
+    
+    @Temporal(TemporalType.DATE)
+    private Date creationDate;
+    
+    /** It it necessary to be able to tell if a post has been corrected.
+     * See 5 kap. 5 § BFL */
+    private boolean correction;
 
     
     /**
@@ -46,13 +54,6 @@ public class Post implements Serializable {
      */
     public PostSum getPostSum() {
         return postSum;
-    }
-
-    /**
-     * @param postSum the postSum to set
-     */
-    public void setSum(PostSum postSum) {
-        this.setPostSum(postSum);
     }
 
     /**
@@ -72,28 +73,6 @@ public class Post implements Serializable {
     @Override
     public String toString() {
         return "Post{" + "id=" + getId() + ", postSum=" + getPostSum() + ", account=" + getAccount() + '}';
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 47 * hash + this.getId();
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Post other = (Post) obj;
-        if (this.getId() != other.getId()) {
-            return false;
-        }
-        return true;
     }
 
     /**
@@ -129,5 +108,71 @@ public class Post implements Serializable {
      */
     public void setVerification(Verification verification) {
         this.verification = verification;
+    }
+
+    /**
+     * @return the creationDate
+     */
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    /**
+     * @param creationDate the creationDate to set
+     */
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    /**
+     * @return the correction
+     */
+    public boolean isCorrection() {
+        return correction;
+    }
+
+    /**
+     * @param correction the correction to set
+     */
+    public void setCorrection(boolean correction) {
+        this.correction = correction;
+    }
+    
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 47 * hash + Objects.hashCode(this.postSum);
+        hash = 47 * hash + Objects.hashCode(this.account);
+        hash = 47 * hash + Objects.hashCode(this.verification);
+        hash = 47 * hash + Objects.hashCode(this.creationDate);
+        hash = 47 * hash + (this.correction ? 1 : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Post other = (Post) obj;
+        if (!Objects.equals(this.postSum, other.postSum)) {
+            return false;
+        }
+        if (!Objects.equals(this.account, other.account)) {
+            return false;
+        }
+        if (!Objects.equals(this.verification, other.verification)) {
+            return false;
+        }
+        if (!Objects.equals(this.creationDate, other.creationDate)) {
+            return false;
+        }
+        if (this.correction != other.correction) {
+            return false;
+        }
+        return true;
     }
 }
