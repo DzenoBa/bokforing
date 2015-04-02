@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -59,17 +60,18 @@ public class PostServiceImpl implements PostService {
      * @param startDate
      * @param endDate
      * @param pageable
-     * @return balanceSheet, a mapping from account to the sum of all posts
-     * using that account and the opening balance. Other things needed to create
-     * the full balanceSheet is title, company name, period and so on.
+     * @return balanceSheet, a mapping from the accounts the user has used to
+     * the sum of all posts during that period and the opening balance. Other
+     * things needed to create the full balanceSheet on the receivers end is
+     * title for the account types, company name, period and so on.
      */
     @Override
-    public Map<Account, List<Double>> getBalanceSheet(UserAccount user, Date startDate, Date endDate, Pageable pageable) {
+    public Map<Account, List<Double>> getBalanceSheet(UserAccount user, Date startDate,
+            Date endDate, Pageable pageable) {
         Map<Account, List<Double>> balanceSheet = new HashMap<>();
-        List<Verification> verifications = verRepo.findByUserAccountAndCreationDateBetween(user, startDate, endDate, pageable).getContent();
-        // May use later perhaps when adding opening balance
-        List<Account> accounts = accountService.findAllAccounts();
-        for (Verification verification : verifications) {
+        List<Verification> givenPeriodVerifications = verRepo.findByUserAccountAndCreationDateBetween(user, startDate, endDate, pageable).getContent();
+
+        for (Verification verification : givenPeriodVerifications) {
             List<Post> posts = verification.getPosts();
             for (Post post : posts) {
                 Account account = post.getAccount();
@@ -82,6 +84,27 @@ public class PostServiceImpl implements PostService {
                     balanceSheet.put(account, balanceList);
                 } else {
                     balanceSheet.get(account).set(0, balanceSheet.get(account).get(0) + post.getPostSum().getSumTotal());
+                }
+            }
+        }
+        Date earlyDate = new Date(00, 00, 00);
+        List<Verification> earlierVerifications = verRepo.findByUserAccountAndCreationDateBetween(user, earlyDate, startDate, pageable).getContent();
+
+        for (Verification verification : earlierVerifications) {
+            List<Post> posts = verification.getPosts();
+            for (Post post : posts) {
+                Account account = post.getAccount();
+                if (account.getNumber() >= REVENUE_ACCOUNTS) {
+                    continue;
+                }
+                if (!balanceSheet.containsKey(account)) {
+                    List<Double> balanceList = new ArrayList<>();
+                    Double periodBalance = 0.0;
+                    balanceList.add(periodBalance);
+                    balanceList.add(post.getPostSum().getSumTotal());
+                    balanceSheet.put(account, balanceList);
+                } else {
+                    balanceSheet.get(account).set(1, balanceSheet.get(account).get(1) + post.getPostSum().getSumTotal());
                 }
             }
         }
