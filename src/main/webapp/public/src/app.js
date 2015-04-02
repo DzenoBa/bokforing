@@ -14,7 +14,7 @@ var bok = angular.module('Bok', [
     'UserControllers',
     'DefaultDataControllers',
     'UserService',
-    'AuthResolverService',
+    'AuthHandlerService',
     'BookkeepingControllers',
     'BookkeepingService',
     'DefaultDataService'
@@ -40,8 +40,8 @@ bok.config(['$routeProvider', 'USER_LEVELS',
                     controller: 'UserPageCtrl',
                     auth: USER_LEVELS.user,
                     resolve: {
-                        auth: ['AuthResolver', function(AuthResolver) {
-                                return AuthResolver.promise();
+                        auth: ['AuthHandler', function(AuthHandler) {
+                                return AuthHandler.promise();
                         }]
                     }
                 }).
@@ -65,8 +65,8 @@ bok.config(['$routeProvider', 'USER_LEVELS',
                     controller: 'EditUserCtrl',
                     auth: USER_LEVELS.user,
                     resolve: {
-                        auth: ['AuthResolver', function(AuthResolver) {
-                                return AuthResolver.promise();
+                        auth: ['AuthHandler', function(AuthHandler) {
+                                return AuthHandler.promise();
                         }]
                     }
                 }).
@@ -75,8 +75,8 @@ bok.config(['$routeProvider', 'USER_LEVELS',
                     controller: 'ManBKCtrl',
                     auth: USER_LEVELS.user,
                     resolve: {
-                        auth: ['AuthResolver', function(AuthResolver) {
-                                return AuthResolver.promise();
+                        auth: ['AuthHandler', function(AuthHandler) {
+                                return AuthHandler.promise();
                         }]
                     }
                 }).
@@ -85,18 +85,18 @@ bok.config(['$routeProvider', 'USER_LEVELS',
                     controller: 'UserInfoCtrl',
                     auth: USER_LEVELS.user,
                     resolve: {
-                        auth: ['AuthResolver', function(AuthResolver) {
-                                return AuthResolver.promise();
+                        auth: ['AuthHandler', function(AuthHandler) {
+                                return AuthHandler.promise();
                         }]
                     }
                 }).
-                when('/lstverifications', {
-                    templateUrl: 'private/lstverifications.html',
+                when('/verifications', {
+                    templateUrl: 'private/verifications.html',
                     controller: 'LstVerCtrl',
                     auth: USER_LEVELS.user,
                     resolve: {
-                        auth: ['AuthResolver', function(AuthResolver) {
-                                return AuthResolver.promise();
+                        auth: ['AuthHandler', function(AuthHandler) {
+                                return AuthHandler.promise();
                         }]
                     }
                 }).
@@ -106,7 +106,7 @@ bok.config(['$routeProvider', 'USER_LEVELS',
 
     }]);
 
-bok.run(function($rootScope, $location, $route, AuthProxy, AuthResolver) {
+bok.run(function($rootScope, $location, $route, AuthProxy, AuthHandler) {
     $rootScope.$on('$routeChangeStart', function (ev, next, current) {
 
         var nextPath = $location.path();
@@ -118,12 +118,12 @@ bok.run(function($rootScope, $location, $route, AuthProxy, AuthResolver) {
             AuthProxy.class().getAuthentication().then(function() {
                 // CHECK IF AUTHORIZED
                 if(nextRoute && !AuthProxy.class().isAuthorized(nextRoute.auth)) {
-                    AuthResolver.redirect(AuthProxy.class().getSession().level);
+                    AuthHandler.redirect(AuthProxy.class().getSession().level);
                 }
             });
         } // CHECK IF AUTHORIZED 
         else if(nextRoute && !AuthProxy.class().isAuthorized(nextRoute.auth)) {
-            AuthResolver.redirect(AuthProxy.class().getSession().level);
+            AuthHandler.redirect(AuthProxy.class().getSession().level);
         }
     });
 });
