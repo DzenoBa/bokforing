@@ -6,14 +6,13 @@
 package se.chalmers.bokforing.model;
 
 import java.io.Serializable;
-import javax.persistence.CascadeType;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 /**
  *
@@ -21,7 +20,7 @@ import javax.persistence.OneToOne;
  */
 @Entity
 public class PostSum implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
@@ -71,5 +70,31 @@ public class PostSum implements Serializable {
      */
     public void setSumTotal(double sumTotal) {
         this.sumTotal = sumTotal;
+    }
+    
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 41 * hash + (int) (Double.doubleToLongBits(this.sumTotal) ^ (Double.doubleToLongBits(this.sumTotal) >>> 32));
+        hash = 41 * hash + Objects.hashCode(this.type);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final PostSum other = (PostSum) obj;
+        if (Double.doubleToLongBits(this.sumTotal) != Double.doubleToLongBits(other.sumTotal)) {
+            return false;
+        }
+        if (this.type != other.type) {
+            return false;
+        }
+        return true;
     }
 }

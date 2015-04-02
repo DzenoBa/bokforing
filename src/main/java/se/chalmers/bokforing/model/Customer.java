@@ -7,6 +7,7 @@ package se.chalmers.bokforing.model;
 
 import se.chalmers.bokforing.model.user.UserAccount;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -124,6 +125,44 @@ public class Customer implements Serializable {
      */
     public void setUserAccount(UserAccount userAccount) {
         this.userAccount = userAccount;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 59 * hash + Objects.hashCode(this.customerNumber);
+        hash = 59 * hash + Objects.hashCode(this.name);
+        hash = 59 * hash + Objects.hashCode(this.phoneNumber);
+        hash = 59 * hash + Objects.hashCode(this.address);
+        hash = 59 * hash + Objects.hashCode(this.userAccount);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Customer other = (Customer) obj;
+        if (!Objects.equals(this.customerNumber, other.customerNumber)) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.phoneNumber, other.phoneNumber)) {
+            return false;
+        }
+        if (!Objects.equals(this.address, other.address)) {
+            return false;
+        }
+        if (!Objects.equals(this.userAccount, other.userAccount)) {
+            return false;
+        }
+        return true;
     }
     
     
