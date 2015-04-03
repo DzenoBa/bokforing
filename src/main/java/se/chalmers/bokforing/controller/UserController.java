@@ -20,7 +20,7 @@ import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.user.UserGroup;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.model.user.UserInfo;
-import se.chalmers.bokforing.service.UserManager;
+import se.chalmers.bokforing.service.user.UserManager;
 import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.service.AccessKeyManager;
 import se.chalmers.bokforing.service.AccessKeyService;

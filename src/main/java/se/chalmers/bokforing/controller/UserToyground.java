@@ -21,7 +21,7 @@ import se.chalmers.bokforing.model.user.UserGroup;
 import se.chalmers.bokforing.model.user.UserInfo;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.persistence.user.UserService;
-import se.chalmers.bokforing.service.UserManager;
+import se.chalmers.bokforing.service.user.UserManager;
 import se.chalmers.bokforing.session.AuthSession;
 import se.chalmers.bokforing.util.PasswordUtil;
 
