@@ -111,4 +111,41 @@ public class PostServiceImpl implements PostService {
         return balanceSheet;
     }
 
+    /**
+     *
+     * @param user
+     * @param startDate
+     * @param endDate
+     * @param pageable
+     * @return incomeStatement, a mapping from the accounts the user has used to
+     * the sum of all posts during that period. Other things needed to create
+     * the full balanceSheet on the receivers end is title for the account
+     * types, company name, period and so on.
+     */
+    @Override
+    public Map<Account, List<Double>> getIncomeStatement(UserAccount user, Date startDate,
+            Date endDate, Pageable pageable) {
+        Map<Account, List<Double>> incomeStatement = new HashMap<>();
+        List<Verification> verifications = verRepo.findByUserAccountAndCreationDateBetween(user, startDate, endDate, pageable).getContent();
+
+        for (Verification verification : verifications) {
+            List<Post> posts = verification.getPosts();
+            for (Post post : posts) {
+                Account account = post.getAccount();
+                if (account.getNumber() < REVENUE_ACCOUNTS) {
+                    continue;
+                }
+                if (!incomeStatement.containsKey(account)) {
+                    List<Double> balanceList = new ArrayList<>();
+                    balanceList.add(post.getPostSum().getSumTotal());
+                    incomeStatement.put(account, balanceList);
+                } else {
+                    incomeStatement.get(account).set(0, incomeStatement.get(account).get(0) + post.getPostSum().getSumTotal());
+                }
+            }
+        }
+               
+        return incomeStatement;
+    }
+
 }

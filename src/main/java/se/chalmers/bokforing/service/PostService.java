@@ -23,4 +23,5 @@ public interface PostService {
 
     Map<Account, List<Double>> getBalanceSheet(UserAccount user, Date startDate, Date endDate, Pageable pageable);
 
+    Map<Account, List<Double>> getIncomeStatement(UserAccount user, Date startDate,Date endDate, Pageable pageable);
 }
