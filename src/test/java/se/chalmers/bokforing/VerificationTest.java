@@ -43,6 +43,7 @@ import se.chalmers.bokforing.service.AccountManager;
 import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.service.AccountService;
 import se.chalmers.bokforing.service.CustomerManager;
+import se.chalmers.bokforing.service.PostManager;
 import se.chalmers.bokforing.service.PostService;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.VerificationService;
@@ -89,6 +90,9 @@ public class VerificationTest extends AbstractIntegrationTest {
     
     @Autowired
     PostService postService;
+    
+    @Autowired
+    PostManager postManager;
     
     private UserAccount user;
     
@@ -261,6 +265,7 @@ public class VerificationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @Transactional
     public void testGeneralLedger() {
         createVerificationHelper();
         Account accountFromDb = accountService.findAccountByNumber(2018);
@@ -279,6 +284,7 @@ public class VerificationTest extends AbstractIntegrationTest {
         assertEquals(4, generalLedger.get(accountFromDb).size());
     }
     
+    @Transactional
     public void createVerificationHelper() {
         double sum1Amount = 100;
         double sum2Amount = 100;
@@ -311,19 +317,19 @@ public class VerificationTest extends AbstractIntegrationTest {
         customer.setName("Jakob");
         customer.setPhoneNumber("031132314");
         
-        Post post = new Post();
+        Post post = postManager.createPost(sum, account);
         post.setPostSum(sum);
         post.setAccount(account);
         
-        Post post2 = new Post();
+        Post post2 = postManager.createPost(sum2, account);
         post2.setPostSum(sum2);
         post2.setAccount(account);
 
-        Post post3 = new Post();
+        Post post3 = postManager.createPost(sum3, account);
         post3.setPostSum(sum3);
         post3.setAccount(account);
         
-        Post post4 = new Post();
+        Post post4 = postManager.createPost(sum4, account);
         post4.setPostSum(sum4);
         post4.setAccount(account);
         
@@ -354,14 +360,18 @@ public class VerificationTest extends AbstractIntegrationTest {
         
         createVerificationHelper();
         
+        
         // Fail case, this won't work, balance will not be zero
         Verification ver = service.findByUserAndVerificationNumber(user, verificationNumber);
+        
+        // Saved for later
+        List<Post> originalPosts = ver.getPosts();
         
         PostSum postSum = new PostSum();
         postSum.setSumTotal(50);
         postSum.setType(PostType.Debit);
         
-        Post newPost = new Post();
+        Post newPost = postManager.createPost(postSum, account);
         newPost.setPostSum(postSum);
         newPost.setAccount(account);
         newPost.setCorrection(true);
@@ -371,6 +381,7 @@ public class VerificationTest extends AbstractIntegrationTest {
         boolean success = manager.replacePost(ver, postToReplace, newPost);
         assertFalse(success);
         
+        
         // Success case, replacing with same data
         ver = service.findByUserAndVerificationNumber(user, verificationNumber);
         
@@ -378,7 +389,7 @@ public class VerificationTest extends AbstractIntegrationTest {
         postSum2.setSumTotal(100);
         postSum2.setType(PostType.Credit);
         
-        Post newPost2 = new Post();
+        Post newPost2 = postManager.createPost(postSum2, account);
         newPost2.setPostSum(postSum2);
         newPost2.setAccount(account);
         newPost2.setCorrection(true);
@@ -387,32 +398,30 @@ public class VerificationTest extends AbstractIntegrationTest {
         boolean success2 = manager.replacePost(ver, postToReplace2, newPost2);
         assertTrue(success2);
         
-        // Set it back to the way it was
-        assertTrue(manager.replacePost(ver, newPost2, postToReplace2));
+        // Set it back to the way it was, i.e. swap the posts back again
+        // This is a bit hacky
+        postToReplace2.setActive(true);
+        ver.getPosts().remove(newPost2);
+        service.save(ver);
         
-        // Replace both posts
+        
+        // Verification now contains four posts, replace all of them
         ver = service.findByUserAndVerificationNumber(user, verificationNumber);
         
         PostSum postSum3 = new PostSum();
         postSum3.setSumTotal(40);
         postSum3.setType(PostType.Credit);
-        
-        Post newPost3 = new Post();
-        newPost3.setPostSum(postSum3);
-        newPost3.setAccount(account);
-        newPost3.setCorrection(true);
+        Post newPost3 = postManager.createPost(postSum3, account);
         
         PostSum postSum4 = new PostSum();
         postSum4.setSumTotal(40);
         postSum4.setType(PostType.Debit);
-        
-        Post newPost4 = new Post();
-        newPost4.setPostSum(postSum4);
-        newPost4.setAccount(account);
-        newPost4.setCorrection(true);
+        Post newPost4 = postManager.createPost(postSum4, account);
         
         List<Post> postsToReplaceList = ver.getPosts();
-        List<Post> newPostsList = Arrays.asList(newPost3, newPost4);
+        
+        // Add back all posts
+        List<Post> newPostsList = Arrays.asList(originalPosts.get(0), originalPosts.get(1), newPost3, newPost4);
         boolean success3 = manager.replacePost(ver, postsToReplaceList, newPostsList);
         assertTrue(success3);
         

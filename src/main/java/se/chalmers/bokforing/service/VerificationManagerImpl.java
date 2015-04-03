@@ -50,13 +50,7 @@ public class VerificationManagerImpl implements VerificationManager {
             return null;
         }
         
-        Date todaysDate = new Date();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(todaysDate);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
+        Date todaysDate = DateUtil.getTodaysDate();
         
         Verification ver = new Verification();
         
@@ -75,6 +69,7 @@ public class VerificationManagerImpl implements VerificationManager {
         
         return ver;
     }
+
 
     private boolean isVerificationValid(UserAccount user, long verificationNumber, List<Post> posts, Date transactionDate) {
         /*if(DateUtil.isDateBeforeToday(transactionDate)) {
@@ -101,15 +96,17 @@ public class VerificationManagerImpl implements VerificationManager {
         double balance = 0;
         
         for(Post post : posts) {
-            PostSum sum = post.getPostSum();
-            if(sum != null && sum.getType() != null) {
-                switch(sum.getType()) {
-                    case Credit:
-                        balance -= sum.getSumTotal();
-                        break;
-                    case Debit:
-                        balance += sum.getSumTotal();
-                        break;
+            if(post.isActive()) { // we only care about ones that haven't been replaced
+                PostSum sum = post.getPostSum();
+                if(sum != null && sum.getType() != null) {
+                    switch(sum.getType()) {
+                        case Credit:
+                            balance -= sum.getSumTotal();
+                            break;
+                        case Debit:
+                            balance += sum.getSumTotal();
+                            break;
+                    }
                 }
             }
         }
@@ -126,37 +123,24 @@ public class VerificationManagerImpl implements VerificationManager {
         newPosts.add(newPost);
         
         return replacePost(verification, oldPosts, newPosts);
-        
-//        List<Post> tempPosts = new ArrayList<>(verification.getPosts());
-//        List<Post> tempPosts = new ArrayList<>(verification.getPosts());
-//        tempPosts.remove(oldPost);
-//        tempPosts.add(newPost);
-//        
-//        if(arePostsValid(tempPosts)) {
-//            oldPost.setCorrection(true); // safeguard
-//            verification.setPosts(tempPosts);
-//            service.save(verification);
-//            return true;
-//        } else {
-//            return false;
-//        }
     }
     
     @Override
     public boolean replacePost(Verification verification, List<Post> oldPosts, List<Post> newPosts) {
         List<Post> tempPosts = new ArrayList<>(verification.getPosts());
         
-        for(Post oldPost : oldPosts) {
-            tempPosts.remove(oldPost);
-        }
-        
         for(Post newPost : newPosts) {
             tempPosts.add(newPost);
         }
         
+        for(Post oldPost: oldPosts) {
+            // Posts to be replaced should no longer be active
+            oldPost.setActive(false);
+        }
+        
         if(arePostsValid(tempPosts)) {
             for(Post post : tempPosts) {
-                post.setCorrection(true); // safeguard
+                post.setCorrection(true);
             }
 
             verification.setPosts(tempPosts);
