@@ -9,10 +9,9 @@
 
 var authService = angular.module('AuthService', []);
 
-authService.factory('AuthProxy', ['$http', '$q','Session', 'USER_LEVELS',
-    function($http, $q, Session, USER_LEVELS) {
-        var url = 'http://localhost:8080/bokforing/auth';
-        
+authService.factory('AuthProxy', ['$http', '$q','Session', '$location', 'USER_LEVELS',
+    function($http, $q, Session, $location, USER_LEVELS) {
+        var url = '//localhost:'+$location.port()+'/bokforing/auth';
         var authService = {};
         
         /**

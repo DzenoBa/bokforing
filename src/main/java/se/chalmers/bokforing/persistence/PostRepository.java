@@ -6,6 +6,8 @@
 package se.chalmers.bokforing.persistence;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,6 +25,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             + "where p.verification.userAccount.id = :userId "
             + "and p.account.number = :accountNumber"
     )
-    List<Post> findPostsForUserAndAccount(@Param("userId") long userId, @Param("accountNumber") int accountNumber);
+    Page<Post> findPostsForUserAndAccount(@Param("userId") long userId, @Param("accountNumber") int accountNumber, Pageable pageable);
     
 }

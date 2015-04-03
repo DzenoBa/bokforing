@@ -70,8 +70,8 @@ bok.config(['$routeProvider', 'USER_LEVELS',
                         }]
                     }
                 }).
-                when('/manbok', {
-                    templateUrl: 'private/manbok.html',
+                when('/bookkeeping', {
+                    templateUrl: 'private/bookkeeping.html',
                     controller: 'ManBKCtrl',
                     auth: USER_LEVELS.user,
                     resolve: {

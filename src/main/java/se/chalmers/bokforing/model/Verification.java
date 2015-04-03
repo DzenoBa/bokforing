@@ -8,6 +8,7 @@ package se.chalmers.bokforing.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -158,6 +159,45 @@ public class Verification implements Serializable {
      */
     public void setVerificationNumber(long verificationNumber) {
         this.verificationNumber = verificationNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.userAccount);
+        hash = 59 * hash + Objects.hashCode(this.verificationNumber);
+        hash = 59 * hash + Objects.hashCode(this.posts);
+        hash = 59 * hash + Objects.hashCode(this.transactionDate);
+        hash = 59 * hash + Objects.hashCode(this.creationDate);
+        hash = 59 * hash + Objects.hashCode(this.customer);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Verification other = (Verification) obj;
+        if (!Objects.equals(this.userAccount, other.userAccount)) {
+            return false;
+        }
+        if (!Objects.equals(this.verificationNumber, other.verificationNumber)) {
+            return false;
+        }
+        if (!Objects.equals(this.transactionDate, other.transactionDate)) {
+            return false;
+        }
+        if (!Objects.equals(this.creationDate, other.creationDate)) {
+            return false;
+        }
+        if (!Objects.equals(this.customer, other.customer)) {
+            return false;
+        }
+        return true;
     }
     
     

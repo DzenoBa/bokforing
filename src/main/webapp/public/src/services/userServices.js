@@ -8,9 +8,9 @@
 
 var userService = angular.module('UserService', []);
 
-userService.factory('UserProxy', ['$http',
-    function($http) {
-       var url = 'http://localhost:8080/bokforing/user';
+userService.factory('UserProxy', ['$http', '$location',
+    function($http, $location) {
+       var url = '//localhost:'+$location.port()+'/bokforing/user';
         return {
             create: function(user) {
                 return $http.post(url + '/create', user);

@@ -6,6 +6,7 @@
 package se.chalmers.bokforing;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +43,7 @@ import se.chalmers.bokforing.service.AccountManager;
 import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.service.AccountService;
 import se.chalmers.bokforing.service.CustomerManager;
+import se.chalmers.bokforing.service.PostManager;
 import se.chalmers.bokforing.service.PostService;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.VerificationService;
@@ -88,6 +90,9 @@ public class VerificationTest extends AbstractIntegrationTest {
     
     @Autowired
     PostService postService;
+    
+    @Autowired
+    PostManager postManager;
     
     private UserAccount user;
     
@@ -137,19 +142,19 @@ public class VerificationTest extends AbstractIntegrationTest {
         customer.setPhoneNumber("031132314");
         
         Post post = new Post();
-        post.setSum(sum);
+        post.setPostSum(sum);
         post.setAccount(account);
         
         Post post2 = new Post();
-        post2.setSum(sum2);
+        post2.setPostSum(sum2);
         post2.setAccount(account);
 
         Post post3 = new Post();
-        post3.setSum(sum3);
+        post3.setPostSum(sum3);
         post3.setAccount(account);
         
         Post post4 = new Post();
-        post4.setSum(sum4);
+        post4.setPostSum(sum4);
         post4.setAccount(account);
         
         ArrayList<Post> postList = new ArrayList<>();
@@ -260,11 +265,13 @@ public class VerificationTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @Transactional
     public void testGeneralLedger() {
         createVerificationHelper();
         Account accountFromDb = accountService.findAccountByNumber(2018);
 
-        List<Post> posts = postRepository.findPostsForUserAndAccount(user.getId(), accountFromDb.getNumber());
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate");
+        List<Post> posts = postService.findPostsForUserAndAccount(user, accountFromDb, terms).getContent();
         assertEquals(4, posts.size());
         
         long begin = System.currentTimeMillis();
@@ -278,6 +285,7 @@ public class VerificationTest extends AbstractIntegrationTest {
         assertEquals(4, generalLedger.get(accountFromDb).size());
     }
     
+    @Transactional
     public void createVerificationHelper() {
         double sum1Amount = 100;
         double sum2Amount = 100;
@@ -310,20 +318,20 @@ public class VerificationTest extends AbstractIntegrationTest {
         customer.setName("Jakob");
         customer.setPhoneNumber("031132314");
         
-        Post post = new Post();
-        post.setSum(sum);
+        Post post = postManager.createPost(sum, account);
+        post.setPostSum(sum);
         post.setAccount(account);
         
-        Post post2 = new Post();
-        post2.setSum(sum2);
+        Post post2 = postManager.createPost(sum2, account);
+        post2.setPostSum(sum2);
         post2.setAccount(account);
 
-        Post post3 = new Post();
-        post3.setSum(sum3);
+        Post post3 = postManager.createPost(sum3, account);
+        post3.setPostSum(sum3);
         post3.setAccount(account);
         
-        Post post4 = new Post();
-        post4.setSum(sum4);
+        Post post4 = postManager.createPost(sum4, account);
+        post4.setPostSum(sum4);
         post4.setAccount(account);
         
         ArrayList<Post> postList = new ArrayList<>();
@@ -343,5 +351,88 @@ public class VerificationTest extends AbstractIntegrationTest {
         
         Verification verificationFromDb = service.findByUserAndVerificationNumber(user, verNbr);
         assertNotNull(verificationFromDb);
+    }
+    
+    @Test
+    @Transactional
+    public void testReplacePost() {
+        Long verificationNumber = 7372L;
+        Account account = accountManager.createAccount(2018, "Egna insättningar");
+        
+        createVerificationHelper();
+        
+        
+        // Fail case, this won't work, balance will not be zero
+        Verification ver = service.findByUserAndVerificationNumber(user, verificationNumber);
+        
+        // Saved for later
+        List<Post> originalPosts = ver.getPosts();
+        
+        PostSum postSum = new PostSum();
+        postSum.setSumTotal(50);
+        postSum.setType(PostType.Debit);
+        
+        Post newPost = postManager.createPost(postSum, account);
+        newPost.setPostSum(postSum);
+        newPost.setAccount(account);
+        newPost.setCorrection(true);
+        
+        List<Post> verificationPosts = ver.getPosts();
+        Post postToReplace = verificationPosts.get(0);
+        boolean success = manager.replacePost(ver, postToReplace, newPost);
+        assertFalse(success);
+        
+        
+        // Success case, replacing with same data
+        ver = service.findByUserAndVerificationNumber(user, verificationNumber);
+        
+        PostSum postSum2 = new PostSum();
+        postSum2.setSumTotal(100);
+        postSum2.setType(PostType.Credit);
+        
+        Post newPost2 = postManager.createPost(postSum2, account);
+        newPost2.setPostSum(postSum2);
+        newPost2.setAccount(account);
+        newPost2.setCorrection(true);
+        
+        Post postToReplace2 = verificationPosts.get(0);
+        boolean success2 = manager.replacePost(ver, postToReplace2, newPost2);
+        assertTrue(success2);
+        
+        // Set it back to the way it was, i.e. swap the posts back again
+        // This is a bit hacky
+        postToReplace2.setActive(true);
+        ver.getPosts().remove(newPost2);
+        service.save(ver);
+        
+        
+        // Verification now contains four posts, replace all of them
+        ver = service.findByUserAndVerificationNumber(user, verificationNumber);
+        
+        PostSum postSum3 = new PostSum();
+        postSum3.setSumTotal(40);
+        postSum3.setType(PostType.Credit);
+        Post newPost3 = postManager.createPost(postSum3, account);
+        
+        PostSum postSum4 = new PostSum();
+        postSum4.setSumTotal(40);
+        postSum4.setType(PostType.Debit);
+        Post newPost4 = postManager.createPost(postSum4, account);
+        
+        List<Post> postsToReplaceList = ver.getPosts();
+        
+        // Add back all posts
+        List<Post> newPostsList = Arrays.asList(originalPosts.get(0), originalPosts.get(1), newPost3, newPost4);
+        boolean success3 = manager.replacePost(ver, postsToReplaceList, newPostsList);
+        assertTrue(success3);
+        
+        // Need to make sure they are all marked as corrected
+        List<Post> postsFromDb = service.findByUserAndVerificationNumber(user, verificationNumber).getPosts();
+        for(Post post : postsFromDb) {
+            assertTrue(post.isCorrection());
+        }
+        
+        // Make sure posts were actually inserted
+        assertEquals(newPostsList.get(0), postsFromDb.get(0));
     }
 }

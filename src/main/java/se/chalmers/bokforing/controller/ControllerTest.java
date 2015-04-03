@@ -44,7 +44,7 @@ public class ControllerTest {
 
         Post post = new Post();
         //post.setPostDate(cal.getTime());
-        post.setSum(sum);
+        post.setPostSum(sum);
         post.setAccount(account);
 
         ArrayList<Post> postList = new ArrayList<>();

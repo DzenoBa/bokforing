@@ -55,6 +55,7 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$
         
         $scope.removeRow = function(index) {
             $scope.verification.posts.splice(index, 1);
+            $scope.accountls.splice(index, 1);
             $scope.rows = $scope.rows-1;
         };
         
@@ -86,8 +87,19 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$
             });
 
             modalInstance.result.then(function (selectedAccount) {
-                $scope.verification.posts[index].accountid = selectedAccount.number;
-                $scope.accountls[index] = selectedAccount.number + ' - ' + selectedAccount.name;
+                if(!angular.isDefined(index)) {
+                    $scope.showaccount = selectedAccount.number + ' - ' + selectedAccount.name;
+                    var tempaccount = {number: selectedAccount.number};
+                    BookkeepingProxy.getVerificationsByAccount(tempaccount)
+                            .success(function(verifications) {
+                                $scope.verifications = verifications;
+                            }).error(function() {
+                                console.log('error: getVerificationsByAccount');
+                            });
+                } else {
+                    $scope.verification.posts[index].accountid = selectedAccount.number;
+                    $scope.accountls[index] = selectedAccount.number + ' - ' + selectedAccount.name;
+                }
             });
         };
                 

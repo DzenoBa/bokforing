@@ -22,12 +22,14 @@ import se.chalmers.bokforing.model.PostType;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.model.user.UserHandler;
+import se.chalmers.bokforing.persistence.PostRepository;
 import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.CustomerService;
 import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.service.AccountManager;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.AccountService;
+import se.chalmers.bokforing.service.PostService;
 import se.chalmers.bokforing.service.VerificationService;
 import se.chalmers.bokforing.session.AuthSession;
 
@@ -61,6 +63,9 @@ public class BookkeepingController {
     
     @Autowired
     private AccountManager accountManager;
+    
+    @Autowired
+    private PostService postService; //TODO
     
     /*
      * CREATE
@@ -137,7 +142,7 @@ public class BookkeepingController {
             // EVERYTHING SEEMS TO BE IN ORDER; CREATE POST
             Post temp_post = new Post();
             temp_post.setAccount(temp_account);
-            temp_post.setSum(temp_postSum);
+            temp_post.setPostSum(temp_postSum);
             
             new_posts.add(temp_post);
         }
@@ -211,6 +216,50 @@ public class BookkeepingController {
         
         List<Verification> verLs = verPage.getContent();
         
+        verJSONLs = convertToVerificationJSONLs(verLs);
+        return verJSONLs;
+    }
+    
+    @RequestMapping(value = "/bookkeeping/getverificationsbyaccount", method = RequestMethod.POST)
+    public @ResponseBody List<VerificationJSON> getVerificationByAccount(@RequestBody final AccountJSON account) {
+        
+        List<VerificationJSON> verJSONLs = new ArrayList();
+        
+        if(!authSession.sessionCheck()) {
+            return verJSONLs;
+        } 
+        UserHandler userHandler = userService.getUser(authSession.getEmail());
+        
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, null);
+        Account entityAccount = new Account();
+        entityAccount.setNumber(account.getNumber());
+        List<Post> postLs = postService.findPostsForUserAndAccount(userHandler.getUA(), entityAccount, terms).getContent();
+        
+        int i = 0; // TODO
+        List<Verification> verLs = new ArrayList();
+        for(Post post : postLs) {
+            verLs.add(post.getVerification());
+            i++;
+            if(i>=20)
+                break; // TODO
+        }
+        verJSONLs = convertToVerificationJSONLs(verLs);
+        
+        return verJSONLs;
+    }
+    
+    /**
+     * CONVERT TO VERIFICATIONJSON LIST
+     * 
+     * Takes a Verification-List and
+     * converts it to a VerificationJSON-List
+     * 
+     * @param verLs
+     * @return 
+     */
+    public List<VerificationJSON> convertToVerificationJSONLs(List<Verification> verLs) {
+        List<VerificationJSON> verJSONLs = new ArrayList();
+        
         // TRANSLATE VERIFICATION TO VERIFICATION JSON
         for (Verification ver : verLs) {
             VerificationJSON verJSON = new VerificationJSON();
@@ -248,6 +297,7 @@ public class BookkeepingController {
             
             verJSONLs.add(verJSON);
         }
+        
         return verJSONLs;
     }
 }
