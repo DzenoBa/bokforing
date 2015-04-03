@@ -44,9 +44,12 @@ public class Post implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date creationDate;
     
-    /** It it necessary to be able to tell if a post has been corrected.
+    /** It it necessary to be able to tell if a Post has been corrected.
      * See 5 kap. 5 § BFL */
     private boolean correction;
+    
+    /** So we know which Posts to use for validation. */
+    private boolean active;
 
     
     /**
@@ -141,11 +144,11 @@ public class Post implements Serializable {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 47 * hash + Objects.hashCode(this.postSum);
-        hash = 47 * hash + Objects.hashCode(this.account);
-        hash = 47 * hash + Objects.hashCode(this.verification);
-        hash = 47 * hash + Objects.hashCode(this.creationDate);
-        hash = 47 * hash + (this.correction ? 1 : 0);
+        hash = 47 * hash + Objects.hashCode(this.getPostSum());
+        hash = 47 * hash + Objects.hashCode(this.getAccount());
+        hash = 47 * hash + Objects.hashCode(this.getVerification());
+        hash = 47 * hash + Objects.hashCode(this.getCreationDate());
+        hash = 47 * hash + (this.isCorrection() ? 1 : 0);
         return hash;
     }
 
@@ -170,9 +173,26 @@ public class Post implements Serializable {
         if (!Objects.equals(this.creationDate, other.creationDate)) {
             return false;
         }
-        if (this.correction != other.correction) {
+        if (this.isCorrection() != other.isCorrection()) {
+            return false;
+        }
+        if (this.isActive() != other.isActive()) {
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return the active
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * @param active the active to set
+     */
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

@@ -45,6 +45,13 @@ public class PostServiceImpl implements PostService {
         
         return generalLedger;
     }
+
+    @Override
+    public void save(Post post) {
+        if(post != null) {
+            repo.save(post);
+        }
+    }
     
     
     
