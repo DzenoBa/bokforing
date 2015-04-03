@@ -29,6 +29,16 @@ authControllers.controller('LoginCtrl', ['$scope',
                 });
             }
         };
+        
+        function changeprotocol() {
+            if(angular.equals($location.$$protocol, 'http')) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+        
+        $scope.changeprotocol = changeprotocol();
     }
 ]);
 

@@ -5,18 +5,23 @@
  */
 package se.chalmers.bokforing.service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.Post;
+import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.persistence.PostRepository;
+import se.chalmers.bokforing.persistence.VerificationRepository;
+import static se.chalmers.bokforing.util.Constants.REVENUE_ACCOUNTS;
 
 /**
  *
@@ -27,32 +32,89 @@ import se.chalmers.bokforing.persistence.PostRepository;
 public class PostServiceImpl implements PostService {
 
     @Autowired
-    private PostRepository repo;
-    
+    private PostRepository postRepo;
+
+    @Autowired
+    private VerificationRepository verRepo;
+
     @Autowired
     private AccountService accountService;
-    
+
     @Override
     public Map<Account, List<Post>> getGeneralLedger(UserAccount user) {
         Map<Account, List<Post>> generalLedger = new HashMap<>();
-        
+
         List<Account> accounts = accountService.findAllAccounts();
-        for(Account account : accounts) {
-            List<Post> posts = repo.findPostsForUserAndAccount(user.getId(), account.getNumber());
-            
+        for (Account account : accounts) {
+            List<Post> posts = postRepo.findPostsForUserAndAccount(user.getId(), account.getNumber());
+
             generalLedger.put(account, posts);
         }
-        
+
         return generalLedger;
     }
 
     @Override
     public void save(Post post) {
         if(post != null) {
-            repo.save(post);
+            postRepo.save(post);
         }
     }
     
-    
-    
+    /**
+     *
+     * @param user
+     * @param startDate
+     * @param endDate
+     * @param pageable
+     * @return balanceSheet, a mapping from the accounts the user has used to
+     * the sum of all posts during that period and the opening balance. Other
+     * things needed to create the full balanceSheet on the receivers end is
+     * title for the account types, company name, period and so on.
+     */
+    @Override
+    public Map<Account, List<Double>> getBalanceSheet(UserAccount user, Date startDate,
+            Date endDate, Pageable pageable) {
+        Map<Account, List<Double>> balanceSheet = new HashMap<>();
+        List<Verification> givenPeriodVerifications = verRepo.findByUserAccountAndCreationDateBetween(user, startDate, endDate, pageable).getContent();
+
+        for (Verification verification : givenPeriodVerifications) {
+            List<Post> posts = verification.getPosts();
+            for (Post post : posts) {
+                Account account = post.getAccount();
+                if (account.getNumber() >= REVENUE_ACCOUNTS) {
+                    continue;
+                }
+                if (!balanceSheet.containsKey(account)) {
+                    List<Double> balanceList = new ArrayList<>();
+                    balanceList.add(post.getPostSum().getSumTotal());
+                    balanceSheet.put(account, balanceList);
+                } else {
+                    balanceSheet.get(account).set(0, balanceSheet.get(account).get(0) + post.getPostSum().getSumTotal());
+                }
+            }
+        }
+        Date earlyDate = new Date(00, 00, 00);
+        List<Verification> earlierVerifications = verRepo.findByUserAccountAndCreationDateBetween(user, earlyDate, startDate, pageable).getContent();
+
+        for (Verification verification : earlierVerifications) {
+            List<Post> posts = verification.getPosts();
+            for (Post post : posts) {
+                Account account = post.getAccount();
+                if (account.getNumber() >= REVENUE_ACCOUNTS) {
+                    continue;
+                }
+                if (!balanceSheet.containsKey(account)) {
+                    List<Double> balanceList = new ArrayList<>();
+                    Double periodBalance = 0.0;
+                    balanceList.add(periodBalance);
+                    balanceList.add(post.getPostSum().getSumTotal());
+                    balanceSheet.put(account, balanceList);
+                } else {
+                    balanceSheet.get(account).set(1, balanceSheet.get(account).get(1) + post.getPostSum().getSumTotal());
+                }
+            }
+        }
+        return balanceSheet;
+    }
 }

@@ -5,22 +5,24 @@
  */
 package se.chalmers.bokforing.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.user.UserAccount;
+import org.springframework.data.domain.Pageable;
 
 /**
  *
  * @author Jakob
  */
 public interface PostService {
-    
+
     Map<Account, List<Post>> getGeneralLedger(UserAccount user);
     
     void save(Post post);
     
+    Map<Account, List<Double>> getBalanceSheet(UserAccount user, Date startDate, Date endDate, Pageable pageable);
+
 }
