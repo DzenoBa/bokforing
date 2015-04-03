@@ -128,7 +128,7 @@ public class PostServiceImpl implements PostService {
      * @param pageable
      * @return incomeStatement, a mapping from the accounts the user has used to
      * the sum of all posts during that period. Other things needed to create
-     * the full balanceSheet on the receivers end is title for the account
+     * the full incomeStatement on the receivers end is title for the account
      * types, company name, period and so on.
      */
     @Override
