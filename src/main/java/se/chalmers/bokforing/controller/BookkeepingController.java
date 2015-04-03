@@ -22,6 +22,7 @@ import se.chalmers.bokforing.model.PostType;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.model.user.UserHandler;
+import se.chalmers.bokforing.persistence.PostRepository;
 import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.CustomerService;
 import se.chalmers.bokforing.persistence.user.UserService;
@@ -61,6 +62,9 @@ public class BookkeepingController {
     
     @Autowired
     private AccountManager accountManager;
+    
+    @Autowired
+    private PostRepository postRepository; //TODO
     
     /*
      * CREATE
@@ -211,6 +215,46 @@ public class BookkeepingController {
         
         List<Verification> verLs = verPage.getContent();
         
+        verJSONLs = convertToVerificationJSONLs(verLs);
+        return verJSONLs;
+    }
+    
+    @RequestMapping(value = "/bookkeeping/getverificationsbyaccount", method = RequestMethod.POST)
+    public @ResponseBody List<VerificationJSON> getVerificationByAccount(@RequestBody final AccountJSON account) {
+        
+        List<VerificationJSON> verJSONLs = new ArrayList();
+        
+        if(!authSession.sessionCheck()) {
+            return verJSONLs;
+        } 
+        UserHandler ua = userService.getUser(authSession.getEmail());
+        List<Post> postLs = postRepository.findPostsForUserAndAccount(ua.getUA().getId(), account.getNumber());
+        
+        int i = 0; // TODO
+        List<Verification> verLs = new ArrayList();
+        for(Post post : postLs) {
+            verLs.add(post.getVerification());
+            i++;
+            if(i>=20)
+                break; // TODO
+        }
+        verJSONLs = convertToVerificationJSONLs(verLs);
+        
+        return verJSONLs;
+    }
+    
+    /**
+     * CONVERT TO VERIFICATIONJSON LIST
+     * 
+     * Takes a Verification-List and
+     * converts it to a VerificationJSON-List
+     * 
+     * @param verLs
+     * @return 
+     */
+    public List<VerificationJSON> convertToVerificationJSONLs(List<Verification> verLs) {
+        List<VerificationJSON> verJSONLs = new ArrayList();
+        
         // TRANSLATE VERIFICATION TO VERIFICATION JSON
         for (Verification ver : verLs) {
             VerificationJSON verJSON = new VerificationJSON();
@@ -248,6 +292,7 @@ public class BookkeepingController {
             
             verJSONLs.add(verJSON);
         }
+        
         return verJSONLs;
     }
 }
