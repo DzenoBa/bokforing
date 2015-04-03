@@ -2,14 +2,15 @@
 <!--Body content-->
 <div class="row">
     <div class="col-md-6" style="padding-top: 15px;">
-        <div class="alert alert-info" role="alert">
-            Note: Använd email och password som finns i databasen!<br/>
-            Det finns en 'helper-function' som kan skapa ett användarnamn, klicka på 'DD' i nav-menu!
-        </div>
+        <!--Offset-->
     </div>
     <div class="col-md-6">
         <h2>Login</h2>
-
+        <div class="alert alert-info" ng-show="changeprotocol">
+            Du använder just nu en osäker anslutning (http://).
+            Klicka på knappen nedan för att använda en säker anslutning (https://).<br/><br/>
+            <a class="btn btn-primary" href="https://localhost:8181/bokforing/public/static/#/login">Byt till en säkert anslutning</a>
+        </div>
         <div class="alert alert-warning" role="alert" ng-show="form.numErrors > 0">
             {{form.numErrors}} fel hittades!
         </div>
