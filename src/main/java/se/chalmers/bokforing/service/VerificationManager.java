@@ -9,9 +9,7 @@ import java.util.Date;
 import java.util.List;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Post;
-import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.user.UserAccount;
-import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.model.Verification;
 
 /**

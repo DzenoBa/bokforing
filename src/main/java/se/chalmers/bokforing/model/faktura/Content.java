@@ -34,8 +34,8 @@ public class Content {
         return sb.toString();
     }
     
-    public Float getTotalPrice(){
-        Float total = 0.0f;
+    public Double getTotalPrice(){
+        Double total = 0.0;
         Iterator<Product> it = list.iterator();
         while(it.hasNext()){
             Product cur = it.next();
@@ -46,9 +46,9 @@ public class Content {
     
     class Product{
         private final String name;
-        private final Float price;
+        private final Double price;
         private int units;
-        Product(String name, Float price, int units){
+        Product(String name, Double price, int units){
             this.name = name;
             this.price = price;
             this.units = units;
@@ -64,7 +64,7 @@ public class Content {
         public String getName(){
             return name;
         }
-        public Float getPrice(){
+        public Double getPrice(){
             return price;
         }
         public int getUnits(){

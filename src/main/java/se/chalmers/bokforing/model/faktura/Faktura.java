@@ -43,14 +43,14 @@ public class Faktura implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date expireDate;
     
-    private ArrayList<Content> content;
+    private Content content;
     
-    private Float totalCost;
+    private Double totalCost;
     
-    private String fskatt;
+    private Boolean fskatt;
     private String momsRegistredNumber;
-    private Float momsCost;
-    private Float momsPrecentage;    
+    private Double momsCost;
+    private Double momsPrecentage;    
 
     /**
      * @return the fakturaId
@@ -139,42 +139,42 @@ public class Faktura implements Serializable {
     /**
      * @return the content
      */
-    public ArrayList<Content> getContent() {
+    public Content getContent() {
         return content;
     }
 
     /**
      * @param content the content to set
      */
-    public void setContent(ArrayList<Content> content) {
+    public void setContent(Content content) {
         this.content = content;
     }
 
     /**
      * @return the totalCost
      */
-    public Float getTotalCost() {
+    public Double getTotalCost() {
         return totalCost;
     }
 
     /**
      * @param totalCost the totalCost to set
      */
-    public void setTotalCost(Float totalCost) {
+    public void setTotalCost(Double totalCost) {
         this.totalCost = totalCost;
     }
 
     /**
      * @return the fskatt
      */
-    public String getFskatt() {
+    public Boolean getFskatt() {
         return fskatt;
     }
 
     /**
      * @param fskatt the fskatt to set
      */
-    public void setFskatt(String fskatt) {
+    public void setFskatt(Boolean fskatt) {
         this.fskatt = fskatt;
     }
 
@@ -195,28 +195,28 @@ public class Faktura implements Serializable {
     /**
      * @return the momsCost
      */
-    public Float getMomsCost() {
+    public Double getMomsCost() {
         return momsCost;
     }
 
     /**
      * @param momsCost the momsCost to set
      */
-    public void setMomsCost(Float momsCost) {
+    public void setMomsCost(Double momsCost) {
         this.momsCost = momsCost;
     }
 
     /**
      * @return the momsPrecentage
      */
-    public Float getMomsPrecentage() {
+    public Double getMomsPrecentage() {
         return momsPrecentage;
     }
 
     /**
      * @param momsPrecentage the momsPrecentage to set
      */
-    public void setMomsPrecentage(Float momsPrecentage) {
+    public void setMomsPrecentage(Double momsPrecentage) {
         this.momsPrecentage = momsPrecentage;
     }
 }
