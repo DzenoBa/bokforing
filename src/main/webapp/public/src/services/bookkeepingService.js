@@ -9,9 +9,9 @@
 
 var bookkeepingService = angular.module('BookkeepingService', []);
 
-bookkeepingService.factory('BookkeepingProxy', ['$http',
-    function($http) {
-        var url = 'http://localhost:8080/bokforing/bookkeeping';
+bookkeepingService.factory('BookkeepingProxy', ['$http', '$location',
+    function($http, $location) {
+        var url = '//localhost:'+$location.port()+'/bokforing/bookkeeping';
         
         return {
             createManBook: function(verification) {
