@@ -22,14 +22,13 @@ import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 public interface PostService {
 
     Map<Account, List<Post>> getGeneralLedger(UserAccount user);
-    
+
     void save(Post post);
-    
+
     Map<Account, List<Double>> getBalanceSheet(UserAccount user, Date startDate, Date endDate, Pageable pageable);
 
-
-    Map<Account, List<Double>> getIncomeStatement(UserAccount user, Date startDate,Date endDate, Pageable pageable);
+    Map<Account, Double> getIncomeStatement(UserAccount user, Date startDate, Date endDate, Pageable pageable);
 
     Page<Post> findPostsForUserAndAccount(UserAccount user, Account account, PagingAndSortingTerms terms);
-    
+
 }

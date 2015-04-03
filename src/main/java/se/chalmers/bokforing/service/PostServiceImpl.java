@@ -132,9 +132,9 @@ public class PostServiceImpl implements PostService {
      * types, company name, period and so on.
      */
     @Override
-    public Map<Account, List<Double>> getIncomeStatement(UserAccount user, Date startDate,
+    public Map<Account, Double> getIncomeStatement(UserAccount user, Date startDate,
             Date endDate, Pageable pageable) {
-        Map<Account, List<Double>> incomeStatement = new HashMap<>();
+        Map<Account, Double> incomeStatement = new HashMap<>();
         List<Verification> verifications = verRepo.findByUserAccountAndCreationDateBetween(user, startDate, endDate, pageable).getContent();
 
         for (Verification verification : verifications) {
@@ -145,11 +145,10 @@ public class PostServiceImpl implements PostService {
                     continue;
                 }
                 if (!incomeStatement.containsKey(account)) {
-                    List<Double> balanceList = new ArrayList<>();
-                    balanceList.add(post.getPostSum().getSumTotal());
-                    incomeStatement.put(account, balanceList);
+                    post.getPostSum().getSumTotal();
+                    incomeStatement.put(account, post.getPostSum().getSumTotal());
                 } else {
-                    incomeStatement.get(account).set(0, incomeStatement.get(account).get(0) + post.getPostSum().getSumTotal());
+                    incomeStatement.put(account, incomeStatement.get(account) + post.getPostSum().getSumTotal());
                 }
             }
         }
