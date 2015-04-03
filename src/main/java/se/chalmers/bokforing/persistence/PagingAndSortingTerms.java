@@ -25,6 +25,10 @@ public class PagingAndSortingTerms {
     private String fieldToSortBy;
     private Integer pageSize;
 
+    public PagingAndSortingTerms(Integer pageNumber, Boolean ascendingSort, String fieldToSortBy) {
+        this(pageNumber, ascendingSort, fieldToSortBy, null);
+    }
+    
     /**
      * Pagesize is optional. If not included, will use Constants.DEFAULT_PAGE_SIZE.
      * 
