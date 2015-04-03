@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.persistence.PostRepository;
 import se.chalmers.bokforing.persistence.VerificationRepository;
 import static se.chalmers.bokforing.util.Constants.REVENUE_ACCOUNTS;
@@ -46,9 +49,9 @@ public class PostServiceImpl implements PostService {
 
         List<Account> accounts = accountService.findAllAccounts();
         for (Account account : accounts) {
-            List<Post> posts = postRepo.findPostsForUserAndAccount(user.getId(), account.getNumber());
+            Page<Post> posts = postRepo.findPostsForUserAndAccount(user.getId(), account.getNumber(), null);
 
-            generalLedger.put(account, posts);
+            generalLedger.put(account, posts.getContent());
         }
 
         return generalLedger;
@@ -116,5 +119,12 @@ public class PostServiceImpl implements PostService {
             }
         }
         return balanceSheet;
+    }
+
+    @Override
+    public Page<Post> findPostsForUserAndAccount(UserAccount user, Account account, PagingAndSortingTerms terms) {
+        PageRequest request = terms.getPageRequest();
+        
+        return postRepo.findPostsForUserAndAccount(user.getId(), account.getNumber(), request);
     }
 }

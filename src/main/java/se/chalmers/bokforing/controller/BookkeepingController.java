@@ -29,6 +29,7 @@ import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.service.AccountManager;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.AccountService;
+import se.chalmers.bokforing.service.PostService;
 import se.chalmers.bokforing.service.VerificationService;
 import se.chalmers.bokforing.session.AuthSession;
 
@@ -64,7 +65,7 @@ public class BookkeepingController {
     private AccountManager accountManager;
     
     @Autowired
-    private PostRepository postRepository; //TODO
+    private PostService postService; //TODO
     
     /*
      * CREATE
@@ -227,8 +228,12 @@ public class BookkeepingController {
         if(!authSession.sessionCheck()) {
             return verJSONLs;
         } 
-        UserHandler ua = userService.getUser(authSession.getEmail());
-        List<Post> postLs = postRepository.findPostsForUserAndAccount(ua.getUA().getId(), account.getNumber());
+        UserHandler userHandler = userService.getUser(authSession.getEmail());
+        
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, null);
+        Account entityAccount = new Account();
+        entityAccount.setNumber(account.getNumber());
+        List<Post> postLs = postService.findPostsForUserAndAccount(userHandler.getUA(), entityAccount, terms).getContent();
         
         int i = 0; // TODO
         List<Verification> verLs = new ArrayList();
