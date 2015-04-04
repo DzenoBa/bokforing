@@ -166,10 +166,10 @@ public class VerificationTest extends AbstractIntegrationTest {
         postList2.add(post4);
         
         Long verNbr = 7372L; // one higher than the highest inserted row
-        Verification verification = manager.createVerification(user, verNbr, postList, cal.getTime(), customer);
+        Verification verification = manager.createVerification(user, verNbr, postList, cal.getTime(), customer, "");
         assertNotNull(verification);
         
-        Verification verification2 = manager.createVerification(user, verNbr+1, postList2, cal.getTime(), customer);
+        Verification verification2 = manager.createVerification(user, verNbr+1, postList2, cal.getTime(), customer, "");
         assertNotNull(verification2);
         
         Verification verificationFromDb = service.findByUserAndVerificationNumber(user, verNbr);
@@ -343,10 +343,10 @@ public class VerificationTest extends AbstractIntegrationTest {
         postList2.add(post4);
         
         Long verNbr = 7372L; // one higher than the highest inserted row
-        Verification verification = manager.createVerification(user, verNbr, postList, cal.getTime(), customer);
+        Verification verification = manager.createVerification(user, verNbr, postList, cal.getTime(), customer, "");
         assertNotNull(verification);
         
-        Verification verification2 = manager.createVerification(user, verNbr+1, postList2, cal.getTime(), customer);
+        Verification verification2 = manager.createVerification(user, verNbr+1, postList2, cal.getTime(), customer, "");
         assertNotNull(verification2);
         
         Verification verificationFromDb = service.findByUserAndVerificationNumber(user, verNbr);
@@ -355,84 +355,111 @@ public class VerificationTest extends AbstractIntegrationTest {
     
     @Test
     @Transactional
-    public void testReplacePost() {
+    public void testReplacePostsWithInvalidPosts() {
         Long verificationNumber = 7372L;
         Account account = accountManager.createAccount(2018, "Egna insättningar");
         
         createVerificationHelper();
         
-        
-        // Fail case, this won't work, balance will not be zero
+        // Fail case, this won't work, since balance will not be zero
         Verification ver = service.findByUserAndVerificationNumber(user, verificationNumber);
-        
-        // Saved for later
-        List<Post> originalPosts = ver.getPosts();
         
         PostSum postSum = new PostSum();
         postSum.setSumTotal(50);
         postSum.setType(PostType.Debit);
         
         Post newPost = postManager.createPost(postSum, account);
-        newPost.setPostSum(postSum);
-        newPost.setAccount(account);
-        newPost.setCorrection(true);
         
         List<Post> verificationPosts = ver.getPosts();
         Post postToReplace = verificationPosts.get(0);
         boolean success = manager.replacePost(ver, postToReplace, newPost);
         assertFalse(success);
         
+        // Since replace failed, post is not set as inactive
+        assertTrue(postToReplace.isActive());
+        assertFalse(postToReplace.isCorrection());
+        
+        Verification verFromDb = service.findByUserAndVerificationNumber(user, verificationNumber);
+        assertFalse(verFromDb.getPosts().contains(newPost));
+
+    }
+    
+    @Test
+    @Transactional
+    public void testReplacePostWithValidPosts() {
+        Long verificationNumber = 7372L;
+        Account account = accountManager.createAccount(2018, "Egna insättningar");
+        
+        createVerificationHelper();
+        Verification ver = service.findByUserAndVerificationNumber(user, verificationNumber);
+        List<Post> verificationPosts = ver.getPosts();
         
         // Success case, replacing with same data
-        ver = service.findByUserAndVerificationNumber(user, verificationNumber);
+        
+        PostSum postSum = new PostSum();
+        postSum.setSumTotal(100);
+        postSum.setType(PostType.Credit);
+        
+        Post newPost = postManager.createPost(postSum, account);
+        
+        Post postToReplace = verificationPosts.get(0);
+        boolean success = manager.replacePost(ver, postToReplace, newPost);
+        assertTrue(success);
+        
+        assertFalse(postToReplace.isActive());
+        assertFalse(postToReplace.isCorrection());
+        
+        Verification verFromDb = service.findByUserAndVerificationNumber(user, verificationNumber);
+        assertTrue(verFromDb.getPosts().contains(newPost));
+    }
+    
+    @Test
+    @Transactional
+    public void testReplacePostWithList() {
+        Long verificationNumber = 7372L;
+        Account account = accountManager.createAccount(2018, "Egna insättningar");
+        
+        createVerificationHelper();
+        
+        // Success case, replace all posts
+        Verification ver = service.findByUserAndVerificationNumber(user, verificationNumber);
+        
+        // Saved for later
+        List<Post> originalPosts = ver.getPosts();
+        
+        PostSum postSum = new PostSum();
+        postSum.setSumTotal(40);
+        postSum.setType(PostType.Credit);
+        Post newPost = postManager.createPost(postSum, account);
         
         PostSum postSum2 = new PostSum();
-        postSum2.setSumTotal(100);
-        postSum2.setType(PostType.Credit);
-        
+        postSum2.setSumTotal(40);
+        postSum2.setType(PostType.Debit);
         Post newPost2 = postManager.createPost(postSum2, account);
-        newPost2.setPostSum(postSum2);
-        newPost2.setAccount(account);
-        newPost2.setCorrection(true);
-        
-        Post postToReplace2 = verificationPosts.get(0);
-        boolean success2 = manager.replacePost(ver, postToReplace2, newPost2);
-        assertTrue(success2);
-        
-        // Set it back to the way it was, i.e. swap the posts back again
-        // This is a bit hacky
-        postToReplace2.setActive(true);
-        ver.getPosts().remove(newPost2);
-        service.save(ver);
-        
-        
-        // Verification now contains four posts, replace all of them
-        ver = service.findByUserAndVerificationNumber(user, verificationNumber);
-        
-        PostSum postSum3 = new PostSum();
-        postSum3.setSumTotal(40);
-        postSum3.setType(PostType.Credit);
-        Post newPost3 = postManager.createPost(postSum3, account);
-        
-        PostSum postSum4 = new PostSum();
-        postSum4.setSumTotal(40);
-        postSum4.setType(PostType.Debit);
-        Post newPost4 = postManager.createPost(postSum4, account);
         
         List<Post> postsToReplaceList = ver.getPosts();
         
-        // Add back all posts
-        List<Post> newPostsList = Arrays.asList(originalPosts.get(0), originalPosts.get(1), newPost3, newPost4);
+        List<Post> newPostsList = Arrays.asList(newPost, newPost2);
         boolean success3 = manager.replacePost(ver, postsToReplaceList, newPostsList);
         assertTrue(success3);
         
-        // Need to make sure they are all marked as corrected
         List<Post> postsFromDb = service.findByUserAndVerificationNumber(user, verificationNumber).getPosts();
-        for(Post post : postsFromDb) {
+        
+        // Posts that have been replacedshould not be active
+        for(Post replacedPost : postsToReplaceList) {
+            assertFalse(replacedPost.isActive());
+            assertFalse(replacedPost.isCorrection());
+        }
+        
+        // Posts that have been added should be active and marked as correction
+        for(Post post : newPostsList) {
+            assertTrue(post.isActive());
             assertTrue(post.isCorrection());
         }
         
+        List<Post> postsThatShouldBeInDb = Arrays.asList(originalPosts.get(0), originalPosts.get(1), newPost, newPost2);
+        
         // Make sure posts were actually inserted
-        assertEquals(newPostsList.get(0), postsFromDb.get(0));
+        assertEquals(postsThatShouldBeInDb, postsFromDb);
     }
 }

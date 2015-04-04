@@ -157,7 +157,7 @@ public class BookkeepingController {
         Customer customerFromDb = customerService.findByCustomerNumber(uh.getUA(), customerNumber);
         
         // CREATE VERIFICATION
-        Verification ver = verificationManager.createVerification(uh.getUA(), new_posts, verification.getTransactionDate(), customerFromDb);
+        Verification ver = verificationManager.createVerification(uh.getUA(), new_posts, verification.getTransactionDate(), customerFromDb, "");
         uh.getVerifications().add(ver);
         userService.storeUser(uh);
         
