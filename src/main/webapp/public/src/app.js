@@ -72,7 +72,7 @@ bok.config(['$routeProvider', 'USER_LEVELS',
                 }).
                 when('/bookkeeping', {
                     templateUrl: 'private/bookkeeping.html',
-                    controller: 'ManBKCtrl',
+                    controller: 'BookkeepingCtrl',
                     auth: USER_LEVELS.user,
                     resolve: {
                         auth: ['AuthHandler', function(AuthHandler) {
@@ -92,7 +92,7 @@ bok.config(['$routeProvider', 'USER_LEVELS',
                 }).
                 when('/verifications', {
                     templateUrl: 'private/verifications.html',
-                    controller: 'LstVerCtrl',
+                    controller: 'VerificationCtrl',
                     auth: USER_LEVELS.user,
                     resolve: {
                         auth: ['AuthHandler', function(AuthHandler) {

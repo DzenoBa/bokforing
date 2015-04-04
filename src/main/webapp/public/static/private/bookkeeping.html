@@ -31,7 +31,7 @@
                 <thead>
                     <tr>
                         <th style="width:15%;">Nr</th>
-                        <th style="width:35%;">Transaktion datum</th>
+                        <th style="width:35%;">Bokföringsdatum</th>
                         <th style="width:23%;">Summa</th>
                         <th style="width:17%"></th>
                     </tr>
@@ -42,7 +42,7 @@
                             <table class="table" style="background:transparent; width:100%; margin:0;">
                                 <tr>
                                     <td style="width:15%;">{{verification.id}}</td>
-                                    <td style="width:35%;">{{verification.transactionDate}}</td>
+                                    <td style="width:35%;">{{verification.creationDate}}</td>
                                     <td style="width:23%;">{{verification.sum}}</td>
                                     <td style="width:17%;">
                                         <button type="button" class="btn btn-default" ng-click="showver = true" ng-show="!showver">
@@ -92,6 +92,7 @@
                     </tr>
                 </tbody>
             </table>
+            <pagination total-items="countverifications" items-per-page="10" ng-model="currentVerPage" max-size="5" class="pagination-sm" boundary-links="true" ng-change="verPageChanged()" ng-show="countverifications > 10"></pagination>
         </div>
         <div class="col-md-7">
             <h2>Manuell bokföring</h2>
@@ -222,7 +223,7 @@
                     </tr>
                 </tbody>
             </table>
-            <pagination total-items="maxsize" items-per-page="21" ng-model="currentPage" max-size="5" class="pagination-sm" boundary-links="true" ng-change="pageChanged()" ng-show="maxsize > 20"></pagination>
+            <pagination total-items="maxsize" items-per-page="10" ng-model="currentPage" max-size="5" class="pagination-sm" boundary-links="true" ng-change="pageChanged()" ng-show="maxsize > 10"></pagination>
         </div>
         <div class="modal-footer">
             <div class="col-sm-6" style="text-align:left;">

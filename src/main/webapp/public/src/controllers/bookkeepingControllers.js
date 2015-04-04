@@ -9,9 +9,12 @@
 
 var bookkeepingControllers = angular.module('BookkeepingControllers', ['ui.bootstrap']);
 
-bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$modal', '$filter',
+bookkeepingControllers.controller('BookkeepingCtrl', ['$scope', 'BookkeepingProxy', '$modal', '$filter',
     function($scope, BookkeepingProxy, $modal, $filter) {
         $scope.rows = 2;
+        $scope.currentVerPage = 1;
+        $scope.selectedVerAccount = {};
+        
         $scope.getNumber = function(num) {
             return new Array(num);   
         };
@@ -89,18 +92,34 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$
             modalInstance.result.then(function (selectedAccount) {
                 if(!angular.isDefined(index)) {
                     $scope.showaccount = selectedAccount.number + ' - ' + selectedAccount.name;
-                    var tempaccount = {number: selectedAccount.number};
-                    BookkeepingProxy.getVerificationsByAccount(tempaccount)
-                            .success(function(verifications) {
-                                $scope.verifications = verifications;
-                            }).error(function() {
-                                console.log('error: getVerificationsByAccount');
-                            });
+                    $scope.selectedVerAccount = selectedAccount;
+                    getVerifications();
                 } else {
                     $scope.verification.posts[index].accountid = selectedAccount.number;
                     $scope.accountls[index] = selectedAccount.number + ' - ' + selectedAccount.name;
                 }
             });
+        };
+        
+        function getVerifications() {
+            var currentPage = $scope.currentVerPage - 1;
+            var tempaccount = {number: $scope.selectedVerAccount.number, startrange: currentPage};
+            BookkeepingProxy.getVerificationsByAccount(tempaccount)
+                    .success(function(verifications) {
+                        $scope.verifications = verifications;
+                    }).error(function() {
+                        console.log('error: getVerificationsByAccount');
+                    });
+            BookkeepingProxy.countVerificationsByAccount(tempaccount)
+                    .success(function(size) {
+                        $scope.countverifications = size;
+                    }).error(function() {
+                        console.log('error: countVerificationsByAccount');
+                    });
+        }
+        
+        $scope.verPageChanged = function() {
+            getVerifications();
         };
                 
         $scope.opencal = function($event) {
@@ -184,28 +203,39 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
     
 });
 
-bookkeepingControllers.controller('LstVerCtrl', ['$scope', 'BookkeepingProxy',
+bookkeepingControllers.controller('VerificationCtrl', ['$scope', 'BookkeepingProxy',
     function($scope, BookkeepingProxy) {
-        
-        $scope.verifications = getVerifications();
         
         $scope.showverinfoboolean = false;
         $scope.verinfo = {};
+        $scope.currentPage = 1;
+        $scope.verifications = getVerifications();
         
         function getVerifications() {
-            BookkeepingProxy.getVerifications()
+            var pageStart = $scope.currentPage-1 + "";
+            // IN SOME WIERD WAY THE SERVER CAN NOT ACCEPT AN INTEGER
+            // SO I WILL SEND A STRING
+            BookkeepingProxy.getVerifications(pageStart)
                     .success(function(verifications) {
                         $scope.verifications = verifications;
                     }).error(function() {
                 console.log("getVer: error");
             });
+            BookkeepingProxy.countVerifications()
+                    .success(function(size) {
+                        $scope.maxsize = size;
+                    }).error(function() {
+                        console.log("countVerification: error");
+                    });
         };
         
-        $scope.showverinfo = function(id) {
-            var no_ver_per_page = 20;
-            var array_id = $scope.verifications.length % no_ver_per_page - id;
-            $scope.verinfo = $scope.verifications[array_id];
+        $scope.showverinfo = function(index) {
+            $scope.verinfo = $scope.verifications[index];
             $scope.showverinfoboolean = true;
+        };
+        
+        $scope.pageChanged = function() {
+            getVerifications();
         };
     }
 ]);

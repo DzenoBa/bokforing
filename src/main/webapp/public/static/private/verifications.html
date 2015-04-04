@@ -9,7 +9,7 @@
                         <th style="width:15%;">Nr</th>
                         <th style="width:25%;">Transaktion datum</th>
                         <th style="width:20%;">Summa</th>
-                        <th style="width:25%;">Skapades</th>
+                        <th style="width:25%;">Bokföringsdatum</th>
                         <th style="width:15%"></th>
                     </tr>
                 </thead>
@@ -20,11 +20,12 @@
                         <td>{{verification.sum}}</td>
                         <td>{{verification.creationDate}}</td>
                         <td>
-                            <input type="button" value="Visa" class="btn btn-primary" ng-click="showverinfo(verification.id)"/>
+                            <input type="button" value="Visa" class="btn btn-primary" ng-click="showverinfo($index)"/>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <pagination total-items="maxsize" items-per-page="20" ng-model="currentPage" max-size="5" class="pagination-sm" boundary-links="true" ng-change="pageChanged()" ng-show="maxsize > 20"></pagination>
         </div>
         <div class="col-md-5" ng-show="showverinfoboolean">
             <h2>Verifikations information - Nr {{verinfo.id}}</h2>

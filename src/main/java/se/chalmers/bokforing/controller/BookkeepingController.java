@@ -167,7 +167,7 @@ public class BookkeepingController {
     }
     
     @RequestMapping(value = "/bookkeeping/searchaccount", method = RequestMethod.POST)
-    public @ResponseBody List<Account> searchaccount(@RequestBody final AccountJSON account) {
+    public @ResponseBody List<Account> searchAccount(@RequestBody final AccountJSON account) {
         List<Account> accLs;
         int start = 0;
         
@@ -176,10 +176,10 @@ public class BookkeepingController {
         }
         
         if(account.getNumber() > 0) {
-            PagingAndSortingTerms terms = new PagingAndSortingTerms(start, true, "number");
+            PagingAndSortingTerms terms = new PagingAndSortingTerms(start, true, "number", 10);
             accLs = accountService.findByNumberLike(account.getNumber(), terms).getContent();
         } else if (!(account.getName().isEmpty())) {
-            PagingAndSortingTerms terms = new PagingAndSortingTerms(start, true, "name");
+            PagingAndSortingTerms terms = new PagingAndSortingTerms(start, true, "name", 10);
             accLs = accountService.findByNameLike(account.getName(), terms).getContent();
         } else {
             // Return a empty list
@@ -189,7 +189,7 @@ public class BookkeepingController {
     }
     
     @RequestMapping(value = "/bookkeeping/countsearchaccount", method = RequestMethod.POST)
-    public @ResponseBody long countsearchaccount(@RequestBody final AccountJSON account) {
+    public @ResponseBody long countSearchAccount(@RequestBody final AccountJSON account) {
         long size = 0;
         
         if(account.getNumber() > 0) {
@@ -202,16 +202,21 @@ public class BookkeepingController {
         return size;
     }
     
-    @RequestMapping(value = "/bookkeeping/getverifications", method = RequestMethod.GET)
-    public @ResponseBody List<VerificationJSON> getVerifications() {
+    @RequestMapping(value = "/bookkeeping/getverifications", method = RequestMethod.POST)
+    public @ResponseBody List<VerificationJSON> getVerifications(@RequestBody final String start) {
         List<VerificationJSON> verJSONLs = new ArrayList();
+        int startPos = 0;
         
         if(!authSession.sessionCheck()) {
             return verJSONLs;
         } 
         UserHandler ua = userService.getUser(authSession.getEmail());
         
-        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate"); // TODO
+        if(Integer.parseInt(start) > 0) {
+            startPos = Integer.parseInt(start);
+        }
+        
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(startPos, Boolean.FALSE, "creationDate");
         Page<Verification> verPage = verificationService.findAllVerifications(ua.getUA(), terms);
         
         List<Verification> verLs = verPage.getContent();
@@ -220,32 +225,69 @@ public class BookkeepingController {
         return verJSONLs;
     }
     
+    @RequestMapping(value = "/bookkeeping/countverifications", method = RequestMethod.GET)
+    public @ResponseBody long countVerifications() {
+        long size = 0;
+        
+        if(!authSession.sessionCheck()) {
+            return size;
+        } 
+        UserHandler ua = userService.getUser(authSession.getEmail());
+        
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate");
+        Page<Verification> verPage = verificationService.findAllVerifications(ua.getUA(), terms);
+        
+        size = verPage.getTotalElements();
+        
+        return size;
+    }
+    
     @RequestMapping(value = "/bookkeeping/getverificationsbyaccount", method = RequestMethod.POST)
     public @ResponseBody List<VerificationJSON> getVerificationByAccount(@RequestBody final AccountJSON account) {
         
         List<VerificationJSON> verJSONLs = new ArrayList();
+        int start = 0;
+        
+        if(account.getStartrange() > 0) {
+            start = account.getStartrange();
+        }
         
         if(!authSession.sessionCheck()) {
             return verJSONLs;
         } 
         UserHandler userHandler = userService.getUser(authSession.getEmail());
         
-        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, null);
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(start, Boolean.FALSE, "creationDate", 10);
         Account entityAccount = new Account();
         entityAccount.setNumber(account.getNumber());
         List<Post> postLs = postService.findPostsForUserAndAccount(userHandler.getUA(), entityAccount, terms).getContent();
         
-        int i = 0; // TODO
         List<Verification> verLs = new ArrayList();
         for(Post post : postLs) {
             verLs.add(post.getVerification());
-            i++;
-            if(i>=20)
-                break; // TODO
         }
         verJSONLs = convertToVerificationJSONLs(verLs);
         
         return verJSONLs;
+    }
+    
+    @RequestMapping(value = "/bookkeeping/countverificationsbyaccount", method = RequestMethod.POST)
+    public @ResponseBody long countVerificationsByAccount(@RequestBody final AccountJSON account) {
+        long size = 0;
+        
+        if(!authSession.sessionCheck()) {
+            return size;
+        } 
+        UserHandler uh = userService.getUser(authSession.getEmail());
+        
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate");
+        Account entityAccount = new Account();
+        entityAccount.setNumber(account.getNumber());
+        Page<Post> postPage = postService.findPostsForUserAndAccount(uh.getUA(), entityAccount, terms);
+        
+        size = postPage.getTotalElements();
+        
+        return size;
     }
     
     /**
