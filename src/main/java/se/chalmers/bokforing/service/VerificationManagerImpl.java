@@ -29,18 +29,22 @@ public class VerificationManagerImpl implements VerificationManager {
     private VerificationService service;
 
     @Override
-    public Verification createVerification(UserAccount user, List<Post> posts, Date transactionDate, Customer customer) {
+    public Verification createVerification(UserAccount user, List<Post> posts, Date transactionDate, Customer customer, String description) {
         // Set to one higher than the highest ID, as Verification have to be
         // perfectly chronological
         long verificationNbr = service.findHighestVerificationNumber(user) + 1;
         
-        return createVerification(user, verificationNbr, posts, transactionDate, customer);
+        return createVerification(user, verificationNbr, posts, transactionDate, customer, description);
     }
     
     @Override
-    public Verification createVerification(UserAccount user, long verificationNumber, List<Post> posts, Date transactionDate, Customer customer) {
+    public Verification createVerification(UserAccount user, long verificationNumber, List<Post> posts, Date transactionDate, Customer customer, String description) {
         if(!isVerificationValid(user, verificationNumber, posts, transactionDate)) {
             return null;
+        }
+        
+        if(description == null || "".equals(description)) {
+            description = "Ingen beskrivning angiven.";
         }
         
         Date todaysDate = DateUtil.getTodaysDate();
@@ -48,7 +52,6 @@ public class VerificationManagerImpl implements VerificationManager {
         Verification ver = new Verification();
         
         for(Post post : posts) {
-            post.setCorrection(false); // safeguard
             post.setVerification(ver);
         }
         
@@ -58,6 +61,7 @@ public class VerificationManagerImpl implements VerificationManager {
         ver.setCustomer(customer);
         ver.setUserAccount(user);
         ver.setVerificationNumber(verificationNumber);
+        ver.setDescription(description);
         service.save(ver);
         
         return ver;

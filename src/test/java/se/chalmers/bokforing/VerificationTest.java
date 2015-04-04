@@ -166,10 +166,10 @@ public class VerificationTest extends AbstractIntegrationTest {
         postList2.add(post4);
         
         Long verNbr = 7372L; // one higher than the highest inserted row
-        Verification verification = manager.createVerification(user, verNbr, postList, cal.getTime(), customer);
+        Verification verification = manager.createVerification(user, verNbr, postList, cal.getTime(), customer, "");
         assertNotNull(verification);
         
-        Verification verification2 = manager.createVerification(user, verNbr+1, postList2, cal.getTime(), customer);
+        Verification verification2 = manager.createVerification(user, verNbr+1, postList2, cal.getTime(), customer, "");
         assertNotNull(verification2);
         
         Verification verificationFromDb = service.findByUserAndVerificationNumber(user, verNbr);
@@ -343,10 +343,10 @@ public class VerificationTest extends AbstractIntegrationTest {
         postList2.add(post4);
         
         Long verNbr = 7372L; // one higher than the highest inserted row
-        Verification verification = manager.createVerification(user, verNbr, postList, cal.getTime(), customer);
+        Verification verification = manager.createVerification(user, verNbr, postList, cal.getTime(), customer, "");
         assertNotNull(verification);
         
-        Verification verification2 = manager.createVerification(user, verNbr+1, postList2, cal.getTime(), customer);
+        Verification verification2 = manager.createVerification(user, verNbr+1, postList2, cal.getTime(), customer, "");
         assertNotNull(verification2);
         
         Verification verificationFromDb = service.findByUserAndVerificationNumber(user, verNbr);
