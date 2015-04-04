@@ -123,23 +123,30 @@ public class VerificationManagerImpl implements VerificationManager {
         List<Post> tempPosts = new ArrayList<>(verification.getPosts());
         
         for(Post newPost : newPosts) {
+            newPost.setCorrection(true);
             tempPosts.add(newPost);
         }
         
-        for(Post oldPost: oldPosts) {
-            // Posts to be replaced should no longer be active
-            oldPost.setActive(false);
+        for(Post postInVer : tempPosts) {
+            if(oldPosts.contains(postInVer)) {
+                // Posts to be replaced should no longer be active
+                postInVer.setActive(false);
+            }
         }
         
         if(arePostsValid(tempPosts)) {
-            for(Post post : tempPosts) {
-                post.setCorrection(true);
-            }
-
             verification.setPosts(tempPosts);
             service.save(verification);
             return true;
         } else {
+            // Posts weren't valid, so don't save. We need to set active
+            // flag back to true again, to not affect the posts that are actually
+            // valid
+            for(Post postInVer : tempPosts) {
+                if(oldPosts.contains(postInVer)) {
+                    postInVer.setActive(true);
+                }
+            }
             return false;
         }
     }
