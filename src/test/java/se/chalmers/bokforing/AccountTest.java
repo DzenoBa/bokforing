@@ -104,12 +104,12 @@ public class AccountTest extends AbstractIntegrationTest {
 
     }
 
-    /*@Transactional
+    @Transactional
     @Test
     public void testInsertDefaultAccounts() {
 
         assertTrue(initUtil.insertDefaultAccounts());
         assertTrue(service.findAllAccounts().size() > 100);
-    }*/
+    }
 
 }
