@@ -71,7 +71,7 @@ public class BookkeepingController {
      * CREATE
      */
     @RequestMapping(value = "/bookkeeping/createman", method = RequestMethod.POST)
-    public @ResponseBody FormJSON createman(@RequestBody final VerificationJSON verification) {
+    public @ResponseBody FormJSON createVerification(@RequestBody final VerificationJSON verification) {
         
         System.out.println("* PING bookkeeping/createman");
         FormJSON form = new FormJSON();
@@ -87,6 +87,12 @@ public class BookkeepingController {
         if(verification.getTransactionDate() == null) {
             form.addError("verificationdate", "Ange ett datum");
             return form;
+        }
+        
+        // CHECK DESCRIPTION
+        String description = "";
+        if(verification.getDescription() != null) {
+            description = verification.getDescription();
         }
         
         // CHECK POSTS
@@ -157,7 +163,7 @@ public class BookkeepingController {
         Customer customerFromDb = customerService.findByCustomerNumber(uh.getUA(), customerNumber);
         
         // CREATE VERIFICATION
-        Verification ver = verificationManager.createVerification(uh.getUA(), new_posts, verification.getTransactionDate(), customerFromDb, "");
+        Verification ver = verificationManager.createVerification(uh.getUA(), new_posts, verification.getTransactionDate(), customerFromDb, description);
         uh.getVerifications().add(ver);
         userService.storeUser(uh);
         
@@ -309,6 +315,7 @@ public class BookkeepingController {
             verJSON.setId(ver.getId());
             verJSON.setTransactionDate(ver.getTransactionDate());
             verJSON.setCreationDate(ver.getCreationDate());
+            verJSON.setDescription(ver.getDescription());
             
             // CREATE POST-JSON'S
             List<PostJSON> debitPostJSONLs = new ArrayList();

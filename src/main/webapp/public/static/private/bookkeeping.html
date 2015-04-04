@@ -6,7 +6,7 @@
             <form class="form-horizontal">
                 <div class="form-group">
                     <div class="col-sm-12">
-                        Genom att välja ett konto nedan kan du få upp en lista på alla verificationer
+                        Genom att välja ett konto nedan kan du få upp en lista på alla verifikationer
                         som har en transaktion från eller till det kontot.
                     </div>
                 </div>
@@ -56,6 +56,13 @@
                                 <tr ng-show="showver">
                                     <td colspan="4" style="padding: 0;">
                                         <table class="table" style="background:transparent; width:100%; margin:0;">
+                                            <tr>
+                                                <td><b>Transaktionsdatum</b></td>
+                                                <td>{{verification.transactionDate}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">{{verification.description}}</td>
+                                            </tr>
                                             <tr>
                                                 <th style="width:50%;">Debet</th>
                                                 <th style="width:50%;">Kredit</th>
@@ -116,6 +123,14 @@
                                 <button type="button" class="btn btn-default" ng-click="opencal($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                             </span>
                         </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <label>Beskrivning</label>
+                    </div>
+                    <div class="col-md-9">
+                        <textarea class="form-control" ng-model="verification.description" name="text" cols="10" rows="2" placeholder="Ange en beskrivning" style="resize: vertical;"></textarea>
                     </div>
                 </div>
                 <div class="form-group" ng-show="form.errors.newpasswd !== null">

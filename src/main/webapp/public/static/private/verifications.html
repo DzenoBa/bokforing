@@ -7,7 +7,7 @@
                 <thead>
                     <tr>
                         <th style="width:15%;">Nr</th>
-                        <th style="width:25%;">Transaktion datum</th>
+                        <th style="width:35%;">Beskrivning</th>
                         <th style="width:20%;">Summa</th>
                         <th style="width:25%;">Bokföringsdatum</th>
                         <th style="width:15%"></th>
@@ -16,7 +16,7 @@
                 <tbody>
                     <tr ng-repeat="verification in verifications">
                         <td>{{verification.id}}</td>
-                        <td>{{verification.transactionDate}}</td>
+                        <td>{{verification.description|limitTo:30}}<span ng-show="verification.description.length > 30">...</span></td>
                         <td>{{verification.sum}}</td>
                         <td>{{verification.creationDate}}</td>
                         <td>
@@ -29,6 +29,9 @@
         </div>
         <div class="col-md-5" ng-show="showverinfoboolean">
             <h2>Verifikations information - Nr {{verinfo.id}}</h2>
+            <h3>{{verinfo.transactionDate}}</h3>
+            <h3>Beskrivning</h3>
+            {{verinfo.description}}
             <h3>Debet</h3>
             <table class="table table-striped">
                 <thead>

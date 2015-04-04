@@ -70,7 +70,8 @@ bookkeepingControllers.controller('BookkeepingCtrl', ['$scope', 'BookkeepingProx
                             $scope.verification = {posts: 
                                         [ {debit: 0, credit: 0},
                                         {debit: 0, credit: 0}],
-                                        transactionDate: $filter('date')(new Date(),'yyyy-MM-dd')
+                                        transactionDate: $filter('date')(new Date(),'yyyy-MM-dd'),
+                                        description: ""
                                 };
                             $scope.rows = 2;
                             $scope.accountls = [];

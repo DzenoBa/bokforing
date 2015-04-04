@@ -20,6 +20,7 @@ public class VerificationJSON implements Serializable {
     private double sum;
     private Date transactionDate;
     private Date creationDate;
+    private String description;
     
     public Long getId() {
         return id;
@@ -68,5 +69,12 @@ public class VerificationJSON implements Serializable {
     }
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+    
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
