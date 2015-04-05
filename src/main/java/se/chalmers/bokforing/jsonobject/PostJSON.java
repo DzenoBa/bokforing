@@ -9,11 +9,19 @@ import java.io.Serializable;
  */
 public class PostJSON implements Serializable {
     
+    private int id;
     private int accountid;
     private String accountname;
     private double debit;
     private double credit;
     private double sum;
+    
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
     
     public int getAccountid() {
         return accountid;
