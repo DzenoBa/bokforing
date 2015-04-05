@@ -1,7 +1,7 @@
 <!--Body content-->
 <div>
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-6">
             <h2>Dina verifikationer</h2>
             <table class="table table-striped">
                 <thead>
@@ -27,8 +27,9 @@
             </table>
             <pagination total-items="maxsize" items-per-page="20" ng-model="currentPage" max-size="5" class="pagination-sm" boundary-links="true" ng-change="pageChanged()" ng-show="maxsize > 20"></pagination>
         </div>
-        <div class="col-md-5" ng-show="showverinfoboolean">
+        <div class="col-md-6" ng-show="showverinfoboolean">
             <h2>Verifikations information - Nr {{verinfo.id}}</h2>
+            <input type="button" value="Ändra" class="btn btn-primary" ng-click="showeditver()"/>
             <h3>{{verinfo.transactionDate}}</h3>
             <h3>Beskrivning</h3>
             {{verinfo.description}}
@@ -58,6 +59,90 @@
                     <td>{{creditpost.sum}}</td>
                 </tr>
             </table>
+        </div>
+        <div class="col-md-6" ng-show="showeditverboolean">
+            <h2>Ändra verifikation - Nr. {{verinfo.id}}</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width:30%">Konto</th>
+                        <th style="width:30%">Debet</th>
+                        <th style="width:30%">Kredit</th>
+                        <th style="width:10%"></th><!-- Offset -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="debitpost in verinfo.debitposts" ng-style="postStyle">
+                        <td>{{debitpost.accountid}} - {{debitpost.accountname}}</td>
+                        <td>{{debitpost.sum}}</td>
+                        <td>0</td>
+                        <td>
+                            <button type="button" class="btn btn-danger" ng-click="removePost(debitpost); postStyle={'text-decoration':'line-through','background':'#FFF0F5'}" ng-show="!debitpost.removed">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+                            <button type="button" class="btn btn-info" ng-click="restorePost(debitpost); postStyle={}" ng-show="debitpost.removed">
+                                <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="creditpost in verinfo.creditposts" ng-style="postStyle">
+                        <td>{{creditpost.accountid}} - {{creditpost.accountname}}</td>
+                        <td>0</td>
+                        <td>{{creditpost.sum}}</td>
+                        <td>
+                            <button type="button" class="btn btn-danger" ng-click="removePost(creditpost); postStyle={'text-decoration':'line-through','background':'#FFF0F5'}" ng-show="!creditpost.removed">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+                            <button type="button" class="btn btn-info" ng-click="restorePost(creditpost); postStyle={}" ng-show="creditpost.removed">
+                                <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="newpost in verinfo.posts">
+                        <td>
+                            <div class="input-group">
+                                <input class="form-control" type="text" value="{{accountls[$index]}}" readonly>
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-primary" ng-click="open($index)">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true" ng-show="!accountls[$index]"></span>
+                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true" ng-show="accountls[$index]"></span>
+                                    </button>
+                                </div>
+                            </div>    
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" step="0.01" ng-model="newpost.debit"/>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" step="0.01" ng-model="newpost.credit"/>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger" ng-click="removeNewpost(newpost)">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>
+                            <span class="label label-warning" ng-show="sumDebit() !== sumCredit()">Debit och kredit måste vara lika</span> &nbsp;
+                        </td>
+                        <td>
+                            Totalt: {{sumDebit()}}
+                        </td>
+                        <td>
+                            Totalt: {{sumCredit()}}
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" ng-click="addNewpost()">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <input type="button" value="Cancel" class="btn btn-primary" ng-click="showverinfo()"/>
         </div>
     </div>
 </div>

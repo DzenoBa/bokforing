@@ -72,7 +72,7 @@ public class BookkeepingController {
     private PostManager postManager;
     
     /*
-     * CREATE
+     * CREATE VERIFICATION
      */
     @RequestMapping(value = "/bookkeeping/createman", method = RequestMethod.POST)
     public @ResponseBody FormJSON createVerification(@RequestBody final VerificationJSON verification) {
@@ -177,7 +177,7 @@ public class BookkeepingController {
     }
     
     /*
-     * CREATE
+     * EDIT VERIFICATION
      */
     @RequestMapping(value = "/bookkeeping/editverification", method = RequestMethod.POST)
     public @ResponseBody FormJSON editVerification(@RequestBody final VerificationJSON verification) {
@@ -203,12 +203,6 @@ public class BookkeepingController {
         String description = "";
         if(verification.getDescription() != null) {
             description = verification.getDescription();
-        }
-        
-        // CHECK POSTS
-        if(verification.getPosts() == null || verification.getPosts().isEmpty()) {
-            form.addError("general", "Ett fel inträffades vänligen försök igenom om en liten stund");
-            return form;
         }
             
         // CREATE NEW POSTS
@@ -274,7 +268,7 @@ public class BookkeepingController {
         
         // EVERYTHING SEEMS TO BE IN ORDER; EDIT VERIFICATION
         ver.setDescription(description);
-        // FUNKTION REPLACE POST SAVES THE VERIFICATION
+        // FUNCTION REPLACE-POST SAVES THE VERIFICATION
         // SO THE DESCRIPTION SHOULD ALSO BE CHANGED
         if(new_posts.size() > 0) {
             if(!verificationManager.replacePost(ver, old_posts, new_posts)) {

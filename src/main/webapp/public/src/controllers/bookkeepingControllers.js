@@ -233,10 +233,82 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', 'BookkeepingPro
         $scope.showverinfo = function(index) {
             $scope.verinfo = $scope.verifications[index];
             $scope.showverinfoboolean = true;
+            $scope.showeditverboolean = false;
+        };
+        
+        $scope.showeditver = function() {
+            $scope.showverinfoboolean = false;
+            $scope.showeditverboolean = true;
         };
         
         $scope.pageChanged = function() {
             getVerifications();
+        };
+        
+        $scope.removePost = function(post) {
+            if($scope.verinfo.oldposts === null) {
+                $scope.verinfo.oldposts = [];
+            }
+            $scope.verinfo.oldposts[$scope.verinfo.oldposts.length] = post;
+            post.removed = true;
+        };
+        
+        $scope.restorePost = function(post) {
+            $scope.verinfo.oldposts.splice($scope.verinfo.oldposts.indexOf(post), 1);
+            post.removed = null;
+        };
+        
+        $scope.sumDebit = function(){
+            return sumDebit();
+        };
+        
+        $scope.sumCredit = function() {
+            return sumCredit();
+        };
+        
+        function sumDebit() {
+            var total = 0;
+            if($scope.verinfo.debitposts) {
+                for(var i = 0; i < $scope.verinfo.debitposts.length; i++){
+                    if(!$scope.verinfo.debitposts[i].removed) {
+                        total += $scope.verinfo.debitposts[i].sum;
+                    }
+                }
+            }
+            if($scope.verinfo.posts) {
+                for(var i = 0; i < $scope.verinfo.posts.length; i++){
+                    total += $scope.verinfo.posts[i].debit;
+                }
+            }
+            return total;
+        }
+        
+        function sumCredit() {
+            var total = 0;
+            if($scope.verinfo.creditposts) {
+                for(var i = 0; i < $scope.verinfo.creditposts.length; i++){
+                    if(!$scope.verinfo.creditposts[i].removed) {
+                        total += $scope.verinfo.creditposts[i].sum;
+                    }
+                }
+            }
+            if($scope.verinfo.posts) {
+                for(var i = 0; i < $scope.verinfo.posts.length; i++){
+                    total += $scope.verinfo.posts[i].credit;
+                }
+            }
+            return total;
+        }
+        
+        $scope.addNewpost = function() {
+            if($scope.verinfo.posts === null) {
+                $scope.verinfo.posts = [];
+            }
+            $scope.verinfo.posts[$scope.verinfo.posts.length] = {debit: 0, credit: 0};
+        };
+        
+        $scope.removeNewpost = function(post) {
+            $scope.verinfo.posts.splice($scope.verinfo.posts.indexOf(post), 1);
         };
     }
 ]);
