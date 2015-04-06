@@ -374,7 +374,7 @@ public class BookkeepingController {
         PagingAndSortingTerms terms = new PagingAndSortingTerms(start, Boolean.FALSE, "creationDate", 10);
         Account entityAccount = new Account();
         entityAccount.setNumber(account.getNumber());
-        List<Post> postLs = postService.findPostsForUserAndAccount(userHandler.getUA(), entityAccount, terms).getContent();
+        List<Post> postLs = postService.findPostsForUserAndAccount(userHandler.getUA(), entityAccount, true, terms).getContent();
         
         List<Verification> verLs = new ArrayList();
         for(Post post : postLs) {
@@ -397,7 +397,7 @@ public class BookkeepingController {
         PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate");
         Account entityAccount = new Account();
         entityAccount.setNumber(account.getNumber());
-        Page<Post> postPage = postService.findPostsForUserAndAccount(uh.getUA(), entityAccount, terms);
+        Page<Post> postPage = postService.findPostsForUserAndAccount(uh.getUA(), entityAccount, true, terms);
         
         size = postPage.getTotalElements();
         

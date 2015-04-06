@@ -271,7 +271,7 @@ public class VerificationTest extends AbstractIntegrationTest {
         Account accountFromDb = accountService.findAccountByNumber(2018);
 
         PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate");
-        List<Post> posts = postService.findPostsForUserAndAccount(user, accountFromDb, terms).getContent();
+        List<Post> posts = postService.findPostsForUserAndAccount(user, accountFromDb, true, terms).getContent();
         assertEquals(4, posts.size());
         
         long begin = System.currentTimeMillis();

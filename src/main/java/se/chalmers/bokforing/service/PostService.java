@@ -29,7 +29,7 @@ public interface PostService {
 
     Map<Account, Double> getIncomeStatement(UserAccount user, Date startDate, Date endDate, Pageable pageable);
 
-    Page<Post> findPostsForUserAndAccount(UserAccount user, Account account, PagingAndSortingTerms terms);
+    Page<Post> findPostsForUserAndAccount(UserAccount user, Account account, boolean isActive, PagingAndSortingTerms terms);
 
     Post findVerificationById(long id);
 }

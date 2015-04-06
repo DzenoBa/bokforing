@@ -48,7 +48,7 @@ public class PostServiceImpl implements PostService {
 
         List<Account> accounts = accountService.findAllAccounts();
         for (Account account : accounts) {
-            Page<Post> posts = postRepo.findPostsForUserAndAccount(user.getId(), account.getNumber(), null);
+            Page<Post> posts = postRepo.findPostsForUserAndAccountAndActive(user.getId(), account.getNumber(), true, null);
 
             generalLedger.put(account, posts.getContent());
         }
@@ -157,10 +157,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<Post> findPostsForUserAndAccount(UserAccount user, Account account, PagingAndSortingTerms terms) {
+    public Page<Post> findPostsForUserAndAccount(UserAccount user, Account account, boolean isActive, PagingAndSortingTerms terms) {
         PageRequest request = terms.getPageRequest();
 
-        return postRepo.findPostsForUserAndAccount(user.getId(), account.getNumber(), request);
+        return postRepo.findPostsForUserAndAccountAndActive(user.getId(), account.getNumber(), isActive, request);
     }
 
     @Override
