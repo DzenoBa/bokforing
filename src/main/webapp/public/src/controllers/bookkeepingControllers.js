@@ -237,14 +237,24 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'Book
             }
             $scope.showverinfoboolean = true;
             $scope.showeditverboolean = false;
+            $scope.showverhistoryboolean = false;
             $scope.editver = {};
         };
         
+        $scope.showverhistory = function() {
+            $scope.showverinfoboolean = false;
+            $scope.showeditverboolean = false;
+            $scope.showverhistoryboolean = true;
+            $scope.editver = {};
+        };
+
         $scope.showeditver = function() {
             angular.copy($scope.verinfo, $scope.editver);
+            $scope.editver.oldposts = [];
             $scope.accountls = [];
             $scope.showverinfoboolean = false;
             $scope.showeditverboolean = true;
+            $scope.showverhistoryboolean = false;
         };
         
         $scope.pageChanged = function() {

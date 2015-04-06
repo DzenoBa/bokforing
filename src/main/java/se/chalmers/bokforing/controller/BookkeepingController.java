@@ -156,6 +156,7 @@ public class BookkeepingController {
             temp_post.setAccount(temp_account);
             temp_post.setPostSum(temp_postSum);
             temp_post.setCreationDate(temp_date);
+            temp_post.setActive(true);
             
             new_posts.add(temp_post);
         }
@@ -427,22 +428,40 @@ public class BookkeepingController {
             // CREATE POST-JSON'S
             List<PostJSON> debitPostJSONLs = new ArrayList();
             List<PostJSON> creditPostJSONLs = new ArrayList();
+            List<PostJSON> oldPostJSONLs = new ArrayList();
             for (Post post : ver.getPosts()) {
                 PostJSON postJSON = new PostJSON();
                 postJSON.setId(post.getId());
                 postJSON.setAccountid(post.getAccount().getNumber());
                 postJSON.setAccountname(post.getAccount().getName());
-                postJSON.setSum(post.getPostSum().getSumTotal());
+                
                 
                 // ADD POST TO RIGHT LS
-                if(post.getPostSum().getType().equals(PostType.Debit)) {
+                if(!post.isActive()) {
+                    // OLD POSTS
+                    if(post.getPostSum().getType().equals(PostType.Debit)) {
+                        postJSON.setDebit(post.getPostSum().getSumTotal());
+                        postJSON.setCredit(0);
+                    } else {
+                        postJSON.setDebit(0);
+                        postJSON.setCredit(post.getPostSum().getSumTotal());
+                    }
+                    postJSON.setCreationdate(new Date());
+                    oldPostJSONLs.add(postJSON);
+                }
+                else if(post.getPostSum().getType().equals(PostType.Debit)) {
+                    postJSON.setSum(post.getPostSum().getSumTotal());
                     debitPostJSONLs.add(postJSON);
                 } else if(post.getPostSum().getType().equals(PostType.Credit)) {
+                    postJSON.setSum(post.getPostSum().getSumTotal());
                     creditPostJSONLs.add(postJSON);
                 }
             }
             verJSON.setDebitposts(debitPostJSONLs);
             verJSON.setCreditposts(creditPostJSONLs);
+            if(oldPostJSONLs.size() > 0) {
+                verJSON.setOldposts(oldPostJSONLs);
+            }
             
             // CALC THE TOTAL SUM
             // TOTAL DEBIT AND TOTAL CREDIT SHOULD BE EQUAL

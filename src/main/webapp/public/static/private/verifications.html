@@ -27,9 +27,14 @@
             </table>
             <pagination total-items="maxsize" items-per-page="20" ng-model="currentPage" max-size="5" class="pagination-sm" boundary-links="true" ng-change="pageChanged()" ng-show="maxsize > 20"></pagination>
         </div>
+        <!-- ** VERIFICATION INFO ** -->
         <div class="col-md-6" ng-show="showverinfoboolean">
+            <ul class="nav nav-tabs nav-justified" style="margin-top: 10px;">
+                <li role="presentation" class="active"><a href="">Visa</a></li>
+                <li role="presentation"><a href="" ng-click="showeditver()">Ändra</a></li>
+                <li role="presentation" ng-class="{disabled: !verinfo.oldposts}"><a href="" ng-click="!verinfo.oldposts || showverhistory()">Historik</a></li>
+            </ul>
             <h2>Verifikations information - Nr {{verinfo.id}}</h2>
-            <input type="button" value="Ändra" class="btn btn-primary" ng-click="showeditver()"/>
             <h3>{{verinfo.transactionDate}}</h3>
             <h3>Beskrivning</h3>
             {{verinfo.description}}
@@ -60,7 +65,13 @@
                 </tr>
             </table>
         </div>
+        <!-- ** EDIT VERIFICATION ** -->
         <div class="col-md-6" ng-show="showeditverboolean">
+            <ul class="nav nav-tabs nav-justified" style="margin-top: 10px;">
+                <li role="presentation"><a href="" ng-click="showverinfo()">Visa</a></li>
+                <li role="presentation" class="active"><a href="">Ändra</a></li>
+                <li role="presentation" ng-class="{disabled: !verinfo.oldposts}"><a href="" ng-click="!verinfo.oldposts || showverhistory()">Historik</a></li>
+            </ul>
             <h2>Ändra verifikation - Nr. {{editver.id}}</h2>
             <form class="form-horizontal">
                 <div class="form-group">
@@ -160,6 +171,34 @@
                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 </button>
             </div>
+        </div>
+        <!-- ** VERIFICATION HISTORY ** -->
+        <div class="col-md-6" ng-show="showverhistoryboolean">
+            <ul class="nav nav-tabs nav-justified" style="margin-top: 10px;">
+                <li role="presentation"><a href="" ng-click="showverinfo()">Visa</a></li>
+                <li role="presentation"><a href="" ng-click="showeditver()">Ändra</a></li>
+                <li role="presentation" class="active"><a href="">Historik</a></li>
+            </ul>
+            <h2>Verifikations historik - Nr. {{verinfo.id}}</h2>
+            <h3>Gamla poster</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width:30%">Konto</th>
+                        <th style="width:20%">Debet</th>
+                        <th style="width:20%">Kredit</th>
+                        <th style="width:30%">Skapades</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="oldpost in verinfo.oldposts">
+                        <td>{{oldpost.accountid}} - {{oldpost.accountname}}</td>
+                        <td>{{oldpost.debit}}</td>
+                        <td>{{oldpost.credit}}</td>
+                        <td>{{oldpost.creationdate | date:'yyyy-MM-dd'}}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
