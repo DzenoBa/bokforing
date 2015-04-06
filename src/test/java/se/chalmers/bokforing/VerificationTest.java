@@ -462,4 +462,20 @@ public class VerificationTest extends AbstractIntegrationTest {
         // Make sure posts were actually inserted
         assertEquals(postsThatShouldBeInDb, postsFromDb);
     }
+    
+    @Test
+    @Transactional
+    public void testGetPost() {
+        createVerificationHelper();
+        
+        Verification ver = service.findByUserAndVerificationNumber(user, 7372);
+        
+        Post postFromVer = ver.getPosts().get(0);
+        Long postId = postFromVer.getId();
+        
+        Post postFromDb = postService.findVerificationById(postId);
+        
+        assertEquals(postFromVer, postFromDb);
+        assertEquals(postFromVer.getId(), postFromDb.getId());
+    }
 }

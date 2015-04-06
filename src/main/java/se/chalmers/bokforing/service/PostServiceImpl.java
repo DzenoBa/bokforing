@@ -162,4 +162,9 @@ public class PostServiceImpl implements PostService {
 
         return postRepo.findPostsForUserAndAccount(user.getId(), account.getNumber(), request);
     }
+
+    @Override
+    public Post findVerificationById(long id) {
+        return postRepo.findOne(id);
+    }
 }

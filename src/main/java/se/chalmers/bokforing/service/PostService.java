@@ -31,4 +31,5 @@ public interface PostService {
 
     Page<Post> findPostsForUserAndAccount(UserAccount user, Account account, PagingAndSortingTerms terms);
 
+    Post findVerificationById(long id);
 }

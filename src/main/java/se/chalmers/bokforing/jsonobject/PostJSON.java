@@ -10,7 +10,7 @@ import java.util.Date;
  */
 public class PostJSON implements Serializable {
     
-    private int id;
+    private Long id;
     private int accountid;
     private String accountname;
     private double debit;
@@ -18,10 +18,10 @@ public class PostJSON implements Serializable {
     private double sum;
     private Date creationdate;
     
-    public int getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
     
