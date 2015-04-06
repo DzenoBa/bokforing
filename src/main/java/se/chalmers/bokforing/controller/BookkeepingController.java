@@ -2,6 +2,7 @@
 package se.chalmers.bokforing.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -151,23 +152,19 @@ public class BookkeepingController {
             
             // EVERYTHING SEEMS TO BE IN ORDER; CREATE POST
             Post temp_post = new Post();
+            Date temp_date = new Date();
             temp_post.setAccount(temp_account);
             temp_post.setPostSum(temp_postSum);
+            temp_post.setCreationDate(temp_date);
             
             new_posts.add(temp_post);
         }
         
         // EVERYTHING SEEMS TO BE IN ORDER; CREATE VERIFICATION
         UserHandler uh = userService.getUser(email);
-        //userService.storeUser(user);
-        
-        // TODO
-        long customerNumber = 123;
-        Customer customer = customerManager.createCustomer(uh.getUA(), customerNumber, "Dzeno", "00387", null);
-        Customer customerFromDb = customerService.findByCustomerNumber(uh.getUA(), customerNumber);
         
         // CREATE VERIFICATION
-        Verification ver = verificationManager.createVerification(uh.getUA(), new_posts, verification.getTransactionDate(), customerFromDb, description);
+        Verification ver = verificationManager.createVerification(uh.getUA(), new_posts, verification.getTransactionDate(), null, description);
         uh.getVerifications().add(ver);
         userService.storeUser(uh);
         

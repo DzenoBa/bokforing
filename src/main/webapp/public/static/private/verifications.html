@@ -61,7 +61,17 @@
             </table>
         </div>
         <div class="col-md-6" ng-show="showeditverboolean">
-            <h2>Ändra verifikation - Nr. {{verinfo.id}}</h2>
+            <h2>Ändra verifikation - Nr. {{editver.id}}</h2>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <label>Beskrivning</label>
+                    </div>
+                    <div class="col-md-9">
+                        <textarea class="form-control" ng-model="editver.description" name="text" cols="10" rows="2" placeholder="Ange en beskrivning" style="resize: vertical;"></textarea>
+                    </div>
+                </div>
+            </form>
             <table class="table">
                 <thead>
                     <tr>
@@ -72,7 +82,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="debitpost in verinfo.debitposts" ng-style="postStyle">
+                    <tr ng-repeat="debitpost in editver.debitposts" ng-style="postStyle">
                         <td>{{debitpost.accountid}} - {{debitpost.accountname}}</td>
                         <td>{{debitpost.sum}}</td>
                         <td>0</td>
@@ -85,7 +95,7 @@
                             </button>
                         </td>
                     </tr>
-                    <tr ng-repeat="creditpost in verinfo.creditposts" ng-style="postStyle">
+                    <tr ng-repeat="creditpost in editver.creditposts" ng-style="postStyle">
                         <td>{{creditpost.accountid}} - {{creditpost.accountname}}</td>
                         <td>0</td>
                         <td>{{creditpost.sum}}</td>
@@ -98,12 +108,12 @@
                             </button>
                         </td>
                     </tr>
-                    <tr ng-repeat="newpost in verinfo.posts">
+                    <tr ng-repeat="newpost in editver.posts">
                         <td>
                             <div class="input-group">
                                 <input class="form-control" type="text" value="{{accountls[$index]}}" readonly>
                                 <div class="input-group-btn">
-                                    <button type="button" class="btn btn-primary" ng-click="open($index)">
+                                    <button type="button" class="btn btn-primary" ng-click="openaccount($index)">
                                         <span class="glyphicon glyphicon-plus" aria-hidden="true" ng-show="!accountls[$index]"></span>
                                         <span class="glyphicon glyphicon-pencil" aria-hidden="true" ng-show="accountls[$index]"></span>
                                     </button>
@@ -142,7 +152,14 @@
                     </tr>
                 </tfoot>
             </table>
-            <input type="button" value="Cancel" class="btn btn-primary" ng-click="showverinfo()"/>
+            <div class="btn-group">
+                <button type="button" class="btn btn-success">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-danger" ng-click="showverinfo()">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </button>
+            </div>
         </div>
     </div>
 </div>

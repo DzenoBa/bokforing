@@ -85,7 +85,7 @@ bookkeepingControllers.controller('BookkeepingCtrl', ['$scope', 'BookkeepingProx
         $scope.open = function (index) {
 
             var modalInstance = $modal.open({
-                templateUrl: 'myModalContent.html',
+                templateUrl: 'private/modals/accountSelecterModal.html',
                 controller: 'ModalInstanceAccountCtrl',
                 size: 'lg'
             });
@@ -204,11 +204,12 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
     
 });
 
-bookkeepingControllers.controller('VerificationCtrl', ['$scope', 'BookkeepingProxy',
-    function($scope, BookkeepingProxy) {
+bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'BookkeepingProxy',
+    function($scope, $modal, BookkeepingProxy) {
         
         $scope.showverinfoboolean = false;
         $scope.verinfo = {};
+        $scope.editver = {};
         $scope.currentPage = 1;
         $scope.verifications = getVerifications();
         
@@ -231,12 +232,17 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', 'BookkeepingPro
         };
         
         $scope.showverinfo = function(index) {
-            $scope.verinfo = $scope.verifications[index];
+            if(angular.isDefined(index)) {
+                $scope.verinfo = $scope.verifications[index];
+            }
             $scope.showverinfoboolean = true;
             $scope.showeditverboolean = false;
+            $scope.editver = {};
         };
         
         $scope.showeditver = function() {
+            angular.copy($scope.verinfo, $scope.editver);
+            $scope.accountls = [];
             $scope.showverinfoboolean = false;
             $scope.showeditverboolean = true;
         };
@@ -246,15 +252,15 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', 'BookkeepingPro
         };
         
         $scope.removePost = function(post) {
-            if($scope.verinfo.oldposts === null) {
-                $scope.verinfo.oldposts = [];
+            if($scope.editver.oldposts === null) {
+                $scope.editver.oldposts = [];
             }
-            $scope.verinfo.oldposts[$scope.verinfo.oldposts.length] = post;
+            $scope.editver.oldposts[$scope.editver.oldposts.length] = post;
             post.removed = true;
         };
         
         $scope.restorePost = function(post) {
-            $scope.verinfo.oldposts.splice($scope.verinfo.oldposts.indexOf(post), 1);
+            $scope.editver.oldposts.splice($scope.editver.oldposts.indexOf(post), 1);
             post.removed = null;
         };
         
@@ -268,16 +274,16 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', 'BookkeepingPro
         
         function sumDebit() {
             var total = 0;
-            if($scope.verinfo.debitposts) {
-                for(var i = 0; i < $scope.verinfo.debitposts.length; i++){
-                    if(!$scope.verinfo.debitposts[i].removed) {
-                        total += $scope.verinfo.debitposts[i].sum;
+            if($scope.editver.debitposts) {
+                for(var i = 0; i < $scope.editver.debitposts.length; i++){
+                    if(!$scope.editver.debitposts[i].removed) {
+                        total += $scope.editver.debitposts[i].sum;
                     }
                 }
             }
-            if($scope.verinfo.posts) {
-                for(var i = 0; i < $scope.verinfo.posts.length; i++){
-                    total += $scope.verinfo.posts[i].debit;
+            if($scope.editver.posts) {
+                for(var i = 0; i < $scope.editver.posts.length; i++){
+                    total += $scope.editver.posts[i].debit;
                 }
             }
             return total;
@@ -285,30 +291,47 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', 'BookkeepingPro
         
         function sumCredit() {
             var total = 0;
-            if($scope.verinfo.creditposts) {
-                for(var i = 0; i < $scope.verinfo.creditposts.length; i++){
-                    if(!$scope.verinfo.creditposts[i].removed) {
-                        total += $scope.verinfo.creditposts[i].sum;
+            if($scope.editver.creditposts) {
+                for(var i = 0; i < $scope.editver.creditposts.length; i++){
+                    if(!$scope.editver.creditposts[i].removed) {
+                        total += $scope.editver.creditposts[i].sum;
                     }
                 }
             }
-            if($scope.verinfo.posts) {
-                for(var i = 0; i < $scope.verinfo.posts.length; i++){
-                    total += $scope.verinfo.posts[i].credit;
+            if($scope.editver.posts) {
+                for(var i = 0; i < $scope.editver.posts.length; i++){
+                    total += $scope.editver.posts[i].credit;
                 }
             }
             return total;
         }
         
         $scope.addNewpost = function() {
-            if($scope.verinfo.posts === null) {
-                $scope.verinfo.posts = [];
+            if($scope.editver.posts === null) {
+                $scope.editver.posts = [];
             }
-            $scope.verinfo.posts[$scope.verinfo.posts.length] = {debit: 0, credit: 0};
+            $scope.editver.posts[$scope.editver.posts.length] = {debit: 0, credit: 0};
         };
         
         $scope.removeNewpost = function(post) {
-            $scope.verinfo.posts.splice($scope.verinfo.posts.indexOf(post), 1);
+            var index = $scope.editver.posts.indexOf(post);
+            $scope.editver.posts.splice(index, 1);
+            $scope.accountls.splice(index, 1);
+        };
+        
+        $scope.accountls = [];
+        $scope.openaccount = function (index) {
+
+            var modalInstance = $modal.open({
+                templateUrl: 'private/modals/accountSelecterModal.html',
+                controller: 'ModalInstanceAccountCtrl',
+                size: 'lg'
+            });
+
+            modalInstance.result.then(function (selectedAccount) {
+                $scope.editver.posts[index].accountid = selectedAccount.number;
+                $scope.accountls[index] = selectedAccount.number + ' - ' + selectedAccount.name;
+            });
         };
     }
 ]);
