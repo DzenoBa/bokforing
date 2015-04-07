@@ -140,15 +140,17 @@ public class PostServiceImpl implements PostService {
         for (Verification verification : verifications) {
             List<Post> posts = verification.getPosts();
             for (Post post : posts) {
-                Account account = post.getAccount();
-                if (account.getNumber() < REVENUE_ACCOUNTS) {
-                    continue;
-                }
-                if (!incomeStatement.containsKey(account)) {
-                    post.getPostSum().getSumTotal();
-                    incomeStatement.put(account, post.getPostSum().getSumTotal());
-                } else {
-                    incomeStatement.put(account, incomeStatement.get(account) + post.getPostSum().getSumTotal());
+                if (post.isActive()) {
+                    Account account = post.getAccount();
+                    if (account.getNumber() < REVENUE_ACCOUNTS) {
+                        continue;
+                    }
+                    if (!incomeStatement.containsKey(account)) {
+                        post.getPostSum().getSumTotal();
+                        incomeStatement.put(account, post.getPostSum().getSumTotal());
+                    } else {
+                        incomeStatement.put(account, incomeStatement.get(account) + post.getPostSum().getSumTotal());
+                    }
                 }
             }
         }
