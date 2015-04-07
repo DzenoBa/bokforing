@@ -204,8 +204,8 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
     
 });
 
-bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'BookkeepingProxy',
-    function($scope, $modal, BookkeepingProxy) {
+bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$route','$modal', 'BookkeepingProxy',
+    function($scope, $route, $modal, BookkeepingProxy) {
         
         $scope.showverinfoboolean = false;
         $scope.verinfo = {};
@@ -271,7 +271,7 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'Book
         
         $scope.restorePost = function(post) {
             $scope.editver.oldposts.splice($scope.editver.oldposts.indexOf(post), 1);
-            post.removed = null;
+            delete post.removed;
         };
         
         $scope.sumDebit = function(){
@@ -342,6 +342,36 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'Book
                 $scope.editver.posts[index].accountid = selectedAccount.number;
                 $scope.accountls[index] = selectedAccount.number + ' - ' + selectedAccount.name;
             });
+        };
+        
+        $scope.sendver = {};
+        $scope.submit = function() {
+            angular.copy($scope.editver, $scope.sendver);
+            if(angular.isDefined($scope.sendver.oldposts)) {
+                // REMOVE THE REMOVED-VAR
+                angular.forEach($scope.sendver.oldposts, function(post) {
+                    delete post.removed;
+                });
+            }
+            BookkeepingProxy.editVerification($scope.sendver)
+                    .success(function(form) {
+                        $scope.form = form;
+                        if(form.numErrors === 0) {
+                            // REOLAD
+                            var index = $scope.verifications.indexOf($scope.verinfo);
+                            $scope.verifications = getVerifications();
+                            $scope.editver = {};
+                            $scope.$watch('verifications', function(ver) {
+                                if(angular.isDefined(ver)) {
+                                    $scope.verinfo = $scope.verifications[index];
+                                }
+                             });
+                            $scope.showeditverboolean = false;
+                            $scope.showverinfoboolean = true;                            
+                        }
+                    }).error(function() {
+                        console.log("editVerification: error");
+                    });
         };
     }
 ]);
