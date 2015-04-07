@@ -49,16 +49,6 @@
   background-position: 0 -15px;
 }
 
-.picbtn{
-    background:url(../images/Briefcase.png) no-repeat; 
-    width:98px; 
-    height:32px; 
-    border:none;}
-
-.picbtn:active{
-        background:url(../images/Briefcase.png) no-repeat;     
-}
-
 .btn-default:active,
 .btn-default.active {
   background-color: #e0e0e0;

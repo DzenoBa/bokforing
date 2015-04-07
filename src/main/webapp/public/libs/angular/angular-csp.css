@@ -22,3 +22,11 @@ ng\:form {
  * animate anything and they're both highly underused CSS properties */
 .ng-animate-start { border-spacing:1px 1px; -ms-zoom:1.0001; }
 .ng-animate-active { border-spacing:0px 0px; -ms-zoom:1; }
+
+.collapsed {
+
+}
+
+#nav-coll-1 {
+
+}

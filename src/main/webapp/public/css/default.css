@@ -25,3 +25,13 @@ footer {
 .error {
     color: #d9534f;
 }
+
+.picbtn{
+    background:url(../images/Briefcase.png) no-repeat; 
+    width:98px; 
+    height:32px; 
+    border:none;}
+
+.picbtn:active{
+        background:url(../images/Briefcase.png) no-repeat;     
+}
