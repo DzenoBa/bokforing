@@ -16,28 +16,20 @@
     </head>
     <body>
         <header class="container">
-            <a href="index.html">
-               <h1>Super-<span style="color:orange">Booky</span></h1>
-               <h5><i>Because you're worth it</i></h5>
-            </a>
-         </header>
+            <hgroup>
+                <h1>Super-<span style="color:blue">Booky</span></h1>
+                <h2><i>Because you're worth it</i></h2>
+            </hgroup>
+        </header>
         <div class="mynav">
             <nav class="container" role="navigation">
-                <a class="navbar-brand" href="#/start">Start</a> <!-- sidan med "händelsetilläggen"-->
-                    <a class="navbar-brand" href="#/bookkeeping">Bokföring</a>
-                    <a class="navbar-brand" href="#/timelog">Tidslogg</a>
-                    <a class="navbar-brand" href="#/userpage">Kunder</a>
-                    <a class="navbar-brand" href="#/products">Produkter</a>
-                    <a class="navbar-brand" href="#/rapporter">Rapporter</a>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#/register" class="btn btn-default">Registrera dig</a></li>
-                    <li><a href="#/login" class="btn btn-default">Logga in</a></li>
-                    <li><a href="#/passwdreset" class="btn btn-default">Glömt lösenord?</a></li> <!-- endast om !inloggad-->
-                    <li><a href="#userinfo" class="btn btn-default">Min Profil</a></li><!--ska endast synas när inloggad-->
-                </ul>
+                <a class="navbar-brand" href="#">Home</a>
+                <a class="navbar-brand" href="#/login">Login</a>
+                <a class="navbar-brand" href="#/userpage">Userpage</a>
+                <a class="navbar-brand" href="#/register">Registrera dig!</a>
+                <a class="navbar-brand" href="#/passwdreset">Glömt lösenord?</a>
             </nav>
         </div>
-        
         <div class="container">
             <!-- Include the view template for the current route -->
             <div ng-view ></div>
