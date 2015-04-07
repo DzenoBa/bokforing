@@ -204,8 +204,8 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
     
 });
 
-bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$route','$modal', 'BookkeepingProxy',
-    function($scope, $route, $modal, BookkeepingProxy) {
+bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'BookkeepingProxy',
+    function($scope, $modal, BookkeepingProxy) {
         
         $scope.showverinfoboolean = false;
         $scope.verinfo = {};
@@ -239,6 +239,10 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$route','$moda
             $scope.showeditverboolean = false;
             $scope.showverhistoryboolean = false;
             $scope.editver = {};
+            // ROMOVE FORM IF DEFINED
+            if(angular.isDefined($scope.form)) {
+                delete $scope.form;
+            }
         };
         
         $scope.showverhistory = function() {
@@ -255,6 +259,10 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$route','$moda
             $scope.showverinfoboolean = false;
             $scope.showeditverboolean = true;
             $scope.showverhistoryboolean = false;
+            // ROMOVE FORM IF DEFINED
+            if(angular.isDefined($scope.form)) {
+                delete $scope.form;
+            }
         };
         
         $scope.pageChanged = function() {
