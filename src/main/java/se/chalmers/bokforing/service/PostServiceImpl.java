@@ -69,10 +69,12 @@ public class PostServiceImpl implements PostService {
      * @param startDate
      * @param endDate
      * @param pageable
-     * @return balanceSheet, a mapping from the accounts the user has used to
-     * the sum of all posts during that period and the opening balance. Other
-     * things needed to create the full balanceSheet on the receivers end is
-     * title for the account types, company name, period and so on.
+     * @return balanceSheet, a mapping from the accounts the user has used to a
+     * list where the first value in the list is the sum of all posts during
+     * that period and the second value is the opening balance of that period.
+     * Other things needed to create the full balanceSheet on the receivers end
+     * is title for the account types, company name, period and so on (look in
+     * docs for specifications).
      */
     @Override
     public Map<Account, List<Double>> getBalanceSheet(UserAccount user, Date startDate,
