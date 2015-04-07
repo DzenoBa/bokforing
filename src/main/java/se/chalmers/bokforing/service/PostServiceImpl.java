@@ -172,7 +172,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post findVerificationById(long id) {
+    public Post findPostById(long id) {
         return postRepo.findOne(id);
     }
 }

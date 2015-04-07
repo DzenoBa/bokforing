@@ -473,7 +473,7 @@ public class VerificationTest extends AbstractIntegrationTest {
         Post postFromVer = ver.getPosts().get(0);
         Long postId = postFromVer.getId();
         
-        Post postFromDb = postService.findVerificationById(postId);
+        Post postFromDb = postService.findPostById(postId);
         
         assertEquals(postFromVer, postFromDb);
         assertEquals(postFromVer.getId(), postFromDb.getId());
