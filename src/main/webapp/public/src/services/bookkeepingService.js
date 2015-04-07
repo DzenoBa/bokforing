@@ -23,11 +23,17 @@ bookkeepingService.factory('BookkeepingProxy', ['$http', '$location',
             countSearchAccount: function(account) {
                 return $http.post(url + '/countsearchaccount', account);
             },
-            getVerifications: function() {
-                return $http.get(url + '/getverifications');
+            getVerifications: function(start) {
+                return $http.post(url + '/getverifications', start);
+            },
+            countVerifications: function() {
+                return $http.get(url + '/countverifications');
             },
             getVerificationsByAccount: function(account) {
                 return $http.post(url + '/getverificationsbyaccount', account);
+            },
+            countVerificationsByAccount: function(account) {
+                return $http.post(url + '/countverificationsbyaccount', account);
             }
         };
     }

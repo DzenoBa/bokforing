@@ -2,6 +2,7 @@
 package se.chalmers.bokforing.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,7 @@ import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.service.AccountManager;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.AccountService;
+import se.chalmers.bokforing.service.PostManager;
 import se.chalmers.bokforing.service.PostService;
 import se.chalmers.bokforing.service.VerificationService;
 import se.chalmers.bokforing.session.AuthSession;
@@ -65,13 +67,16 @@ public class BookkeepingController {
     private AccountManager accountManager;
     
     @Autowired
-    private PostService postService; //TODO
+    private PostService postService; 
+    
+    @Autowired
+    private PostManager postManager;
     
     /*
-     * CREATE
+     * CREATE VERIFICATION
      */
     @RequestMapping(value = "/bookkeeping/createman", method = RequestMethod.POST)
-    public @ResponseBody FormJSON createman(@RequestBody final VerificationJSON verification) {
+    public @ResponseBody FormJSON createVerification(@RequestBody final VerificationJSON verification) {
         
         System.out.println("* PING bookkeeping/createman");
         FormJSON form = new FormJSON();
@@ -87,6 +92,12 @@ public class BookkeepingController {
         if(verification.getTransactionDate() == null) {
             form.addError("verificationdate", "Ange ett datum");
             return form;
+        }
+        
+        // CHECK DESCRIPTION
+        String description = "";
+        if(verification.getDescription() != null) {
+            description = verification.getDescription();
         }
         
         // CHECK POSTS
@@ -141,23 +152,20 @@ public class BookkeepingController {
             
             // EVERYTHING SEEMS TO BE IN ORDER; CREATE POST
             Post temp_post = new Post();
+            Date temp_date = new Date();
             temp_post.setAccount(temp_account);
             temp_post.setPostSum(temp_postSum);
+            temp_post.setCreationDate(temp_date);
+            temp_post.setActive(true);
             
             new_posts.add(temp_post);
         }
         
         // EVERYTHING SEEMS TO BE IN ORDER; CREATE VERIFICATION
         UserHandler uh = userService.getUser(email);
-        //userService.storeUser(user);
-        
-        // TODO
-        long customerNumber = 123;
-        Customer customer = customerManager.createCustomer(uh.getUA(), customerNumber, "Dzeno", "00387", null);
-        Customer customerFromDb = customerService.findByCustomerNumber(uh.getUA(), customerNumber);
         
         // CREATE VERIFICATION
-        Verification ver = verificationManager.createVerification(uh.getUA(), new_posts, verification.getTransactionDate(), customerFromDb);
+        Verification ver = verificationManager.createVerification(uh.getUA(), new_posts, verification.getTransactionDate(), null, description);
         uh.getVerifications().add(ver);
         userService.storeUser(uh);
         
@@ -166,8 +174,114 @@ public class BookkeepingController {
         return form;
     }
     
+    /*
+     * EDIT VERIFICATION
+     */
+    @RequestMapping(value = "/bookkeeping/editverification", method = RequestMethod.POST)
+    public @ResponseBody FormJSON editVerification(@RequestBody final VerificationJSON verification) {
+        
+        FormJSON form = new FormJSON();
+        
+        // CHECK SESSION
+        if(!(authSession.sessionCheck())) {
+            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            return form;
+        }
+        String email = authSession.getEmail();
+        UserHandler uh = userService.getUser(email);
+        
+        // VERIFICATION CHECK
+        Verification ver = verificationService.findVerificationById(uh.getUA(), verification.getId());
+        if(ver == null) {
+            form.addError("general", "Ett fel inträffades, vänligen försök igen om en liten stund.");
+            return form;
+        }
+        
+        // CHECK DESCRIPTION
+        String description = "";
+        if(verification.getDescription() != null) {
+            description = verification.getDescription();
+        }
+            
+        // CREATE NEW POSTS
+        List<Post> new_posts = new ArrayList();
+        for(PostJSON post : verification.getPosts()) {
+            if(post == null) {
+                form.addError("general", "Ett fel inträffades, vänligen försök igen om en liten stund.");
+                return form;
+            }
+            
+            int index = new_posts.size() + 1;
+            // CHECK ACCOUNT
+            if(!(post.getAccountid() > 0)) {
+                form.addError("general", "Vänligen välj ett konto för rad " + index + "!");
+                return form;
+            } 
+            Account temp_account = accountService.findAccountByNumber(post.getAccountid());
+            // THIS SHOULD'NT HAPPEN 
+            if(temp_account == null) {
+                form.addError("general", "Något gick fel, vänligen försök igen om en liten stund");
+            }
+            // CHECK DEBIT AND CREDIT
+            if(post.getDebit() < 0 || post.getCredit() < 0) {
+                form.addError("general", "Både debet och kredit måste innehålla en siffra i rad " + index + "!");
+                return form;
+            }
+            
+            // CREATE A POSTSUM
+            PostSum temp_postSum = new PostSum();
+            
+            // DEBIT
+            if (post.getDebit() > 0 && post.getCredit() == 0) {
+                temp_postSum.setType(PostType.Debit);
+                temp_postSum.setSumTotal(post.getDebit());
+            }
+            // CREDIT
+            else if (post.getCredit() > 0 && post.getDebit() == 0) {
+                temp_postSum.setType(PostType.Credit);
+                temp_postSum.setSumTotal(post.getCredit());
+            }
+            // SOMETHING WRONG
+            else {
+                form.addError("general", "Debet och Kredit får ej vara lika eller en av dem måste vara 0; Rad: " + index);
+                return form;
+            }
+            
+            // EVERYTHING SEEMS TO BE IN ORDER; CREATE POST
+            Post temp_post = postManager.createPost(temp_postSum, temp_account);
+            
+            new_posts.add(temp_post);
+        }
+        
+        // OLD POSTS CHECK
+        List<Post> old_posts = new ArrayList();
+        for(PostJSON post : verification.getOldposts()) {
+            Post temp_post = null; // PostService.findById()
+            if(temp_post == null) {
+                form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+                return form;
+            }
+            old_posts.add(temp_post);
+        }
+        
+        // EVERYTHING SEEMS TO BE IN ORDER; EDIT VERIFICATION
+        ver.setDescription(description);
+        // FUNCTION REPLACE-POST SAVES THE VERIFICATION
+        // SO THE DESCRIPTION SHOULD ALSO BE CHANGED
+        if(new_posts.size() > 0) {
+            if(!verificationManager.replacePost(ver, old_posts, new_posts)) {
+                form.addError("general", "Något gick fel, kunde inte ändra posterna.");
+                return form;
+            }
+        } else {
+            verificationService.save(ver);
+        }
+        
+        return form;
+    }
+    
     @RequestMapping(value = "/bookkeeping/searchaccount", method = RequestMethod.POST)
-    public @ResponseBody List<Account> searchaccount(@RequestBody final AccountJSON account) {
+    public @ResponseBody List<Account> searchAccount(@RequestBody final AccountJSON account) {
         List<Account> accLs;
         int start = 0;
         
@@ -176,10 +290,10 @@ public class BookkeepingController {
         }
         
         if(account.getNumber() > 0) {
-            PagingAndSortingTerms terms = new PagingAndSortingTerms(start, true, "number");
+            PagingAndSortingTerms terms = new PagingAndSortingTerms(start, true, "number", 10);
             accLs = accountService.findByNumberLike(account.getNumber(), terms).getContent();
         } else if (!(account.getName().isEmpty())) {
-            PagingAndSortingTerms terms = new PagingAndSortingTerms(start, true, "name");
+            PagingAndSortingTerms terms = new PagingAndSortingTerms(start, true, "name", 10);
             accLs = accountService.findByNameLike(account.getName(), terms).getContent();
         } else {
             // Return a empty list
@@ -189,7 +303,7 @@ public class BookkeepingController {
     }
     
     @RequestMapping(value = "/bookkeeping/countsearchaccount", method = RequestMethod.POST)
-    public @ResponseBody long countsearchaccount(@RequestBody final AccountJSON account) {
+    public @ResponseBody long countSearchAccount(@RequestBody final AccountJSON account) {
         long size = 0;
         
         if(account.getNumber() > 0) {
@@ -202,16 +316,21 @@ public class BookkeepingController {
         return size;
     }
     
-    @RequestMapping(value = "/bookkeeping/getverifications", method = RequestMethod.GET)
-    public @ResponseBody List<VerificationJSON> getVerifications() {
+    @RequestMapping(value = "/bookkeeping/getverifications", method = RequestMethod.POST)
+    public @ResponseBody List<VerificationJSON> getVerifications(@RequestBody final String start) {
         List<VerificationJSON> verJSONLs = new ArrayList();
+        int startPos = 0;
         
         if(!authSession.sessionCheck()) {
             return verJSONLs;
         } 
         UserHandler ua = userService.getUser(authSession.getEmail());
         
-        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate"); // TODO
+        if(Integer.parseInt(start) > 0) {
+            startPos = Integer.parseInt(start);
+        }
+        
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(startPos, Boolean.FALSE, "creationDate");
         Page<Verification> verPage = verificationService.findAllVerifications(ua.getUA(), terms);
         
         List<Verification> verLs = verPage.getContent();
@@ -220,32 +339,69 @@ public class BookkeepingController {
         return verJSONLs;
     }
     
+    @RequestMapping(value = "/bookkeeping/countverifications", method = RequestMethod.GET)
+    public @ResponseBody long countVerifications() {
+        long size = 0;
+        
+        if(!authSession.sessionCheck()) {
+            return size;
+        } 
+        UserHandler ua = userService.getUser(authSession.getEmail());
+        
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate");
+        Page<Verification> verPage = verificationService.findAllVerifications(ua.getUA(), terms);
+        
+        size = verPage.getTotalElements();
+        
+        return size;
+    }
+    
     @RequestMapping(value = "/bookkeeping/getverificationsbyaccount", method = RequestMethod.POST)
     public @ResponseBody List<VerificationJSON> getVerificationByAccount(@RequestBody final AccountJSON account) {
         
         List<VerificationJSON> verJSONLs = new ArrayList();
+        int start = 0;
+        
+        if(account.getStartrange() > 0) {
+            start = account.getStartrange();
+        }
         
         if(!authSession.sessionCheck()) {
             return verJSONLs;
         } 
         UserHandler userHandler = userService.getUser(authSession.getEmail());
         
-        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, null);
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(start, Boolean.FALSE, "creationDate", 10);
         Account entityAccount = new Account();
         entityAccount.setNumber(account.getNumber());
-        List<Post> postLs = postService.findPostsForUserAndAccount(userHandler.getUA(), entityAccount, terms).getContent();
+        List<Post> postLs = postService.findPostsForUserAndAccount(userHandler.getUA(), entityAccount, true, terms).getContent();
         
-        int i = 0; // TODO
         List<Verification> verLs = new ArrayList();
         for(Post post : postLs) {
             verLs.add(post.getVerification());
-            i++;
-            if(i>=20)
-                break; // TODO
         }
         verJSONLs = convertToVerificationJSONLs(verLs);
         
         return verJSONLs;
+    }
+    
+    @RequestMapping(value = "/bookkeeping/countverificationsbyaccount", method = RequestMethod.POST)
+    public @ResponseBody long countVerificationsByAccount(@RequestBody final AccountJSON account) {
+        long size = 0;
+        
+        if(!authSession.sessionCheck()) {
+            return size;
+        } 
+        UserHandler uh = userService.getUser(authSession.getEmail());
+        
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate");
+        Account entityAccount = new Account();
+        entityAccount.setNumber(account.getNumber());
+        Page<Post> postPage = postService.findPostsForUserAndAccount(uh.getUA(), entityAccount, true, terms);
+        
+        size = postPage.getTotalElements();
+        
+        return size;
     }
     
     /**
@@ -267,25 +423,45 @@ public class BookkeepingController {
             verJSON.setId(ver.getId());
             verJSON.setTransactionDate(ver.getTransactionDate());
             verJSON.setCreationDate(ver.getCreationDate());
+            verJSON.setDescription(ver.getDescription());
             
             // CREATE POST-JSON'S
             List<PostJSON> debitPostJSONLs = new ArrayList();
             List<PostJSON> creditPostJSONLs = new ArrayList();
+            List<PostJSON> oldPostJSONLs = new ArrayList();
             for (Post post : ver.getPosts()) {
                 PostJSON postJSON = new PostJSON();
+                postJSON.setId(post.getId());
                 postJSON.setAccountid(post.getAccount().getNumber());
                 postJSON.setAccountname(post.getAccount().getName());
-                postJSON.setSum(post.getPostSum().getSumTotal());
+                
                 
                 // ADD POST TO RIGHT LS
-                if(post.getPostSum().getType().equals(PostType.Debit)) {
+                if(!post.isActive()) {
+                    // OLD POSTS
+                    if(post.getPostSum().getType().equals(PostType.Debit)) {
+                        postJSON.setDebit(post.getPostSum().getSumTotal());
+                        postJSON.setCredit(0);
+                    } else {
+                        postJSON.setDebit(0);
+                        postJSON.setCredit(post.getPostSum().getSumTotal());
+                    }
+                    postJSON.setCreationdate(new Date());
+                    oldPostJSONLs.add(postJSON);
+                }
+                else if(post.getPostSum().getType().equals(PostType.Debit)) {
+                    postJSON.setSum(post.getPostSum().getSumTotal());
                     debitPostJSONLs.add(postJSON);
                 } else if(post.getPostSum().getType().equals(PostType.Credit)) {
+                    postJSON.setSum(post.getPostSum().getSumTotal());
                     creditPostJSONLs.add(postJSON);
                 }
             }
             verJSON.setDebitposts(debitPostJSONLs);
             verJSON.setCreditposts(creditPostJSONLs);
+            if(oldPostJSONLs.size() > 0) {
+                verJSON.setOldposts(oldPostJSONLs);
+            }
             
             // CALC THE TOTAL SUM
             // TOTAL DEBIT AND TOTAL CREDIT SHOULD BE EQUAL

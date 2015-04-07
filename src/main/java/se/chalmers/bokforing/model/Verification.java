@@ -58,6 +58,8 @@ public class Verification implements Serializable {
     @OneToOne(cascade = CascadeType.REMOVE)
     private Customer customer;
     
+    private String description;
+    
     /**
      * @return the posts
      */
@@ -150,26 +152,26 @@ public class Verification implements Serializable {
     /**
      * @return the verificationNumber
      */
-    public long getVerificationNumber() {
+    public Long getVerificationNumber() {
         return verificationNumber;
     }
 
     /**
      * @param verificationNumber the verificationNumber to set
      */
-    public void setVerificationNumber(long verificationNumber) {
+    public void setVerificationNumber(Long verificationNumber) {
         this.verificationNumber = verificationNumber;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 59 * hash + Objects.hashCode(this.userAccount);
-        hash = 59 * hash + Objects.hashCode(this.verificationNumber);
-        hash = 59 * hash + Objects.hashCode(this.posts);
-        hash = 59 * hash + Objects.hashCode(this.transactionDate);
-        hash = 59 * hash + Objects.hashCode(this.creationDate);
-        hash = 59 * hash + Objects.hashCode(this.customer);
+        hash = 59 * hash + Objects.hashCode(this.getUserAccount());
+        hash = 59 * hash + Objects.hashCode(this.getVerificationNumber());
+        hash = 59 * hash + Objects.hashCode(this.getPosts());
+        hash = 59 * hash + Objects.hashCode(this.getTransactionDate());
+        hash = 59 * hash + Objects.hashCode(this.getCreationDate());
+        hash = 59 * hash + Objects.hashCode(this.getCustomer());
         return hash;
     }
 
@@ -198,6 +200,20 @@ public class Verification implements Serializable {
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
     
     

@@ -23,8 +23,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             + "select p "
             + "from Post p "
             + "where p.verification.userAccount.id = :userId "
-            + "and p.account.number = :accountNumber"
+            + "and p.account.number = :accountNumber "
+            + "and p.active = :active"
     )
-    Page<Post> findPostsForUserAndAccount(@Param("userId") long userId, @Param("accountNumber") int accountNumber, Pageable pageable);
+    Page<Post> findPostsForUserAndAccountAndActive(@Param("userId") long userId, @Param("accountNumber") int accountNumber, @Param("active") boolean active, Pageable pageable);
     
 }

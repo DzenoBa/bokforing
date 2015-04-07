@@ -21,9 +21,9 @@ import se.chalmers.bokforing.model.Verification;
  */
 public interface VerificationManager {
     
-    Verification createVerification(UserAccount user, List<Post> posts, Date transactionDate, Customer customer);
+    Verification createVerification(UserAccount user, List<Post> posts, Date transactionDate, Customer customer, String description);
     
-    Verification createVerification(UserAccount user, long verificationNbr, List<Post> posts, Date transactionDate, Customer customer);
+    Verification createVerification(UserAccount user, long verificationNbr, List<Post> posts, Date transactionDate, Customer customer, String description);
     
     boolean replacePost(Verification verification, Post oldPost, Post newPost);
     

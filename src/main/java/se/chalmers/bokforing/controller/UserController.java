@@ -148,8 +148,10 @@ public class UserController {
         }
         
         // EVERYTHING SEEMS TO BE IN ORDER CHANGE USER
-        String newHashPasswd = PasswordUtil.hash(uh.getSalt() + user.getNewpasswd());
+        String newSalt = PasswordUtil.randomString(8);
+        String newHashPasswd = PasswordUtil.hash(newSalt + user.getNewpasswd());
         uh.setPass(newHashPasswd);
+        uh.setSalt(newSalt);
         userDb.storeUser(uh);
         
         return form;
@@ -349,8 +351,10 @@ public class UserController {
         }
 
         // EVERYTHING SEEMS TO BE IN ORDER CHANGE PASSWORD
-        String newHashPasswd = PasswordUtil.hash(userHandler.getSalt() + user.getNewpasswd()); //TO DO
+        String newSalt = PasswordUtil.randomString(8);
+        String newHashPasswd = PasswordUtil.hash(newSalt + user.getNewpasswd()); //TO DO
         userHandler.setPass(newHashPasswd);
+        userHandler.setSalt(newSalt);
         userDb.storeUser(userHandler);
         
         // DELETE ACCESS KEY

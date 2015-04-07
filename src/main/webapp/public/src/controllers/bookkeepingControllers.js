@@ -9,9 +9,12 @@
 
 var bookkeepingControllers = angular.module('BookkeepingControllers', ['ui.bootstrap']);
 
-bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$modal', '$filter',
+bookkeepingControllers.controller('BookkeepingCtrl', ['$scope', 'BookkeepingProxy', '$modal', '$filter',
     function($scope, BookkeepingProxy, $modal, $filter) {
         $scope.rows = 2;
+        $scope.currentVerPage = 1;
+        $scope.selectedVerAccount = {};
+        
         $scope.getNumber = function(num) {
             return new Array(num);   
         };
@@ -67,7 +70,8 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$
                             $scope.verification = {posts: 
                                         [ {debit: 0, credit: 0},
                                         {debit: 0, credit: 0}],
-                                        transactionDate: $filter('date')(new Date(),'yyyy-MM-dd')
+                                        transactionDate: $filter('date')(new Date(),'yyyy-MM-dd'),
+                                        description: ""
                                 };
                             $scope.rows = 2;
                             $scope.accountls = [];
@@ -81,7 +85,7 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$
         $scope.open = function (index) {
 
             var modalInstance = $modal.open({
-                templateUrl: 'myModalContent.html',
+                templateUrl: 'private/modals/accountSelecterModal.html',
                 controller: 'ModalInstanceAccountCtrl',
                 size: 'lg'
             });
@@ -89,18 +93,34 @@ bookkeepingControllers.controller('ManBKCtrl', ['$scope', 'BookkeepingProxy', '$
             modalInstance.result.then(function (selectedAccount) {
                 if(!angular.isDefined(index)) {
                     $scope.showaccount = selectedAccount.number + ' - ' + selectedAccount.name;
-                    var tempaccount = {number: selectedAccount.number};
-                    BookkeepingProxy.getVerificationsByAccount(tempaccount)
-                            .success(function(verifications) {
-                                $scope.verifications = verifications;
-                            }).error(function() {
-                                console.log('error: getVerificationsByAccount');
-                            });
+                    $scope.selectedVerAccount = selectedAccount;
+                    getVerifications();
                 } else {
                     $scope.verification.posts[index].accountid = selectedAccount.number;
                     $scope.accountls[index] = selectedAccount.number + ' - ' + selectedAccount.name;
                 }
             });
+        };
+        
+        function getVerifications() {
+            var currentPage = $scope.currentVerPage - 1;
+            var tempaccount = {number: $scope.selectedVerAccount.number, startrange: currentPage};
+            BookkeepingProxy.getVerificationsByAccount(tempaccount)
+                    .success(function(verifications) {
+                        $scope.verifications = verifications;
+                    }).error(function() {
+                        console.log('error: getVerificationsByAccount');
+                    });
+            BookkeepingProxy.countVerificationsByAccount(tempaccount)
+                    .success(function(size) {
+                        $scope.countverifications = size;
+                    }).error(function() {
+                        console.log('error: countVerificationsByAccount');
+                    });
+        }
+        
+        $scope.verPageChanged = function() {
+            getVerifications();
         };
                 
         $scope.opencal = function($event) {
@@ -184,28 +204,144 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
     
 });
 
-bookkeepingControllers.controller('LstVerCtrl', ['$scope', 'BookkeepingProxy',
-    function($scope, BookkeepingProxy) {
-        
-        $scope.verifications = getVerifications();
+bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'BookkeepingProxy',
+    function($scope, $modal, BookkeepingProxy) {
         
         $scope.showverinfoboolean = false;
         $scope.verinfo = {};
+        $scope.editver = {};
+        $scope.currentPage = 1;
+        $scope.verifications = getVerifications();
         
         function getVerifications() {
-            BookkeepingProxy.getVerifications()
+            var pageStart = $scope.currentPage-1 + "";
+            // IN SOME WIERD WAY THE SERVER CAN NOT ACCEPT AN INTEGER
+            // SO I WILL SEND A STRING
+            BookkeepingProxy.getVerifications(pageStart)
                     .success(function(verifications) {
                         $scope.verifications = verifications;
                     }).error(function() {
                 console.log("getVer: error");
             });
+            BookkeepingProxy.countVerifications()
+                    .success(function(size) {
+                        $scope.maxsize = size;
+                    }).error(function() {
+                        console.log("countVerification: error");
+                    });
         };
         
-        $scope.showverinfo = function(id) {
-            var no_ver_per_page = 20;
-            var array_id = $scope.verifications.length % no_ver_per_page - id;
-            $scope.verinfo = $scope.verifications[array_id];
+        $scope.showverinfo = function(index) {
+            if(angular.isDefined(index)) {
+                $scope.verinfo = $scope.verifications[index];
+            }
             $scope.showverinfoboolean = true;
+            $scope.showeditverboolean = false;
+            $scope.showverhistoryboolean = false;
+            $scope.editver = {};
+        };
+        
+        $scope.showverhistory = function() {
+            $scope.showverinfoboolean = false;
+            $scope.showeditverboolean = false;
+            $scope.showverhistoryboolean = true;
+            $scope.editver = {};
+        };
+
+        $scope.showeditver = function() {
+            angular.copy($scope.verinfo, $scope.editver);
+            $scope.editver.oldposts = [];
+            $scope.accountls = [];
+            $scope.showverinfoboolean = false;
+            $scope.showeditverboolean = true;
+            $scope.showverhistoryboolean = false;
+        };
+        
+        $scope.pageChanged = function() {
+            getVerifications();
+        };
+        
+        $scope.removePost = function(post) {
+            if($scope.editver.oldposts === null) {
+                $scope.editver.oldposts = [];
+            }
+            $scope.editver.oldposts[$scope.editver.oldposts.length] = post;
+            post.removed = true;
+        };
+        
+        $scope.restorePost = function(post) {
+            $scope.editver.oldposts.splice($scope.editver.oldposts.indexOf(post), 1);
+            post.removed = null;
+        };
+        
+        $scope.sumDebit = function(){
+            return sumDebit();
+        };
+        
+        $scope.sumCredit = function() {
+            return sumCredit();
+        };
+        
+        function sumDebit() {
+            var total = 0;
+            if($scope.editver.debitposts) {
+                for(var i = 0; i < $scope.editver.debitposts.length; i++){
+                    if(!$scope.editver.debitposts[i].removed) {
+                        total += $scope.editver.debitposts[i].sum;
+                    }
+                }
+            }
+            if($scope.editver.posts) {
+                for(var i = 0; i < $scope.editver.posts.length; i++){
+                    total += $scope.editver.posts[i].debit;
+                }
+            }
+            return total;
+        }
+        
+        function sumCredit() {
+            var total = 0;
+            if($scope.editver.creditposts) {
+                for(var i = 0; i < $scope.editver.creditposts.length; i++){
+                    if(!$scope.editver.creditposts[i].removed) {
+                        total += $scope.editver.creditposts[i].sum;
+                    }
+                }
+            }
+            if($scope.editver.posts) {
+                for(var i = 0; i < $scope.editver.posts.length; i++){
+                    total += $scope.editver.posts[i].credit;
+                }
+            }
+            return total;
+        }
+        
+        $scope.addNewpost = function() {
+            if($scope.editver.posts === null) {
+                $scope.editver.posts = [];
+            }
+            $scope.editver.posts[$scope.editver.posts.length] = {debit: 0, credit: 0};
+        };
+        
+        $scope.removeNewpost = function(post) {
+            var index = $scope.editver.posts.indexOf(post);
+            $scope.editver.posts.splice(index, 1);
+            $scope.accountls.splice(index, 1);
+        };
+        
+        $scope.accountls = [];
+        $scope.openaccount = function (index) {
+
+            var modalInstance = $modal.open({
+                templateUrl: 'private/modals/accountSelecterModal.html',
+                controller: 'ModalInstanceAccountCtrl',
+                size: 'lg'
+            });
+
+            modalInstance.result.then(function (selectedAccount) {
+                $scope.editver.posts[index].accountid = selectedAccount.number;
+                $scope.accountls[index] = selectedAccount.number + ' - ' + selectedAccount.name;
+            });
         };
     }
 ]);
