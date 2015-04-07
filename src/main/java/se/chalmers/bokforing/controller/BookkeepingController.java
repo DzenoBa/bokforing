@@ -257,7 +257,7 @@ public class BookkeepingController {
         List<Post> old_posts = new ArrayList();
         if(verification.getOldposts() != null) {
             for(PostJSON post : verification.getOldposts()) {
-                Post temp_post = postService.findVerificationById(post.getId());
+                Post temp_post = postService.findPostById(post.getId());
                 if(temp_post == null) {
                     form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
                     return form;
