@@ -83,16 +83,18 @@ public class PostServiceImpl implements PostService {
         for (Verification verification : givenPeriodVerifications) {
             List<Post> posts = verification.getPosts();
             for (Post post : posts) {
-                Account account = post.getAccount();
-                if (account.getNumber() >= REVENUE_ACCOUNTS) {
-                    continue;
-                }
-                if (!balanceSheet.containsKey(account)) {
-                    List<Double> balanceList = new ArrayList<>();
-                    balanceList.add(post.getPostSum().getSumTotal());
-                    balanceSheet.put(account, balanceList);
-                } else {
-                    balanceSheet.get(account).set(0, balanceSheet.get(account).get(0) + post.getPostSum().getSumTotal());
+                if (post.isActive()) {
+                    Account account = post.getAccount();
+                    if (account.getNumber() >= REVENUE_ACCOUNTS) {
+                        continue;
+                    }
+                    if (!balanceSheet.containsKey(account)) {
+                        List<Double> balanceList = new ArrayList<>();
+                        balanceList.add(post.getPostSum().getSumTotal());
+                        balanceSheet.put(account, balanceList);
+                    } else {
+                        balanceSheet.get(account).set(0, balanceSheet.get(account).get(0) + post.getPostSum().getSumTotal());
+                    }
                 }
             }
         }
@@ -102,18 +104,20 @@ public class PostServiceImpl implements PostService {
         for (Verification verification : earlierVerifications) {
             List<Post> posts = verification.getPosts();
             for (Post post : posts) {
-                Account account = post.getAccount();
-                if (account.getNumber() >= REVENUE_ACCOUNTS) {
-                    continue;
-                }
-                if (!balanceSheet.containsKey(account)) {
-                    List<Double> balanceList = new ArrayList<>();
-                    Double periodBalance = 0.0;
-                    balanceList.add(periodBalance);
-                    balanceList.add(post.getPostSum().getSumTotal());
-                    balanceSheet.put(account, balanceList);
-                } else {
-                    balanceSheet.get(account).set(1, balanceSheet.get(account).get(1) + post.getPostSum().getSumTotal());
+                if (post.isActive()) {
+                    Account account = post.getAccount();
+                    if (account.getNumber() >= REVENUE_ACCOUNTS) {
+                        continue;
+                    }
+                    if (!balanceSheet.containsKey(account)) {
+                        List<Double> balanceList = new ArrayList<>();
+                        Double periodBalance = 0.0;
+                        balanceList.add(periodBalance);
+                        balanceList.add(post.getPostSum().getSumTotal());
+                        balanceSheet.put(account, balanceList);
+                    } else {
+                        balanceSheet.get(account).set(1, balanceSheet.get(account).get(1) + post.getPostSum().getSumTotal());
+                    }
                 }
             }
         }
