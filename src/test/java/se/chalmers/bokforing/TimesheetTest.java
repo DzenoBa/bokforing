@@ -79,6 +79,7 @@ public class TimesheetTest extends AbstractIntegrationTest {
         
         assertNotNull(timesheet);
         assertEquals(user, timesheetFromDb.getUserAccount());
+        assertEquals(product, timesheetFromDb.getProduct());
     }
     
 }
