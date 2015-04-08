@@ -232,7 +232,7 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'Book
             $scope.showeditverboolean = false;
             $scope.showverhistoryboolean = false;
             $scope.editver = {};
-            // ROMOVE FORM IF DEFINED
+            // REMOVE FORM IF DEFINED
             if(angular.isDefined($scope.form)) {
                 delete $scope.form;
             }
@@ -252,7 +252,7 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'Book
             $scope.showverinfoboolean = false;
             $scope.showeditverboolean = true;
             $scope.showverhistoryboolean = false;
-            // ROMOVE FORM IF DEFINED
+            // REMOVE FORM IF DEFINED
             if(angular.isDefined($scope.form)) {
                 delete $scope.form;
             }
