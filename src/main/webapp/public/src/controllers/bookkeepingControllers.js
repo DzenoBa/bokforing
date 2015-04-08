@@ -11,13 +11,8 @@ var bookkeepingControllers = angular.module('BookkeepingControllers', ['ui.boots
 
 bookkeepingControllers.controller('BookkeepingCtrl', ['$scope', 'BookkeepingProxy', '$modal', '$filter',
     function($scope, BookkeepingProxy, $modal, $filter) {
-        $scope.rows = 2;
         $scope.currentVerPage = 1;
         $scope.selectedVerAccount = {};
-        
-        $scope.getNumber = function(num) {
-            return new Array(num);   
-        };
 
         $scope.verification = {posts: 
                     [ {debit: 0, credit: 0},
@@ -35,7 +30,7 @@ bookkeepingControllers.controller('BookkeepingCtrl', ['$scope', 'BookkeepingProx
         
         function sumDebit() {
             var total = 0;
-            for(var i = 0; i < $scope.rows; i++){
+            for(var i = 0; i < $scope.verification.posts.length; i++){
                 var debit = $scope.verification.posts[i].debit;
                 total += debit;
             }
@@ -44,7 +39,7 @@ bookkeepingControllers.controller('BookkeepingCtrl', ['$scope', 'BookkeepingProx
         
         function sumCredit() {
             var total = 0;
-            for(var i = 0; i < $scope.rows; i++){
+            for(var i = 0; i < $scope.verification.posts.length; i++){
                 var credit = $scope.verification.posts[i].credit;
                 total += credit;
             }
@@ -52,14 +47,13 @@ bookkeepingControllers.controller('BookkeepingCtrl', ['$scope', 'BookkeepingProx
         }
         
         $scope.addRow = function() {
-            $scope.verification.posts[$scope.rows] = {debit: 0, credit: 0};
-            $scope.rows = $scope.rows+1;
+            $scope.verification.posts[$scope.verification.posts.length] = {debit: 0, credit: 0};
         };
         
-        $scope.removeRow = function(index) {
+        $scope.removeRow = function(post) {
+            var index = $scope.verification.posts.indexOf(post);
             $scope.verification.posts.splice(index, 1);
             $scope.accountls.splice(index, 1);
-            $scope.rows = $scope.rows-1;
         };
         
         $scope.create = function() {
@@ -73,7 +67,6 @@ bookkeepingControllers.controller('BookkeepingCtrl', ['$scope', 'BookkeepingProx
                                         transactionDate: $filter('date')(new Date(),'yyyy-MM-dd'),
                                         description: ""
                                 };
-                            $scope.rows = 2;
                             $scope.accountls = [];
                         }
                     }).error(function() {
