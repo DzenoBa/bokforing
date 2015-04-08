@@ -6,6 +6,8 @@
 package se.chalmers.bokforing.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.persistence.ProductRepository;
 
@@ -13,6 +15,8 @@ import se.chalmers.bokforing.persistence.ProductRepository;
  *
  * @author Jakob
  */
+@Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
