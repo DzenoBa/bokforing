@@ -219,7 +219,7 @@ public class UserController {
         
         // USER REQUESTED TO CHANGE COMPANY NAME
         if(userInfo.getCompanyname() != null) {
-            uh.setPhoneNumber(userInfo.getCompanyname());
+            uh.setCompanyName(userInfo.getCompanyname());
             userDb.storeUser(uh);
             return form;
         }

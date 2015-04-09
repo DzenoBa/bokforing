@@ -29,6 +29,9 @@
         </div>
         <!-- ** VERIFICATION INFO ** -->
         <div class="col-md-6" ng-show="showverinfoboolean">
+            <div class="alert alert-success" role="alert" style="margin-top:10px;" ng-show="form.numErrors === 0">
+                Verifikationen har ändrats!
+            </div>
             <ul class="nav nav-tabs nav-justified" style="margin-top: 10px;">
                 <li role="presentation" class="active"><a href="">Visa</a></li>
                 <li role="presentation"><a href="" ng-click="showeditver()">Ändra</a></li>
@@ -72,6 +75,10 @@
                 <li role="presentation" class="active"><a href="">Ändra</a></li>
                 <li role="presentation" ng-class="{disabled: !verinfo.oldposts}"><a href="" ng-click="!verinfo.oldposts || showverhistory()">Historik</a></li>
             </ul>
+            <div class="alert alert-danger" role="alert" style="margin-top: 10px;" ng-show="form.numErrors > 0">
+                <h4>{{form.numErrors}} fel hittades!</h4>
+                <p>{{form.errors.general}}</p>
+            </div>
             <h2>Ändra verifikation - Nr. {{editver.id}}</h2>
             <form class="form-horizontal">
                 <div class="form-group">
@@ -164,7 +171,7 @@
                 </tfoot>
             </table>
             <div class="btn-group">
-                <button type="button" class="btn btn-success">
+                <button type="button" class="btn btn-success" ng-click="submit()" ng-disabled="sumDebit() !== sumCredit()">
                     <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                 </button>
                 <button type="button" class="btn btn-danger" ng-click="showverinfo()">

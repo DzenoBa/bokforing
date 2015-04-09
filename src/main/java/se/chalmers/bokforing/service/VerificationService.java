@@ -26,7 +26,7 @@ public interface VerificationService {
     
     Page<Verification> findAllVerifications(UserAccount user, PagingAndSortingTerms terms);
     
-    Verification findVerificationById(UserAccount user, long id);
+    Verification findVerificationById(UserAccount user, Long id);
     
     long findHighestVerificationNumber(UserAccount user);
     

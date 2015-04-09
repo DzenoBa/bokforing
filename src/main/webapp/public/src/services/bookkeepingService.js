@@ -17,6 +17,9 @@ bookkeepingService.factory('BookkeepingProxy', ['$http', '$location',
             createManBook: function(verification) {
                 return $http.post(url + '/createman', verification);
             },
+            editVerification: function(verification) {
+                return $http.post(url + '/editverification', verification);
+            },
             searchAccount: function(account) {
                 return $http.post(url + '/searchaccount', account);
             },

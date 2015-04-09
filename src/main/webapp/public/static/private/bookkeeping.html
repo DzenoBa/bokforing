@@ -149,7 +149,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="i in getNumber(rows) track by $index">
+                        <tr ng-repeat="post in verification.posts track by $index">
                             <td>
                                 <div class="input-group">
                                     <input class="form-control" type="text" value="{{accountls[$index]}}" readonly>
@@ -162,13 +162,13 @@
                                 </div>    
                             </td>
                             <td>
-                                <input type="number" class="form-control" step="0.01" value="{{verification.posts[$index].debit}}" ng-model="verification.posts[$index].debit"/>
+                                <input type="number" class="form-control" step="0.01" ng-model="post.debit"/>
                             </td>
                             <td>
-                                <input type="number" class="form-control" step="0.01" ng-model="verification.posts[$index].credit"/>
+                                <input type="number" class="form-control" step="0.01" ng-model="post.credit"/>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-danger" ng-click="removeRow($index)" ng-show="$index===(rows-1) && $index>=2">
+                                <button type="button" class="btn btn-danger" ng-click="removeRow(post)" ng-show="verification.posts.length > 2">
                                     <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                 </button>
                             </td>

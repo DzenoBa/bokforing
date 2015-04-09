@@ -128,6 +128,7 @@ public class VerificationManagerImpl implements VerificationManager {
         
         for(Post newPost : newPosts) {
             newPost.setCorrection(true);
+            newPost.setVerification(verification);
             tempPosts.add(newPost);
         }
         

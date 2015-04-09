@@ -32,8 +32,8 @@ public class VerificationServiceImpl implements VerificationService {
     private VerificationRepository repository;
 
     @Override
-    public Verification findVerificationById(UserAccount user, long id) {
-        return repository.findByIdAndUserAccount(user, id);
+    public Verification findVerificationById(UserAccount user, Long id) {
+        return repository.findByIdAndUserAccount(id, user);
     }
 
     @Override

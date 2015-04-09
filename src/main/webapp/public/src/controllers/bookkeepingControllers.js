@@ -11,13 +11,8 @@ var bookkeepingControllers = angular.module('BookkeepingControllers', ['ui.boots
 
 bookkeepingControllers.controller('BookkeepingCtrl', ['$scope', 'BookkeepingProxy', '$modal', '$filter',
     function($scope, BookkeepingProxy, $modal, $filter) {
-        $scope.rows = 2;
         $scope.currentVerPage = 1;
         $scope.selectedVerAccount = {};
-        
-        $scope.getNumber = function(num) {
-            return new Array(num);   
-        };
 
         $scope.verification = {posts: 
                     [ {debit: 0, credit: 0},
@@ -35,7 +30,7 @@ bookkeepingControllers.controller('BookkeepingCtrl', ['$scope', 'BookkeepingProx
         
         function sumDebit() {
             var total = 0;
-            for(var i = 0; i < $scope.rows; i++){
+            for(var i = 0; i < $scope.verification.posts.length; i++){
                 var debit = $scope.verification.posts[i].debit;
                 total += debit;
             }
@@ -44,7 +39,7 @@ bookkeepingControllers.controller('BookkeepingCtrl', ['$scope', 'BookkeepingProx
         
         function sumCredit() {
             var total = 0;
-            for(var i = 0; i < $scope.rows; i++){
+            for(var i = 0; i < $scope.verification.posts.length; i++){
                 var credit = $scope.verification.posts[i].credit;
                 total += credit;
             }
@@ -52,14 +47,13 @@ bookkeepingControllers.controller('BookkeepingCtrl', ['$scope', 'BookkeepingProx
         }
         
         $scope.addRow = function() {
-            $scope.verification.posts[$scope.rows] = {debit: 0, credit: 0};
-            $scope.rows = $scope.rows+1;
+            $scope.verification.posts[$scope.verification.posts.length] = {debit: 0, credit: 0};
         };
         
-        $scope.removeRow = function(index) {
+        $scope.removeRow = function(post) {
+            var index = $scope.verification.posts.indexOf(post);
             $scope.verification.posts.splice(index, 1);
             $scope.accountls.splice(index, 1);
-            $scope.rows = $scope.rows-1;
         };
         
         $scope.create = function() {
@@ -73,7 +67,6 @@ bookkeepingControllers.controller('BookkeepingCtrl', ['$scope', 'BookkeepingProx
                                         transactionDate: $filter('date')(new Date(),'yyyy-MM-dd'),
                                         description: ""
                                 };
-                            $scope.rows = 2;
                             $scope.accountls = [];
                         }
                     }).error(function() {
@@ -239,6 +232,10 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'Book
             $scope.showeditverboolean = false;
             $scope.showverhistoryboolean = false;
             $scope.editver = {};
+            // REMOVE FORM IF DEFINED
+            if(angular.isDefined($scope.form)) {
+                delete $scope.form;
+            }
         };
         
         $scope.showverhistory = function() {
@@ -255,6 +252,10 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'Book
             $scope.showverinfoboolean = false;
             $scope.showeditverboolean = true;
             $scope.showverhistoryboolean = false;
+            // REMOVE FORM IF DEFINED
+            if(angular.isDefined($scope.form)) {
+                delete $scope.form;
+            }
         };
         
         $scope.pageChanged = function() {
@@ -271,7 +272,7 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'Book
         
         $scope.restorePost = function(post) {
             $scope.editver.oldposts.splice($scope.editver.oldposts.indexOf(post), 1);
-            post.removed = null;
+            delete post.removed;
         };
         
         $scope.sumDebit = function(){
@@ -342,6 +343,36 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'Book
                 $scope.editver.posts[index].accountid = selectedAccount.number;
                 $scope.accountls[index] = selectedAccount.number + ' - ' + selectedAccount.name;
             });
+        };
+        
+        $scope.sendver = {};
+        $scope.submit = function() {
+            angular.copy($scope.editver, $scope.sendver);
+            if(angular.isDefined($scope.sendver.oldposts)) {
+                // REMOVE THE REMOVED-VAR
+                angular.forEach($scope.sendver.oldposts, function(post) {
+                    delete post.removed;
+                });
+            }
+            BookkeepingProxy.editVerification($scope.sendver)
+                    .success(function(form) {
+                        $scope.form = form;
+                        if(form.numErrors === 0) {
+                            // REOLAD
+                            var index = $scope.verifications.indexOf($scope.verinfo);
+                            $scope.verifications = getVerifications();
+                            $scope.editver = {};
+                            $scope.$watch('verifications', function(ver) {
+                                if(angular.isDefined(ver)) {
+                                    $scope.verinfo = $scope.verifications[index];
+                                }
+                             });
+                            $scope.showeditverboolean = false;
+                            $scope.showverinfoboolean = true;                            
+                        }
+                    }).error(function() {
+                        console.log("editVerification: error");
+                    });
         };
     }
 ]);

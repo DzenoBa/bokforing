@@ -16,14 +16,12 @@ import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.PostJSON;
 import se.chalmers.bokforing.jsonobject.VerificationJSON;
 import se.chalmers.bokforing.model.Account;
-import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.model.user.UserHandler;
-import se.chalmers.bokforing.persistence.PostRepository;
 import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.CustomerService;
 import se.chalmers.bokforing.persistence.user.UserService;
@@ -205,70 +203,74 @@ public class BookkeepingController {
             
         // CREATE NEW POSTS
         List<Post> new_posts = new ArrayList();
-        for(PostJSON post : verification.getPosts()) {
-            if(post == null) {
-                form.addError("general", "Ett fel inträffades, vänligen försök igen om en liten stund.");
-                return form;
+        if(verification.getPosts() != null) {
+            for(PostJSON post : verification.getPosts()) {
+                if(post == null) {
+                    form.addError("general", "Ett fel inträffades, vänligen försök igen om en liten stund.");
+                    return form;
+                }
+
+                int index = new_posts.size() + 1;
+                // CHECK ACCOUNT
+                if(!(post.getAccountid() > 0)) {
+                    form.addError("general", "Vänligen välj ett konto för rad " + index + "!");
+                    return form;
+                } 
+                Account temp_account = accountService.findAccountByNumber(post.getAccountid());
+                // THIS SHOULD'NT HAPPEN 
+                if(temp_account == null) {
+                    form.addError("general", "Något gick fel, vänligen försök igen om en liten stund");
+                }
+                // CHECK DEBIT AND CREDIT
+                if(post.getDebit() < 0 || post.getCredit() < 0) {
+                    form.addError("general", "Både debet och kredit måste innehålla en siffra i rad " + index + "!");
+                    return form;
+                }
+
+                // CREATE A POSTSUM
+                PostSum temp_postSum = new PostSum();
+
+                // DEBIT
+                if (post.getDebit() > 0 && post.getCredit() == 0) {
+                    temp_postSum.setType(PostType.Debit);
+                    temp_postSum.setSumTotal(post.getDebit());
+                }
+                // CREDIT
+                else if (post.getCredit() > 0 && post.getDebit() == 0) {
+                    temp_postSum.setType(PostType.Credit);
+                    temp_postSum.setSumTotal(post.getCredit());
+                }
+                // SOMETHING WRONG
+                else {
+                    form.addError("general", "Debet och Kredit får ej vara lika eller en av dem måste vara 0; Rad: " + index);
+                    return form;
+                }
+
+                // EVERYTHING SEEMS TO BE IN ORDER; CREATE POST
+                Post temp_post = postManager.createPost(temp_postSum, temp_account);
+
+                new_posts.add(temp_post);
             }
-            
-            int index = new_posts.size() + 1;
-            // CHECK ACCOUNT
-            if(!(post.getAccountid() > 0)) {
-                form.addError("general", "Vänligen välj ett konto för rad " + index + "!");
-                return form;
-            } 
-            Account temp_account = accountService.findAccountByNumber(post.getAccountid());
-            // THIS SHOULD'NT HAPPEN 
-            if(temp_account == null) {
-                form.addError("general", "Något gick fel, vänligen försök igen om en liten stund");
-            }
-            // CHECK DEBIT AND CREDIT
-            if(post.getDebit() < 0 || post.getCredit() < 0) {
-                form.addError("general", "Både debet och kredit måste innehålla en siffra i rad " + index + "!");
-                return form;
-            }
-            
-            // CREATE A POSTSUM
-            PostSum temp_postSum = new PostSum();
-            
-            // DEBIT
-            if (post.getDebit() > 0 && post.getCredit() == 0) {
-                temp_postSum.setType(PostType.Debit);
-                temp_postSum.setSumTotal(post.getDebit());
-            }
-            // CREDIT
-            else if (post.getCredit() > 0 && post.getDebit() == 0) {
-                temp_postSum.setType(PostType.Credit);
-                temp_postSum.setSumTotal(post.getCredit());
-            }
-            // SOMETHING WRONG
-            else {
-                form.addError("general", "Debet och Kredit får ej vara lika eller en av dem måste vara 0; Rad: " + index);
-                return form;
-            }
-            
-            // EVERYTHING SEEMS TO BE IN ORDER; CREATE POST
-            Post temp_post = postManager.createPost(temp_postSum, temp_account);
-            
-            new_posts.add(temp_post);
         }
         
         // OLD POSTS CHECK
         List<Post> old_posts = new ArrayList();
-        for(PostJSON post : verification.getOldposts()) {
-            Post temp_post = null; // PostService.findById()
-            if(temp_post == null) {
-                form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
-                return form;
+        if(verification.getOldposts() != null) {
+            for(PostJSON post : verification.getOldposts()) {
+                Post temp_post = postService.findPostById(post.getId());
+                if(temp_post == null) {
+                    form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+                    return form;
+                }
+                old_posts.add(temp_post);
             }
-            old_posts.add(temp_post);
         }
-        
+
         // EVERYTHING SEEMS TO BE IN ORDER; EDIT VERIFICATION
         ver.setDescription(description);
         // FUNCTION REPLACE-POST SAVES THE VERIFICATION
         // SO THE DESCRIPTION SHOULD ALSO BE CHANGED
-        if(new_posts.size() > 0) {
+        if(new_posts.size() > 0 || old_posts.size() > 0) {
             if(!verificationManager.replacePost(ver, old_posts, new_posts)) {
                 form.addError("general", "Något gick fel, kunde inte ändra posterna.");
                 return form;
