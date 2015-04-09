@@ -48,16 +48,6 @@ authControllers.controller('UserPageCtrl', ['$scope', '$location', 'AuthProxy', 
             $scope.session = AuthProxy.class().getSession();
         };
 
-        $scope.logout = function() {
-            AuthProxy.logout()
-                    .success(function(boolean) {
-                        Session.destroy();
-                        $location.path('/login');
-                    }).error(function() {
-                console.log("logout: error");
-            });
-        };
-        
         init();
     }
 ]);

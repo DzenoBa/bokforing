@@ -9,6 +9,7 @@
 
 var bok = angular.module('Bok', [
     'ngRoute',
+    'IndexControllers',
     'AuthControllers',
     'AuthService',
     'UserControllers',

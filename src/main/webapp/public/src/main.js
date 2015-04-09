@@ -7,6 +7,7 @@ require(
     [
         '../libs/bootstrap/js/ui-bootstrap-tpls-0.12.1.min',
         'app',
+        'controllers/indexControllers',
         'controllers/userControllers',
         'controllers/authControllers',
         'controllers/bookkeepingControllers',
