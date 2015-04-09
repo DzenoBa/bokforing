@@ -7,7 +7,7 @@
 
 'use strict';
 
-var userControllers = angular.module('UserControllers', []);
+var userControllers = angular.module('UserControllers', ['ui.bootstrap']);
 
 userControllers.controller('RegisterCtrl', ['$scope', 'UserProxy',
     function($scope, UserProxy) {
@@ -48,12 +48,12 @@ userControllers.controller('RegisterCtrl', ['$scope', 'UserProxy',
         };
     }]);
 
-userControllers.controller('EditUserCtrl', ['$scope', 'UserProxy',
-    function($scope, UserProxy) {
+userControllers.controller('EditUserCtrl', ['$scope', '$modal', 'UserProxy',
+    function($scope, $modal, UserProxy) {
         
         $scope.edit = function() {
             if(!(angular.isUndefined($scope.user) || $scope.user === null)) {
-                UserProxy.edit($scope.user)
+                UserProxy.editPassword($scope.user)
                         .success(function(form) {
                             if(form.numErrors === 0) {
                                 $scope.form = form;
@@ -87,7 +87,63 @@ userControllers.controller('EditUserCtrl', ['$scope', 'UserProxy',
                 $scope.passwdstrength.three = false;
             }
         };
-    }]);
+        
+        $scope.editemail = function() {
+            if(!(angular.isUndefined($scope.user) || $scope.user === null)) {
+                UserProxy.editEmail($scope.user)
+                        .success(function(form) {
+                            if(form.numErrors === 0) {
+                                $scope.form = form;
+                                $scope.user = null;
+                            } else {
+                                $scope.form = form;
+                                if(angular.isDefined(form.errors.accesskey)) {
+                                    var modalInstance = $modal.open({
+                                        templateUrl: 'emailModalContent.html',
+                                        controller: 'ModalInstanceEmailCtrl',
+                                        size: 'lg',
+                                        resolve: {
+                                            error: function() {
+                                                return form.errors.accesskey;
+                                            }
+                                        }
+                                    });
+
+                                    modalInstance.result.then(function (accesskey) {
+                                        if(angular.isDefined(accesskey)) {
+                                            $scope.user.accesskey = accesskey;
+                                        } else if(angular.isDefined($scope.user.accesskey)) {
+                                            delete $scope.user.accesskey;
+                                        }
+                                        $scope.editemail();
+                                    });
+                                }
+                            }
+                        }).error(function() {
+                    console.log("editEmail: error");
+                });
+            }
+        };
+    }
+]);
+
+userControllers.controller('ModalInstanceEmailCtrl', 
+    function ($scope, $modalInstance, error) {
+
+    $scope.edit = function () {
+      $modalInstance.close($scope.accesskey);
+    };
+    
+    $scope.resend = function () {
+        $modalInstance.close();
+    };
+
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+
+    $scope.error = error;
+});
 
 /**
  * USER INFO

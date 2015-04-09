@@ -15,8 +15,11 @@ userService.factory('UserProxy', ['$http', '$location',
             create: function(user) {
                 return $http.post(url + '/create', user);
             },
-            edit: function(user) {
+            editPassword: function(user) {
                 return $http.post(url + '/edit', user);
+            },
+            editEmail: function(user) {
+                return $http.post(url + '/editemail', user);
             },
             getUserInfo: function() {
                 return $http.get(url + '/getuserinfo');

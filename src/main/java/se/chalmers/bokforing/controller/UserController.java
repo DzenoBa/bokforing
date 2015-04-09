@@ -223,6 +223,9 @@ public class UserController {
         }
         
         // EVERYTHING SEEMS TO BE IN ORDER CHANGE USER EMAIL
+        // REMOVE KEY FROM DB
+        AccessKey accessKey = accessKeyService.findByUserAccountAndType(uh.getUA(), AccessKeyType.EMAILCHANGE);
+        accessKeyManager.removeAccessKey(accessKey);
         uh.setEmail(user.getEmail());
         userDb.storeUser(uh);
         authSession.setEmail(user.getEmail());
