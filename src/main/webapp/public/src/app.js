@@ -14,11 +14,13 @@ var bok = angular.module('Bok', [
     'AuthService',
     'UserControllers',
     'DefaultDataControllers',
+    'ProductControllers',
     'UserService',
     'AuthHandlerService',
     'BookkeepingControllers',
     'BookkeepingService',
-    'DefaultDataService'
+    'DefaultDataService',
+    'ProductService'
      // More here
 ]);
 
@@ -94,6 +96,16 @@ bok.config(['$routeProvider', 'USER_LEVELS',
                 when('/verifications', {
                     templateUrl: 'private/verifications.html',
                     controller: 'VerificationCtrl',
+                    auth: USER_LEVELS.user,
+                    resolve: {
+                        auth: ['AuthHandler', function(AuthHandler) {
+                                return AuthHandler.promise();
+                        }]
+                    }
+                }).
+                when('/products', {
+                    templateUrl: 'private/products.html',
+                    controller: 'ProductCtrl',
                     auth: USER_LEVELS.user,
                     resolve: {
                         auth: ['AuthHandler', function(AuthHandler) {

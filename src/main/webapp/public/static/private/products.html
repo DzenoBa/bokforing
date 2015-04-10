@@ -1,0 +1,69 @@
+<!--Body content-->
+<div class="row">
+    <div class="col-md-6">
+        <h2>Dina produkter</h2>
+    </div>
+    <!-- NEW PRODUCT -->
+    <div class="col-md-6">
+        <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
+                Produkten har skapats!
+            </div>
+            <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
+                <h4>{{form.numErrors}} fel hittades!</h4>
+                <p>{{form.errors.general}}</p>
+            </div>
+        <h2>Ny produkt</h2>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Namn</label>
+                <div class="col-md-9">
+                    <input id="name" type="text" class="form-control" ng-model="product.name" placeholder="Ange ett namn"/>
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.name !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.name}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="price" class="col-sm-3 control-label">Pris</label>
+                <div class="col-md-9">
+                    <input id="price" type="number" step="0.1" class="form-control" ng-model="product.price"/>
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.price !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.price}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="unit" class="col-sm-3 control-label">Enhet</label>
+                <div class="col-md-9">
+                    <select class="form-control" id="unit" ng-model="product.quantitytype">
+                        <option ng-repeat="quantityType in quantityTypes" value="{{quantityType}}">{{quantityType}}</option>
+                     </select>
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.quantitytype !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.quantitytype}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description" class="col-sm-3 control-label">Beskrivning</label>
+                <div class="col-md-9">
+                    <textarea id="description" class="form-control" ng-model="product.description" name="text" rows="2" placeholder="Ange en beskrivning" style="resize: vertical;"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <input type="button" value="Skapa" class="btn btn-success btn-block" ng-click="create()" ng-disabled="!product"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -12,11 +12,13 @@ require(
         'controllers/authControllers',
         'controllers/bookkeepingControllers',
         'controllers/defaultDataController',
+        'controllers/productControllers',
         'services/userServices',
         'services/authServices',
         'services/authHandler',
         'services/bookkeepingService',
-        'services/defaultDataService'
+        'services/defaultDataService',
+        'services/productService'
         
     ],
     function () {
