@@ -29,7 +29,10 @@
             <div class="form-group">
                 <label for="price" class="col-sm-3 control-label">Pris</label>
                 <div class="col-md-9">
-                    <input id="price" type="number" step="0.1" class="form-control" ng-model="product.price"/>
+                    <div class="input-group">
+                        <input id="price" type="number" step="0.1" class="form-control" ng-model="product.price"/>
+                        <span class="input-group-addon">SEK</span>
+                    </div>
                 </div>
             </div>
             <div class="form-group" ng-show="form.errors.price !== null">
