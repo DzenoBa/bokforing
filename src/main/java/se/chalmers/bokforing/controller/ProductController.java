@@ -4,6 +4,7 @@ package se.chalmers.bokforing.controller;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -89,7 +90,7 @@ public class ProductController {
     /*
      * GET PRODUCT
      */
-    @RequestMapping(value = "/bookkeeping/getproducts", method = RequestMethod.POST)
+    @RequestMapping(value = "/product/getproducts", method = RequestMethod.POST)
     public @ResponseBody List<ProductJSON> getProducts(@RequestBody final String start) {
         
         List<ProductJSON> productJSONLs = new ArrayList();
@@ -105,12 +106,45 @@ public class ProductController {
         }
         
         PagingAndSortingTerms terms = new PagingAndSortingTerms(startPos, Boolean.TRUE, "name");
-        //Page<Product> productPage = productService. // TODO
+        Page<Product> productPage = productService.findAllProducts(ua.getUA(), terms);
+        
+        for(Product p : productPage.getContent()) {
+            ProductJSON temp = new ProductJSON();
+            temp.setName(p.getName());
+            temp.setPrice(p.getPrice());
+            temp.setQuantitytype(p.getQuantityType().toString());
+            temp.setDescription(p.getDescription());
+            
+            productJSONLs.add(temp);
+        }
         
         return productJSONLs;
     }
     
-    @RequestMapping(value = "/product/getquantitytype", method = RequestMethod.GET)
+    /*
+     * COUNT PRODUCT
+     */
+    @RequestMapping(value = "/product/countproducts", method = RequestMethod.GET)
+    public @ResponseBody long countProducts() {
+        
+        long size = 0;
+        
+        if(!authSession.sessionCheck()) {
+            return size;
+        }
+        UserHandler ua = userService.getUser(authSession.getEmail());
+
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.TRUE, "name");
+        Page<Product> productPage = productService.findAllProducts(ua.getUA(), terms);
+        
+        size = productPage.getTotalElements();
+        return size;
+    }
+    
+    /*
+     * GET QUANNTITY-TYPES
+     */
+    @RequestMapping(value = "/product/getquantitytypes", method = RequestMethod.GET)
     public @ResponseBody List<String> getQuantityTypes () {
         
         List<String> types = new ArrayList();

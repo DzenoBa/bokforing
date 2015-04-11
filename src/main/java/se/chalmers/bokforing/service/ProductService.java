@@ -5,7 +5,10 @@
  */
 package se.chalmers.bokforing.service;
 
+import org.springframework.data.domain.Page;
 import se.chalmers.bokforing.model.Product;
+import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 
 /**
  *
@@ -16,4 +19,6 @@ public interface ProductService {
     void save(Product product);
     
     void remove(Product product);
+    
+    Page<Product> findAllProducts(UserAccount user, PagingAndSortingTerms terms);
 }
