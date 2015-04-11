@@ -24,6 +24,12 @@ productService.factory('ProductProxy', ['$http', '$location',
             },
             countProducts: function() {
                 return $http.get(url + '/countproducts');
+            },
+            edit: function(product) {
+                return $http.post(url + '/edit', product);
+            },
+            delete: function(product) {
+                return $http.post(url + '/delete', product);
             }
         };
     }
