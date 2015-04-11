@@ -41,6 +41,11 @@ public class ProductServiceImpl implements ProductService {
     }
     
     @Override
+    public Product findProductById(UserAccount user, Long id) {
+        return repository.findByIdAndUserAccount(id, user);
+    }
+    
+    @Override
     public Page<Product> findAllProducts(UserAccount user, PagingAndSortingTerms terms) {
         PageRequest request = terms.getPageRequest();
         

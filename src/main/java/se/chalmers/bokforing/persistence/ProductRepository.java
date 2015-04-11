@@ -19,5 +19,7 @@ import se.chalmers.bokforing.model.user.UserAccount;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     
+    Product findByIdAndUserAccount(Long id, UserAccount userAccount);
+    
     Page<Product> findByUserAccount(UserAccount userAccount, Pageable pageable);
 }

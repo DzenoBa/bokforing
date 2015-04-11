@@ -20,5 +20,7 @@ public interface ProductService {
     
     void remove(Product product);
     
+    Product findProductById(UserAccount user, Long id);
+    
     Page<Product> findAllProducts(UserAccount user, PagingAndSortingTerms terms);
 }
