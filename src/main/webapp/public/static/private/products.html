@@ -1,7 +1,43 @@
 <!--Body content-->
 <div class="row">
+    <!-- LST PRODUCTS -->
     <div class="col-md-6">
         <h2>Dina produkter</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width:30%;">Namn</th>
+                    <th style="width:25%;">Pris</th>
+                    <th style="width:25%;">Enhet</th>
+                    <th style="width:20%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="product in products">
+                    <td style="padding:0;" colspan="4">
+                        <table class="table" style="background:transparent; margin:0; width:100%;">
+                            <tr>
+                                <td style="width:30%;">{{product.name}}</td>
+                                <td style="width:25%;">{{product.price}}</td>
+                                <td style="width:25%;">{{product.quantitytype}}</td>
+                                <td style="width:20%;">
+                                    <button type="button" class="btn btn-default" ng-click="showproduct = true" ng-show="!showproduct">
+                                        <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default" ng-click="showproduct = false" ng-show="showproduct">
+                                        <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr ng-show="showproduct">
+                                <td colspan="4">Beskrivning: {{product.description}}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <pagination total-items="maxsize" items-per-page="20" ng-model="currentPage" max-size="5" class="pagination-sm" boundary-links="true" ng-change="pageChanged()" ng-show="maxsize > 20"></pagination>
     </div>
     <!-- NEW PRODUCT -->
     <div class="col-md-6">

@@ -17,7 +17,13 @@ productService.factory('ProductProxy', ['$http', '$location',
                 return $http.post(url + '/create', product);
             },
             getQuantityTypes: function() {
-                return $http.get(url + '/getquantitytype');
+                return $http.get(url + '/getquantitytypes');
+            },
+            getProducts: function(start) {
+                return $http.post(url + '/getproducts', start);
+            },
+            countProducts: function() {
+                return $http.get(url + '/countproducts');
             }
         };
     }
