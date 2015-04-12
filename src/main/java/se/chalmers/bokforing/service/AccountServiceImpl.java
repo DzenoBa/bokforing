@@ -82,7 +82,7 @@ public class AccountServiceImpl implements AccountService {
     public Page<Account> findByNameLike(String name, PagingAndSortingTerms terms) {
         PageRequest request = terms.getPageRequest();
         String tmp = "%"+ name + "%";
-        return repository.findByNameLike(tmp, request);
+        return repository.findByNameLikeIgnoreCase(tmp, request);
     }
 
     @Override

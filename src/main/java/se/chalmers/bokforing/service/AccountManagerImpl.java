@@ -17,7 +17,7 @@ import se.chalmers.bokforing.model.Account;
 public class AccountManagerImpl implements AccountManager {
 
     @Autowired
-    AccountService service;
+    private AccountService service;
     
     @Override
     public Account createAccount(int number, String name) {

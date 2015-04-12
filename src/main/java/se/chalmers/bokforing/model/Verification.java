@@ -8,6 +8,7 @@ package se.chalmers.bokforing.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,6 +57,8 @@ public class Verification implements Serializable {
     
     @OneToOne(cascade = CascadeType.REMOVE)
     private Customer customer;
+    
+    private String description;
     
     /**
      * @return the posts
@@ -149,15 +152,68 @@ public class Verification implements Serializable {
     /**
      * @return the verificationNumber
      */
-    public long getVerificationNumber() {
+    public Long getVerificationNumber() {
         return verificationNumber;
     }
 
     /**
      * @param verificationNumber the verificationNumber to set
      */
-    public void setVerificationNumber(long verificationNumber) {
+    public void setVerificationNumber(Long verificationNumber) {
         this.verificationNumber = verificationNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.getUserAccount());
+        hash = 59 * hash + Objects.hashCode(this.getVerificationNumber());
+        hash = 59 * hash + Objects.hashCode(this.getPosts());
+        hash = 59 * hash + Objects.hashCode(this.getTransactionDate());
+        hash = 59 * hash + Objects.hashCode(this.getCreationDate());
+        hash = 59 * hash + Objects.hashCode(this.getCustomer());
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Verification other = (Verification) obj;
+        if (!Objects.equals(this.userAccount, other.userAccount)) {
+            return false;
+        }
+        if (!Objects.equals(this.verificationNumber, other.verificationNumber)) {
+            return false;
+        }
+        if (!Objects.equals(this.transactionDate, other.transactionDate)) {
+            return false;
+        }
+        if (!Objects.equals(this.creationDate, other.creationDate)) {
+            return false;
+        }
+        if (!Objects.equals(this.customer, other.customer)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
     
     

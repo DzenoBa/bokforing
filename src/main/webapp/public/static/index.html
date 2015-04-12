@@ -15,24 +15,46 @@
         <link rel="stylesheet" type="text/css" href="/bokforing/public/css/default.css">
     </head>
     <body>
-        <header class="container">
-            <hgroup>
-                <h1>Super-<span style="color:blue">Booky</span></h1>
-                <h2><i>Because you're worth it</i></h2>
-            </hgroup>
-        </header>
-        <div class="mynav">
-            <nav class="container" role="navigation">
-                <a class="navbar-brand" href="#">Home</a>
-                <a class="navbar-brand" href="#/login">Login</a>
-                <a class="navbar-brand" href="#/userpage">Userpage</a>
-                <a class="navbar-brand" href="#/register">Registrera dig!</a>
-                <a class="navbar-brand" href="#/passwdreset">Glömt lösenord?</a>
-            </nav>
-        </div>
-        <div class="container">
-            <!-- Include the view template for the current route -->
-            <div ng-view ></div>
+        <div class="container-fluid">
+            <div class="row" ng-controller="IndexCtrl">
+                <div class="col-sm-3 col-md-2 sidebar" ng-show="authShow('user')">
+                    <ul class="nav nav-sidebar">
+                        <li ng-class="{'active': page('userpage')}"><a href="#userpage">Startsida</a></li>
+                    </ul>
+                    <ul class="nav nav-sidebar">
+                        <li ng-class="{'active': page('verifications')}"><a href="#verifications">Verifikationer</a></li>
+                        <li ng-class="{'active': page('bookkeeping')}"><a href="#bookkeeping">Bokföring</a></li>
+                        <li ng-class="{'active': page('products')}"><a href="#products">Produkter</a></li>
+                    </ul>
+                    <ul class="nav nav-sidebar">
+                        <li ng-class="{'active': page('userinfo')}"><a href="#userinfo">Användarinformation</a></li>
+                        <li ng-class="{'active': page('edituser')}"><a href="#edituser">Användarinställningar</a></li>
+                    </ul>
+                </div>
+                <div ng-class="{'main': authShow('guest'), 'col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main': authShow('user')}">
+                    <nav class="navbar navbar-static-top" role="navigation">
+                        <div class="navbar-header">
+                            <img src="/bokforing/public/images/logo-h50px.png" alt="" />
+                        </div>
+                        <div id="navbar" class="mynavbar-right" ng-controller="IndexCtrl">
+                            <ul class="nav mynav navbar-nav navbar-right">
+                                <li><a href="#">Home</a></li>
+                                <li><a href="#/login" ng-show="authShow('guest')">Logga in</a></li>
+                                <li><a href="#/register" ng-show="authShow('guest')">Registrera dig!</a></li>
+                                <li><a href="" ng-click="logout()" ng-show="authShow('user')">Logga ut</a></li>
+                            </ul>
+                        </div>
+                    </nav>
+                    <div class="container" ng-if="authShow('guest')">
+                        <!-- Include the view template for the current route -->
+                        <div ng-view></div>
+                    </div>
+                    <div ng-if="authShow('user')">
+                        <!-- Include the view template for the current route -->
+                        <div ng-view></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>

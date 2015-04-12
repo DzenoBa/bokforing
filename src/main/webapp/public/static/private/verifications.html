@@ -1,33 +1,46 @@
 <!--Body content-->
 <div>
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-6">
             <h2>Dina verifikationer</h2>
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th style="width:15%;">Nr</th>
-                        <th style="width:25%;">Transaktion datum</th>
+                        <th style="width:35%;">Beskrivning</th>
                         <th style="width:20%;">Summa</th>
-                        <th style="width:25%;">Skapades</th>
+                        <th style="width:25%;">Bokföringsdatum</th>
                         <th style="width:15%"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="verification in verifications">
                         <td>{{verification.id}}</td>
-                        <td>{{verification.transactionDate}}</td>
+                        <td>{{verification.description|limitTo:30}}<span ng-show="verification.description.length > 30">...</span></td>
                         <td>{{verification.sum}}</td>
                         <td>{{verification.creationDate}}</td>
                         <td>
-                            <input type="button" value="Visa" class="btn btn-primary" ng-click="showverinfo(verification.id)"/>
+                            <input type="button" value="Visa" class="btn btn-primary" ng-click="showverinfo($index)"/>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <pagination total-items="maxsize" items-per-page="20" ng-model="currentPage" max-size="5" class="pagination-sm" boundary-links="true" ng-change="pageChanged()" ng-show="maxsize > 20"></pagination>
         </div>
-        <div class="col-md-5" ng-show="showverinfoboolean">
+        <!-- ** VERIFICATION INFO ** -->
+        <div class="col-md-6" ng-show="showverinfoboolean">
+            <div class="alert alert-success" role="alert" style="margin-top:10px;" ng-show="form.numErrors === 0">
+                Verifikationen har ändrats!
+            </div>
+            <ul class="nav nav-tabs nav-justified" style="margin-top: 10px;">
+                <li role="presentation" class="active"><a href="">Visa</a></li>
+                <li role="presentation"><a href="" ng-click="showeditver()">Ändra</a></li>
+                <li role="presentation" ng-class="{disabled: !verinfo.oldposts}"><a href="" ng-click="!verinfo.oldposts || showverhistory()">Historik</a></li>
+            </ul>
             <h2>Verifikations information - Nr {{verinfo.id}}</h2>
+            <h3>{{verinfo.transactionDate}}</h3>
+            <h3>Beskrivning</h3>
+            {{verinfo.description}}
             <h3>Debet</h3>
             <table class="table table-striped">
                 <thead>
@@ -53,6 +66,145 @@
                     <td>{{creditpost.accountid}} - {{creditpost.accountname}}</td>
                     <td>{{creditpost.sum}}</td>
                 </tr>
+            </table>
+        </div>
+        <!-- ** EDIT VERIFICATION ** -->
+        <div class="col-md-6" ng-show="showeditverboolean">
+            <ul class="nav nav-tabs nav-justified" style="margin-top: 10px;">
+                <li role="presentation"><a href="" ng-click="showverinfo()">Visa</a></li>
+                <li role="presentation" class="active"><a href="">Ändra</a></li>
+                <li role="presentation" ng-class="{disabled: !verinfo.oldposts}"><a href="" ng-click="!verinfo.oldposts || showverhistory()">Historik</a></li>
+            </ul>
+            <div class="alert alert-danger" role="alert" style="margin-top: 10px;" ng-show="form.numErrors > 0">
+                <h4>{{form.numErrors}} fel hittades!</h4>
+                <p>{{form.errors.general}}</p>
+            </div>
+            <h2>Ändra verifikation - Nr. {{editver.id}}</h2>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <label>Beskrivning</label>
+                    </div>
+                    <div class="col-md-9">
+                        <textarea class="form-control" ng-model="editver.description" name="text" cols="10" rows="2" placeholder="Ange en beskrivning" style="resize: vertical;"></textarea>
+                    </div>
+                </div>
+            </form>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width:30%">Konto</th>
+                        <th style="width:30%">Debet</th>
+                        <th style="width:30%">Kredit</th>
+                        <th style="width:10%"></th><!-- Offset -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="debitpost in editver.debitposts" ng-style="postStyle">
+                        <td>{{debitpost.accountid}} - {{debitpost.accountname}}</td>
+                        <td>{{debitpost.sum}}</td>
+                        <td>0</td>
+                        <td>
+                            <button type="button" class="btn btn-danger" ng-click="removePost(debitpost); postStyle={'text-decoration':'line-through','background':'#FFF0F5'}" ng-show="!debitpost.removed">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+                            <button type="button" class="btn btn-info" ng-click="restorePost(debitpost); postStyle={}" ng-show="debitpost.removed">
+                                <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="creditpost in editver.creditposts" ng-style="postStyle">
+                        <td>{{creditpost.accountid}} - {{creditpost.accountname}}</td>
+                        <td>0</td>
+                        <td>{{creditpost.sum}}</td>
+                        <td>
+                            <button type="button" class="btn btn-danger" ng-click="removePost(creditpost); postStyle={'text-decoration':'line-through','background':'#FFF0F5'}" ng-show="!creditpost.removed">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+                            <button type="button" class="btn btn-info" ng-click="restorePost(creditpost); postStyle={}" ng-show="creditpost.removed">
+                                <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="newpost in editver.posts">
+                        <td>
+                            <div class="input-group">
+                                <input class="form-control" type="text" value="{{accountls[$index]}}" readonly>
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-primary" ng-click="openaccount($index)">
+                                        <span class="glyphicon glyphicon-plus" aria-hidden="true" ng-show="!accountls[$index]"></span>
+                                        <span class="glyphicon glyphicon-pencil" aria-hidden="true" ng-show="accountls[$index]"></span>
+                                    </button>
+                                </div>
+                            </div>    
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" step="0.01" ng-model="newpost.debit"/>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" step="0.01" ng-model="newpost.credit"/>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger" ng-click="removeNewpost(newpost)">
+                                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>
+                            <span class="label label-warning" ng-show="sumDebit() !== sumCredit()">Debit och kredit måste vara lika</span> &nbsp;
+                        </td>
+                        <td>
+                            Totalt: {{sumDebit()}}
+                        </td>
+                        <td>
+                            Totalt: {{sumCredit()}}
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" ng-click="addNewpost()">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="btn-group">
+                <button type="button" class="btn btn-success" ng-click="submit()" ng-disabled="sumDebit() !== sumCredit()">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-danger" ng-click="showverinfo()">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+        <!-- ** VERIFICATION HISTORY ** -->
+        <div class="col-md-6" ng-show="showverhistoryboolean">
+            <ul class="nav nav-tabs nav-justified" style="margin-top: 10px;">
+                <li role="presentation"><a href="" ng-click="showverinfo()">Visa</a></li>
+                <li role="presentation"><a href="" ng-click="showeditver()">Ändra</a></li>
+                <li role="presentation" class="active"><a href="">Historik</a></li>
+            </ul>
+            <h2>Verifikations historik - Nr. {{verinfo.id}}</h2>
+            <h3>Gamla poster</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width:30%">Konto</th>
+                        <th style="width:20%">Debet</th>
+                        <th style="width:20%">Kredit</th>
+                        <th style="width:30%">Skapades</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="oldpost in verinfo.oldposts">
+                        <td>{{oldpost.accountid}} - {{oldpost.accountname}}</td>
+                        <td>{{oldpost.debit}}</td>
+                        <td>{{oldpost.credit}}</td>
+                        <td>{{oldpost.creationdate | date:'yyyy-MM-dd'}}</td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </div>

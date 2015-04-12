@@ -21,6 +21,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import se.chalmers.bokforing.model.Customer;
+import se.chalmers.bokforing.model.Product;
+import se.chalmers.bokforing.model.Timesheet;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.util.PasswordUtil;
 
@@ -59,6 +61,11 @@ public class UserAccount implements Serializable {
     
     @OneToMany(mappedBy = "userAccount", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Customer> customers;
+    
+    @OneToMany(mappedBy = "userAccount")
+    private List<Timesheet> timesheets;
+    @OneToMany(mappedBy = "userAccount")
+    private List<Product> products;
     
     protected UserAccount(){
         
@@ -178,23 +185,23 @@ public class UserAccount implements Serializable {
     }
     
     String toStringLight(){
-        return id + ":" + email;
+        return getId() + ":" + getEmail();
     }
     
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("UserEnt{ id= ").append(id);
+        sb.append("UserEnt{ id= ").append(getId());
         sb.append(", userInfo=");
-        if(userInfo != null)
-            sb.append(userInfo.toStringLight());
+        if(getUserInfo() != null)
+            sb.append(getUserInfo().toStringLight());
         else
             sb.append("null");
-        sb.append(", pass=").append(pass);
-        sb.append(", salt= ").append(salt);
-        sb.append(", email=").append(email);
-        sb.append(", group=").append(userGroup);
-        sb.append(", sessionid=").append(sessionid);
+        sb.append(", pass=").append(getPass());
+        sb.append(", salt= ").append(getSalt());
+        sb.append(", email=").append(getEmail());
+        sb.append(", group=").append(getUserGroup());
+        sb.append(", sessionid=").append(getSessionid());
         sb.append(" }");
         return  sb.toString();  
     }
@@ -207,12 +214,12 @@ public class UserAccount implements Serializable {
         return false;
     else{
         UserAccount other = (UserAccount) obj; 
-            return (id == null ? other.id == null : id.equals(other.id))
-                && (email == null ? other.email == null : email.equals(other.email))
-                && (pass == null ? other.pass == null : pass.equals(other.pass))
-                && (salt == null ? other.salt == null : salt.equals(other.salt))
-                && (sessionid == null ? other.sessionid == null : sessionid.equals(other.sessionid))
-                && (userGroup == null ? other.userGroup == null : userGroup.equals(other.userGroup))
+            return (getId() == null ? other.getId() == null : getId().equals(other.getId()))
+                && (getEmail() == null ? other.getEmail() == null : getEmail().equals(other.getEmail()))
+                && (getPass() == null ? other.getPass() == null : getPass().equals(other.getPass()))
+                && (getSalt() == null ? other.getSalt() == null : getSalt().equals(other.getSalt()))
+                && (getSessionid() == null ? other.getSessionid() == null : getSessionid().equals(other.getSessionid()))
+                && (getUserGroup() == null ? other.getUserGroup() == null : getUserGroup().equals(other.getUserGroup()))
                 //&& (userInfo == other.userInfo || (userInfo != null && userInfo.equals(other.userInfo)))
                 //&& (verifications == null ? other.verifications == null : verifications.equals(other.verifications))
                 //&& (customers == null ? other.customers == null : customers.equals(other.customers))
@@ -223,15 +230,29 @@ public class UserAccount implements Serializable {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 83 * hash + Objects.hashCode(this.id);
-        hash = 83 * hash + Objects.hashCode(this.userInfo);
-        hash = 83 * hash + Objects.hashCode(this.pass);
-        hash = 83 * hash + Objects.hashCode(this.salt);
-        hash = 83 * hash + Objects.hashCode(this.email);
-        hash = 83 * hash + Objects.hashCode(this.userGroup);
-        hash = 83 * hash + Objects.hashCode(this.sessionid);
-        hash = 83 * hash + Objects.hashCode(this.verifications);
-        hash = 83 * hash + Objects.hashCode(this.customers);
+        hash = 83 * hash + Objects.hashCode(this.getId());
+        hash = 83 * hash + Objects.hashCode(this.getUserInfo());
+        hash = 83 * hash + Objects.hashCode(this.getPass());
+        hash = 83 * hash + Objects.hashCode(this.getSalt());
+        hash = 83 * hash + Objects.hashCode(this.getEmail());
+        hash = 83 * hash + Objects.hashCode(this.getUserGroup());
+        hash = 83 * hash + Objects.hashCode(this.getSessionid());
+        hash = 83 * hash + Objects.hashCode(this.getVerifications());
+        hash = 83 * hash + Objects.hashCode(this.getCustomers());
         return hash;
+    }
+
+    /**
+     * @return the timesheets
+     */
+    public List<Timesheet> getTimesheets() {
+        return timesheets;
+    }
+
+    /**
+     * @param timesheets the timesheets to set
+     */
+    public void setTimesheets(List<Timesheet> timesheets) {
+        this.timesheets = timesheets;
     }
 }

@@ -5,6 +5,7 @@
  */
 package se.chalmers.bokforing.model;
 
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -93,6 +94,40 @@ public class Address {
      */
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.streetNameAndNumber);
+        hash = 59 * hash + Objects.hashCode(this.postalCode);
+        hash = 59 * hash + Objects.hashCode(this.postTown);
+        hash = 59 * hash + Objects.hashCode(this.country);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Address other = (Address) obj;
+        if (!Objects.equals(this.streetNameAndNumber, other.streetNameAndNumber)) {
+            return false;
+        }
+        if (!Objects.equals(this.postalCode, other.postalCode)) {
+            return false;
+        }
+        if (!Objects.equals(this.postTown, other.postTown)) {
+            return false;
+        }
+        if (!Objects.equals(this.country, other.country)) {
+            return false;
+        }
+        return true;
     }
     
     

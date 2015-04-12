@@ -9,15 +9,18 @@
 
 var bok = angular.module('Bok', [
     'ngRoute',
+    'IndexControllers',
     'AuthControllers',
     'AuthService',
     'UserControllers',
     'DefaultDataControllers',
+    'ProductControllers',
     'UserService',
     'AuthHandlerService',
     'BookkeepingControllers',
     'BookkeepingService',
-    'DefaultDataService'
+    'DefaultDataService',
+    'ProductService'
      // More here
 ]);
 
@@ -70,9 +73,9 @@ bok.config(['$routeProvider', 'USER_LEVELS',
                         }]
                     }
                 }).
-                when('/manbok', {
-                    templateUrl: 'private/manbok.html',
-                    controller: 'ManBKCtrl',
+                when('/bookkeeping', {
+                    templateUrl: 'private/bookkeeping.html',
+                    controller: 'BookkeepingCtrl',
                     auth: USER_LEVELS.user,
                     resolve: {
                         auth: ['AuthHandler', function(AuthHandler) {
@@ -92,7 +95,17 @@ bok.config(['$routeProvider', 'USER_LEVELS',
                 }).
                 when('/verifications', {
                     templateUrl: 'private/verifications.html',
-                    controller: 'LstVerCtrl',
+                    controller: 'VerificationCtrl',
+                    auth: USER_LEVELS.user,
+                    resolve: {
+                        auth: ['AuthHandler', function(AuthHandler) {
+                                return AuthHandler.promise();
+                        }]
+                    }
+                }).
+                when('/products', {
+                    templateUrl: 'private/products.html',
+                    controller: 'ProductCtrl',
                     auth: USER_LEVELS.user,
                     resolve: {
                         auth: ['AuthHandler', function(AuthHandler) {

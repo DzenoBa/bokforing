@@ -218,15 +218,7 @@
             <artifactId>flying-saucer-pdf</artifactId>
             <version>9.0.7</version>
         </dependency>
-        <dependency>
-            <groupId>unknown.binary</groupId>
-            <artifactId>hibernate-jpamodelgen-4.3.1.Final</artifactId>
-            <version>SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
-
-
 
     <build>
         <plugins>

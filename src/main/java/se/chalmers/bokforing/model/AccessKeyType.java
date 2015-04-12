@@ -10,5 +10,5 @@ package se.chalmers.bokforing.model;
  * @author Dženan
  */
 public enum AccessKeyType {
-    FORGOTPASSWD;
+    FORGOTPASSWD, EMAILCHANGE;
 }
