@@ -35,4 +35,6 @@ public interface PostService {
     Post findPostById(long id);
     
     double getBalanceForAccountTypeBetweenDates(UserAccount user, AccountType accountType, Date start, Date end);
+
+    Map<Date, Double> getBalanceForAccountAtDate(UserAccount user, AccountType accountType, Date startDate, Date endDate);
 }

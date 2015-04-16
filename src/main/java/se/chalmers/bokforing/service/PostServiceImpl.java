@@ -6,6 +6,7 @@
 package se.chalmers.bokforing.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -193,5 +194,27 @@ public class PostServiceImpl implements PostService {
         }
         
         return balance;
+    }
+
+    @Override
+    public Map<Date, Double> getBalanceForAccountAtDate(UserAccount user, AccountType accountType, Date startDate, Date endDate) {
+        Map<Date, Double> map = new HashMap<>();
+        
+        Calendar start = Calendar.getInstance();
+        start.setTime(startDate);
+        Calendar end = Calendar.getInstance();
+        end.setTime(endDate);
+
+        while(!start.after(end)) {
+            Date date = start.getTime();
+
+            // Between the same date gives only one day
+            double balanceForDate = getBalanceForAccountTypeBetweenDates(user, accountType, date, date);
+            map.put(date, balanceForDate);
+
+            start.add(Calendar.DATE, 1);
+        }
+        
+        return map;
     }
 }
