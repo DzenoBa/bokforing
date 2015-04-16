@@ -528,9 +528,10 @@ public class VerificationTest extends AbstractIntegrationTest {
         cal.set(2014, 10, 11);
         Date endDate = cal.getTime();
         
-        double balance = postService.getBalanceForAccountTypeBetweenDates(user, AccountType.FUNDS_AND_DEBT, startDate, endDate);
+        // Assets -> account2 (because it starts with a 1) -> posts 2 and 4
+        double balance = postService.getBalanceForAccountTypeBetweenDates(user, AccountType.ASSETS, startDate, endDate);
         
-        double expectedBalance = sum4Amount - sum2Amount;
+        double expectedBalance = post2.getBalance() + post4.getBalance();
         assertTrue(expectedBalance == balance);
     }
 }

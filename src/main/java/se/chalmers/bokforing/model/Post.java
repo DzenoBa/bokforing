@@ -197,18 +197,42 @@ public class Post implements Serializable {
     
     // TODO: fix this for different types
     public double getBalance() {
+        if(!isActive()) { // we only care about ones that haven't been replaced
+            return 0;
+        }
+        
+        double debitAccountTypeFactor = 0;
+        double creditAccountTypeFactor = 0;
+        
+        // Different account types count the debit and credit sides of the
+        // post differently. Some make credit negative, some make credit 
+        // positive etc.
+        switch(account.getAccountType()) {
+            case ASSETS:
+            case MATERIAL_AND_PRODUCT_COSTS:
+                debitAccountTypeFactor = 1;
+                creditAccountTypeFactor = -1;
+                break;
+            case FUNDS_AND_DEBT:
+            case REVENUE:
+            case COSTS_5:
+            case COSTS_6:
+            case COSTS_7:
+                debitAccountTypeFactor = -1;
+                creditAccountTypeFactor = 1;
+                break;
+        }
+        
         double balance = 0;
         
-        if(isActive()) { // we only care about ones that haven't been replaced
-            if(postSum != null && postSum.getType() != null) {
-                switch(postSum.getType()) {
-                    case Credit:
-                        balance -= postSum.getSumTotal();
-                        break;
-                    case Debit:
-                        balance += postSum.getSumTotal();
-                        break;
-                }
+        if(postSum != null && postSum.getType() != null) {
+            switch(postSum.getType()) {
+                case Credit:
+                    balance += postSum.getSumTotal() * creditAccountTypeFactor;
+                    break;
+                case Debit:
+                    balance += postSum.getSumTotal() * debitAccountTypeFactor;
+                    break;
             }
         }
         
