@@ -3,12 +3,9 @@ package se.chalmers.bokforing;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import javax.sql.DataSource;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DataSourceUtils;

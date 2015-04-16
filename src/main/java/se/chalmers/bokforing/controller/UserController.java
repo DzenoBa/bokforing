@@ -1,7 +1,6 @@
 
 package se.chalmers.bokforing.controller;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,7 @@ import se.chalmers.bokforing.jsonobject.UserJSON;
 import se.chalmers.bokforing.model.AccessKey;
 import se.chalmers.bokforing.model.AccessKeyType;
 import se.chalmers.bokforing.model.user.UserAccount;
-import se.chalmers.bokforing.model.user.UserGroup;
 import se.chalmers.bokforing.model.user.UserHandler;
-import se.chalmers.bokforing.model.user.UserInfo;
 import se.chalmers.bokforing.service.user.UserManager;
 import se.chalmers.bokforing.persistence.user.UserService;
 import se.chalmers.bokforing.service.AccessKeyManager;

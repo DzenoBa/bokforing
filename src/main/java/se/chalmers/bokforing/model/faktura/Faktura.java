@@ -20,27 +20,27 @@ import se.chalmers.bokforing.model.user.UserInfo;
  *
  * @author victor
  */
-@Entity
+//@Entity
 public class Faktura implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@Id
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fakturaId;
 
     private boolean valid = true;
         
     //From
     //We need names, phone numbers and company from the info.
-    @ManyToOne
+    //@ManyToOne
     private UserInfo fromUser;
     
     //To
-    @ManyToOne
+    //@ManyToOne
     private UserInfo toUser;
     
     //Date
-    @Temporal(javax.persistence.TemporalType.DATE)
+    //@Temporal(javax.persistence.TemporalType.DATE)
     private Date fakturaDatum;
-    @Temporal(javax.persistence.TemporalType.DATE)
+    //@Temporal(javax.persistence.TemporalType.DATE)
     private Date expireDate;
     
     private Content content;

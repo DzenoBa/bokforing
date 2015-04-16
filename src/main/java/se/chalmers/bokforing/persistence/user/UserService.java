@@ -5,13 +5,9 @@
  */
 package se.chalmers.bokforing.persistence.user;
 
-import java.net.URI;
-import java.util.Date;
 import java.util.List;
-import se.chalmers.bokforing.model.user.UserGroup;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.user.UserHandler;
-import se.chalmers.bokforing.model.user.UserInfo;
 
 /**
  *

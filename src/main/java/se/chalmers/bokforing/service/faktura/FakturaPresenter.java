@@ -5,7 +5,22 @@
  */
 package se.chalmers.bokforing.service.faktura;
 
+import com.lowagie.text.DocumentException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.StringBufferInputStream;
 import java.util.Date;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.nodes.TextNode;
+import org.xhtmlrenderer.pdf.ITextRenderer;
+import org.xml.sax.SAXException;
 import se.chalmers.bokforing.model.faktura.Content;
 import se.chalmers.bokforing.model.faktura.Faktura;
 import se.chalmers.bokforing.model.user.UserInfo;
@@ -41,6 +56,28 @@ public class FakturaPresenter {
     
     private final Double momsPrecentage;
     
+    public FakturaPresenter(){
+        fak = null;
+        fName = "undef";
+        fComp = "undef";
+        mNumber = "undef";
+        fTax = false;
+        
+        tName = "undef";
+        tComp = "undef";
+        
+        fakDate = new Date();
+        expireDate = new Date();
+        
+        fakId = (long) 0;
+        
+        cont = null;
+        totalCost = null;
+        
+        moms = 0.0;
+        momsPrecentage = 0.0;
+    }
+    
     public FakturaPresenter(Faktura faktura){
         this.fak = faktura;
         UserInfo to = fak.getToUser();
@@ -65,6 +102,24 @@ public class FakturaPresenter {
         moms = fak.getMomsCost();
         momsPrecentage = fak.getMomsPrecentage();
         
+    }
+
+    public void print() throws IOException, DocumentException {        
+        File input = new File("xhtml/firstdoc.xhtml");
+        Document doc = Jsoup.parse(input, "UTF-8");
+        
+        Element kundnr = doc.select("a[id=faktnr]").first();
+
+        kundnr.text(fakId.toString());
+       
+        System.out.println(doc.outerHtml());
+        String outputFile = "pdf/fak" + fakId + ".pdf";
+        try (OutputStream os = new FileOutputStream(outputFile)) {
+            ITextRenderer renderer = new ITextRenderer();
+            renderer.setDocumentFromString(doc.outerHtml());
+            renderer.layout();
+            renderer.createPDF(os);
+        }
     }
     
 }
