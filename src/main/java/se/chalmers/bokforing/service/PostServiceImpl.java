@@ -94,10 +94,10 @@ public class PostServiceImpl implements PostService {
                     }
                     if (!balanceSheet.containsKey(account)) {
                         List<Double> balanceList = new ArrayList<>();
-                        balanceList.add(post.getPostSum().getSumTotal());
+                        balanceList.add(post.getBalance());
                         balanceSheet.put(account, balanceList);
                     } else {
-                        balanceSheet.get(account).set(0, balanceSheet.get(account).get(0) + post.getPostSum().getSumTotal());
+                        balanceSheet.get(account).set(0, balanceSheet.get(account).get(0) + post.getBalance());
                     }
                 }
             }
@@ -117,10 +117,10 @@ public class PostServiceImpl implements PostService {
                         List<Double> balanceList = new ArrayList<>();
                         Double periodBalance = 0.0;
                         balanceList.add(periodBalance);
-                        balanceList.add(post.getPostSum().getSumTotal());
+                        balanceList.add(post.getBalance());
                         balanceSheet.put(account, balanceList);
                     } else {
-                        balanceSheet.get(account).set(1, balanceSheet.get(account).get(1) + post.getPostSum().getSumTotal());
+                        balanceSheet.get(account).set(1, balanceSheet.get(account).get(1) + post.getBalance());
                     }
                 }
             }
@@ -154,10 +154,9 @@ public class PostServiceImpl implements PostService {
                         continue;
                     }
                     if (!incomeStatement.containsKey(account)) {
-                        post.getPostSum().getSumTotal();
-                        incomeStatement.put(account, post.getPostSum().getSumTotal());
+                        incomeStatement.put(account, post.getBalance());
                     } else {
-                        incomeStatement.put(account, incomeStatement.get(account) + post.getPostSum().getSumTotal());
+                        incomeStatement.put(account, incomeStatement.get(account) + post.getBalance());
                     }
                 }
             }
