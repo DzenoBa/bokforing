@@ -93,19 +93,7 @@ public class VerificationManagerImpl implements VerificationManager {
         double balance = 0;
         
         for(Post post : posts) {
-            if(post.isActive()) { // we only care about ones that haven't been replaced
-                PostSum sum = post.getPostSum();
-                if(sum != null && sum.getType() != null) {
-                    switch(sum.getType()) {
-                        case Credit:
-                            balance -= sum.getSumTotal();
-                            break;
-                        case Debit:
-                            balance += sum.getSumTotal();
-                            break;
-                    }
-                }
-            }
+            balance += post.getBalance();
         }
         
         return balance;

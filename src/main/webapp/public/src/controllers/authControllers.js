@@ -49,5 +49,23 @@ authControllers.controller('UserPageCtrl', ['$scope', '$location', 'AuthProxy', 
         };
 
         init();
+        
+        var data = {
+            labels: ["1/1", "3/1", "5/1", "8/1", "20/1", "30/1"],
+            datasets: [
+                {
+                    label: "Label",
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(151,187,205,1)",
+                    data: [28, 48, 40, 19, 86, 27]
+                }
+            ]
+        };
+        var ctx = document.getElementById("myChart").getContext("2d");
+        var myLineChart = new Chart(ctx).Line(data);  
     }
 ]);

@@ -6,6 +6,7 @@ require.config({
 require(
     [
         '../libs/bootstrap/js/ui-bootstrap-tpls-0.12.1.min',
+        '../libs/chartjs/Chart.min',
         'app',
         'controllers/indexControllers',
         'controllers/userControllers',

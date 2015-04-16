@@ -6,6 +6,7 @@
 package se.chalmers.bokforing.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.Account;
+import se.chalmers.bokforing.model.AccountType;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.model.user.UserAccount;
@@ -92,10 +94,10 @@ public class PostServiceImpl implements PostService {
                     }
                     if (!balanceSheet.containsKey(account)) {
                         List<Double> balanceList = new ArrayList<>();
-                        balanceList.add(post.getPostSum().getSumTotal());
+                        balanceList.add(post.getBalance());
                         balanceSheet.put(account, balanceList);
                     } else {
-                        balanceSheet.get(account).set(0, balanceSheet.get(account).get(0) + post.getPostSum().getSumTotal());
+                        balanceSheet.get(account).set(0, balanceSheet.get(account).get(0) + post.getBalance());
                     }
                 }
             }
@@ -115,10 +117,10 @@ public class PostServiceImpl implements PostService {
                         List<Double> balanceList = new ArrayList<>();
                         Double periodBalance = 0.0;
                         balanceList.add(periodBalance);
-                        balanceList.add(post.getPostSum().getSumTotal());
+                        balanceList.add(post.getBalance());
                         balanceSheet.put(account, balanceList);
                     } else {
-                        balanceSheet.get(account).set(1, balanceSheet.get(account).get(1) + post.getPostSum().getSumTotal());
+                        balanceSheet.get(account).set(1, balanceSheet.get(account).get(1) + post.getBalance());
                     }
                 }
             }
@@ -152,10 +154,9 @@ public class PostServiceImpl implements PostService {
                         continue;
                     }
                     if (!incomeStatement.containsKey(account)) {
-                        post.getPostSum().getSumTotal();
-                        incomeStatement.put(account, post.getPostSum().getSumTotal());
+                        incomeStatement.put(account, post.getBalance());
                     } else {
-                        incomeStatement.put(account, incomeStatement.get(account) + post.getPostSum().getSumTotal());
+                        incomeStatement.put(account, incomeStatement.get(account) + post.getBalance());
                     }
                 }
             }
@@ -174,5 +175,45 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post findPostById(long id) {
         return postRepo.findOne(id);
+    }
+
+    @Override
+    public double getBalanceForAccountTypeBetweenDates(UserAccount user, AccountType accountType, Date start, Date end) {
+        int startingDigit = accountType.getStartingDigit();
+        
+        int startNumber = startingDigit * 1000;
+        int endNumber = startNumber + 999;
+        
+        List<Post> posts = postRepo.findByVerification_UserAccountAndAccount_NumberBetweenAndVerification_TransactionDateBetween(user, startNumber, endNumber, start, end);
+        
+        double balance = 0;
+        
+        for(Post post : posts) {
+            balance += post.getBalance();
+        }
+        
+        return balance;
+    }
+
+    @Override
+    public Map<Date, Double> getBalanceForAccountAtDate(UserAccount user, AccountType accountType, Date startDate, Date endDate) {
+        Map<Date, Double> map = new HashMap<>();
+        
+        Calendar start = Calendar.getInstance();
+        start.setTime(startDate);
+        Calendar end = Calendar.getInstance();
+        end.setTime(endDate);
+
+        while(!start.after(end)) {
+            Date date = start.getTime();
+
+            // Between the same date gives only one day
+            double balanceForDate = getBalanceForAccountTypeBetweenDates(user, accountType, date, date);
+            map.put(date, balanceForDate);
+
+            start.add(Calendar.DATE, 1);
+        }
+        
+        return map;
     }
 }
