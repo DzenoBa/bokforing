@@ -195,7 +195,6 @@ public class Post implements Serializable {
         this.active = active;
     }
     
-    // TODO: fix this for different types
     public double getBalance() {
         if(!isActive()) { // we only care about ones that haven't been replaced
             return 0;
