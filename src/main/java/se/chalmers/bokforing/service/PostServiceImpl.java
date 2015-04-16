@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.Account;
+import se.chalmers.bokforing.model.AccountType;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.model.user.UserAccount;
@@ -174,5 +175,23 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post findPostById(long id) {
         return postRepo.findOne(id);
+    }
+
+    @Override
+    public double getBalanceForAccountTypeBetweenDates(UserAccount user, AccountType accountType, Date start, Date end) {
+        int startingDigit = accountType.getStartingDigit();
+        
+        int startNumber = startingDigit * 1000;
+        int endNumber = startNumber + 999;
+        
+        List<Post> posts = postRepo.findByVerification_UserAccountAndAccount_NumberBetweenAndVerification_TransactionDateBetween(user, startNumber, endNumber, start, end);
+        
+        double balance = 0;
+        
+        for(Post post : posts) {
+            balance += post.getBalance();
+        }
+        
+        return balance;
     }
 }

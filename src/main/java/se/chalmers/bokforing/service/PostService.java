@@ -13,6 +13,7 @@ import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.user.UserAccount;
 import org.springframework.data.domain.Pageable;
+import se.chalmers.bokforing.model.AccountType;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 
 /**
@@ -32,4 +33,6 @@ public interface PostService {
     Page<Post> findPostsForUserAndAccount(UserAccount user, Account account, boolean isActive, PagingAndSortingTerms terms);
 
     Post findPostById(long id);
+    
+    double getBalanceForAccountTypeBetweenDates(UserAccount user, AccountType accountType, Date start, Date end);
 }

@@ -194,4 +194,24 @@ public class Post implements Serializable {
     public void setActive(boolean active) {
         this.active = active;
     }
+    
+    // TODO: fix this for different types
+    public double getBalance() {
+        double balance = 0;
+        
+        if(isActive()) { // we only care about ones that haven't been replaced
+            if(postSum != null && postSum.getType() != null) {
+                switch(postSum.getType()) {
+                    case Credit:
+                        balance -= postSum.getSumTotal();
+                        break;
+                    case Debit:
+                        balance += postSum.getSumTotal();
+                        break;
+                }
+            }
+        }
+        
+        return balance;
+    }
 }
