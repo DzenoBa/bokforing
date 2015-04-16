@@ -16,7 +16,10 @@ public enum AccountType {
     ASSETS(1),
     FUNDS_AND_DEBT(2),
     REVENUE(3),
-    MATERIAL_AND_PRODUCT_COSTS(4);
+    MATERIAL_AND_PRODUCT_COSTS(4),
+    COSTS_5(5),
+    COSTS_6(6),
+    COSTS_7(7);
     
     private final int startingDigit;
     
