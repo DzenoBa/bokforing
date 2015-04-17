@@ -28,14 +28,14 @@ public class AccountManagerImpl implements AccountManager {
         
         Account account = new Account();
 
-        int firstDigit = number/1000;
+        int firstDigit = Integer.parseInt(Integer.toString(number).substring(0, 1));
         
         // A bit hacky bit should work
         for(AccountType type : AccountType.values()) {
-            if(type.ordinal() == firstDigit) {
+            if(type.getStartingDigit() == firstDigit) {
                 account.setAccountType(type);
             }
-        }
+        } 
         
         account.setNumber(number);
         account.setName(name);
