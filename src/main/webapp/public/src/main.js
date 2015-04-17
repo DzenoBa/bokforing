@@ -19,7 +19,8 @@ require(
         'services/authHandler',
         'services/bookkeepingService',
         'services/defaultDataService',
-        'services/productService'
+        'services/productService',
+        'services/statisticsService'
         
     ],
     function () {
