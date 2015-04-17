@@ -164,6 +164,10 @@ public class BookkeepingController {
         
         // CREATE VERIFICATION
         Verification ver = verificationManager.createVerification(uh.getUA(), new_posts, verification.getTransactionDate(), null, description);
+        if(ver == null) {
+            form.addError("general", "Verifikationen är ej valid");
+            return form;
+        }
         uh.getVerifications().add(ver);
         userService.storeUser(uh);
         
