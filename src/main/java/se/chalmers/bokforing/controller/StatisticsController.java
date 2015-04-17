@@ -46,12 +46,15 @@ public class StatisticsController {
         
         Date end = new Date();
         long DAY_IN_MS = 1000 * 60 * 60 * 24;
-        Date start = new Date(System.currentTimeMillis() - (7 * DAY_IN_MS));
+        Date start = new Date(System.currentTimeMillis() - (6 * DAY_IN_MS));
         
         AccountType accType = AccountType.ASSETS;
         if(account.getNumber() == 2) 
             accType = AccountType.FUNDS_AND_DEBT;
-        // MORE?
+        else if(account.getNumber() == 3)
+            accType = AccountType.REVENUE;
+        else if(account.getNumber() >= 4)
+            accType = AccountType.MATERIAL_AND_PRODUCT_COSTS;
         
         Map<Date, Double> map = postService.getBalanceForAccountAtDate(uh.getUA(), accType, start, end);
         
