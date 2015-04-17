@@ -10,17 +10,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.StringBufferInputStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.TextNode;
 import org.xhtmlrenderer.pdf.ITextRenderer;
-import org.xml.sax.SAXException;
 import se.chalmers.bokforing.model.faktura.Content;
 import se.chalmers.bokforing.model.faktura.Faktura;
 import se.chalmers.bokforing.model.user.UserInfo;
@@ -30,6 +25,8 @@ import se.chalmers.bokforing.model.user.UserInfo;
  * @author victor
  */
 public class FakturaPresenter {
+    private Document doc;
+    
     private final Faktura fak;
     
     //The big list of privates
@@ -58,7 +55,7 @@ public class FakturaPresenter {
     
     public FakturaPresenter(){
         fak = null;
-        fName = "undef";
+        fName = "Mister Reciver";
         fComp = "undef";
         mNumber = "undef";
         fTax = false;
@@ -104,13 +101,41 @@ public class FakturaPresenter {
         
     }
 
+    private void replacer(String tag, String replaceWith){
+        Element replace = doc.select("a[id="+tag+"]").first();
+        replace.text(replaceWith);
+    }
+    
     public void print() throws IOException, DocumentException {        
-        File input = new File("xhtml/firstdoc.xhtml");
-        Document doc = Jsoup.parse(input, "UTF-8");
+        File input = new File("xhtml/faktura.xhtml");
+        doc = Jsoup.parse(input, "UTF-8");
         
-        Element kundnr = doc.select("a[id=faktnr]").first();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
+        
+        //TOP
+        replacer("faktnr",fakId.toString());
+        replacer("kundnr","INGET KUND NUMMER");
+        replacer("faktdat",sdf.format(fakDate));
+        replacer("tcnamn",tComp);
+        replacer("tadr","INTE KUNDADRESS");
+        replacer("poskod", "INTE POSTKOD");
+        
+        //MID/TOP
+        replacer("ernamn",tName);
+        replacer("ordnr","INGET ORDER NUMMER");
+        
+        replacer("vnamn", fName);
+        replacer("betvil","INGA VILKOR");
+        replacer("exdat",sdf.format(expireDate));
+        replacer("intrest", "INGEN DRÖJSMÅLSRÄNTA");
+        
+        //MID
+        
+        
+        //BOT
+        
 
-        kundnr.text(fakId.toString());
+        
        
         System.out.println(doc.outerHtml());
         String outputFile = "pdf/fak" + fakId + ".pdf";

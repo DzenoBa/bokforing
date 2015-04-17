@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Faktura</title>
+        <style>
+        a{ 
+	color: black;
+} 
+.textbox{
+	border-style: solid;
+	border-width: medium;
+}
+</style>
+    </head>
+    <body>
+    <div id="top">
+			<div class="figure">
+		       <!-- <img src="alice2.gif" style="max-width: 200px; max-height: 200px;"/>//-->
+		    </div>
+		    <div class="textbox" style="position: absolute; left: 250px; top: 25px;">
+		    <h1>Faktura</h1>
+		    </div>
+		    
+		    <div class="textbox" style="position: absolute; left: 250px; top: 125px;">
+		    <b>Faktura Nummer / Kund Nummer</b>
+		    <p></p>
+		    <a id="faktnr">[FAKTNR]</a> &nbsp;/&nbsp; <a id="kundnr">[KUNDNR]</a>
+		    </div>
+
+<div class="textbox" style="position: absolute; left: 600px; top: 125px;">
+		    <b>Faktura Datum</b>
+		    <p></p>
+		    <a id="faktdat">[FAKTDAT]</a>
+		    </div>    
+        </div>
+		<div class="textbox" style="position: absolute; left: 250px; top: 200px;">
+		    <b>Fakturaadress</b>
+		  	<ul>
+			  <li><a id="tcnamn">[TCNAMN]</a></li>
+			  <li><a id="tadr">[TADR]</a></li>
+			  <li><a id="poskod">[POSTKOD]</a></li>
+			</ul> 
+		    </div>
+
+	<div id="middleTop" style="position: absolute; width: 100%;top: 300px;">
+<table border="1" style="float: left; display: inline-table;">
+  <tr>
+    <th>Er Refernes</th>
+    <td><a id="ernamn">[ERNAMN]</a></td>
+  </tr>
+  <tr>
+    <th>Ert ordernr</th>
+    <td><a id="ordnr">[ORDNR]</a></td>
+  </tr>
+</table> 
+
+<table border="1" style="float: right; display: inline-table;">
+  <tr>
+    <th>Vår Refernes</th>
+    <td><a id="vnamn">[VNAMN]</a></td>
+  </tr>
+  <tr>
+    <th>Betallnings Vilkor</th>
+    <td><a id="betvil">[BETVIL]</a></td>
+  </tr>
+  <tr>
+    <th>Förfallo Datum</th>
+    <td><a id="exdat">[EXDAT]</a></td>
+  </tr>
+  <tr>
+    <th>Dröjsmålsränta</th>
+    <td><a id="intrest">[INTREST]</a></td>
+  </tr>
+</table> 
+
+    </div>
+    <div id="mainlist" style="position: absolute; width: 100%;top: 400px;">
+    	<table border="1">
+    	<tr>
+    		<th>Produkt</th>
+    		<th>Antal</th>
+    		<th>Kostnad</th>
+    	</tr>
+    	<a id="content">[CONTENT]</a>
+    	</table>
+    </div>
+    </body>
+</html>
