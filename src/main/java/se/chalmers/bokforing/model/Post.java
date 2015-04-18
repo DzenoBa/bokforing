@@ -207,16 +207,17 @@ public class Post implements Serializable {
         // post differently. Some make credit negative, some make credit 
         // positive etc.
         switch(account.getAccountType()) {
-            case ASSETS:
-            case MATERIAL_AND_PRODUCT_COSTS:
+            case ASSETS:    // 1
+            case MATERIAL_AND_PRODUCT_COSTS: // 4
+            case COSTS_5: // 5
+            case COSTS_6: // 6
+            case COSTS_7: // 7
+            case COSTS_8:
                 debitAccountTypeFactor = 1;
                 creditAccountTypeFactor = -1;
                 break;
-            case FUNDS_AND_DEBT:
-            case REVENUE:
-            case COSTS_5:
-            case COSTS_6:
-            case COSTS_7:
+            case FUNDS_AND_DEBT: // 2
+            case REVENUE: // 3
                 debitAccountTypeFactor = -1;
                 creditAccountTypeFactor = 1;
                 break;
@@ -231,6 +232,27 @@ public class Post implements Serializable {
                     break;
                 case Debit:
                     balance += postSum.getSumTotal() * debitAccountTypeFactor;
+                    break;
+            }
+        }
+        
+        return balance;
+    }
+    
+    public double getBalanceIgnoreSign() {
+        if(!isActive()) { // we only care about ones that haven't been replaced
+            return 0;
+        }
+        
+        double balance = 0;
+        
+        if(postSum != null && postSum.getType() != null) {
+            switch(postSum.getType()) {
+                case Credit:
+                    balance -= postSum.getSumTotal();
+                    break;
+                case Debit:
+                    balance += postSum.getSumTotal();
                     break;
             }
         }

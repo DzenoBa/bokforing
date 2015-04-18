@@ -19,7 +19,8 @@ public enum AccountType {
     MATERIAL_AND_PRODUCT_COSTS(4),
     COSTS_5(5),
     COSTS_6(6),
-    COSTS_7(7);
+    COSTS_7(7),
+    COSTS_8(8);
     
     private final int startingDigit;
     

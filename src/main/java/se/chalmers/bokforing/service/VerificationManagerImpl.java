@@ -93,7 +93,7 @@ public class VerificationManagerImpl implements VerificationManager {
         double balance = 0;
         
         for(Post post : posts) {
-            balance += post.getBalance();
+            balance += post.getBalanceIgnoreSign();
         }
         
         return balance;

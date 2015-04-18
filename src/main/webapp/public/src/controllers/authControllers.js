@@ -42,30 +42,123 @@ authControllers.controller('LoginCtrl', ['$scope',
     }
 ]);
 
-authControllers.controller('UserPageCtrl', ['$scope', '$location', 'AuthProxy', 'Session',
-    function($scope, $location, AuthProxy, Session) {
+authControllers.controller('UserPageCtrl', ['$scope', '$q', '$filter', 'AuthProxy', 'StatisticsProxy',
+    function($scope, $q, $filter, AuthProxy, StatisticsProxy) {
+        
         var init = function() {
             $scope.session = AuthProxy.class().getSession();
+            
+            // GET REVENUE DATA
+            getBalanceList({number: 3}).then(function(data) {
+                var dd = {};
+                angular.forEach(data, function(value, key) {
+                    dd[$filter('date')(key,'dd/MM')] = value;
+                });
+                for(var i=0; i<6; i++){
+                    revenueChart.datasets[0].points[i].value = dd[revenueChart.datasets[0].points[i].label];
+                }
+                revenueChart.update();
+            });
+            
+            // GET COST DATA
+            getBalanceList({number: 4}).then(function(data) {
+                var dd = {};
+                angular.forEach(data, function(value, key) {
+                    dd[$filter('date')(key,'dd/MM')] = value;
+                });
+                for(var i=0; i<6; i++){
+                    costChart.datasets[0].points[i].value = dd[costChart.datasets[0].points[i].label];
+                }
+                costChart.update();
+            });
+            
+            // GET ASSETS DATA
+            getBalanceList({number: 1}).then(function(data) {
+                var dd = {};
+                angular.forEach(data, function(value, key) {
+                    dd[$filter('date')(key,'dd/MM')] = value;
+                });
+                for(var i=0; i<6; i++){
+                    assetsChart.datasets[0].points[i].value = dd[assetsChart.datasets[0].points[i].label];
+                }
+                assetsChart.update();
+            });
         };
 
-        init();
+        function getDates() {
+            var dates = [];
+            for(var i=6; i>=0; i--) {
+                dates[dates.length] = $filter('date')(new Date() - i * 1000 * 60 * 60 * 24,'dd/MM');
+            }
+            return dates;
+        };
         
-        var data = {
-            labels: ["1/1", "3/1", "5/1", "8/1", "20/1", "30/1"],
+        function getBalanceList(account) {
+            var dfrd = $q.defer();
+            StatisticsProxy.getBalanceList(account)
+                    .success(function(data) {
+                        dfrd.resolve(data);
+                    }).error(function() {
+                console.log("getBalanceList: error");
+                dfrd.reject();
+            });
+            return dfrd.promise;
+        };
+        
+        var revenueData = {
+            labels: getDates(),
             datasets: [
                 {
-                    label: "Label",
-                    fillColor: "rgba(151,187,205,0.2)",
-                    strokeColor: "rgba(151,187,205,1)",
-                    pointColor: "rgba(151,187,205,1)",
-                    pointStrokeColor: "#fff",
+                    label: "Assets",
+                    fillColor: "rgba(139,204,159,0.9)",
+                    strokeColor: "rgba(139,204,159,1)",
+                    pointColor: "#fff",
+                    pointStrokeColor: "rgba(139,204,159,1)",
                     pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(151,187,205,1)",
-                    data: [28, 48, 40, 19, 86, 27]
+                    pointHighlightStroke: "rgba(139,204,159,1)",
+                    data: [0,0,0,0,0,0,0]
                 }
             ]
         };
-        var ctx = document.getElementById("myChart").getContext("2d");
-        var myLineChart = new Chart(ctx).Line(data);  
+        var costData = {
+            labels: getDates(),
+            datasets: [
+                {
+                    label: "Funds",
+                    fillColor: "rgba(240,126,72,0.9)",
+                    strokeColor: "rgba(240,126,72,1)",
+                    pointColor: "#fff",
+                    pointStrokeColor: "rgba(240,126,72,1)",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(240,126,72,1)",
+                    data: [0,0,0,0,0,0,0]
+                }
+            ]
+        };
+        
+        var assetsData = {
+            labels: getDates(),
+            datasets: [
+                {
+                    label: "Assets",
+                    fillColor: "rgba(74,149,237,0.9)",
+                    strokeColor: "rgba(74,149,237,1)",
+                    pointColor: "#fff",
+                    pointStrokeColor: "rgba(74,149,237,1)",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(74,149,237,1)",
+                    data: [0,0,0,0,0,0,0]
+                }
+            ]
+        };
+        
+        var revenueCtx = document.getElementById("revenueChart").getContext("2d");
+        var revenueChart = new Chart(revenueCtx).Line(revenueData);
+        var costCtx = document.getElementById("costChart").getContext("2d");
+        var costChart = new Chart(costCtx).Line(costData); 
+        var assetsCtx = document.getElementById("assetsChart").getContext("2d");
+        var assetsChart = new Chart(assetsCtx).Line(assetsData); 
+       
+        init();
     }
 ]);
