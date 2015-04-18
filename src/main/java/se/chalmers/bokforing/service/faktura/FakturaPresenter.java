@@ -10,13 +10,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import se.chalmers.bokforing.model.faktura.Content;
+import se.chalmers.bokforing.model.faktura.Content.Product;
 import se.chalmers.bokforing.model.faktura.Faktura;
 import se.chalmers.bokforing.model.user.UserInfo;
 
@@ -68,8 +71,10 @@ public class FakturaPresenter {
         
         fakId = (long) 0;
         
-        cont = null;
-        totalCost = null;
+        cont = new Content();
+        cont.addProduct("Example", 10.0);
+        cont.addProduct("Example", 10.21,3);
+        totalCost = cont.getTotalPrice();
         
         moms = 0.0;
         momsPrecentage = 0.0;
@@ -105,7 +110,30 @@ public class FakturaPresenter {
         Element replace = doc.select("a[id="+tag+"]").first();
         replace.text(replaceWith);
     }
-    
+    private String contentListGenerator(){
+        StringBuilder sb = new StringBuilder();
+        //HeaderRow
+        sb.append("<table class=\"contentTable\">");
+        sb.append("<tr>");
+        sb.append("<th>Produkt</th>");
+        sb.append("<th>Antal</th>");
+    	sb.append("<th>Kostnad</th>");
+    	sb.append("</tr>");
+        //Start With Content
+        Iterator<Product> it = cont.getIterator();
+        while(it.hasNext()){
+            Product p = it.next();
+            sb.append("<tr>");
+            sb.append("<td>").append(p.getName()).append("</td>");
+            sb.append("<td>").append(p.getUnits()).append("</td>");
+            sb.append("<td>").append(new DecimalFormat("#.##").format((Double) (p.getPrice() * p.getUnits()))).append(" kr</td>");
+            sb.append("</tr>");
+        }
+        
+        //End Table
+        sb.append("</table>");
+        return sb.toString();
+    }
     public void print() throws IOException, DocumentException {        
         File input = new File("xhtml/faktura.xhtml");
         doc = Jsoup.parse(input, "UTF-8");
@@ -130,7 +158,9 @@ public class FakturaPresenter {
         replacer("intrest", "INGEN DRÖJSMÅLSRÄNTA");
         
         //MID
-        
+        //replacer("content", contentListGenerator());
+        Element replace = doc.select("a[id=content]").first();
+        replace.html(contentListGenerator());
         
         //BOT
         

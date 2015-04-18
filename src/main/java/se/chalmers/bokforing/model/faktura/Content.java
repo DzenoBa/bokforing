@@ -17,8 +17,12 @@ import java.util.LinkedList;
 public class Content {
     private final LinkedList<Product> list = new LinkedList<>();
     
-    void addProduct(Product add){
-        list.add(add);
+    public void addProduct(String str, Double price){
+        addProduct(str,price,1);
+    }
+    
+    public void addProduct(String str, Double price, Integer amount){
+        list.add(new Product(str,price,amount));
     }
     
     public String recipt(){
@@ -34,6 +38,10 @@ public class Content {
         return sb.toString();
     }
     
+    public Iterator<Product> getIterator(){
+        return list.iterator();
+    }
+    
     public Double getTotalPrice(){
         Double total = 0.0;
         Iterator<Product> it = list.iterator();
@@ -44,7 +52,7 @@ public class Content {
         return total;
     }
     
-    class Product{
+    public class Product{
         private final String name;
         private final Double price;
         private int units;
@@ -54,10 +62,10 @@ public class Content {
             this.units = units;
         }
         
-        public int addUnits(int i){
+        int addUnits(int i){
             return units += i;
         }
-        public int removeUnits(int i){
+        int removeUnits(int i){
             return addUnits(-i);
         }
         
