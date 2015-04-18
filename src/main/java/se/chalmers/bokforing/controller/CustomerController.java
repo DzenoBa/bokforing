@@ -274,6 +274,7 @@ public class CustomerController {
         Customer cDb = customerService.findByCustomerNumber(uh.getUA(), customer.getCustomernumber());
         if(cDb == null) {
             form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+            return form;
         }
         
         customerManager.deleteCustomer(cDb);

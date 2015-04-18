@@ -228,6 +228,7 @@ public class ProductController {
         Product pDb = productService.findProductById(uh.getUA(), product.getId());
         if(pDb == null) {
             form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+            return form;
         }
         
         productService.remove(pDb);
