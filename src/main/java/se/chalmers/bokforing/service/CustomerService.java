@@ -8,7 +8,6 @@ package se.chalmers.bokforing.service;
 import org.springframework.data.domain.Page;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.user.UserAccount;
-import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 
 /**
@@ -20,6 +19,8 @@ public interface CustomerService {
     Page<Customer> findAllCustomers(UserAccount user, PagingAndSortingTerms terms);
     
     Customer findByCustomerNumber(UserAccount user, long customerNumber);
+    
+    Page<Customer> findByNameLike(UserAccount user, String name, PagingAndSortingTerms terms);
     
     void save(Customer customer);
     
