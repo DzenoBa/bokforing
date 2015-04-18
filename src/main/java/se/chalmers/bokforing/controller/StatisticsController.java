@@ -58,6 +58,17 @@ public class StatisticsController {
         
         Map<Date, Double> map = postService.getBalanceForAccountAtDate(uh.getUA(), accType, start, end);
         
+        // ADD VALUES 5-7 IF >= 4
+        if(account.getNumber() >= 4) {
+            AccountType[] accTypeLs = AccountType.values();
+            for(int i=4; i<7; i++) {
+                Map<Date, Double> tempMap = postService.getBalanceForAccountAtDate(uh.getUA(), accTypeLs[i], start, end);
+                for(Map.Entry<Date, Double> entry: map.entrySet()) {
+                    double newValue = entry.getValue() + tempMap.get(entry.getKey());
+                    map.put(entry.getKey(), newValue);
+                }
+            }
+        }
         return map;
     }
 }
