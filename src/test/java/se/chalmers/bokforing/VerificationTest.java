@@ -259,8 +259,8 @@ public class VerificationTest extends AbstractIntegrationTest {
         // dates should be "lower" the farther we go down the list
         assertTrue(firstDate.after(secondDate));
     }
-
-    /**
+    
+     /**
      * Test of getBalanceSheet method, of class PostServiceImpl.
      */
     @Test
@@ -268,39 +268,39 @@ public class VerificationTest extends AbstractIntegrationTest {
     public void testGetBalanceSheet() {
         double sum1Amount = 100;
         double sum2Amount = 100;
-
+        
         double sum3Amount = 200;
         double sum4Amount = 200;
-
+       
         Calendar cal = Calendar.getInstance();
 
         Account account = accountManager.createAccount(2018, "Egna insättningar");
-
+        
         PostSum sum = new PostSum();
         sum.setSumTotal(sum1Amount);
         sum.setType(PostType.Credit);
-
+        
         PostSum sum2 = new PostSum();
         sum2.setSumTotal(sum2Amount);
         sum2.setType(PostType.Debit);
-
+        
         PostSum sum3 = new PostSum();
         sum3.setSumTotal(sum3Amount);
         sum3.setType(PostType.Debit);
-
+        
         PostSum sum4 = new PostSum();
         sum4.setSumTotal(sum4Amount);
         sum4.setType(PostType.Credit);
-
+        
         Customer customer = customerManager.createCustomer(user, 123, null, null, null);
         customer.setCustomerNumber(1L);
         customer.setName("Jakob");
         customer.setPhoneNumber("031132314");
-
+        
         Post post = postManager.createPost(sum, account);
         post.setPostSum(sum);
         post.setAccount(account);
-
+        
         Post post2 = postManager.createPost(sum2, account);
         post2.setPostSum(sum2);
         post2.setAccount(account);
@@ -308,26 +308,26 @@ public class VerificationTest extends AbstractIntegrationTest {
         Post post3 = postManager.createPost(sum3, account);
         post3.setPostSum(sum3);
         post3.setAccount(account);
-
+        
         Post post4 = postManager.createPost(sum4, account);
         post4.setPostSum(sum4);
         post4.setAccount(account);
-
+        
         ArrayList<Post> postList = new ArrayList<>();
         postList.add(post);
         postList.add(post2);
-
+        
         ArrayList<Post> postList2 = new ArrayList<>();
         postList2.add(post3);
         postList2.add(post4);
-
+        
         Long verNbr = 7372L; // one higher than the highest inserted row
         Verification verification = manager.createVerification(user, verNbr, postList, cal.getTime(), customer, "");
         assertNotNull(verification);
-
-        Verification verification2 = manager.createVerification(user, verNbr + 1, postList2, cal.getTime(), customer, "");
+        
+        Verification verification2 = manager.createVerification(user, verNbr+1, postList2, cal.getTime(), customer, "");
         assertNotNull(verification2);
-
+        
         Verification verificationFromDb = service.findByUserAndVerificationNumber(user, verNbr);
         assertNotNull(verificationFromDb);
         Account accountFromDb = accountService.findAccountByNumber(2018);
@@ -346,16 +346,16 @@ public class VerificationTest extends AbstractIntegrationTest {
         Map<Account, List<Double>> result = instance.getBalanceSheet(user, startDate, endDate, null);
         System.out.println("Time to get Balance Sheet: " + (System.currentTimeMillis() - begin));
         List<Double> expResult = new ArrayList<>();
-
+        
         Double totalSum = posts.iterator().next().getPostSum().getSumTotal();
-        while (posts.iterator().hasNext()) {
-
+        while(posts.iterator().hasNext()){
+           
             totalSum += posts.iterator().next().getPostSum().getSumTotal();
         }
         System.out.println(totalSum);
-
+            
         expResult.add(0, totalSum);
-        expResult.add(1, 0.0);
+        expResult.add(1,0.0);
         assertEquals(result.get(accountFromDb), expResult);
     }
 
@@ -626,5 +626,6 @@ public class VerificationTest extends AbstractIntegrationTest {
         double expectedBalance = post2.getBalance() + post4.getBalance();
         assertTrue(expectedBalance == balance);
     }
+
 
 }
