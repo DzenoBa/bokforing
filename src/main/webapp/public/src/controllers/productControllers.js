@@ -65,7 +65,7 @@ productControllers.controller('ProductCtrl', ['$scope', 'ProductProxy',
         
         function getProducts() {
             var stringIndex = $scope.currentPage-1 + "";
-            ProductProxy.getProducts(stringIndex)
+            ProductProxy.getProducts({name: $scope.searchname, startrange: stringIndex})
                     .success(function(products) {
                         $scope.products = products;
                     }).error(function() {
@@ -74,12 +74,23 @@ productControllers.controller('ProductCtrl', ['$scope', 'ProductProxy',
         };
         
         function countProducts() {
-            ProductProxy.countProducts()
+            ProductProxy.countProducts({name: $scope.searchname})
                     .success(function(size) {
                         $scope.maxsize = size;
                     }).error(function() {
                         console.log("product:countProducts: error");
                     });
+        };
+        
+        $scope.search = function() {
+            getProducts();
+            countProducts();
+        };
+        
+        $scope.autosearch = function() {
+            if($scope.searchname.length > 2 || $scope.searchname.length === 0) {
+                $scope.search();
+            }
         };
         
         $scope.edit = function() {

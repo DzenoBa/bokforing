@@ -14,6 +14,7 @@ public class ProductJSON {
     private String description;
     private double price;
     private String quantitytype;
+    private int startrange;
     
     public Long getId() {
         return id;
@@ -48,5 +49,12 @@ public class ProductJSON {
     }
     public void setQuantitytype(String quantitytype) {
         this.quantitytype = quantitytype;
+    }
+    
+    public int getStartrange() {
+        return startrange;
+    }
+    public void setStartragne(int startrange) {
+        this.startrange = startrange;
     }
 }
