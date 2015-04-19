@@ -2,6 +2,7 @@
 package se.chalmers.bokforing.jsonobject;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -9,11 +10,20 @@ import java.io.Serializable;
  */
 public class PostJSON implements Serializable {
     
+    private Long id;
     private int accountid;
     private String accountname;
     private double debit;
     private double credit;
     private double sum;
+    private Date creationdate;
+    
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
     
     public int getAccountid() {
         return accountid;
@@ -50,4 +60,10 @@ public class PostJSON implements Serializable {
         this.sum = sum;
     }
     
+    public Date getCreationdate() {
+        return creationdate;
+    }
+    public void setCreationdate(Date creationdate) {
+        this.creationdate = creationdate;
+    }
 }

@@ -23,11 +23,25 @@ public class PagingAndSortingTerms {
     private Integer pageNumber;
     private Boolean ascendingSort;
     private String fieldToSortBy;
+    private Integer pageSize;
 
     public PagingAndSortingTerms(Integer pageNumber, Boolean ascendingSort, String fieldToSortBy) {
+        this(pageNumber, ascendingSort, fieldToSortBy, null);
+    }
+    
+    /**
+     * Pagesize is optional. If not included, will use Constants.DEFAULT_PAGE_SIZE.
+     * 
+     * @param pageNumber
+     * @param ascendingSort
+     * @param fieldToSortBy
+     * @param pageSize optional
+     */
+    public PagingAndSortingTerms(Integer pageNumber, Boolean ascendingSort, String fieldToSortBy, Integer pageSize) {
         this.pageNumber = pageNumber;
         this.ascendingSort = ascendingSort;
         this.fieldToSortBy = fieldToSortBy;
+        this.pageSize = pageSize;
     }
     
     public PageRequest getPageRequest() {
@@ -47,7 +61,11 @@ public class PagingAndSortingTerms {
         }
 
         Sort sort = new Sort(dir, fieldToSortBy);
-        PageRequest request = new PageRequest(tempPageNumber, Constants.DEFAULT_PAGE_SIZE, sort);
+        
+        Integer pageSizeLocal = null;
+        pageSizeLocal = this.pageSize == null ? Constants.DEFAULT_PAGE_SIZE : this.pageSize;
+        
+        PageRequest request = new PageRequest(tempPageNumber, pageSizeLocal, sort);
         return request;
     }
 

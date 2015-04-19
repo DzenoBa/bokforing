@@ -28,7 +28,6 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
     "se.chalmers.bokforing.persistence", 
     "se.chalmers.bokforing.session", 
     "se.chalmers.bokforing.service",
-    "se.chalmers.bokforing.util"
 })
 public class WebConfig extends WebMvcConfigurerAdapter {
     

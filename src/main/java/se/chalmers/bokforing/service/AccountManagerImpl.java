@@ -8,6 +8,7 @@ package se.chalmers.bokforing.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.model.Account;
+import se.chalmers.bokforing.model.AccountType;
 
 /**
  *
@@ -17,7 +18,7 @@ import se.chalmers.bokforing.model.Account;
 public class AccountManagerImpl implements AccountManager {
 
     @Autowired
-    AccountService service;
+    private AccountService service;
     
     @Override
     public Account createAccount(int number, String name) {
@@ -26,6 +27,16 @@ public class AccountManagerImpl implements AccountManager {
         }
         
         Account account = new Account();
+
+        int firstDigit = Integer.parseInt(Integer.toString(number).substring(0, 1));
+        
+        // A bit hacky bit should work
+        for(AccountType type : AccountType.values()) {
+            if(type.getStartingDigit() == firstDigit) {
+                account.setAccountType(type);
+            }
+        } 
+        
         account.setNumber(number);
         account.setName(name);
         service.save(account);

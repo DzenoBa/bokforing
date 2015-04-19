@@ -8,6 +8,7 @@ package se.chalmers.bokforing.model;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -24,6 +25,9 @@ public class Account implements Serializable {
     @Id
     private int number;
     private String name;
+    
+    @Enumerated
+    private AccountType accountType;
     
     /**
      * @return the number
@@ -56,8 +60,8 @@ public class Account implements Serializable {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 37 * hash + this.number;
-        hash = 37 * hash + Objects.hashCode(this.name);
+        hash = 37 * hash + this.getNumber();
+        hash = 37 * hash + Objects.hashCode(this.getName());
         return hash;
     }
 
@@ -70,9 +74,23 @@ public class Account implements Serializable {
             return false;
         }
         final Account other = (Account) obj;
-        if (this.number != other.number) {
+        if (this.getNumber() != other.getNumber()) {
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return the accountType
+     */
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    /**
+     * @param accountType the accountType to set
+     */
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
     }
 }

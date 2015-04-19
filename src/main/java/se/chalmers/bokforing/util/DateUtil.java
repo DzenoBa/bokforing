@@ -45,4 +45,15 @@ public class DateUtil {
         return false;
     }
 
+    public static Date getTodaysDate() {
+        Date todaysDate = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(todaysDate);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return todaysDate;
+    }
+
 }

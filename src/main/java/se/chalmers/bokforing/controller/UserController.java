@@ -145,9 +145,87 @@ public class UserController {
         }
         
         // EVERYTHING SEEMS TO BE IN ORDER CHANGE USER
-        String newHashPasswd = PasswordUtil.hash(uh.getSalt() + user.getNewpasswd());
+        String newSalt = PasswordUtil.randomString(8);
+        String newHashPasswd = PasswordUtil.hash(newSalt + user.getNewpasswd());
         uh.setPass(newHashPasswd);
+        uh.setSalt(newSalt);
         userDb.storeUser(uh);
+        
+        return form;
+    }
+    
+    @RequestMapping(value = "/user/editemail", method = RequestMethod.POST)
+    public @ResponseBody FormJSON editEmail(@RequestBody final UserJSON user) {
+
+        FormJSON form = new FormJSON();
+
+        // CHECK SESSION
+        if(!authSession.sessionCheck()) {
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+            return form;
+        }
+        String email = authSession.getEmail();
+        
+        // EMAIL CHECK
+        if(user.getEmail() == null || user.getEmail().isEmpty()) {
+            form.addError("email", "Ange en e-post adress.");
+            return form;
+        }
+        // CHECK IF VALID EMAIL
+        String regexEmail = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        Pattern patternEmail = Pattern.compile(regexEmail);
+        if(!(patternEmail.matcher(user.getEmail()).find())) {
+            form.addError("email", "Vänligen ange en e-post adress!");
+            return form;
+        }
+        
+        UserHandler uh = userDb.getUser(email);
+        // CHECK IF VALID PASSWORD
+        if(user.getPasswd() == null || user.getPasswd().isEmpty()) {
+            form.addError("passwd", "Ange ditt nuvarande lösenord!");
+            return form;
+        }
+        String hashPasswd = PasswordUtil.hash(uh.getSalt() + user.getPasswd());
+        if(!(hashPasswd.equals(uh.getPass()))) {
+            form.addError("passwd", "Löseordet är fel!");
+            return form;
+        }
+
+        // CHECK ACCESSKEY
+        if(user.getAccesskey() == null || user.getAccesskey().isEmpty()) {
+            // SEND A KEY TO USER'S EMAIL
+            String randomKey = PasswordUtil.randomString(5);
+            String hashedKey = randomKey; // TODO
+            AccessKey newAccessKey = accessKeyManager.create(hashedKey, AccessKeyType.EMAILCHANGE, uh.getUA());
+            if(newAccessKey == null) {
+                form.addError("general", "Något gick fel, vänligen försök igen om en liten stund");
+                return form;
+            }
+        
+            // TODO: SEND EMAIL
+            form.addError("accesskey", "En kod har generarats och har skickas till din nuvarande e-post adress!");
+            return form;
+        }
+        // CHECK IF VALID ACCESSKEY
+        if(!user.getAccesskey().isEmpty()) {
+            AccessKey accessKey = accessKeyService.findByUserAccountAndType(uh.getUA(), AccessKeyType.EMAILCHANGE);
+            if(accessKey == null) {
+                form.addError("general", "Något gick fel, vänligen försök igen om en liten stund");
+                return form;
+            } else if(!accessKey.getKey().equals(user.getAccesskey())) {
+                form.addError("accesskey", "Koden du angav är invalid");
+                return form;
+            }
+        }
+        
+        // EVERYTHING SEEMS TO BE IN ORDER CHANGE USER EMAIL
+        // REMOVE KEY FROM DB
+        AccessKey accessKey = accessKeyService.findByUserAccountAndType(uh.getUA(), AccessKeyType.EMAILCHANGE);
+        accessKeyManager.removeAccessKey(accessKey);
+        uh.setEmail(user.getEmail());
+        userDb.storeUser(uh);
+        authSession.setEmail(user.getEmail());
         
         return form;
     }
@@ -214,7 +292,7 @@ public class UserController {
         
         // USER REQUESTED TO CHANGE COMPANY NAME
         if(userInfo.getCompanyname() != null) {
-            uh.setPhoneNumber(userInfo.getCompanyname());
+            uh.setCompanyName(userInfo.getCompanyname());
             userDb.storeUser(uh);
             return form;
         }
@@ -346,8 +424,10 @@ public class UserController {
         }
 
         // EVERYTHING SEEMS TO BE IN ORDER CHANGE PASSWORD
-        String newHashPasswd = PasswordUtil.hash(userHandler.getSalt() + user.getNewpasswd()); //TO DO
+        String newSalt = PasswordUtil.randomString(8);
+        String newHashPasswd = PasswordUtil.hash(newSalt + user.getNewpasswd()); //TO DO
         userHandler.setPass(newHashPasswd);
+        userHandler.setSalt(newSalt);
         userDb.storeUser(userHandler);
         
         // DELETE ACCESS KEY

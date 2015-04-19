@@ -29,7 +29,7 @@ public class Post implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
     
     @OneToOne(cascade = CascadeType.ALL)
     private PostSum postSum;
@@ -43,9 +43,12 @@ public class Post implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date creationDate;
     
-    /** It it necessary to be able to tell if a post has been corrected.
+    /** It it necessary to be able to tell if a Post has been corrected.
      * See 5 kap. 5 § BFL */
     private boolean correction;
+    
+    /** So we know which Posts to use for validation. */
+    private boolean active;
 
     
     /**
@@ -77,14 +80,14 @@ public class Post implements Serializable {
     /**
      * @return the id
      */
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -140,11 +143,11 @@ public class Post implements Serializable {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 47 * hash + Objects.hashCode(this.postSum);
-        hash = 47 * hash + Objects.hashCode(this.account);
-        hash = 47 * hash + Objects.hashCode(this.verification);
-        hash = 47 * hash + Objects.hashCode(this.creationDate);
-        hash = 47 * hash + (this.correction ? 1 : 0);
+        hash = 47 * hash + Objects.hashCode(this.getPostSum());
+        hash = 47 * hash + Objects.hashCode(this.getAccount());
+        hash = 47 * hash + Objects.hashCode(this.getVerification());
+        hash = 47 * hash + Objects.hashCode(this.getCreationDate());
+        hash = 47 * hash + (this.isCorrection() ? 1 : 0);
         return hash;
     }
 
@@ -169,9 +172,91 @@ public class Post implements Serializable {
         if (!Objects.equals(this.creationDate, other.creationDate)) {
             return false;
         }
-        if (this.correction != other.correction) {
+        if (this.isCorrection() != other.isCorrection()) {
+            return false;
+        }
+        if (this.isActive() != other.isActive()) {
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return the active
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * @param active the active to set
+     */
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+    
+    public double getBalance() {
+        if(!isActive()) { // we only care about ones that haven't been replaced
+            return 0;
+        }
+        
+        double debitAccountTypeFactor = 0;
+        double creditAccountTypeFactor = 0;
+        
+        // Different account types count the debit and credit sides of the
+        // post differently. Some make credit negative, some make credit 
+        // positive etc.
+        switch(account.getAccountType()) {
+            case ASSETS:    // 1
+            case MATERIAL_AND_PRODUCT_COSTS: // 4
+            case COSTS_5: // 5
+            case COSTS_6: // 6
+            case COSTS_7: // 7
+            case COSTS_8:
+                debitAccountTypeFactor = 1;
+                creditAccountTypeFactor = -1;
+                break;
+            case FUNDS_AND_DEBT: // 2
+            case REVENUE: // 3
+                debitAccountTypeFactor = -1;
+                creditAccountTypeFactor = 1;
+                break;
+        }
+        
+        double balance = 0;
+        
+        if(postSum != null && postSum.getType() != null) {
+            switch(postSum.getType()) {
+                case Credit:
+                    balance += postSum.getSumTotal() * creditAccountTypeFactor;
+                    break;
+                case Debit:
+                    balance += postSum.getSumTotal() * debitAccountTypeFactor;
+                    break;
+            }
+        }
+        
+        return balance;
+    }
+    
+    public double getBalanceIgnoreSign() {
+        if(!isActive()) { // we only care about ones that haven't been replaced
+            return 0;
+        }
+        
+        double balance = 0;
+        
+        if(postSum != null && postSum.getType() != null) {
+            switch(postSum.getType()) {
+                case Credit:
+                    balance -= postSum.getSumTotal();
+                    break;
+                case Debit:
+                    balance += postSum.getSumTotal();
+                    break;
+            }
+        }
+        
+        return balance;
     }
 }

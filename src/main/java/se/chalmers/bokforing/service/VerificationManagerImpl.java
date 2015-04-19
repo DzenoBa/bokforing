@@ -16,6 +16,7 @@ import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.Verification;
+import se.chalmers.bokforing.util.DateUtil;
 
 /**
  *
@@ -28,32 +29,29 @@ public class VerificationManagerImpl implements VerificationManager {
     private VerificationService service;
 
     @Override
-    public Verification createVerification(UserAccount user, List<Post> posts, Date transactionDate, Customer customer) {
+    public Verification createVerification(UserAccount user, List<Post> posts, Date transactionDate, Customer customer, String description) {
         // Set to one higher than the highest ID, as Verification have to be
         // perfectly chronological
         long verificationNbr = service.findHighestVerificationNumber(user) + 1;
         
-        return createVerification(user, verificationNbr, posts, transactionDate, customer);
+        return createVerification(user, verificationNbr, posts, transactionDate, customer, description);
     }
     
     @Override
-    public Verification createVerification(UserAccount user, long verificationNumber, List<Post> posts, Date transactionDate, Customer customer) {
+    public Verification createVerification(UserAccount user, long verificationNumber, List<Post> posts, Date transactionDate, Customer customer, String description) {
         if(!isVerificationValid(user, verificationNumber, posts, transactionDate)) {
             return null;
         }
         
-        Date todaysDate = new Date();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(todaysDate);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
+        if(description == null || "".equals(description)) {
+            description = "Ingen beskrivning angiven.";
+        }
+        
+        Date todaysDate = DateUtil.getTodaysDate();
         
         Verification ver = new Verification();
         
         for(Post post : posts) {
-            post.setCorrection(false); // safeguard
             post.setVerification(ver);
         }
         
@@ -63,10 +61,12 @@ public class VerificationManagerImpl implements VerificationManager {
         ver.setCustomer(customer);
         ver.setUserAccount(user);
         ver.setVerificationNumber(verificationNumber);
+        ver.setDescription(description);
         service.save(ver);
         
         return ver;
     }
+
 
     private boolean isVerificationValid(UserAccount user, long verificationNumber, List<Post> posts, Date transactionDate) {
         /*if(DateUtil.isDateBeforeToday(transactionDate)) {
@@ -93,17 +93,7 @@ public class VerificationManagerImpl implements VerificationManager {
         double balance = 0;
         
         for(Post post : posts) {
-            PostSum sum = post.getPostSum();
-            if(sum != null && sum.getType() != null) {
-                switch(sum.getType()) {
-                    case Credit:
-                        balance -= sum.getSumTotal();
-                        break;
-                    case Debit:
-                        balance += sum.getSumTotal();
-                        break;
-                }
-            }
+            balance += post.getBalanceIgnoreSign();
         }
         
         return balance;
@@ -118,43 +108,38 @@ public class VerificationManagerImpl implements VerificationManager {
         newPosts.add(newPost);
         
         return replacePost(verification, oldPosts, newPosts);
-        
-//        List<Post> tempPosts = new ArrayList<>(verification.getPosts());
-//        List<Post> tempPosts = new ArrayList<>(verification.getPosts());
-//        tempPosts.remove(oldPost);
-//        tempPosts.add(newPost);
-//        
-//        if(arePostsValid(tempPosts)) {
-//            oldPost.setCorrection(true); // safeguard
-//            verification.setPosts(tempPosts);
-//            service.save(verification);
-//            return true;
-//        } else {
-//            return false;
-//        }
     }
     
     @Override
     public boolean replacePost(Verification verification, List<Post> oldPosts, List<Post> newPosts) {
         List<Post> tempPosts = new ArrayList<>(verification.getPosts());
         
-        for(Post oldPost : oldPosts) {
-            tempPosts.remove(oldPost);
-        }
-        
         for(Post newPost : newPosts) {
+            newPost.setCorrection(true);
+            newPost.setVerification(verification);
             tempPosts.add(newPost);
         }
         
-        if(arePostsValid(tempPosts)) {
-            for(Post post : tempPosts) {
-                post.setCorrection(true); // safeguard
+        for(Post postInVer : tempPosts) {
+            if(oldPosts.contains(postInVer)) {
+                // Posts to be replaced should no longer be active
+                postInVer.setActive(false);
             }
-
+        }
+        
+        if(arePostsValid(tempPosts)) {
             verification.setPosts(tempPosts);
             service.save(verification);
             return true;
         } else {
+            // Posts weren't valid, so don't save. We need to set active
+            // flag back to true again, to not affect the posts that are actually
+            // valid
+            for(Post postInVer : tempPosts) {
+                if(oldPosts.contains(postInVer)) {
+                    postInVer.setActive(true);
+                }
+            }
             return false;
         }
     }

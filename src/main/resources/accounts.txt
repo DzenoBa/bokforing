@@ -222,7 +222,7 @@
 1912 Kassa 2 
 1913 Kassa 3 
 1920 PlusGiro 
-1930 Företagskonto/checkkonto/ affärskonto 
+1930 Företagskonto/ checkkonto/ affärskonto 
 1940 Övriga bankkonton 
 1950 Bankcertifikat 
 1960 Koncernkonto moderföretag 
@@ -244,10 +244,10 @@
 2040 Eget kapital, delägare 4 
 2050 Avsättning till expansionsfond 
 2060 Eget kapital i ideella föreningar, stiftelser och registrerade trossamfund 
-2061 Eget kapital/stiftelsekapital/grundkapital 
+2061 Eget kapital/ stiftelsekapital/ grundkapital 
 2065 Förändring i fond för verkligt värde 
 2066 Värdesäkringsfond 
-2067 Balanserad vinst eller förlust/balanserat kapital 
+2067 Balanserad vinst eller förlust/ balanserat kapital 
 2068 Vinst eller förlust från föregående år 
 2069 Årets resultat 
 2070 Ändamålsbestämda medel 
@@ -264,7 +264,7 @@
 2088 Fond för yttre underhåll 
 2090 Fritt eget kapital 
 2091 Balanserad vinst eller förlust  
-2092 Mottagna/lämnade koncernbidrag 
+2092 Mottagna/ lämnade koncernbidrag 
 2093 Erhållna aktieägartillskott 
 2094 Egna aktier 
 2095 Fusionsresultat 
@@ -366,7 +366,7 @@
 2499 Andra övriga kortfristiga skulder 
 2510 Skatteskulder 
 2512 Beräknad inkomstskatt 
-2513 Beräknad fastighetsskatt/fastighetsavgift 
+2513 Beräknad fastighetsskatt/ fastighetsavgift 
 2514 Beräknad särskild löneskatt på pensionskostnader 
 2515 Beräknad avkastningsskatt 
 2516 Moms 
@@ -445,7 +445,7 @@
 2880 Skuld erhållna bidrag 
 2890 Övriga kortfristiga skulder 
 2891 Skulder under indrivning 
-2892 Inre reparationsfond/underhållsfond
+2892 Inre reparationsfond/ underhållsfond
 2893 Skulder till närstående personer, kortfristig del 
 2895 Derivat (kortfristiga skulder) 
 2897 Mottagna depositioner, kortfristiga 
@@ -555,7 +555,7 @@
 3921 Provisionsintäkter 
 3922 Licensintäkter och royalties 
 3925 Franchiseintäkter 
-3940 Orealiserade negativa/positiva värdeförändringar på säkringsinstrument
+3940 Orealiserade negativa/ positiva värdeförändringar på säkringsinstrument
 3950 Återvunna, tidigare avskrivna kundfordringar 
 3960 Valutakursvinster på fordringar och skulder av rörelsekaraktär 
 3970 Vinst vid avyttring av immateriella och materiella anläggningstillgångar 
@@ -652,7 +652,7 @@
 5098 Övriga lokalkostnader, avdragsgilla 
 5099 Övriga lokalkostnader, ej avdragsgilla 
 5100 Fastighetskostnader (gruppkonto) 
-5110 Tomträttsavgäld/arrende 
+5110 Tomträttsavgäld/ arrende 
 5120 El för belysning 
 5130 Värme 
 5131 Uppvärmning 
@@ -666,7 +666,7 @@
 5165 Trädgårdsskötsel 
 5170 Reparation och underhåll av fastighet 
 5190 Övriga fastighetskostnader 
-5191 Fastighetsskatt/fastighetsavgift 
+5191 Fastighetsskatt/ fastighetsavgift 
 5192 Fastighetsförsäkringspremier 
 5193 Fastighetsskötsel och förvaltning 
 5198 Övriga fastighetskostnader, avdragsgilla 
@@ -804,7 +804,7 @@
 6424 Övriga tjänster – revisor 
 6430 Management fees 
 6440 Årsredovisning och delårsrapporter 
-6450 Bolagsstämma/års- eller föreningsstämma 
+6450 Bolagsstämma/ års- eller föreningsstämma 
 6490 Övriga förvaltningskostnader 
 6500 Övriga externa tjänster (gruppkonto) 
 6510 Mätningskostnader 
@@ -918,11 +918,11 @@
 7310 Kontanta extraersättningar 
 7311 Ersättningar för sammanträden m.m. 
 7312 Ersättningar för förslagsverksamhet och uppfinningar 
-7313 Ersättningar för/bidrag till bostadskostnader 
-7314 Ersättningar för/bidrag till måltidskostnader 
-7315 Ersättningar för/bidrag till resor till och från arbetsplatsen 
-7316 Ersättningar för/bidrag till arbetskläder 
-7317 Ersättningar för/bidrag till arbetsmaterial och arbetsverktyg 
+7313 Ersättningar för/ bidrag till bostadskostnader 
+7314 Ersättningar för/ bidrag till måltidskostnader 
+7315 Ersättningar för/ bidrag till resor till och från arbetsplatsen 
+7316 Ersättningar för/ bidrag till arbetskläder 
+7317 Ersättningar för/ bidrag till arbetsmaterial och arbetsverktyg 
 7318 Felräkningspengar 
 7319 Övriga kontanta extraersättningar 
 7320 Traktamenten vid tjänsteresa 
@@ -1042,13 +1042,13 @@
 7836 Avskrivningar på leasade tillgångar 
 7839 Avskrivningar på övriga maskiner och inventarier 
 7840 Avskrivningar på förbättringsutgifter på annans fastighet 
-7940 Orealiserade positiva/negativa värdeförändringar på säkringsinstrument 
+7940 Orealiserade positiva/ negativa värdeförändringar på säkringsinstrument 
 7960 Valutakursförluster på fordringar och skulder av rörelsekaraktär 
 7970 Förlust vid avyttring av immateriella och materiella anläggningstillgångar 
 7971 Förlust vid avyttring av immateriella anläggningstillgångar 
 7972 Förlust vid avyttring av byggnader och mark 
 7973 Förlust vid avyttring av maskiner och inventarier 
-7990 Övriga rörelsekostnader 8 Finansiella och andra inkomster/ intäkter och utgifter/kostnader 
+7990 Övriga rörelsekostnader 8 Finansiella och andra inkomster/ intäkter och utgifter/  kostnader 
 8010 Utdelning på andelar i koncernföretag 
 8012 Utdelning på andelar i dotterföretag 
 8013 Utdelning på andelar i andra koncernföretag 

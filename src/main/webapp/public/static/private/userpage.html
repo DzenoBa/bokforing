@@ -17,11 +17,22 @@
             </td>
         </tr>
     </table>
-    <div class="btn-group">
-        <input type="button" value="Log out" class="btn btn-primary" ng-click="logout()"/>
-        <a href="#edituser" class="btn btn-default">Edit user</a>
-        <a href="#manbok" class="btn btn-default">Man. bokföring</a>
-        <a href="#userinfo" class="btn btn-default">Användarinformation</a>
-        <a href="#verifications" class="btn btn-default">Dina verifikationer</a>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Intäkter</h3>
+            Diagramet nedan visar hur stora dina intäkter är per dag.
+            <canvas id="revenueChart" width="500" height="300"></canvas>
+        </div>
+        <div class="col-md-6">
+            <h3>Utgifter</h3>
+            Diagramet nedan visar hur stora dina utgifter är per dag.
+            <canvas id="costChart" width="500" height="300"></canvas>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <canvas id="assetsChart" width="500" height="300"></canvas>
+        </div>
+        <div class="col-md-6"></div><!--Offset-->
     </div>
 </div>
