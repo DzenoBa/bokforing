@@ -56,6 +56,6 @@ public class CustomerServiceImpl implements CustomerService {
         
         PageRequest request = terms.getPageRequest();
         
-        return repository.findByNameLikeIgnoreCase(user, name, request);
+        return repository.findByUserAccountAndNameContainingIgnoreCase(user, name, request);
     }
 }

@@ -60,7 +60,7 @@ public class ProductServiceImpl implements ProductService {
         
         PageRequest request = terms.getPageRequest();
         
-        return repository.findByNameLikeIgnoreCase(user, name, request);
+        return repository.findByUserAccountAndNameContainingIgnoreCase(user, name, request);
     }
     
 }
