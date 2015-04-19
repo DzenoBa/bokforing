@@ -86,6 +86,16 @@ bok.config(['$routeProvider', 'USER_LEVELS',
                         }]
                     }
                 }).
+                when('/fastbookkeeping', {
+                    templateUrl: 'private/fastbookkeeping.html',
+                    controller: 'FastbookkeepingCtrl',
+                    auth: USER_LEVELS.user,
+                    resolve: {
+                        auth: ['AuthHandler', function(AuthHandler) {
+                                return AuthHandler.promise();
+                        }]
+                    }
+                }).
                 when('/userinfo', {
                     templateUrl: 'private/userinfo.html',
                     controller: 'UserInfoCtrl',
