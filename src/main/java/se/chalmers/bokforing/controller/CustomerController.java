@@ -117,7 +117,7 @@ public class CustomerController {
      * GET CUSTOMERS
      */
     @RequestMapping(value = "/customer/getcustomers", method = RequestMethod.POST)
-    public @ResponseBody List<CustomerJSON> getCustomers(@RequestBody final String start) {
+    public @ResponseBody List<CustomerJSON> getCustomers(@RequestBody final CustomerJSON customer) {
         
         List<CustomerJSON> customerJSONLs = new ArrayList();
         int startPos = 0;
@@ -127,12 +127,17 @@ public class CustomerController {
         }
         UserHandler ua = userService.getUser(authSession.getEmail());
         
-        if(Integer.parseInt(start) > 0) {
-            startPos = Integer.parseInt(start);
+        if(customer.getStartrange() > 0) {
+            startPos = customer.getStartrange();
         }
         
         PagingAndSortingTerms terms = new PagingAndSortingTerms(startPos, Boolean.TRUE, "name");
-        Page<Customer> customerPage = customerService.findAllCustomers(ua.getUA(), terms);
+        Page<Customer> customerPage;
+        if(customer.getName() != null && !customer.getName().isEmpty()) {
+            customerPage = customerService.findByNameLike(ua.getUA(), customer.getName(), terms);
+        } else {
+            customerPage = customerService.findAllCustomers(ua.getUA(), terms);
+        }
         
         for(Customer c : customerPage.getContent()) {
             CustomerJSON temp = new CustomerJSON();
@@ -153,8 +158,8 @@ public class CustomerController {
     /*
      * COUNT CUSTOMERS
      */
-    @RequestMapping(value = "/customer/countcustomers", method = RequestMethod.GET)
-    public @ResponseBody long countCustomers() {
+    @RequestMapping(value = "/customer/countcustomers", method = RequestMethod.POST)
+    public @ResponseBody long countCustomers(@RequestBody final CustomerJSON customer) {
         
         long size = 0;
         
@@ -164,7 +169,12 @@ public class CustomerController {
         UserHandler ua = userService.getUser(authSession.getEmail());
 
         PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.TRUE, "name");
-        Page<Customer> customerPage = customerService.findAllCustomers(ua.getUA(), terms);
+        Page<Customer> customerPage;
+        if(customer.getName() != null && !customer.getName().isEmpty()) {
+            customerPage = customerService.findByNameLike(ua.getUA(), customer.getName(), terms);
+        } else {
+            customerPage = customerService.findAllCustomers(ua.getUA(), terms);
+        }
         
         size = customerPage.getTotalElements();
         return size;

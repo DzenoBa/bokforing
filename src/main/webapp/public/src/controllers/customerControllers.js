@@ -56,7 +56,7 @@ customerControllers.controller('CustomerCtrl', ['$scope', 'CustomerProxy',
  
         function getCustomers() {
             var stringIndex = $scope.currentPage-1 + "";
-            CustomerProxy.getCustomers(stringIndex)
+            CustomerProxy.getCustomers({name: $scope.searchname, startrange: stringIndex})
                     .success(function(customers) {
                         $scope.customers = customers;
                     }).error(function() {
@@ -65,12 +65,23 @@ customerControllers.controller('CustomerCtrl', ['$scope', 'CustomerProxy',
         };
         
         function countCustomers() {
-            CustomerProxy.countCustomers()
+            CustomerProxy.countCustomers({name: $scope.searchname})
                     .success(function(size) {
                         $scope.maxsize = size;
                     }).error(function() {
                         console.log("customer:countCustomers: error");
                     });
+        };
+        
+        $scope.search = function() {
+            getCustomers();
+            countCustomers();
+        };
+        
+        $scope.autosearch = function() {
+            if($scope.searchname.length > 2 || $scope.searchname.length === 0) {
+                $scope.search();
+            }
         };
         
         $scope.edit = function() {

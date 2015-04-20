@@ -6,6 +6,14 @@
         <button type="button" class="btn btn-success" ng-click="showcreate()">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button>
+        <p style="margin-top:10px;">Här visas alla din kunder. Du kan söka efter en kund genom att agne ett namn,
+        om fältet lämnas tomt kommer alla dina kunder visas istället.</p>
+        <div class="input-group">
+            <input type="text" class="form-control" ng-model="searchname" ng-change="autosearch()"/>
+            <div class="input-group-btn">
+                <button class="btn btn-primary" ng-click="search()" ng-disabled="!searchname">Sök</button>
+            </div>
+        </div>
         <table class="table table-striped">
             <thead>
                 <tr>
