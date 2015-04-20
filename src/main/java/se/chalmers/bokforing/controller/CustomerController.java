@@ -61,6 +61,14 @@ public class CustomerController {
             return form;
         }
         
+        UserHandler uh = userService.getUser(email);
+        // CHECK IF CUSTOMER NUMBER EXIST
+        Customer custCheck = customerService.findByCustomerNumber(uh.getUA(), customer.getCustomernumber());
+        if(custCheck != null) {
+            form.addError("customernumber", "Kundnummret finns redan registrerat");
+            return form;
+        }
+        
         // CHECK NAME
         if(customer.getName() == null || customer.getName().isEmpty()) {
             form.addError("name", "Vänligen ange ett namn");
@@ -104,7 +112,6 @@ public class CustomerController {
         address.setPostTown(customer.getCity());
         address.setCountry(customer.getCountry());
                 
-        UserHandler uh = userService.getUser(email);
         Customer cDb = customerManager.createCustomer(uh.getUA(), customer.getCustomernumber(), 
                 customer.getName(), customer.getPhonenumber(), address);
         if(cDb == null) {
