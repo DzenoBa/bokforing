@@ -28,7 +28,7 @@ public class Timesheet implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     private Product product;
     
     @ManyToOne

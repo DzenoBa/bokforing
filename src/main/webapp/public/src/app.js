@@ -23,7 +23,8 @@ var bok = angular.module('Bok', [
     'DefaultDataService',
     'ProductService',
     'CustomerService',
-    'StatisticsService'
+    'StatisticsService',
+    'TimesheetService'
      // More here
 ]);
 

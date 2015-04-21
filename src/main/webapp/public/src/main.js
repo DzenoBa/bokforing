@@ -22,7 +22,8 @@ require(
         'services/defaultDataService',
         'services/productService',
         'services/customerService',
-        'services/statisticsService'
+        'services/statisticsService',
+        'services/timesheetService'
         
     ],
     function () {
