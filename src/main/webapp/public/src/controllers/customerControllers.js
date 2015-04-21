@@ -1,47 +1,47 @@
 
 /**
- * PRODUCT CONTROLLERS
+ * CUSTOMER CONTROLLERS
  * 
  * @author Dženan
  */
 
 'use strict';
 
-var productControllers = angular.module('ProductControllers', []);
+var customerControllers = angular.module('CustomerControllers', []);
 
-productControllers.controller('ProductCtrl', ['$scope', 'ProductProxy',
-    function($scope, ProductProxy) {
+customerControllers.controller('CustomerCtrl', ['$scope', 'CustomerProxy',
+    function($scope, CustomerProxy) {
         
         $scope.currentPage = 1;
         $scope.createboolean = true;
         $scope.editboolean = false;
         
         $scope.create = function() {
-            ProductProxy.create($scope.product)
+            CustomerProxy.create($scope.customer)
                     .success(function(form) {
                         $scope.form = form;
                         if(form.numErrors === 0) {
-                            $scope.product = {price: 0};
-                            getProducts();
-                            countProducts();
+                            $scope.customer = {};
+                            getCustomers();
+                            countCustomers();
                         }
                     }).error(function() {
-                        console.log("product:create: error");
+                        console.log("customer:create: error");
                     });
         };
         
         $scope.pageChanged = function() {
-            getProducts();
+            getCustomers();
         };
         
-        $scope.showedit = function(product) {
+        $scope.showedit = function(customer) {
             if(angular.isDefined($scope.form)) {
                 delete $scope.form;
             }
             $scope.createboolean = false;
             $scope.deleteboolean = false;
             $scope.editboolean = true;
-            $scope.product = angular.copy(product);
+            $scope.customer = angular.copy(customer);
         };
         
         $scope.showcreate = function() {
@@ -51,40 +51,31 @@ productControllers.controller('ProductCtrl', ['$scope', 'ProductProxy',
             $scope.editboolean = false;
             $scope.deleteboolean = false;
             $scope.createboolean = true;
-            $scope.product = {price: 0};
+            $scope.customer = {};
         };
-        
-        function getQuantityTypes() {
-            ProductProxy.getQuantityTypes()
-                    .success(function(quantityTypes) {
-                        $scope.quantityTypes = quantityTypes;
-                    }).error(function() {
-                        console.log("product:getQuantityTypes: error");
-                    });
-        };
-        
-        function getProducts() {
+ 
+        function getCustomers() {
             var stringIndex = $scope.currentPage-1 + "";
-            ProductProxy.getProducts({name: $scope.searchname, startrange: stringIndex})
-                    .success(function(products) {
-                        $scope.products = products;
+            CustomerProxy.getCustomers({name: $scope.searchname, startrange: stringIndex})
+                    .success(function(customers) {
+                        $scope.customers = customers;
                     }).error(function() {
-                        console.log("product:getProducts: error");
+                        console.log("customer:getCustomers: error");
                     });
         };
         
-        function countProducts() {
-            ProductProxy.countProducts({name: $scope.searchname})
+        function countCustomers() {
+            CustomerProxy.countCustomers({name: $scope.searchname})
                     .success(function(size) {
                         $scope.maxsize = size;
                     }).error(function() {
-                        console.log("product:countProducts: error");
+                        console.log("customer:countCustomers: error");
                     });
         };
         
         $scope.search = function() {
-            getProducts();
-            countProducts();
+            getCustomers();
+            countCustomers();
         };
         
         $scope.autosearch = function() {
@@ -94,36 +85,35 @@ productControllers.controller('ProductCtrl', ['$scope', 'ProductProxy',
         };
         
         $scope.edit = function() {
-            ProductProxy.edit($scope.product)
+            CustomerProxy.edit($scope.customer)
                     .success(function(form) {
                         $scope.form = form;
                         if(form.numErrors === 0) {
-                            getProducts();
+                            getCustomers();
                         }
                     }).error(function() {
-                        console.log("product:edit: error");
+                        console.log("customer:edit: error");
                     });
         };
         
         $scope.delete = function() {
-            ProductProxy.delete({id: $scope.product.id})
+            CustomerProxy.delete({customernumber: $scope.customer.customernumber})
                     .success(function(form) {
                         $scope.form = form;
                         if(form.numErrors === 0) {
-                            $scope.product = {};
+                            $scope.customers = {};
                             $scope.editboolean = false;
                             $scope.deleteboolean = true;
-                            getProducts();
-                            countProducts();
+                            getCustomers();
+                            countCustomers();
                         }
                     }).error(function() {
-                        console.log("product:delete: error");
+                        console.log("customer:delete: error");
                     });
         };
         
         // INIT
-        getProducts();
-        countProducts();
-        getQuantityTypes();
+        getCustomers();
+        countCustomers();
     }
 ]);

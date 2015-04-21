@@ -15,12 +15,14 @@ var bok = angular.module('Bok', [
     'UserControllers',
     'DefaultDataControllers',
     'ProductControllers',
+    'CustomerControllers',
     'UserService',
     'AuthHandlerService',
     'BookkeepingControllers',
     'BookkeepingService',
     'DefaultDataService',
     'ProductService',
+    'CustomerService',
     'StatisticsService'
      // More here
 ]);
@@ -84,6 +86,16 @@ bok.config(['$routeProvider', 'USER_LEVELS',
                         }]
                     }
                 }).
+                when('/fastbookkeeping', {
+                    templateUrl: 'private/fastbookkeeping.html',
+                    controller: 'FastbookkeepingCtrl',
+                    auth: USER_LEVELS.user,
+                    resolve: {
+                        auth: ['AuthHandler', function(AuthHandler) {
+                                return AuthHandler.promise();
+                        }]
+                    }
+                }).
                 when('/userinfo', {
                     templateUrl: 'private/userinfo.html',
                     controller: 'UserInfoCtrl',
@@ -107,6 +119,16 @@ bok.config(['$routeProvider', 'USER_LEVELS',
                 when('/products', {
                     templateUrl: 'private/products.html',
                     controller: 'ProductCtrl',
+                    auth: USER_LEVELS.user,
+                    resolve: {
+                        auth: ['AuthHandler', function(AuthHandler) {
+                                return AuthHandler.promise();
+                        }]
+                    }
+                }).
+                when('/customers', {
+                    templateUrl: 'private/customers.html',
+                    controller: 'CustomerCtrl',
                     auth: USER_LEVELS.user,
                     resolve: {
                         auth: ['AuthHandler', function(AuthHandler) {

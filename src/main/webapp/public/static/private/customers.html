@@ -1,0 +1,250 @@
+<!--Body content-->
+<div class="row">
+    <!-- LST CUSTOMERS -->
+    <div class="col-md-6">
+        <h2>Dina kunder</h2>
+        <button type="button" class="btn btn-success" ng-click="showcreate()">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </button>
+        <p style="margin-top:10px;">Här visas alla din kunder. Du kan söka efter en kund genom att agne ett namn,
+        om fältet lämnas tomt kommer alla dina kunder visas istället.</p>
+        <div class="input-group">
+            <input type="text" class="form-control" ng-model="searchname" ng-change="autosearch()"/>
+            <div class="input-group-btn">
+                <button class="btn btn-primary" ng-click="search()" ng-disabled="!searchname">Sök</button>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width:30%;">Kundnummer</th>
+                    <th style="width:25%;">Namn</th>
+                    <th style="width:25%;">??</th>
+                    <th style="width:20%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="customer in customers">
+                    <td>{{customer.customernumber}}</td>
+                    <td>{{customer.name}}</td>
+                    <td>???</td>
+                    <td>
+                        <button type="button" class="btn btn-info" ng-click="showedit(customer)">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <pagination total-items="maxsize" items-per-page="20" ng-model="currentPage" max-size="5" class="pagination-sm" boundary-links="true" ng-change="pageChanged()" ng-show="maxsize > 20"></pagination>
+    </div>
+    <!-- NEW CUSTOMER -->
+    <div class="col-md-6" ng-show="createboolean">
+        <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
+            Kunden har skapats!
+        </div>
+        <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
+            <h4>{{form.numErrors}} fel hittades!</h4>
+            <p>{{form.errors.general}}</p>
+        </div>
+        <h2>Ny kund</h2>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="customernumber" class="col-sm-3 control-label">Kundnummer</label>
+                <div class="col-md-9">
+                    <input id="customernumber" type="number" class="form-control" ng-model="customer.customernumber" placeholder="Ange ett kundnummer"/>
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.customernumber !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.customernumber}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Namn</label>
+                <div class="col-md-9">
+                    <input id="name" type="text" class="form-control" ng-model="customer.name" placeholder="Ange ett namn"/>
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.name !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.name}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="phonenumber" class="col-sm-3 control-label">Telefonnummer</label>
+                <div class="col-md-9">
+                    <input id="phonenumber" type="text" class="form-control" ng-model="customer.phonenumber" placeholder="Ange ett telefonnummer"/>
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.phonenumber !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.phonenumber}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="address" class="col-sm-3 control-label">Adress</label>
+                <div class="col-md-9">
+                    <input id="address" type="text" class="form-control" ng-model="customer.street" placeholder="Ange en gatuadress"/>
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.street !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.street}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="city" class="col-sm-3 control-label">Post nr. & stad</label>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <input id="postalcode" type="text" class="form-control" ng-model="customer.postalcode" placeholder="Ange ett postnummer"/>
+                        </div>
+                        <div class="col-lg-7">
+                            <input id="city" type="text" class="form-control" ng-model="customer.city" placeholder="Ange en stad"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.city !== null || form.errors.potalcode !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.city}}{{form.errors.postalcode}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="country" class="col-sm-3 control-label">Land</label>
+                <div class="col-md-9">
+                    <input id="country" type="text" class="form-control" ng-model="customer.country" placeholder="Ange ett land"/>
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.country !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.country}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <input type="button" value="Skapa" class="btn btn-success btn-block" ng-click="create()" ng-disabled="!customer"/>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- EDIT CUSTOMER -->
+    <div class="col-md-6" ng-show="editboolean">
+        <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
+            Kunden har ändrats!
+        </div>
+        <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
+            <h4>{{form.numErrors}} fel hittades!</h4>
+            <p>{{form.errors.general}}</p>
+        </div>
+        <h2>Ändra kunduppgifter</h2>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-3 control-label">Kundnummer</div>
+                <div class="col-md-9 control-label" style="text-align: left;">
+                    {{customer.customernumber}}
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.customernumber !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.customernumber}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name" class="col-sm-3 control-label">Namn</label>
+                <div class="col-md-9">
+                    <input id="name" type="text" class="form-control" ng-model="customer.name" placeholder="Ange ett namn"/>
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.name !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.name}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="phonenumber" class="col-sm-3 control-label">Telefonnummer</label>
+                <div class="col-md-9">
+                    <input id="phonenumber" type="text" class="form-control" ng-model="customer.phonenumber" placeholder="Ange ett telefonnummer"/>
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.phonenumber !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.phonenumber}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="address" class="col-sm-3 control-label">Adress</label>
+                <div class="col-md-9">
+                    <input id="address" type="text" class="form-control" ng-model="customer.street" placeholder="Ange en gatuadress"/>
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.street !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.street}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="city" class="col-sm-3 control-label">Post nr. & stad</label>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <input id="postalcode" type="text" class="form-control" ng-model="customer.postalcode" placeholder="Ange ett postnummer"/>
+                        </div>
+                        <div class="col-lg-7">
+                            <input id="city" type="text" class="form-control" ng-model="customer.city" placeholder="Ange en stad"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.city !== null || form.errors.potalcode !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.city}}{{form.errors.postalcode}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="country" class="col-sm-3 control-label">Land</label>
+                <div class="col-md-9">
+                    <input id="country" type="text" class="form-control" ng-model="customer.country" placeholder="Ange ett land"/>
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.country !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.country}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <div class="btn-group">
+                        <input type="button" value="Ändra" class="btn btn-success" ng-click="edit()" ng-disabled="!customer"/>
+                        <input type="button" value="Ta bort" class="btn btn-danger" ng-click="delete()"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- DELETE CUSTOMER -->
+    <div class="col-md-6" ng-show="deleteboolean">
+        <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
+                Kunden har tagits bort!
+        </div>
+        <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
+            <h4>{{form.numErrors}} fel hittades!</h4>
+            <p>{{form.errors.general}}</p>
+        </div>
+    </div>
+</div>

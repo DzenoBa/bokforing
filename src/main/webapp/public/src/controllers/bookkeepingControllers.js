@@ -376,3 +376,54 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'Book
         };
     }
 ]);
+
+bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'BookkeepingProxy', '$modal', '$filter',
+    function($scope, BookkeepingProxy, $modal, $filter) {
+        
+        $scope.step = 1;
+        $scope.steptype = [0,0,0,0];
+        $scope.posts = [];
+        $scope.sum = 0;
+        $scope.moms = 0;
+        
+        $scope.calcStep2 = function() {
+            var moms = $scope.sum * .2;
+            var type;
+            if($scope.steptype[0] === 1)
+                type = "credit";
+            else 
+                type = "debit";
+            addPost(2611, "Utgående moms på försäljning inom Sverige, 25%", type, moms);
+            addPost(3000, "Försäljning inom Sverige", $scope.steptype[1], $scope.sum - moms);
+        };
+        
+        $scope.calcStep3 = function() {
+            var type;
+            if($scope.steptype[0] === 1)
+                type = "debit";
+            else 
+                type = "credit";
+            if($scope.steptype[2] === 1) {
+                addPost(1910, "Kassa", type, $scope.sum);
+            } else {
+                addPost(1920, "PlusGiro", type, $scope.sum);
+            }
+        };
+        
+        
+        function addPost(acc_number, acc_name, type, sum) {
+            var debit;
+            var credit;
+            if(type === "debit") {
+                debit = sum;
+                credit = 0;
+            } else {
+                debit = 0;
+                credit = sum;
+            }
+            var temp_post = {accountid: acc_number, accountname: acc_name,
+                            debit: debit, credit: credit};
+            $scope.posts = $scope.posts.concat([temp_post]);
+        };
+    }
+]);

@@ -91,7 +91,7 @@ public class ProductController {
      * GET PRODUCT
      */
     @RequestMapping(value = "/product/getproducts", method = RequestMethod.POST)
-    public @ResponseBody List<ProductJSON> getProducts(@RequestBody final String start) {
+    public @ResponseBody List<ProductJSON> getProducts(@RequestBody final ProductJSON product) {
         
         List<ProductJSON> productJSONLs = new ArrayList();
         int startPos = 0;
@@ -101,12 +101,17 @@ public class ProductController {
         }
         UserHandler ua = userService.getUser(authSession.getEmail());
         
-        if(Integer.parseInt(start) > 0) {
-            startPos = Integer.parseInt(start);
+        if(product.getStartrange() > 0) {
+            startPos = product.getStartrange();
         }
         
         PagingAndSortingTerms terms = new PagingAndSortingTerms(startPos, Boolean.TRUE, "name");
-        Page<Product> productPage = productService.findAllProducts(ua.getUA(), terms);
+        Page<Product> productPage;
+        if(product.getName() != null && !product.getName().isEmpty()) {
+            productPage = productService.findByNameLike(ua.getUA(), product.getName(), terms);
+        } else {
+            productPage = productService.findAllProducts(ua.getUA(), terms);
+        }
         
         for(Product p : productPage.getContent()) {
             ProductJSON temp = new ProductJSON();
@@ -125,8 +130,8 @@ public class ProductController {
     /*
      * COUNT PRODUCT
      */
-    @RequestMapping(value = "/product/countproducts", method = RequestMethod.GET)
-    public @ResponseBody long countProducts() {
+    @RequestMapping(value = "/product/countproducts", method = RequestMethod.POST)
+    public @ResponseBody long countProducts(@RequestBody final ProductJSON product) {
         
         long size = 0;
         
@@ -136,7 +141,12 @@ public class ProductController {
         UserHandler ua = userService.getUser(authSession.getEmail());
 
         PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.TRUE, "name");
-        Page<Product> productPage = productService.findAllProducts(ua.getUA(), terms);
+        Page<Product> productPage;
+        if(product.getName() != null && !product.getName().isEmpty()) {
+            productPage = productService.findByNameLike(ua.getUA(), product.getName(), terms);
+        } else {
+            productPage = productService.findAllProducts(ua.getUA(), terms);
+        }
         
         size = productPage.getTotalElements();
         return size;
@@ -228,6 +238,7 @@ public class ProductController {
         Product pDb = productService.findProductById(uh.getUA(), product.getId());
         if(pDb == null) {
             form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+            return form;
         }
         
         productService.remove(pDb);

@@ -56,14 +56,15 @@ public class UserAccount implements Serializable {
    
     private String sessionid;
     
-    @OneToMany(mappedBy = "userAccount", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "userAccount")
     private List<Verification> verifications;
     
-    @OneToMany(mappedBy = "userAccount", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "userAccount")
     private List<Customer> customers;
     
     @OneToMany(mappedBy = "userAccount")
     private List<Timesheet> timesheets;
+    
     @OneToMany(mappedBy = "userAccount")
     private List<Product> products;
     
@@ -254,5 +255,19 @@ public class UserAccount implements Serializable {
      */
     public void setTimesheets(List<Timesheet> timesheets) {
         this.timesheets = timesheets;
+    }
+
+    /**
+     * @return the products
+     */
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    /**
+     * @param products the products to set
+     */
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }

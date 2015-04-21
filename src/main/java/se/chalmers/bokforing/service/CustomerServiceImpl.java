@@ -47,4 +47,15 @@ public class CustomerServiceImpl implements CustomerService {
     public void delete(Customer customer) {
         repository.delete(customer);
     }
+
+    @Override
+    public Page<Customer> findByNameLike(UserAccount user, String name, PagingAndSortingTerms terms) {
+        if(user == null || name == null || name.isEmpty() || terms == null) {
+            return null;
+        }
+        
+        PageRequest request = terms.getPageRequest();
+        
+        return repository.findByUserAccountAndNameContainingIgnoreCase(user, name, request);
+    }
 }

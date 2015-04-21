@@ -23,4 +23,6 @@ public interface ProductService {
     Product findProductById(UserAccount user, Long id);
     
     Page<Product> findAllProducts(UserAccount user, PagingAndSortingTerms terms);
+    
+    Page<Product> findByNameLike(UserAccount user, String name, PagingAndSortingTerms terms);
 }

@@ -14,12 +14,14 @@ require(
         'controllers/bookkeepingControllers',
         'controllers/defaultDataController',
         'controllers/productControllers',
+        'controllers/customerControllers',
         'services/userServices',
         'services/authServices',
         'services/authHandler',
         'services/bookkeepingService',
         'services/defaultDataService',
         'services/productService',
+        'services/customerService',
         'services/statisticsService'
         
     ],

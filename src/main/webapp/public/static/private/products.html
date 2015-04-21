@@ -4,8 +4,16 @@
     <div class="col-md-6">
         <h2>Dina produkter</h2>
         <button type="button" class="btn btn-success" ng-click="showcreate()">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ny produkt
         </button>
+        <p style="margin-top:10px;">Här visas alla produkter som du har skapat. Du kan söka efter en produkt genom att agne ett namn,
+        om fältet lämnas tomt kommer alla dina produkter visas istället.</p>
+        <div class="input-group">
+            <input type="text" class="form-control" ng-model="searchname" ng-change="autosearch()"/>
+            <div class="input-group-btn">
+                <button class="btn btn-primary" ng-click="search()" ng-disabled="!searchname">Sök</button>
+            </div>
+        </div>
         <table class="table table-striped">
             <thead>
                 <tr>

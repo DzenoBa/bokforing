@@ -51,5 +51,16 @@ public class ProductServiceImpl implements ProductService {
         
         return repository.findByUserAccount(user, request);
     }
+
+    @Override
+    public Page<Product> findByNameLike(UserAccount user, String name, PagingAndSortingTerms terms) {
+        if(user == null || name == null || name.isEmpty() || terms == null) {
+            return null;
+        }
+        
+        PageRequest request = terms.getPageRequest();
+        
+        return repository.findByUserAccountAndNameContainingIgnoreCase(user, name, request);
+    }
     
 }

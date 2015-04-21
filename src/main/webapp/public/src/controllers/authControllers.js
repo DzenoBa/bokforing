@@ -50,40 +50,30 @@ authControllers.controller('UserPageCtrl', ['$scope', '$q', '$filter', 'AuthProx
             
             // GET REVENUE DATA
             getBalanceList({number: 3}).then(function(data) {
-                var dd = {};
-                angular.forEach(data, function(value, key) {
-                    dd[$filter('date')(key,'dd/MM')] = value;
-                });
-                for(var i=0; i<6; i++){
-                    revenueChart.datasets[0].points[i].value = dd[revenueChart.datasets[0].points[i].label];
-                }
-                revenueChart.update();
+                updateChart(revenueChart, data);
             });
             
             // GET COST DATA
             getBalanceList({number: 4}).then(function(data) {
-                var dd = {};
-                angular.forEach(data, function(value, key) {
-                    dd[$filter('date')(key,'dd/MM')] = value;
-                });
-                for(var i=0; i<6; i++){
-                    costChart.datasets[0].points[i].value = dd[costChart.datasets[0].points[i].label];
-                }
-                costChart.update();
+                updateChart(costChart, data);
             });
             
             // GET ASSETS DATA
             getBalanceList({number: 1}).then(function(data) {
-                var dd = {};
-                angular.forEach(data, function(value, key) {
-                    dd[$filter('date')(key,'dd/MM')] = value;
-                });
-                for(var i=0; i<6; i++){
-                    assetsChart.datasets[0].points[i].value = dd[assetsChart.datasets[0].points[i].label];
-                }
-                assetsChart.update();
+                updateChart(assetsChart, data);
             });
         };
+        
+        function updateChart(chart, data) {
+            var dd = {};
+            angular.forEach(data, function(value, key) {
+                dd[$filter('date')(key,'dd/MM')] = value;
+            });
+            for(var i=0; i<7; i++){
+                chart.datasets[0].points[i].value = dd[chart.datasets[0].points[i].label];
+            }
+            chart.update();
+        }
 
         function getDates() {
             var dates = [];
