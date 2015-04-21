@@ -95,6 +95,7 @@ public class PostServiceImpl implements PostService {
                     if (!balanceSheet.containsKey(account)) {
                         List<Double> balanceList = new ArrayList<>();
                         balanceList.add(post.getBalance());
+                        balanceList.add(0.0);
                         balanceSheet.put(account, balanceList);
                     } else {
                         balanceSheet.get(account).set(0, balanceSheet.get(account).get(0) + post.getBalance());
@@ -104,7 +105,7 @@ public class PostServiceImpl implements PostService {
         }
         Date earlyDate = new Date(00, 00, 00);
         List<Verification> earlierVerifications = verRepo.findByUserAccountAndCreationDateBetween(user, earlyDate, startDate, pageable).getContent();
-
+        
         for (Verification verification : earlierVerifications) {
             List<Post> posts = verification.getPosts();
             for (Post post : posts) {
