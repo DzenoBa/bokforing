@@ -37,6 +37,15 @@ bookkeepingService.factory('BookkeepingProxy', ['$http', '$location',
             },
             countVerificationsByAccount: function(account) {
                 return $http.post(url + '/countverificationsbyaccount', account);
+            },
+            addToFavoriteAccounts: function(account) {
+                return $http.post(url + '/addtofavaccounts', account);
+            },
+            deleteFromFavoriteAccounts: function(account) {
+                return $http.post(url + '/deletefromfavaccounts', account);
+            },
+            getFavoriteAccounts: function() {
+                return $http.get(url + '/getfavaccounts');
             }
         };
     }

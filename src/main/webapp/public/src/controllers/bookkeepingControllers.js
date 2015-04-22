@@ -425,5 +425,55 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
                             debit: debit, credit: credit};
             $scope.posts = $scope.posts.concat([temp_post]);
         };
+        
+        $scope.openaccount = function (index) {
+
+            var modalInstance = $modal.open({
+                templateUrl: 'private/modals/accountSelecterModal.html',
+                controller: 'ModalInstanceAccountCtrl',
+                size: 'lg'
+            });
+
+            modalInstance.result.then(function (selectedAccount) {
+                BookkeepingProxy.addToFavoriteAccounts({number: selectedAccount.number})
+                    .success(function(form) {
+                        $scope.form = form;
+                        if(form.numErrors === 0) {
+                            getFavoriteAccounts();
+                        }
+                    }).error(function() {
+                        console.log("addToFavList: error");
+                    });
+            });
+        };
+        
+        function getFavoriteAccounts() {
+            BookkeepingProxy.getFavoriteAccounts()
+                    .success(function(accounts) {
+                        $scope.accounts = accounts;
+                    }).error(function() {
+                        console.log("getFavAcc: error");
+                    });
+        };
+        
+        $scope.initPayed = function() {
+            getFavoriteAccounts();
+        };
+        
+        $scope.deleteFavAccount = function(account) {
+            BookkeepingProxy.deleteFromFavoriteAccounts({number: account.number})
+                    .success(function(form) {
+                        $scope.form = form;
+                        if(form.numErrors === 0) {
+                            getFavoriteAccounts();
+                        }
+                    }).error(function() {
+                        console.log("deleteFromFavList: error");
+                    });
+        };
+        
+        $scope.selectAccount = function(account) {
+            $scope.selectedAccount = account;
+        };
     }
 ]);

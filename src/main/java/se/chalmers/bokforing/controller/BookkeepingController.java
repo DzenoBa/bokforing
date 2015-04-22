@@ -485,6 +485,7 @@ public class BookkeepingController {
         return verJSONLs;
     }
     
+    @Transactional
     @RequestMapping(value = "/bookkeeping/addtofavaccounts", method = RequestMethod.POST)
     public @ResponseBody FormJSON addToFavoriteAccounts(@RequestBody final AccountJSON account) {
         
@@ -522,6 +523,7 @@ public class BookkeepingController {
         return form;
     }
     
+    @Transactional
     @RequestMapping(value = "/bookkeeping/deletefromfavaccounts", method = RequestMethod.POST)
     public @ResponseBody FormJSON deleteFromFavoriteAccounts(@RequestBody final AccountJSON account) {
         

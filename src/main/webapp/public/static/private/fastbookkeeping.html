@@ -19,8 +19,8 @@
                         <h3>Jag har fått betalt</h3>
                         <p>Bokför försäljning</p>
                     </a></li>
-                <li><a href="" ng-click="step = 2; steptype[0] = 2">
-                        <h3>Jag har har betalat</h3>
+                <li><a href="" ng-click="step = 2; steptype[0] = 2; initPayed()">
+                        <h3>Jag har betalat</h3>
                         <p>Bokför inköp</p>
                     </a></li>
             </ul>
@@ -64,7 +64,50 @@
                 </div>
             </div>
             <div class="row" ng-show="steptype[0]===2">
-                bla
+                <div class="col-md-6">
+                    <div class="alert alert-success" role="alert" style="margin-top:10px;" ng-show="form.numErrors === 0">
+                        Din request lyckades!
+                    </div>
+                    <button type="button" class="btn btn-success" ng-click="openaccount()">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Lägg till konto
+                    </button>
+                    <h3>Dina favorit konton</h3>
+                    <div style="height:250px; width:100%; border: 1px solid #ccc; overflow:auto;">
+                        <table class="table">
+                            <tr>
+                                <th style="width: 40%;">Nummer</th>
+                                <th style="width: 40%;">Namn</th>
+                                <th style="width: 20%;"></th>
+                            </tr>
+                            <tr ng-repeat="account in accounts">
+                                <td>{{account.number}}</td>
+                                <td>{{account.name}}</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <button class="btn btn-success" ng-click="selectAccount(account)">Välj</button>
+                                        <button class="btn btn-danger" ng-click="deleteFavAccount(account)">
+                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-6" ng-show="selectedAccount">
+                    Du har valt: {{selectedAccount.number}} - {{selectedAccount.name}}
+                    <h3>Hur har du betalat?</h3>
+                    <ul class="nav nav-pills nav-justified">
+                        <li><a href="">
+                                <h4>Kontant</h4>
+                                <p>Pengar kommer att tas från till ditt Kassa-konto</p>
+                            </a></li>
+                        <li><a href="">
+                                <h4>Kort</h4>
+                                <p>Pengar kommer att tas från till ditt Bankgiro-konto</p>
+                            </a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
