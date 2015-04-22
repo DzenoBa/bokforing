@@ -33,6 +33,8 @@ protected UserInfo(){
     private String userName;
     private String phoneNumber;
     private String companyName;
+    private String companyAdr;
+    private String postCode;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastLogIn;
     private URI logo;
@@ -74,6 +76,20 @@ protected UserInfo(){
         this.companyName = name;
     }
 
+    public String getCompanyAdr() {
+        return companyAdr;
+    }
+    void setCompanyAdr(String adr){
+        this.companyAdr = adr;
+    }
+    
+    public String getPostCode() {
+        return postCode;
+    }
+    void setPostCode(String pcode){
+        this.postCode = pcode;
+    }
+    
     /**
      * @return the logo
      */

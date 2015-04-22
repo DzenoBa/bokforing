@@ -167,6 +167,26 @@ public class UserHandler {
     public String getCompanyName(){
         return ui.getCompanyName();
     }
+    
+    public void setCompanyAdr(String adr){
+        if(ui.getCompanyAdr() == null || !adr.equals(ui.getCompanyAdr())){
+            ui.setCompanyAdr(adr);
+            modUI = true;
+        }
+    }
+    public String getCompanyAdr(){
+        return ui.getCompanyAdr();
+    }
+    
+        public void setPostCode(String pcode){
+        if(ui.getPostCode() == null || !pcode.equals(ui.getPostCode())){
+            ui.setPostCode(pcode);
+            modUI = true;
+        }
+    }
+    public String getPostCode(){
+        return ui.getPostCode();
+    }
 
 public void setLogo(final URI logo){
     if(ui.getLogo() == null || !logo.equals(ui.getLogo())){

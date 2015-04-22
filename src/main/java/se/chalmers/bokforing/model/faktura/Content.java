@@ -47,7 +47,7 @@ public class Content {
         Iterator<Product> it = list.iterator();
         while(it.hasNext()){
             Product cur = it.next();
-            total = cur.getPrice() * cur.getUnits();
+            total += cur.getPrice() * cur.getUnits();
         }
         return total;
     }

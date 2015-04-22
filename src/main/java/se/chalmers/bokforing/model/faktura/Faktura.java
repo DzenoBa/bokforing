@@ -7,6 +7,7 @@ package se.chalmers.bokforing.model.faktura;
 
 import java.io.Serializable;
 import java.util.Date;
+import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.user.UserInfo;
 
 /**
@@ -24,25 +25,22 @@ public class Faktura implements Serializable {
     //From
     //We need names, phone numbers and company from the info.
     //@ManyToOne
-    private UserInfo fromUser;
+    private UserAccount fromUser;
     
     //To
     //@ManyToOne
-    private UserInfo toUser;
+    private UserAccount toUser;
     
     //Date
     //@Temporal(javax.persistence.TemporalType.DATE)
-    private Date fakturaDatum;
+    private Date fakturaDate = new Date();
     //@Temporal(javax.persistence.TemporalType.DATE)
-    private Date expireDate;
+    private Date expireDate = fakturaDate;
     
     private Content content;
-    
-    private Double totalCost;
-    
+        
     private Boolean fskatt;
     private String momsRegistredNumber;
-    private Double momsCost;
     private Double momsPrecentage;    
 
     /**
@@ -76,43 +74,43 @@ public class Faktura implements Serializable {
     /**
      * @return the fromUser
      */
-    public UserInfo getFromUser() {
+    public UserAccount getFromUser() {
         return fromUser;
     }
 
     /**
      * @param fromUser the fromUser to set
      */
-    public void setFromUser(UserInfo fromUser) {
+    public void setFromUser(UserAccount fromUser) {
         this.fromUser = fromUser;
     }
 
     /**
      * @return the toUser
      */
-    public UserInfo getToUser() {
+    public UserAccount getToUser() {
         return toUser;
     }
 
     /**
      * @param toUser the toUser to set
      */
-    public void setToUser(UserInfo toUser) {
+    public void setToUser(UserAccount toUser) {
         this.toUser = toUser;
     }
 
     /**
-     * @return the fakturaDatum
+     * @return the fakturaDate
      */
-    public Date getFakturaDatum() {
-        return fakturaDatum;
+    public Date getFakturaDate() {
+        return fakturaDate;
     }
 
     /**
-     * @param fakturaDatum the fakturaDatum to set
+     * @param fakturaDatum the fakturaDate to set
      */
-    public void setFakturaDatum(Date fakturaDatum) {
-        this.fakturaDatum = fakturaDatum;
+    public void setFakturaDate(Date fakturaDate) {
+        this.fakturaDate = fakturaDate;
     }
 
     /**
@@ -144,20 +142,6 @@ public class Faktura implements Serializable {
     }
 
     /**
-     * @return the totalCost
-     */
-    public Double getTotalCost() {
-        return totalCost;
-    }
-
-    /**
-     * @param totalCost the totalCost to set
-     */
-    public void setTotalCost(Double totalCost) {
-        this.totalCost = totalCost;
-    }
-
-    /**
      * @return the fskatt
      */
     public Boolean getFskatt() {
@@ -183,20 +167,6 @@ public class Faktura implements Serializable {
      */
     public void setMomsRegistredNumber(String momsRegistredNumber) {
         this.momsRegistredNumber = momsRegistredNumber;
-    }
-
-    /**
-     * @return the momsCost
-     */
-    public Double getMomsCost() {
-        return momsCost;
-    }
-
-    /**
-     * @param momsCost the momsCost to set
-     */
-    public void setMomsCost(Double momsCost) {
-        this.momsCost = momsCost;
     }
 
     /**
