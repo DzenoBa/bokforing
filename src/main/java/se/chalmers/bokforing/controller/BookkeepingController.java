@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,7 +22,6 @@ import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
 import se.chalmers.bokforing.model.Verification;
-import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.service.CustomerManager;
@@ -555,6 +555,7 @@ public class BookkeepingController {
         return form;
     }
     
+    @Transactional
     @RequestMapping(value = "/bookkeeping/getfavaccounts", method = RequestMethod.GET)
     public @ResponseBody List<AccountJSON> getFavoriteAccounts() {
         
@@ -564,9 +565,9 @@ public class BookkeepingController {
             return accountJSONLs;
         } 
         UserHandler uh = userService.getUser(authSession.getEmail());
-        List<Account> accountList = new ArrayList(uh.getUA().getFavoriteAccounts());
+        Set<Account> accountSet = uh.getUA().getFavoriteAccounts();
         
-        for(Account a : accountList) {
+        for(Account a : accountSet) {
             AccountJSON a_json = new AccountJSON();
             a_json.setNumber(a.getNumber());
             a_json.setName(a.getName());
