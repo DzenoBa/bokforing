@@ -68,6 +68,9 @@
                     <div class="alert alert-success" role="alert" style="margin-top:10px;" ng-show="form.numErrors === 0">
                         Din request lyckades!
                     </div>
+                    <div class="alert alert-danger" role="alert" style="margin-top:10px;" ng-show="form.numErrors > 0 && form.errors.accounts">
+                        {{form.errors.accounts}}
+                    </div>
                     <button type="button" class="btn btn-success" ng-click="openaccount()">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Lägg till konto
                     </button>
@@ -95,7 +98,43 @@
                     </div>
                 </div>
                 <div class="col-md-6" ng-show="selectedAccount">
-                    Du har valt: {{selectedAccount.number}} - {{selectedAccount.name}}
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="sump" class="col-sm-3 control-label">Du har valt</label>
+                            <div class="col-md-9">
+                                <p class="help-block">{{selectedAccount.number}} - {{selectedAccount.name}}</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sump" class="col-sm-3 control-label">Summa</label>
+                            <div class="col-md-9">
+                                <input id="sump" type="number" class="form-control" placeholder="Ange en summa"/>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="form.errors.sum !== null">
+                            <div class="col-sm-3"></div><!-- Offset -->
+                            <div class="col-sm-9">
+                                <span class="error">{{form.errors.sum}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="momsp" class="col-sm-3 control-label">Moms</label>
+                            <div class="col-md-9">
+                                <select class="form-control" id="momsp">
+                                    <option value="0">0 %</option>
+                                    <option value="6">6 %</option>
+                                    <option value="12">12 %</option>
+                                    <option value="25">25 %</option>
+                                 </select>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="form.errors.moms !== null">
+                            <div class="col-sm-3"></div><!-- Offset -->
+                            <div class="col-sm-9">
+                                <span class="error">{{form.errors.moms}}</span>
+                            </div>
+                        </div>
+                    </form>
                     <h3>Hur har du betalat?</h3>
                     <ul class="nav nav-pills nav-justified">
                         <li><a href="">
