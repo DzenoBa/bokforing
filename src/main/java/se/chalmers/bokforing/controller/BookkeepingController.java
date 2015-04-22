@@ -4,6 +4,7 @@ package se.chalmers.bokforing.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
 import se.chalmers.bokforing.model.Verification;
+import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.service.CustomerManager;
@@ -481,5 +483,97 @@ public class BookkeepingController {
         }
         
         return verJSONLs;
+    }
+    
+    @RequestMapping(value = "/bookkeeping/addtofavaccounts", method = RequestMethod.POST)
+    public @ResponseBody FormJSON addToFavoriteAccounts(@RequestBody final AccountJSON account) {
+        
+        FormJSON form = new FormJSON();
+        
+         // CHECK SESSION
+        if(!(authSession.sessionCheck())) {
+            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            return form;
+        } 
+        String email = authSession.getEmail();
+        
+        // ACCOUNT CHECK
+        if(!(account.getNumber() > 0)) {
+            form.addError("account", "Vänligen ange ett konto");
+            return form;
+        }
+        Account aDb = accountService.findAccountByNumber(account.getNumber());
+        if(aDb == null) {
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
+            return form;
+        }
+        
+        // EVERYTHING SEEMS TO BE IN ORDER
+        UserHandler uh = userService.getUser(email);
+        Set<Account> accountSet = uh.getUA().getFavoriteAccounts();
+        if(accountSet.contains(aDb)) {
+            form.addError("accounts", "Kontot finns redan i listan.");
+            return form;
+        }
+        accountSet.add(aDb);
+        uh.getUA().setFavoriteAccounts(accountSet);
+        userService.storeUser(uh);
+        
+        return form;
+    }
+    
+    @RequestMapping(value = "/bookkeeping/deletefromfavaccounts", method = RequestMethod.POST)
+    public @ResponseBody FormJSON deleteFromFavoriteAccounts(@RequestBody final AccountJSON account) {
+        
+        FormJSON form = new FormJSON();
+        
+         // CHECK SESSION
+        if(!(authSession.sessionCheck())) {
+            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            return form;
+        } 
+        String email = authSession.getEmail();
+        
+        // ACCOUNT CHECK
+        if(!(account.getNumber() > 0)) {
+            form.addError("account", "Vänligen ange ett konto");
+            return form;
+        }
+        Account aDb = accountService.findAccountByNumber(account.getNumber());
+        if(aDb == null) {
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
+            return form;
+        }
+        
+        // EVERYTHING SEEMS TO BE IN ORDER
+        UserHandler uh = userService.getUser(email);
+        Set<Account> accountSet = uh.getUA().getFavoriteAccounts();
+        accountSet.remove(aDb);
+        uh.getUA().setFavoriteAccounts(accountSet);
+        userService.storeUser(uh);
+        
+        return form;
+    }
+    
+    @RequestMapping(value = "/bookkeeping/getfavaccounts", method = RequestMethod.GET)
+    public @ResponseBody List<AccountJSON> getFavoriteAccounts() {
+        
+        List<AccountJSON> accountJSONLs = new ArrayList();
+        
+        if(!authSession.sessionCheck()) {
+            return accountJSONLs;
+        } 
+        UserHandler uh = userService.getUser(authSession.getEmail());
+        List<Account> accountList = new ArrayList(uh.getUA().getFavoriteAccounts());
+        
+        for(Account a : accountList) {
+            AccountJSON a_json = new AccountJSON();
+            a_json.setNumber(a.getNumber());
+            a_json.setName(a.getName());
+            
+            accountJSONLs.add(a_json);
+        }
+        
+        return accountJSONLs;
     }
 }
