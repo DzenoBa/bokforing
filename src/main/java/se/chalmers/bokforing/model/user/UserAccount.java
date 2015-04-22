@@ -8,18 +8,19 @@ package se.chalmers.bokforing.model.user;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.Timesheet;
@@ -67,6 +68,9 @@ public class UserAccount implements Serializable {
     
     @OneToMany(mappedBy = "userAccount")
     private List<Product> products;
+    
+    @OneToMany
+    private Set<Account> favoriteAccounts;
     
     protected UserAccount(){
         
@@ -269,5 +273,19 @@ public class UserAccount implements Serializable {
      */
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    /**
+     * @return the favoriteAccounts
+     */
+    public Set<Account> getFavoriteAccounts() {
+        return favoriteAccounts;
+    }
+
+    /**
+     * @param favoriteAccounts the favoriteAccounts to set
+     */
+    public void setFavoriteAccounts(Set<Account> favoriteAccounts) {
+        this.favoriteAccounts = favoriteAccounts;
     }
 }

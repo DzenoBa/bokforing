@@ -5,6 +5,8 @@
  */
 package se.chalmers.bokforing.service;
 
+import se.chalmers.bokforing.model.Account;
+import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.user.UserHandler;
 
 /**
@@ -20,4 +22,8 @@ public interface UserManager {
      * @param userAcc of type UserAccount with email and name
      */
     public void createUser(UserHandler userAcc);
+    
+    void addFavoriteAccount(UserHandler user, Account account);
+    
+    boolean removeFavoriteAccount(UserHandler user, Account account);
 }
