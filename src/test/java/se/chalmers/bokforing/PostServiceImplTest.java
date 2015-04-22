@@ -38,7 +38,7 @@ import se.chalmers.bokforing.service.VerificationService;
  * @author Isabelle
  */
 @ContextConfiguration(classes = TestApplicationConfig.class)
-public class PostServiceImplTest {
+public class PostServiceImplTest extends AbstractIntegrationTest {
 
     private static int INSERTED_VERIFICATION_ROWS_BEFORE;
 
