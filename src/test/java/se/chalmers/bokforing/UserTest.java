@@ -23,7 +23,7 @@ import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
-import se.chalmers.bokforing.persistence.user.UserService;
+import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.AccountManager;
 import se.chalmers.bokforing.service.AccountService;
 import se.chalmers.bokforing.service.UserManager;

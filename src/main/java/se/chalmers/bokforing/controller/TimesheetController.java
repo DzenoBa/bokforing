@@ -19,7 +19,7 @@ import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.Timesheet;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
-import se.chalmers.bokforing.persistence.user.UserService;
+import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.CustomerService;
 import se.chalmers.bokforing.service.ProductService;
 import se.chalmers.bokforing.service.TimesheetManager;

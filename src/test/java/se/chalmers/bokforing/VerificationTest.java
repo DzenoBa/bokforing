@@ -37,7 +37,7 @@ import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.persistence.PostRepository;
 import se.chalmers.bokforing.persistence.VerificationRepository;
 import se.chalmers.bokforing.service.AccountManager;
-import se.chalmers.bokforing.persistence.user.UserService;
+import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.AccountService;
 import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.PostManager;

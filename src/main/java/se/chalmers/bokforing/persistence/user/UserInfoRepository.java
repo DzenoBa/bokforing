@@ -13,7 +13,7 @@ import se.chalmers.bokforing.model.user.UserInfo;
  *
  * @author victor
  */
-interface UserInfoRepository extends JpaRepository<UserInfo,Long> {
+public interface UserInfoRepository extends JpaRepository<UserInfo,Long> {
     UserInfo findByUserInfoId(int id);
     List<UserInfo> findByUserName(String userName);
 }
