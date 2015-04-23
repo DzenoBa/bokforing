@@ -61,26 +61,26 @@ public class TimesheetController {
         
         // CHECK SESSION
         if(!authSession.sessionCheck()) {
-            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
             return form;
         }
         String email = authSession.getEmail();
         
         // CHECK PRODUCT
         if(timesheet.getProduct() == null || !(timesheet.getProduct().getId() > 0)) {
-            form.addError("product", "Vänligen ange en produkt");
+            form.addError("product", "Vänligen ange en produkt.");
             return form;
         }
         
         // CHECK CUSTOMER
         if(timesheet.getCustomer() == null || !(timesheet.getCustomer().getCustomernumber() > 0)) {
-            form.addError("customer", "Vänligen ange en kund");
+            form.addError("customer", "Vänligen ange en kund.");
             return form;
         } 
         
         // CHECK QUANTITY
         if(timesheet.getQuantity() == null || !(timesheet.getQuantity() > 0)) {
-            form.addError("quantity", "Vänligen ange en kvantite");
+            form.addError("quantity", "Vänligen ange en kvantitet.");
             return form;
         }
         
@@ -91,7 +91,7 @@ public class TimesheetController {
         
         // CHECK DATE
         if(timesheet.getDate() == null) {
-            form.addError("date", "Vänligen ange ett datum");
+            form.addError("date", "Vänligen ange ett datum.");
             return form;
         }
         
@@ -100,7 +100,7 @@ public class TimesheetController {
         Product product = productService.findProductById(uh.getUA(), timesheet.getProduct().getId());
         Customer customer = customerService.findByCustomerNumber(uh.getUA(), timesheet.getCustomer().getCustomernumber());
         if(product == null || customer == null) {
-            form.addError("genaral", "Något gick fel, vänligen försök igen om en liten stund");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             return form;
         }
         
@@ -108,7 +108,7 @@ public class TimesheetController {
         Timesheet tsDb = timesheetManager.createTimesheet(uh.getUA(), customer, product, 
                 timesheet.getQuantity(), description, timesheet.getDate());
         if(tsDb == null) {
-            form.addError("genaral", "Något gick fel, vänligen försök igen om en liten stund");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
         }
         
         return form;

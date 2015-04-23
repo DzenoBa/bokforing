@@ -83,14 +83,14 @@ public class BookkeepingController {
         
         // CHECK SESSION
         if(!(authSession.sessionCheck())) {
-            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd!");
             return form;
         }
         String email = authSession.getEmail();
         
         // CHECK DATE
         if(verification.getTransactionDate() == null) {
-            form.addError("verificationdate", "Ange ett datum");
+            form.addError("verificationdate", "Ange ett datum.");
             return form;
         }
         
@@ -102,7 +102,7 @@ public class BookkeepingController {
         
         // CHECK POSTS
         if(verification.getPosts() == null || verification.getPosts().isEmpty()) {
-            form.addError("general", "Ett fel inträffades vänligen försök igenom om en liten stund");
+            form.addError("general", "Ett fel inträffade, vänligen försök igenom om en liten stund.");
             return form;
         }
             
@@ -110,7 +110,7 @@ public class BookkeepingController {
         List<Post> new_posts = new ArrayList();
         for(PostJSON post : verification.getPosts()) {
             if(post == null) {
-                form.addError("general", "Ett fel inträffades, vänligen försök igen om en liten stund.");
+                form.addError("general", "Ett fel inträffade, vänligen försök igen om en liten stund.");
                 return form;
             }
             
@@ -123,11 +123,11 @@ public class BookkeepingController {
             Account temp_account = accountService.findAccountByNumber(post.getAccountid());
             // THIS SHOULD'NT HAPPEN 
             if(temp_account == null) {
-                form.addError("general", "Något gick fel, vänligen försök igen om en liten stund");
+                form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             }
             // CHECK DEBIT AND CREDIT
             if(post.getDebit() < 0 || post.getCredit() < 0) {
-                form.addError("general", "Både debet och kredit måste innehålla en siffra i rad " + index + "!");
+                form.addError("general", "Både debet och kredit måste innehålla en siffra i rad " + index + ".");
                 return form;
             }
             
@@ -146,7 +146,7 @@ public class BookkeepingController {
             }
             // SOMETHING WRONG
             else {
-                form.addError("general", "Debet och Kredit får ej vara lika eller en av dem måste vara 0; Rad: " + index);
+                form.addError("general", "Rad: " + index + ". Debet och kredit får ej vara lika eller en av dem måste vara 0.");
                 return form;
             }
             
@@ -167,7 +167,7 @@ public class BookkeepingController {
         // CREATE VERIFICATION
         Verification ver = verificationManager.createVerification(uh.getUA(), new_posts, verification.getTransactionDate(), null, description);
         if(ver == null) {
-            form.addError("general", "Verifikationen är ej valid");
+            form.addError("general", "Verifikationen är inte giltig.");
             return form;
         }
         uh.getVerifications().add(ver);
@@ -188,7 +188,7 @@ public class BookkeepingController {
         
         // CHECK SESSION
         if(!(authSession.sessionCheck())) {
-            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
             return form;
         }
         String email = authSession.getEmail();
@@ -197,7 +197,7 @@ public class BookkeepingController {
         // VERIFICATION CHECK
         Verification ver = verificationService.findVerificationById(uh.getUA(), verification.getId());
         if(ver == null) {
-            form.addError("general", "Ett fel inträffades, vänligen försök igen om en liten stund.");
+            form.addError("general", "Ett fel inträffade, vänligen försök igen om en liten stund.");
             return form;
         }
         
@@ -212,7 +212,7 @@ public class BookkeepingController {
         if(verification.getPosts() != null) {
             for(PostJSON post : verification.getPosts()) {
                 if(post == null) {
-                    form.addError("general", "Ett fel inträffades, vänligen försök igen om en liten stund.");
+                    form.addError("general", "Ett fel inträffade, vänligen försök igen om en liten stund.");
                     return form;
                 }
 
@@ -248,7 +248,7 @@ public class BookkeepingController {
                 }
                 // SOMETHING WRONG
                 else {
-                    form.addError("general", "Debet och Kredit får ej vara lika eller en av dem måste vara 0; Rad: " + index);
+                    form.addError("general", "Rad: " + index + ". Debet och kredit får ej vara lika eller en av dem måste vara 0.");
                     return form;
                 }
 
@@ -265,7 +265,7 @@ public class BookkeepingController {
             for(PostJSON post : verification.getOldposts()) {
                 Post temp_post = postService.findPostById(post.getId());
                 if(temp_post == null) {
-                    form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+                    form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
                     return form;
                 }
                 old_posts.add(temp_post);
@@ -493,14 +493,14 @@ public class BookkeepingController {
         
          // CHECK SESSION
         if(!(authSession.sessionCheck())) {
-            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
             return form;
         } 
         String email = authSession.getEmail();
         
         // ACCOUNT CHECK
         if(!(account.getNumber() > 0)) {
-            form.addError("account", "Vänligen ange ett konto");
+            form.addError("account", "Vänligen ange ett konto.");
             return form;
         }
         Account aDb = accountService.findAccountByNumber(account.getNumber());
@@ -531,14 +531,14 @@ public class BookkeepingController {
         
          // CHECK SESSION
         if(!(authSession.sessionCheck())) {
-            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
             return form;
         } 
         String email = authSession.getEmail();
         
         // ACCOUNT CHECK
         if(!(account.getNumber() > 0)) {
-            form.addError("account", "Vänligen ange ett konto");
+            form.addError("account", "Vänligen ange ett konto.");
             return form;
         }
         Account aDb = accountService.findAccountByNumber(account.getNumber());

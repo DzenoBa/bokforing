@@ -36,11 +36,11 @@ public class DefaultDataController {
         
         PagingAndSortingTerms terms = new PagingAndSortingTerms(0, false, "name");
         if(accountService.findAllAccounts(terms).getNumberOfElements() > 0) {
-            form.addError("general", "Denna funktion kan inte användas eftersom data redan finns i tabellen");
+            form.addError("general", "Denna funktion kan inte användas eftersom data redan finns i tabellen.");
             return form;
         } else {
             if(!initUtil.insertDefaultAccounts()) {
-                form.addError("general", "Något fick fel");
+                form.addError("general", "Något fick fel.");
                 return form;
             }
         }

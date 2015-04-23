@@ -50,7 +50,7 @@ public class CustomerController {
         
         // CHECK SESSION
         if(!authSession.sessionCheck()) {
-            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
             return form;
         }
         String email = authSession.getEmail();
@@ -65,43 +65,43 @@ public class CustomerController {
         // CHECK IF CUSTOMER NUMBER EXIST
         Customer custCheck = customerService.findByCustomerNumber(uh.getUA(), customer.getCustomernumber());
         if(custCheck != null) {
-            form.addError("customernumber", "Kundnummret finns redan registrerat");
+            form.addError("customernumber", "Kundnummret är redan registrerat.");
             return form;
         }
         
         // CHECK NAME
         if(customer.getName() == null || customer.getName().isEmpty()) {
-            form.addError("name", "Vänligen ange ett namn");
+            form.addError("name", "Vänligen ange ett namn.");
             return form;
         }
         
         // CHECK PHONE NUMBER
         if(customer.getPhonenumber() == null || customer.getPhonenumber().isEmpty()) {
-            form.addError("phonenumber", "Vänligen ange ett telefonnummer");
+            form.addError("phonenumber", "Vänligen ange ett telefonnummer.");
             return form;
         }
         
         // CHECK STREET
         if(customer.getStreet() == null || customer.getStreet().isEmpty()) {
-            form.addError("street", "Vänligen ange gatuadress");
+            form.addError("street", "Vänligen ange gatuadress.");
             return form;
         }
         
         // CHECK POSTAL CODE
         if(customer.getPostalcode() == null || customer.getPostalcode().isEmpty()) {
-            form.addError("city", "Vänligen ange ett post nummer");
+            form.addError("city", "Vänligen ange ett postnummer.");
             return form;
         }
         
         // CHECK CITY
         if(customer.getCity() == null || customer.getCity().isEmpty()) {
-            form.addError("city", "Vänligen ange en stad");
+            form.addError("city", "Vänligen ange en stad.");
             return form;
         }
         
         // CHECK COUNTRY
         if(customer.getCountry() == null || customer.getCountry().isEmpty()) {
-            form.addError("country", "Vänligen ange ett land");
+            form.addError("country", "Vänligen ange ett land.");
             return form;
         }
         
@@ -115,7 +115,7 @@ public class CustomerController {
         Customer cDb = customerManager.createCustomer(uh.getUA(), customer.getCustomernumber(), 
                 customer.getName(), customer.getPhonenumber(), address);
         if(cDb == null) {
-            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
         }
         return form;
     }
@@ -197,50 +197,50 @@ public class CustomerController {
         
         // CHECK SESSION
         if(!authSession.sessionCheck()) {
-            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
             return form;
         }
         String email = authSession.getEmail();
         
         // CHECK CUSTOMER NUMBER
         if(customer.getCustomernumber() == null || !(customer.getCustomernumber() > 0)) {
-            form.addError("customernumber", "Vänligen ange ett kund nummer");
+            form.addError("customernumber", "Vänligen ange ett kundnummer.");
             return form;
         }
         
         // CHECK NAME
         if(customer.getName() == null || customer.getName().isEmpty()) {
-            form.addError("name", "Vänligen ange ett namn");
+            form.addError("name", "Vänligen ange ett namn.");
             return form;
         }
         
         // CHECK PHONE NUMBER
         if(customer.getPhonenumber() == null || customer.getPhonenumber().isEmpty()) {
-            form.addError("phonenumber", "Vänligen ange ett telefonnummer");
+            form.addError("phonenumber", "Vänligen ange ett telefonnummer.");
             return form;
         }
         
         // CHECK STREET
         if(customer.getStreet() == null || customer.getStreet().isEmpty()) {
-            form.addError("street", "Vänligen ange gatuadress");
+            form.addError("street", "Vänligen ange gatuadress.");
             return form;
         }
         
         // CHECK POSTAL CODE
         if(customer.getPostalcode() == null || customer.getPostalcode().isEmpty()) {
-            form.addError("city", "Vänligen ange ett post nummer");
+            form.addError("city", "Vänligen ange ett postnummer.");
             return form;
         }
         
         // CHECK CITY
         if(customer.getCity() == null || customer.getCity().isEmpty()) {
-            form.addError("city", "Vänligen ange en stad");
+            form.addError("city", "Vänligen ange en stad.");
             return form;
         }
         
         // CHECK COUNTRY
         if(customer.getCountry() == null || customer.getCountry().isEmpty()) {
-            form.addError("country", "Vänligen ange ett land");
+            form.addError("country", "Vänligen ange ett land.");
             return form;
         }
         
@@ -248,7 +248,7 @@ public class CustomerController {
         UserHandler uh = userService.getUser(email);
         Customer cDb = customerService.findByCustomerNumber(uh.getUA(), customer.getCustomernumber());
         if(cDb == null) {
-            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
         }
         cDb.setName(customer.getName());
         cDb.setPhoneNumber(customer.getPhonenumber());
@@ -275,7 +275,7 @@ public class CustomerController {
         
         // CHECK SESSION
         if(!authSession.sessionCheck()) {
-            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
             return form;
         }
         String email = authSession.getEmail();
@@ -290,7 +290,7 @@ public class CustomerController {
         UserHandler uh = userService.getUser(email);
         Customer cDb = customerService.findByCustomerNumber(uh.getUA(), customer.getCustomernumber());
         if(cDb == null) {
-            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             return form;
         }
         

@@ -57,14 +57,14 @@ public class ProductController {
         
         // CHECK SESSION
         if(!authSession.sessionCheck()) {
-            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
             return form;
         }
         String email = authSession.getEmail();
         
         // CHECK NAME
         if(product.getName() == null || product.getName().isEmpty()) {
-            form.addError("name", "Vänligen ange ett namn");
+            form.addError("name", "Vänligen ange ett namn.");
             return form;
         }
         
@@ -75,7 +75,7 @@ public class ProductController {
         
         // PRICE CHECK
         if(!(product.getPrice() > 0)) {
-            form.addError("price", "Vänligen ange ett korrekt pris");
+            form.addError("price", "Priset måste vara en positiv summa.");
             return form;
         }
         
@@ -90,7 +90,7 @@ public class ProductController {
         Product pDb = productManager.createProduct(uh.getUA(), product.getName(), 
                 product.getPrice(), Product.QuantityType.valueOf(product.getQuantitytype()), description, account);
         if(pDb == null) {
-            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
         }
         return form;
     }
@@ -179,20 +179,20 @@ public class ProductController {
         
         // CHECK SESSION
         if(!authSession.sessionCheck()) {
-            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
             return form;
         }
         String email = authSession.getEmail();
         
         // CHECK ID
         if(product.getId() == null || product.getId() <= 0) {
-            form.addError("genaral", "Något gick fel, vänligen försök igen om en liten stund.");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             return form;
         }
         
         // CHECK NAME
         if(product.getName() == null || product.getName().isEmpty()) {
-            form.addError("name", "Vänligen ange ett namn");
+            form.addError("name", "Vänligen ange ett namn.");
             return form;
         }
         
@@ -203,13 +203,13 @@ public class ProductController {
         
         // PRICE CHECK
         if(!(product.getPrice() > 0)) {
-            form.addError("price", "Vänligen ange ett korrekt pris");
+            form.addError("price", "Vänligen ange ett korrekt pris.");
             return form;
         }
         
         // QUANNTITY-TYPE CHECK
         if(product.getQuantitytype() == null || product.getQuantitytype().isEmpty()) {
-            form.addError("quantitytype", "Vänligen ange en enhet");
+            form.addError("quantitytype", "Vänligen ange en enhet.");
             return form;
         }
         
@@ -217,14 +217,15 @@ public class ProductController {
         UserHandler uh = userService.getUser(email);
         Product pDb = productService.findProductById(uh.getUA(), product.getId());
         if(pDb == null) {
-            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
+        } else {
+            pDb.setName(product.getName());
+            pDb.setPrice(product.getPrice());
+            pDb.setQuantityType(Product.QuantityType.valueOf(product.getQuantitytype()));
+            pDb.setDescription(description);
+
+            productService.save(pDb);
         }
-        pDb.setName(product.getName());
-        pDb.setPrice(product.getPrice());
-        pDb.setQuantityType(Product.QuantityType.valueOf(product.getQuantitytype()));
-        pDb.setDescription(description);
-        
-        productService.save(pDb);
         
         return form;
     }
@@ -239,14 +240,14 @@ public class ProductController {
         
         // CHECK SESSION
         if(!authSession.sessionCheck()) {
-            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
             return form;
         }
         String email = authSession.getEmail();
         
         // CHECK ID
         if(product.getId() == null || product.getId() <= 0) {
-            form.addError("genaral", "Något gick fel, vänligen försök igen om en liten stund.");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             return form;
         }
               
@@ -254,7 +255,7 @@ public class ProductController {
         UserHandler uh = userService.getUser(email);
         Product pDb = productService.findProductById(uh.getUA(), product.getId());
         if(pDb == null) {
-            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             return form;
         }
         
