@@ -250,19 +250,47 @@ public class ProductController {
             return form;
         }
         
+        // ACCOUNT CHECK
+        if(product.getAccount() == null || !(product.getAccount().getNumber() > 0)) {
+            form.addError("account", "Vänligen ange ett konto");
+            return form;
+        }
+        
+        // VAT-ACCOUNT CHECK
+        int vat_number = 0;
+        if(product.getVat() != null) {
+            if(product.getVat().getNumber() > 0)
+                vat_number = product.getVat().getNumber();
+            else {
+                form.addError("account", "Vänligen ange moms");
+                return form;
+            }
+        }
+        
+        Account account = accountService.findAccountByNumber(product.getAccount().getNumber());
+        // IF(vat_number==0) IT SHOULD RETURN NULL
+        Account vat_account = accountService.findAccountByNumber(vat_number); 
+        
+        if(account == null) {
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
+            return form;
+        }
+        
         // EVERYTHING SEEMS TO BE IN ORDER
         UserHandler uh = userService.getUser(email);
         Product pDb = productService.findProductById(uh.getUA(), product.getId());
         if(pDb == null) {
             form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
-        } else {
-            pDb.setName(product.getName());
-            pDb.setPrice(product.getPrice());
-            pDb.setQuantityType(Product.QuantityType.valueOf(product.getQuantitytype()));
-            pDb.setDescription(description);
-
-            productService.save(pDb);
+            return form;
         }
+        pDb.setName(product.getName());
+        pDb.setPrice(product.getPrice());
+        pDb.setQuantityType(Product.QuantityType.valueOf(product.getQuantitytype()));
+        pDb.setDescription(description);
+        pDb.setDefaultAccount(account);
+        pDb.setVATAccount(vat_account);
+
+        productService.save(pDb);
         
         return form;
     }
