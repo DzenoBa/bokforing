@@ -34,6 +34,12 @@ public class Product implements Serializable {
     @Enumerated(EnumType.STRING)
     private QuantityType quantityType;
     
+    /** This is the default Account for which transactions involving this product
+     * should be placed in.
+     */
+    @ManyToOne
+    private Account defaultAccount;
+    
     @ManyToOne
     private UserAccount userAccount;
 
@@ -124,6 +130,20 @@ public class Product implements Serializable {
     public void setUserAccount(UserAccount userAccount) {
         this.userAccount = userAccount;
     }
+
+    /**
+     * @return the defaultAccount
+     */
+    public Account getDefaultAccount() {
+        return defaultAccount;
+    }
+
+    /**
+     * @param defaultAccount the defaultAccount to set
+     */
+    public void setDefaultAccount(Account defaultAccount) {
+        this.defaultAccount = defaultAccount;
+    }
     
     public enum QuantityType {
         KILOGRAM("kg"),
@@ -147,11 +167,11 @@ public class Product implements Serializable {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 23 * hash + Objects.hashCode(this.name);
-        hash = 23 * hash + Objects.hashCode(this.description);
-        hash = 23 * hash + Objects.hashCode(this.price);
-        hash = 23 * hash + Objects.hashCode(this.quantityType);
-        hash = 23 * hash + Objects.hashCode(this.userAccount);
+        hash = 23 * hash + Objects.hashCode(this.getName());
+        hash = 23 * hash + Objects.hashCode(this.getDescription());
+        hash = 23 * hash + Objects.hashCode(this.getPrice());
+        hash = 23 * hash + Objects.hashCode(this.getQuantityType());
+        hash = 23 * hash + Objects.hashCode(this.getUserAccount());
         return hash;
     }
 
@@ -173,7 +193,7 @@ public class Product implements Serializable {
         if (!Objects.equals(this.price, other.price)) {
             return false;
         }
-        if (this.quantityType != other.quantityType) {
+        if (this.getQuantityType() != other.getQuantityType()) {
             return false;
         }
         if (!Objects.equals(this.userAccount, other.userAccount)) {

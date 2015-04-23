@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.ProductJSON;
+import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
+import se.chalmers.bokforing.service.AccountService;
 import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.ProductManager;
 import se.chalmers.bokforing.service.ProductService;
@@ -40,6 +42,9 @@ public class ProductController {
     @Autowired
     private UserService userService;
     
+    @Autowired
+    private AccountService accountService;
+    
     /*
      * CREATE PRODUCT
      */
@@ -47,6 +52,8 @@ public class ProductController {
     public @ResponseBody FormJSON create(@RequestBody final ProductJSON product) {
         
         FormJSON form = new FormJSON();
+        
+        Account account = accountService.findAccountByNumber(1050);
         
         // CHECK SESSION
         if(!authSession.sessionCheck()) {
@@ -81,7 +88,7 @@ public class ProductController {
         // EVERYTHING SEEMS TO BE IN ORDER
         UserHandler uh = userService.getUser(email);
         Product pDb = productManager.createProduct(uh.getUA(), product.getName(), 
-                product.getPrice(), Product.QuantityType.valueOf(product.getQuantitytype()), description);
+                product.getPrice(), Product.QuantityType.valueOf(product.getQuantitytype()), description, account);
         if(pDb == null) {
             form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
         }

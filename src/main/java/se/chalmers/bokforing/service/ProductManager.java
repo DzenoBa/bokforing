@@ -5,6 +5,7 @@
  */
 package se.chalmers.bokforing.service;
 
+import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.Product.QuantityType;
 import se.chalmers.bokforing.model.user.UserAccount;
@@ -15,7 +16,7 @@ import se.chalmers.bokforing.model.user.UserAccount;
  */
 public interface ProductManager {
     
-    Product createProduct(UserAccount user, String name, double price, QuantityType quantityType, String description);
+    Product createProduct(UserAccount user, String name, double price, QuantityType quantityType, String description, Account defaultAccount);
     
     void removeProduct(Product product);
     
