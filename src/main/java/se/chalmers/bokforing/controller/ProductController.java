@@ -19,6 +19,7 @@ import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.ProductManager;
 import se.chalmers.bokforing.service.ProductService;
 import se.chalmers.bokforing.session.AuthSession;
+import se.chalmers.bokforing.util.Constants;
 
 /**
  *
@@ -95,6 +96,7 @@ public class ProductController {
         
         List<ProductJSON> productJSONLs = new ArrayList();
         int startPos = 0;
+        int pageSize = Constants.DEFAULT_PAGE_SIZE;
         
         if(!authSession.sessionCheck()) {
             return productJSONLs;
@@ -104,8 +106,11 @@ public class ProductController {
         if(product.getStartrange() > 0) {
             startPos = product.getStartrange();
         }
+        if(product.getPagesize() > 0) {
+            pageSize = product.getPagesize();
+        }
         
-        PagingAndSortingTerms terms = new PagingAndSortingTerms(startPos, Boolean.TRUE, "name");
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(startPos, Boolean.TRUE, "name", pageSize);
         Page<Product> productPage;
         if(product.getName() != null && !product.getName().isEmpty()) {
             productPage = productService.findByNameLike(ua.getUA(), product.getName(), terms);
@@ -134,13 +139,18 @@ public class ProductController {
     public @ResponseBody long countProducts(@RequestBody final ProductJSON product) {
         
         long size = 0;
+        int pageSize = Constants.DEFAULT_PAGE_SIZE;
         
         if(!authSession.sessionCheck()) {
             return size;
         }
         UserHandler ua = userService.getUser(authSession.getEmail());
 
-        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.TRUE, "name");
+        if(product.getPagesize() > 0) {
+            pageSize = product.getPagesize();
+        }
+        
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.TRUE, "name", pageSize);
         Page<Product> productPage;
         if(product.getName() != null && !product.getName().isEmpty()) {
             productPage = productService.findByNameLike(ua.getUA(), product.getName(), terms);

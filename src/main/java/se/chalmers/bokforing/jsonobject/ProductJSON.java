@@ -15,6 +15,7 @@ public class ProductJSON {
     private double price;
     private String quantitytype;
     private int startrange;
+    private int pagesize;
     
     public Long getId() {
         return id;
@@ -56,5 +57,12 @@ public class ProductJSON {
     }
     public void setStartragne(int startrange) {
         this.startrange = startrange;
+    }
+    
+    public int getPagesize() {
+        return pagesize;
+    }
+    public void setPagesize(int pagesize) {
+        this.pagesize = pagesize;
     }
 }
