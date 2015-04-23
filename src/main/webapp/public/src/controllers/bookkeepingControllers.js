@@ -377,8 +377,8 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'Book
     }
 ]);
 
-bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'BookkeepingProxy', '$modal', '$filter',
-    function($scope, BookkeepingProxy, $modal, $filter) {
+bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'BookkeepingProxy', 'ProductProxy', '$modal', '$filter',
+    function($scope, BookkeepingProxy, ProductProxy, $modal, $filter) {
         
         $scope.step = 1;
         $scope.steptype = [0,0,0,0];
@@ -447,6 +447,9 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
             });
         };
         
+        /*
+         * JAG HAR BETALAT
+         */
         function getFavoriteAccounts() {
             BookkeepingProxy.getFavoriteAccounts()
                     .success(function(accounts) {
@@ -475,5 +478,55 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
         $scope.selectAccount = function(account) {
             $scope.selectedAccount = account;
         };
+        
+        /*
+         * JAG HAR FÅTT BETALT
+         */
+        $scope.currentProductPage = 1;
+        
+        $scope.initGotPayed = function() {
+            getProducts();
+            countProducts();
+        };
+        
+        function getProducts() {
+            var index = $scope.currentProductPage-1;
+            ProductProxy.getProducts({name: $scope.searchproductname, startrange: index, pagesize: 10})
+                   .success(function(products) {
+                       $scope.products = products;
+                   }).error(function() {
+                       console.log("getProducts: error");
+                   });
+        };
+        
+        function countProducts() {
+            ProductProxy.countProducts({name: $scope.searchproductname, pagesize: 10})
+                   .success(function(long) {
+                       $scope.productmaxsize = long;
+                   }).error(function() {
+                       console.log("getProducts: error");
+                   });
+        };
+        
+        $scope.productPageChanged = function() {
+            getProducts();
+        };
+        
+        $scope.searchproduct = function() {
+            getProducts();
+            countProducts();
+        };
+        
+        $scope.autosearchproduct = function() {
+            if($scope.searchproductname.length > 2 || $scope.searchproductname.length === 0) {
+                $scope.searchproduct();
+            }
+        };
+        
+        $scope.selectProduct = function(product) {
+            $scope.selectedProduct = product;
+        };
     }
+    
+    
 ]);
