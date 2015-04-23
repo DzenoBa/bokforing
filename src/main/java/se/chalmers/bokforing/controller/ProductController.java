@@ -107,7 +107,7 @@ public class ProductController {
         // EVERYTHING SEEMS TO BE IN ORDER
         UserHandler uh = userService.getUser(email);
         Product pDb = productManager.createProduct(uh.getUA(), product.getName(), 
-                product.getPrice(), Product.QuantityType.valueOf(product.getQuantitytype()), description, account, account);
+                product.getPrice(), Product.QuantityType.valueOf(product.getQuantitytype()), description, account, vat_account);
         if(pDb == null) {
             form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
         }
@@ -157,12 +157,12 @@ public class ProductController {
             temp_a.setName(p.getDefaultAccount().getName());
             temp.setAccount(temp_a);
             
-            /*if(p.getVatAccount() != null) {
+            if(p.getVATAccount() != null) {
                 AccountJSON temp_a_vat = new AccountJSON();
-                temp_a_vat.setNumber(p.getVatAccount().getNumber());
-                temp_a_vat.setName(p.getVatAccount().getName());
+                temp_a_vat.setNumber(p.getVATAccount().getNumber());
+                temp_a_vat.setName(p.getVATAccount().getName());
                 temp.setVat(temp_a_vat);
-            }*/
+            }
             
             productJSONLs.add(temp);
         }
