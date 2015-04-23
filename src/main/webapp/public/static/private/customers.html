@@ -6,8 +6,8 @@
         <button type="button" class="btn btn-success" ng-click="showcreate()">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
         </button>
-        <p style="margin-top:10px;">Här visas alla din kunder. Du kan söka efter en kund genom att agne ett namn,
-        om fältet lämnas tomt kommer alla dina kunder visas istället.</p>
+        <p style="margin-top:10px;">Här visas alla dina kunder. Du kan söka efter en kund genom att agne ett namn.
+        Om fältet lämnas tomt kommer istället alla dina kunder att visas.</p>
         <div class="input-group">
             <input type="text" class="form-control" ng-model="searchname" ng-change="autosearch()"/>
             <div class="input-group-btn">
@@ -41,10 +41,10 @@
     <!-- NEW CUSTOMER -->
     <div class="col-md-6" ng-show="createboolean">
         <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
-            Kunden har skapats!
+            Kunden har skapats.
         </div>
         <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
-            <h4>{{form.numErrors}} fel hittades!</h4>
+            <h4>{{form.numErrors}} fel hittades.</h4>
             <p>{{form.errors.general}}</p>
         </div>
         <h2>Ny kund</h2>
@@ -142,7 +142,7 @@
             Kunden har ändrats!
         </div>
         <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
-            <h4>{{form.numErrors}} fel hittades!</h4>
+            <h4>{{form.numErrors}} fel hittades.</h4>
             <p>{{form.errors.general}}</p>
         </div>
         <h2>Ändra kunduppgifter</h2>
@@ -240,10 +240,10 @@
     <!-- DELETE CUSTOMER -->
     <div class="col-md-6" ng-show="deleteboolean">
         <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
-                Kunden har tagits bort!
+                Kunden har tagits bort.
         </div>
         <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
-            <h4>{{form.numErrors}} fel hittades!</h4>
+            <h4>{{form.numErrors}} fel hittades.</h4>
             <p>{{form.errors.general}}</p>
         </div>
     </div>

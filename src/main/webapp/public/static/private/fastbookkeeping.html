@@ -66,7 +66,7 @@
             <div class="row" ng-show="steptype[0]===2">
                 <div class="col-md-6">
                     <div class="alert alert-success" role="alert" style="margin-top:10px;" ng-show="form.numErrors === 0">
-                        Din request lyckades!
+                        Din förfrågan lyckades.
                     </div>
                     <div class="alert alert-danger" role="alert" style="margin-top:10px;" ng-show="form.numErrors > 0 && form.errors.accounts">
                         {{form.errors.accounts}}
@@ -139,11 +139,11 @@
                     <ul class="nav nav-pills nav-justified">
                         <li><a href="">
                                 <h4>Kontant</h4>
-                                <p>Pengar kommer att tas från till ditt Kassa-konto</p>
+                                <p>Pengar kommer att dras från ditt kassakonto</p>
                             </a></li>
                         <li><a href="">
                                 <h4>Kort</h4>
-                                <p>Pengar kommer att tas från till ditt Bankgiro-konto</p>
+                                <p>Pengar kommer att tas från ditt bankgirokonto</p>
                             </a></li>
                     </ul>
                 </div>
@@ -159,13 +159,13 @@
                     <ul class="nav nav-pills nav-justified">
                         <li><a href="" ng-click="step = 4; steptype[2] = 1; calcStep3()">
                                 <h3>Kontant</h3>
-                                <p ng-show="steptype[0]===1">Pengar kommer att läggas in till ditt Kassa-konto</p>
-                                <p ng-show="steptype[0]===2">Pengar kommer att tas från till ditt Kassa-konto</p>
+                                <p ng-show="steptype[0]===1">Pengar kommer att tillföras ditt kassakonto</p>
+                                <p ng-show="steptype[0]===2">Pengar kommer att dras från ditt kassakonto</p>
                             </a></li>
                         <li><a href="" ng-click="step = 4; steptype[2] = 2; calcStep3()">
                                 <h3>Kort</h3>
-                                <p ng-show="steptype[0]===1">Pengar kommer att läggas in till ditt Bankgiro-konto</p>
-                                <p ng-show="steptype[0]===2">Pengar kommer att tas från till ditt Bankgiro-konto</p>
+                                <p ng-show="steptype[0]===1">Pengar kommer att tillföras ditt bankgirokonto</p>
+                                <p ng-show="steptype[0]===2">Pengar kommer att tas från ditt bankgirokonto</p>
                             </a></li>
                     </ul>
                 </div>

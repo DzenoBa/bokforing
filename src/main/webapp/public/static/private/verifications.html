@@ -30,14 +30,14 @@
         <!-- ** VERIFICATION INFO ** -->
         <div class="col-md-6" ng-show="showverinfoboolean">
             <div class="alert alert-success" role="alert" style="margin-top:10px;" ng-show="form.numErrors === 0">
-                Verifikationen har ändrats!
+                Verifikationen har ändrats.
             </div>
             <ul class="nav nav-tabs nav-justified" style="margin-top: 10px;">
                 <li role="presentation" class="active"><a href="">Visa</a></li>
                 <li role="presentation"><a href="" ng-click="showeditver()">Ändra</a></li>
                 <li role="presentation" ng-class="{disabled: !verinfo.oldposts}"><a href="" ng-click="!verinfo.oldposts || showverhistory()">Historik</a></li>
             </ul>
-            <h2>Verifikations information - Nr {{verinfo.id}}</h2>
+            <h2>Verifikationsinformation - Nr {{verinfo.id}}</h2>
             <h3>{{verinfo.transactionDate}}</h3>
             <h3>Beskrivning</h3>
             {{verinfo.description}}
@@ -76,7 +76,7 @@
                 <li role="presentation" ng-class="{disabled: !verinfo.oldposts}"><a href="" ng-click="!verinfo.oldposts || showverhistory()">Historik</a></li>
             </ul>
             <div class="alert alert-danger" role="alert" style="margin-top: 10px;" ng-show="form.numErrors > 0">
-                <h4>{{form.numErrors}} fel hittades!</h4>
+                <h4>{{form.numErrors}} fel hittades.</h4>
                 <p>{{form.errors.general}}</p>
             </div>
             <h2>Ändra verifikation - Nr. {{editver.id}}</h2>
@@ -186,7 +186,7 @@
                 <li role="presentation"><a href="" ng-click="showeditver()">Ändra</a></li>
                 <li role="presentation" class="active"><a href="">Historik</a></li>
             </ul>
-            <h2>Verifikations historik - Nr. {{verinfo.id}}</h2>
+            <h2>Verifikationshistorik - Nr. {{verinfo.id}}</h2>
             <h3>Gamla poster</h3>
             <table class="table">
                 <thead>

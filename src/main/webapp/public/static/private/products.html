@@ -6,8 +6,8 @@
         <button type="button" class="btn btn-success" ng-click="showcreate()">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ny produkt
         </button>
-        <p style="margin-top:10px;">Här visas alla produkter som du har skapat. Du kan söka efter en produkt genom att agne ett namn,
-        om fältet lämnas tomt kommer alla dina produkter visas istället.</p>
+        <p style="margin-top:10px;">Här visas alla produkter som du har skapat. Du kan söka efter en produkt genom att agne ett namn.
+        Om fältet lämnas tomt kommer istället alla dina produkter att visas.</p>
         <div class="input-group">
             <input type="text" class="form-control" ng-model="searchname" ng-change="autosearch()"/>
             <div class="input-group-btn">
@@ -56,10 +56,10 @@
     <!-- NEW PRODUCT -->
     <div class="col-md-6" ng-show="createboolean">
         <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
-            Produkten har skapats!
+            Produkten har skapats.
         </div>
         <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
-            <h4>{{form.numErrors}} fel hittades!</h4>
+            <h4>{{form.numErrors}} fel hittades.</h4>
             <p>{{form.errors.general}}</p>
         </div>
         <h2>Ny produkt</h2>
@@ -122,10 +122,10 @@
     <!-- EDIT PRODUCT -->
     <div class="col-md-6" ng-show="editboolean">
         <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
-                Produkten har ändrats!
+                Produkten har ändrats.
         </div>
         <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
-            <h4>{{form.numErrors}} fel hittades!</h4>
+            <h4>{{form.numErrors}} fel hittades.</h4>
             <p>{{form.errors.general}}</p>
         </div>
         <h2>Ändra produkt</h2>
@@ -191,10 +191,10 @@
     <!-- DELETE PRODUCT -->
     <div class="col-md-6" ng-show="deleteboolean">
         <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
-                Produkten har tagits bort!
+                Produkten har tagits bort.
         </div>
         <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
-            <h4>{{form.numErrors}} fel hittades!</h4>
+            <h4>{{form.numErrors}} fel hittades.</h4>
             <p>{{form.errors.general}}</p>
         </div>
     </div>
