@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import se.chalmers.bokforing.jsonobject.AccountJSON;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.ProductJSON;
 import se.chalmers.bokforing.model.Account;
@@ -53,8 +54,6 @@ public class ProductController {
         
         FormJSON form = new FormJSON();
         
-        Account account = accountService.findAccountByNumber(1050);
-        
         // CHECK SESSION
         if(!authSession.sessionCheck()) {
             form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
@@ -82,6 +81,26 @@ public class ProductController {
         // QUANNTITY-TYPE CHECK
         if(product.getQuantitytype() == null || product.getQuantitytype().isEmpty()) {
             form.addError("quantitytype", "Vänligen ange en enhet");
+            return form;
+        }
+        
+        // ACCOUNT CHECK
+        if(product.getAccount() == null || !(product.getAccount().getNumber() > 0)) {
+            form.addError("account", "Vänligen ange ett konto");
+            return form;
+        }
+        
+        // VAT-ACCOUNT CHECK
+        if(product.getVat() == null || !(product.getVat().getNumber() > 0)) {
+            form.addError("account", "Vänligen ange moms");
+            return form;
+        }
+        
+        Account account = accountService.findAccountByNumber(product.getAccount().getNumber());
+        Account vat_account = accountService.findAccountByNumber(product.getVat().getNumber());
+        
+        if(account == null || vat_account == null) {
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             return form;
         }
         
@@ -132,6 +151,18 @@ public class ProductController {
             temp.setPrice(p.getPrice());
             temp.setQuantitytype(p.getQuantityType().toString());
             temp.setDescription(p.getDescription());
+            
+            AccountJSON temp_a = new AccountJSON();
+            temp_a.setNumber(p.getDefaultAccount().getNumber());
+            temp_a.setName(p.getDefaultAccount().getName());
+            temp.setAccount(temp_a);
+            
+            /*if(p.getVatAccount() != null) {
+                AccountJSON temp_a_vat = new AccountJSON();
+                temp_a_vat.setNumber(p.getVatAccount().getNumber());
+                temp_a_vat.setName(p.getVatAccount().getName());
+                temp.setVat(temp_a_vat);
+            }*/
             
             productJSONLs.add(temp);
         }

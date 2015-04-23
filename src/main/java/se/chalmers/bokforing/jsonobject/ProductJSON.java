@@ -14,6 +14,8 @@ public class ProductJSON {
     private String description;
     private double price;
     private String quantitytype;
+    private AccountJSON account;
+    private AccountJSON vat;
     private int startrange;
     private int pagesize;
     
@@ -50,6 +52,20 @@ public class ProductJSON {
     }
     public void setQuantitytype(String quantitytype) {
         this.quantitytype = quantitytype;
+    }
+    
+    public AccountJSON getAccount() {
+        return account;
+    }
+    public void setAccount(AccountJSON account) {
+        this.account = account;
+    }
+    
+    public AccountJSON getVat() {
+        return vat;
+    }
+    public void setVat(AccountJSON vat) {
+        this.vat = vat;
     }
     
     public int getStartrange() {
