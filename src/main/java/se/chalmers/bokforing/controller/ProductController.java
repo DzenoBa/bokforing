@@ -107,7 +107,7 @@ public class ProductController {
         // EVERYTHING SEEMS TO BE IN ORDER
         UserHandler uh = userService.getUser(email);
         Product pDb = productManager.createProduct(uh.getUA(), product.getName(), 
-                product.getPrice(), Product.QuantityType.valueOf(product.getQuantitytype()), description, account);
+                product.getPrice(), Product.QuantityType.valueOf(product.getQuantitytype()), description, account, account);
         if(pDb == null) {
             form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
         }

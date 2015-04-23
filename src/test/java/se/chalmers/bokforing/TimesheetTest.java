@@ -73,7 +73,7 @@ public class TimesheetTest extends AbstractIntegrationTest {
         Account defaultAccount = accountManager.createAccount(2050, "Banankontot");
         PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "product");
         
-        Product product = productManager.createProduct(user, "Bananas", 10.0, QuantityType.KILOGRAM, "Bananas en masse.", defaultAccount);
+        Product product = productManager.createProduct(user, "Bananas", 10.0, QuantityType.KILOGRAM, "Bananas en masse.", defaultAccount, defaultAccount);
         
         Timesheet timesheet = timesheetManager.createTimesheet(user, customer, product, quantity, "Köpte lite bananer", DateUtil.getTodaysDate());
         

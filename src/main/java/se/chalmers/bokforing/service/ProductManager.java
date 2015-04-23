@@ -16,7 +16,7 @@ import se.chalmers.bokforing.model.user.UserAccount;
  */
 public interface ProductManager {
     
-    Product createProduct(UserAccount user, String name, double price, QuantityType quantityType, String description, Account defaultAccount);
+    Product createProduct(UserAccount user, String name, double price, QuantityType quantityType, String description, Account defaultAccount, Account VATAccount);
     
     void removeProduct(Product product);
     

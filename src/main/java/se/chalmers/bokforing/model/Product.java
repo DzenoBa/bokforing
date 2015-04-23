@@ -41,6 +41,9 @@ public class Product implements Serializable {
     private Account defaultAccount;
     
     @ManyToOne
+    private Account VATAccount;
+    
+    @ManyToOne
     private UserAccount userAccount;
 
     /**
@@ -143,6 +146,20 @@ public class Product implements Serializable {
      */
     public void setDefaultAccount(Account defaultAccount) {
         this.defaultAccount = defaultAccount;
+    }
+
+    /**
+     * @return the VATAccount
+     */
+    public Account getVATAccount() {
+        return VATAccount;
+    }
+
+    /**
+     * @param VATAccount the VATAccount to set
+     */
+    public void setVATAccount(Account VATAccount) {
+        this.VATAccount = VATAccount;
     }
     
     public enum QuantityType {
