@@ -9,14 +9,21 @@
 
 var productControllers = angular.module('ProductControllers', []);
 
-productControllers.controller('ProductCtrl', ['$scope', 'ProductProxy',
-    function($scope, ProductProxy) {
+productControllers.controller('ProductCtrl', ['$scope', 'ProductProxy', '$modal',
+    function($scope, ProductProxy, $modal) {
         
         $scope.currentPage = 1;
         $scope.createboolean = true;
         $scope.editboolean = false;
+        $scope.product = {};
         
         $scope.create = function() {
+            if($scope.vatacc === "6")
+                $scope.product.vat = {number: 2630};
+            else if ($scope.vatacc === "12")
+                $scope.product.vat = {number: 2620};
+            else if($scope.vatacc === "25")
+                $scope.product.vat = {number: 2610};
             ProductProxy.create($scope.product)
                     .success(function(form) {
                         $scope.form = form;
@@ -119,6 +126,24 @@ productControllers.controller('ProductCtrl', ['$scope', 'ProductProxy',
                     }).error(function() {
                         console.log("product:delete: error");
                     });
+        };
+        
+        $scope.openaccounts = function () {
+
+            var modalInstance = $modal.open({
+                templateUrl: 'private/modals/accountSelecterModal.html',
+                controller: 'ModalInstanceAccountCtrl',
+                size: 'lg',
+                resolve: {
+                    accountType: function() {
+                        return 3;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (selectedAccount) {
+                $scope.product.account = {number: selectedAccount.number, name: selectedAccount.name};
+            });
         };
         
         // INIT

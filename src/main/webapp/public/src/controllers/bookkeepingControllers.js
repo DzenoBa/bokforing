@@ -80,7 +80,12 @@ bookkeepingControllers.controller('BookkeepingCtrl', ['$scope', 'BookkeepingProx
             var modalInstance = $modal.open({
                 templateUrl: 'private/modals/accountSelecterModal.html',
                 controller: 'ModalInstanceAccountCtrl',
-                size: 'lg'
+                size: 'lg',
+                resolve: {
+                    accountType: function() {
+                        return null;
+                    }
+                }
             });
 
             modalInstance.result.then(function (selectedAccount) {
@@ -134,11 +139,12 @@ bookkeepingControllers.controller('BookkeepingCtrl', ['$scope', 'BookkeepingProx
 ]);
 
 bookkeepingControllers.controller('ModalInstanceAccountCtrl', 
-    function ($scope, $modalInstance, BookkeepingProxy) {
+    function ($scope, $modalInstance, BookkeepingProxy, accountType) {
 
     $scope.radioModel = 0;
     $scope.currentPage = 1;
-    
+    $scope.accountType = accountType;
+
     $scope.selected = function(account) {
         account: account;
     };
@@ -159,7 +165,8 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
     $scope.autosearch = function() {
         $scope.currentPage = 1;
         if($scope.radioModel === 0 && $scope.account.number > 9 || 
-                $scope.radioModel === 1 && $scope.account.name.length > 2) {
+                $scope.radioModel === 1 && $scope.account.name.length > 2 ||
+                $scope.accountType > 0) {
             search();
         } else {
             $scope.accounts = {};
@@ -170,7 +177,9 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
     function search() {
         var account;
         var currentPage = $scope.currentPage - 1;
-        if($scope.radioModel === 0 && $scope.account.number) {
+        if(accountType > 0 && $scope.account.number >= 0) {
+            account = {number: "" + + accountType + $scope.account.number, startrange: currentPage};
+        } else if($scope.radioModel === 0 && $scope.account.number) {
             account = {number: $scope.account.number, startrange: currentPage};
         } else if($scope.radioModel === 1 && $scope.account.name) {
             account = {name: $scope.account.name, startrange: currentPage};
@@ -194,6 +203,15 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
     $scope.pageChanged = function() {
         search();
     };
+    
+    function init() {
+        if(accountType > 0) {
+            $scope.account = {number: ""};
+            search();
+        }
+    }
+    
+    init();
     
 });
 
@@ -336,7 +354,12 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'Book
             var modalInstance = $modal.open({
                 templateUrl: 'private/modals/accountSelecterModal.html',
                 controller: 'ModalInstanceAccountCtrl',
-                size: 'lg'
+                size: 'lg',
+                resolve: {
+                    accountType: function() {
+                        return null;
+                    }
+                }
             });
 
             modalInstance.result.then(function (selectedAccount) {
@@ -431,7 +454,12 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
             var modalInstance = $modal.open({
                 templateUrl: 'private/modals/accountSelecterModal.html',
                 controller: 'ModalInstanceAccountCtrl',
-                size: 'lg'
+                size: 'lg',
+                resolve: {
+                    accountType: function() {
+                        return null;
+                    }
+                }
             });
 
             modalInstance.result.then(function (selectedAccount) {

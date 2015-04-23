@@ -106,6 +106,37 @@
                 </div>
             </div>
             <div class="form-group">
+                <label class="col-sm-3 control-label">Konto</label>
+                <div class="col-md-9">
+                    <div class="input-group">
+                        <input class="form-control" type="text" value="{{product.account.number}} - {{product.account.name}}" readonly>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-primary" ng-click="openaccounts()">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true" ng-show="!product.account"></span>
+                                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ng-show="product.account"></span>
+                            </button>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.account !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.account}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="vatacc" class="col-sm-3 control-label">Moms</label>
+                <div class="col-md-9">
+                    <select class="form-control" id="vatacc" ng-model="vatacc">
+                        <option value="0">0 %</option>
+                        <option value="6">6 %</option>
+                        <option value="12">12 %</option>
+                        <option value="25">25 %</option>
+                     </select>
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="description" class="col-sm-3 control-label">Beskrivning</label>
                 <div class="col-md-9">
                     <textarea id="description" class="form-control" ng-model="product.description" name="text" rows="2" placeholder="Ange en beskrivning" style="resize: vertical;"></textarea>

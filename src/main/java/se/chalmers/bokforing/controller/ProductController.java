@@ -91,15 +91,21 @@ public class ProductController {
         }
         
         // VAT-ACCOUNT CHECK
-        if(product.getVat() == null || !(product.getVat().getNumber() > 0)) {
-            form.addError("account", "Vänligen ange moms");
-            return form;
+        int vat_number = 0;
+        if(product.getVat() != null) {
+            if(product.getVat().getNumber() > 0)
+                vat_number = product.getVat().getNumber();
+            else {
+                form.addError("account", "Vänligen ange moms");
+                return form;
+            }
         }
         
         Account account = accountService.findAccountByNumber(product.getAccount().getNumber());
-        Account vat_account = accountService.findAccountByNumber(product.getVat().getNumber());
+        // IF(vat_number==0) IT SHOULD RETURN NULL
+        Account vat_account = accountService.findAccountByNumber(vat_number); 
         
-        if(account == null || vat_account == null) {
+        if(account == null) {
             form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             return form;
         }
