@@ -484,6 +484,52 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
             $scope.selectedAccount = account;
         };
         
+        $scope.calcHavePayed = function() {
+            $scope.posts = [];
+            if(angular.isUndefined($scope.sum) || !($scope.sum > 0)) {
+                $scope.form = {errors: {sum: "Vänligen ange en summa"}};
+                $scope.step = 2;
+                return;
+            } else if(angular.isUndefined($scope.vat) || !($scope.vat >= 0)) {
+                $scope.form = {errors: {vat: "Vänligen ange moms"}};
+                $scope.step = 2;
+                return;
+            } else {
+                $scope.form = null;
+            }
+            var totalSum = $filter('number')($scope.sum, 2);
+            
+            if($scope.steptype[2] === 0) {
+                addPost(1910, "Kassa", "credit", totalSum);
+            } else {
+                addPost(1920, "PlusGiro", "credit", totalSum);
+            }
+            
+            var accountSum = totalSum;
+
+            if($scope.vat !== null && $scope.vat > 0) {
+                var vatSum = $filter('number')(totalSum * $scope.vat);
+                accountSum = $filter('number')(totalSum - vatSum);
+                var vatAccount = vatToAccountConverter($scope.vat);
+                addPost(vatAccount.number, vatAccount.name,
+                    "debit", vatSum);
+            }
+            
+            addPost($scope.selectedAccount.number, $scope.selectedAccount.name,
+                "debit", accountSum);
+            
+        };
+        
+        function vatToAccountConverter(number) {
+            if(number === "0.06")
+                return {number: 2630, name: "Utgående moms, 6 %"};
+            if(number === "0.12")
+                return {number: 2620, name: "Utgående moms, 12 %"};
+            if(number === "0.25")
+                return {number: 2610, name: "Utgående moms, 25 %"};
+            return {number:0, name: ""};
+        };
+        
         /*
          * JAG HAR FÅTT BETALT
          */
@@ -537,6 +583,7 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
             if(angular.isUndefined($scope.noofproduct) || !($scope.noofproduct > 0)) {
                 $scope.form = {errors: {noofproduct: "Vänligen ange ett antal"}};
                 $scope.step = 2;
+                return;
             } else {
                 $scope.form = null;
             }

@@ -135,7 +135,7 @@
                         <div class="form-group">
                             <label for="sump" class="col-sm-3 control-label">Summa</label>
                             <div class="col-md-9">
-                                <input id="sump" type="number" class="form-control" placeholder="Ange en summa"/>
+                                <input id="sump" type="number" class="form-control" ng-model="sum" placeholder="Ange en summa"/>
                             </div>
                         </div>
                         <div class="form-group" ng-show="form.errors.sum !== null">
@@ -147,12 +147,18 @@
                         <div class="form-group">
                             <label for="momsp" class="col-sm-3 control-label">Moms</label>
                             <div class="col-md-9">
-                                <select class="form-control" id="momsp">
+                                <select class="form-control" id="momsp" ng-model="vat">
                                     <option value="0">0 %</option>
-                                    <option value="6">6 %</option>
-                                    <option value="12">12 %</option>
-                                    <option value="25">25 %</option>
+                                    <option value="0.06">6 %</option>
+                                    <option value="0.12">12 %</option>
+                                    <option value="0.25">25 %</option>
                                  </select>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="form.errors.vat !== null">
+                            <div class="col-sm-3"></div><!-- Offset -->
+                            <div class="col-sm-9">
+                                <span class="error">{{form.errors.vat}}</span>
                             </div>
                         </div>
                         <div class="form-group" ng-show="form.errors.moms !== null">
@@ -164,11 +170,11 @@
                     </form>
                     <h3>Hur har du betalat?</h3>
                     <ul class="nav nav-pills nav-justified">
-                        <li><a href="">
+                        <li><a href="" ng-click="step=3; steptype[2] = 0; calcHavePayed()">
                                 <h4>Kontant</h4>
                                 <p>Pengar kommer att dras från ditt kassakonto</p>
                             </a></li>
-                        <li><a href="">
+                        <li><a href="" ng-click="step=3; steptype[2] = 1; calcHavePayed()">
                                 <h4>Kort</h4>
                                 <p>Pengar kommer att tas från ditt bankgirokonto</p>
                             </a></li>
