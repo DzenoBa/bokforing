@@ -406,34 +406,7 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
         $scope.step = 1;
         $scope.steptype = [0,0,0,0];
         $scope.posts = [];
-        $scope.sum = 0;
-        $scope.moms = 0;
-        
-        $scope.calcStep2 = function() {
-            var moms = $scope.sum * .2;
-            var type;
-            if($scope.steptype[0] === 1)
-                type = "credit";
-            else 
-                type = "debit";
-            addPost(2611, "Utgående moms på försäljning inom Sverige, 25%", type, moms);
-            addPost(3000, "Försäljning inom Sverige", $scope.steptype[1], $scope.sum - moms);
-        };
-        
-        $scope.calcStep3 = function() {
-            var type;
-            if($scope.steptype[0] === 1)
-                type = "debit";
-            else 
-                type = "credit";
-            if($scope.steptype[2] === 1) {
-                addPost(1910, "Kassa", type, $scope.sum);
-            } else {
-                addPost(1920, "PlusGiro", type, $scope.sum);
-            }
-        };
-        
-        
+      
         function addPost(acc_number, acc_name, type, sum) {
             var debit;
             var credit;
@@ -553,6 +526,44 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
         
         $scope.selectProduct = function(product) {
             $scope.selectedProduct = product;
+        };
+        
+        $scope.calcGotPayed = function() {
+            $scope.posts = [];
+            if(angular.isUndefined($scope.noofproduct) || !($scope.noofproduct > 0)) {
+                $scope.form = {errors: {noofproduct: "Vänligen ange ett antal"}};
+                $scope.step = 2;
+            } else {
+                $scope.form = null;
+            }
+            var productSum = $filter('number')($scope.selectedProduct.price * $scope.noofproduct, 2);
+            addPost($scope.selectedProduct.account.number, $scope.selectedProduct.account.name,
+                "credit", productSum);
+            
+            var totalSum = productSum;
+            
+            if($scope.selectedProduct.vat !== null) {
+                var vat = 1 + vatConverter($scope.selectedProduct.vat.number);
+                totalSum = $filter('number')(productSum * vat, 2);
+                var vatSum = $filter('number')(totalSum-productSum, 2);
+                addPost($scope.selectedProduct.vat.number, $scope.selectedProduct.vat.name,
+                    "credit", vatSum);
+            }
+            if($scope.steptype[2] === 0) {
+                addPost(1910, "Kassa", "debit", totalSum);
+            } else {
+                addPost(1920, "PlusGiro", "debit", totalSum);
+            }
+        };
+        
+        function vatConverter(number) {
+            if(number === 2630)
+                return 0.06;
+            if(number === 2620)
+                return 0.12;
+            if(number === 2610)
+                return 0.25;
+            return 1;
         };
     }
     

@@ -67,17 +67,23 @@
                         <div class="form-group">
                             <label for="nopr" class="col-sm-3 control-label">Antal</label>
                             <div class="col-md-9">
-                                <input id="nopr" type="number" class="form-control" placeholder="Ange ett antal"/>
+                                <input id="nopr" type="number" class="form-control" ng-model="noofproduct" placeholder="Ange ett antal"/>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="form.errors.noofproduct">
+                            <div class="col-sm-3"></div><!--Offset -->
+                            <div class="col-md-9">
+                                <span class="error">{{form.errors.noofproduct}}</span>
                             </div>
                         </div>
                     </form>
                     <h3>Hur har du fått betalt?</h3>
                     <ul class="nav nav-pills nav-justified">
-                        <li><a href="">
+                        <li><a href="" ng-click="step = 3; steptype[2] = 0; calcGotPayed()">
                                 <h4>Kontant</h4>
                                 <p>Pengar kommer att läggas in i ditt kassakonto</p>
                             </a></li>
-                        <li><a href="">
+                        <li><a href="" ng-click="step = 3; steptype[2] = 1; calcGotPayed()">
                                 <h4>Kort</h4>
                                 <p>Pengar kommer att läggas in i ditt bankgirokonto</p>
                             </a></li>
@@ -172,28 +178,6 @@
         </div>
     </div>
     <div class="row" ng-show="step === 3">
-        <div class="col-md-12">
-            <h3 ng-show="steptype[0]===1">Hur fick du betalt?</h3>
-            <h3 ng-show="steptype[0]===2">Hur har du betalat?</h3>
-            <div class="row">
-                <div class="col-md-12">
-                    <ul class="nav nav-pills nav-justified">
-                        <li><a href="" ng-click="step = 4; steptype[2] = 1; calcStep3()">
-                                <h3>Kontant</h3>
-                                <p ng-show="steptype[0]===1">Pengar kommer att tillföras ditt kassakonto</p>
-                                <p ng-show="steptype[0]===2">Pengar kommer att dras från ditt kassakonto</p>
-                            </a></li>
-                        <li><a href="" ng-click="step = 4; steptype[2] = 2; calcStep3()">
-                                <h3>Kort</h3>
-                                <p ng-show="steptype[0]===1">Pengar kommer att tillföras ditt bankgirokonto</p>
-                                <p ng-show="steptype[0]===2">Pengar kommer att tas från ditt bankgirokonto</p>
-                            </a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row" ng-show="step === 4">
         <div class="col-md-12">
             <h3>Kontrolera & Bekräfta</h3>
             <table class="table">
