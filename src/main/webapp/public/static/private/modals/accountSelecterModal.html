@@ -7,6 +7,9 @@
             <div class="btn-group">
                 <label class="btn btn-primary" ng-model="radioModel" btn-radio="0">Nummer</label>
                 <label class="btn btn-primary" ng-model="$parent.radioModel" btn-radio="1" ng-if="!(accountType > 0)">Namn</label>
+                <select class="btn" id="vatacc" ng-model="$parent.accountType" ng-if="accountTypes" ng-change="autosearch()">
+                    <option ng-repeat="type in accountTypes" value="{{type}}">{{type}}</option>
+                </select>
             </div>
         </div>
         <div class="col-sm-9">

@@ -143,8 +143,7 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
 
     $scope.radioModel = 0;
     $scope.currentPage = 1;
-    $scope.accountType = accountType;
-
+    
     $scope.selected = function(account) {
         account: account;
     };
@@ -177,9 +176,9 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
     function search() {
         var account;
         var currentPage = $scope.currentPage - 1;
-        if(accountType > 0 && $scope.account.number >= 0) {
-            account = {number: "" + + accountType + $scope.account.number, startrange: currentPage};
-        } else if($scope.radioModel === 0 && $scope.account.number) {
+        if($scope.accountType > 0 && $scope.account.number >= 0) {
+            account = {number: "" + + $scope.accountType + $scope.account.number, startrange: currentPage};
+        } else if($scope.radioModel === 0 && $scope.account.number > 0) {
             account = {number: $scope.account.number, startrange: currentPage};
         } else if($scope.radioModel === 1 && $scope.account.name) {
             account = {name: $scope.account.name, startrange: currentPage};
@@ -205,6 +204,11 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
     };
     
     function init() {
+        if(accountType !== null && accountType.length > 0) {
+            $scope.accountType = accountType[0];
+            $scope.accountTypes = accountType;
+        } else
+            $scope.accountType = accountType;
         if(accountType > 0) {
             $scope.account = {number: ""};
             search();
@@ -430,7 +434,7 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
                 size: 'lg',
                 resolve: {
                     accountType: function() {
-                        return null;
+                        return [4,5,6,7];
                     }
                 }
             });
