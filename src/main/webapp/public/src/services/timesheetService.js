@@ -21,6 +21,12 @@ timesheetService.factory('TimesheetProxy', ['$http', '$location',
             },
             countTimesheets: function() {
                 return $http.get(url + '/counttimesheets');
+            },
+            edit: function(timesheet) {
+                return $http.post(url + '/edit', timesheet);
+            },
+            delete: function(timesheet) {
+                return $http.post(url + '/delete', timesheet);
             }
         };
     }
