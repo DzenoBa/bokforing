@@ -468,6 +468,7 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
         
         $scope.initPayed = function() {
             getFavoriteAccounts();
+            $scope.transactionDate = $filter('date')(new Date(),'yyyy-MM-dd');
         };
         
         $scope.deleteFavAccount = function(account) {
@@ -488,7 +489,11 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
         
         $scope.calcHavePayed = function() {
             $scope.posts = [];
-            if(angular.isUndefined($scope.sum) || !($scope.sum > 0)) {
+            if(angular.isUndefined($scope.transactionDate) || ($scope.transactionDate === null)) {
+                $scope.form = {errors: {transactiondate: "Vänligen ange ett bokföringsdatum"}};
+                $scope.step = 2;
+                return;
+            } else if(angular.isUndefined($scope.sum) || !($scope.sum > 0)) {
                 $scope.form = {errors: {sum: "Vänligen ange en summa"}};
                 $scope.step = 2;
                 return;
@@ -541,6 +546,7 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
         $scope.initGotPayed = function() {
             getProducts();
             countProducts();
+            $scope.transactionDate = $filter('date')(new Date(),'yyyy-MM-dd');
         };
         
         function getProducts() {
@@ -583,7 +589,11 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
         
         $scope.calcGotPayed = function() {
             $scope.posts = [];
-            if(angular.isUndefined($scope.noofproduct) || !($scope.noofproduct > 0)) {
+            if(angular.isUndefined($scope.transactionDate) || ($scope.transactionDate === null)) {
+                $scope.form = {errors: {transactiondate: "Vänligen ange ett bokföringsdatum"}};
+                $scope.step = 2;
+                return;
+            } else if(angular.isUndefined($scope.noofproduct) || !($scope.noofproduct > 0)) {
                 $scope.form = {errors: {noofproduct: "Vänligen ange ett antal"}};
                 $scope.step = 2;
                 return;
@@ -622,6 +632,21 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
             return 1;
         };
         
+        $scope.opencal = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            
+            $scope.opened = true;
+        };
+        
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1,
+            yearRange: 1,
+            maxMode: 'month',
+            currentText: 'Idag'
+        };  
+        
         function totalDebitCredit() {
             var debit = 0;
             var credit = 0;
@@ -636,7 +661,7 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
         };
         
         $scope.submit = function() {
-            var verification = {transactionDate: new Date(), posts: $scope.posts};
+            var verification = {transactionDate: $scope.transactionDate, posts: $scope.posts};
             BookkeepingProxy.createManBook(verification)
                     .success(function(form) {
                         if(form.numErrors === 0) {
@@ -647,6 +672,7 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
                             delete $scope.noofproduct;
                             delete $scope.sum;
                             delete $scope.vat;
+                            delete $scope.transactionDate;
                             $scope.step = 4;
                         } else {
                             $scope.form = form;

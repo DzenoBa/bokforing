@@ -65,6 +65,23 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="nopr" class="col-sm-3 control-label">Bokföringsdatum</label>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" ng-model="transactionDate" is-open="opened" datepicker-popup="yyyy-MM-dd" datepicker-options="dateOptions" min-date="2014-01-01" max-date="'2015-06-22'"  date-disabled="disabled(date, mode)" ng-required="true"/>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="opencal($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="form.errors.transactiondate !== null">
+                            <div class="col-sm-3"></div><!-- Offset -->
+                            <div class="col-sm-9">
+                                <span class="error">{{form.errors.transactiondate}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="nopr" class="col-sm-3 control-label">Antal</label>
                             <div class="col-md-9">
                                 <input id="nopr" type="number" class="form-control" ng-model="noofproduct" placeholder="Ange ett antal"/>
@@ -133,6 +150,23 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="nopr" class="col-sm-3 control-label">Bokföringsdatum</label>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" ng-model="transactionDate" is-open="opened" datepicker-popup="yyyy-MM-dd" datepicker-options="dateOptions" min-date="2014-01-01" max-date="'2015-06-22'"  date-disabled="disabled(date, mode)" ng-required="true"/>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="opencal($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="form.errors.transactiondate !== null">
+                            <div class="col-sm-3"></div><!-- Offset -->
+                            <div class="col-sm-9">
+                                <span class="error">{{form.errors.transactiondate}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="sump" class="col-sm-3 control-label">Summa</label>
                             <div class="col-md-9">
                                 <input id="sump" type="number" class="form-control" ng-model="sum" placeholder="Ange en summa"/>
@@ -190,6 +224,7 @@
                 <h4>{{form.numErrors}} fel hittades.</h4>
                 <p>{{form.errors.general}}</p>
             </div>
+            Bokföringsdatum: {{transactionDate | date:'yyyy-MM-dd'}}.
             <table class="table">
                 <thead>
                     <tr>
