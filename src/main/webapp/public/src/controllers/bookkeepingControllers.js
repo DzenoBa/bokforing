@@ -162,14 +162,16 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
     };
     
     $scope.autosearch = function() {
-        $scope.currentPage = 1;
-        if($scope.radioModel === 0 && $scope.account.number > 9 || 
-                $scope.radioModel === 1 && $scope.account.name.length > 2 ||
-                $scope.accountType > 0) {
-            search();
-        } else {
-            $scope.accounts = {};
-            $scope.maxsize = 0;
+        if(angular.isDefined($scope.account)) {
+            $scope.currentPage = 1;
+            if($scope.radioModel === 0 && $scope.account.number > 9 || 
+                    $scope.radioModel === 1 && $scope.account.name.length > 2 ||
+                    $scope.accountType > 0) {
+                search();
+            } else {
+                $scope.accounts = {};
+                $scope.maxsize = 0;
+            }
         }
     };
     
@@ -426,7 +428,7 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
             $scope.posts = $scope.posts.concat([temp_post]);
         };
         
-        $scope.openaccount = function (index) {
+        $scope.openaccount = function () {
 
             var modalInstance = $modal.open({
                 templateUrl: 'private/modals/accountSelecterModal.html',
@@ -518,6 +520,7 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
             addPost($scope.selectedAccount.number, $scope.selectedAccount.name,
                 "debit", accountSum);
             
+            totalDebitCredit();
         };
         
         function vatToAccountConverter(number) {
@@ -605,6 +608,8 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
             } else {
                 addPost(1920, "PlusGiro", "debit", totalSum);
             }
+            
+            totalDebitCredit();
         };
         
         function vatConverter(number) {
@@ -615,6 +620,40 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
             if(number === 2610)
                 return 0.25;
             return 1;
+        };
+        
+        function totalDebitCredit() {
+            var debit = 0;
+            var credit = 0;
+            
+            angular.forEach($scope.posts, function(value, key) { 
+                debit = debit + parseInt(value.debit, 10);
+                credit = credit + parseInt(value.credit, 10);
+            });
+            
+            $scope.sumDebit = $filter('number')(debit, 2);
+            $scope.sumCredit = $filter('number')(credit, 2);
+        };
+        
+        $scope.submit = function() {
+            var verification = {transactionDate: new Date(), posts: $scope.posts};
+            BookkeepingProxy.createManBook(verification)
+                    .success(function(form) {
+                        if(form.numErrors === 0) {
+                            $scope.posts = [];
+                            // REMOVE VARIABLES IN SCOPE
+                            delete $scope.selectedAccount;
+                            delete $scope.selectedProduct;
+                            delete $scope.noofproduct;
+                            delete $scope.sum;
+                            delete $scope.vat;
+                            $scope.step = 4;
+                        } else {
+                            $scope.form = form;
+                        }
+                    }).error(function() {
+                        console.log("create_ver: error");
+                    });
         };
     }
     

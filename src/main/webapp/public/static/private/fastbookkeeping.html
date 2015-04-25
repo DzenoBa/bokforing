@@ -4,7 +4,7 @@
     <div class="navbar-default">
         <div class="container-fluid" style="padding-bottom: 10px;">
             <div class="row">
-                <div class="col-sm-4" style="padding-top:12px;"><h4><a href="" ng-show="step>1" ng-click="step = step-1">Tillbaka</a></h4></div>
+                <div class="col-sm-4" style="padding-top:12px;"><h4><a href="" ng-show="step>1 && step!==4" ng-click="step = step-1">Tillbaka</a></h4></div>
                 <div class="col-sm-4" style="text-align: center;">
                     <h3>Steg <span class="label label-info">{{step}}</span></h3>
                 </div>
@@ -186,18 +186,45 @@
     <div class="row" ng-show="step === 3">
         <div class="col-md-12">
             <h3>Kontrolera & Bekräfta</h3>
+            <div class="alert alert-danger" role="alert" style="margin-top: 10px;" ng-show="form.numErrors > 0">
+                <h4>{{form.numErrors}} fel hittades.</h4>
+                <p>{{form.errors.general}}</p>
+            </div>
             <table class="table">
-                <tr>
-                    <th style="width:33%;">Konto</th>
-                    <th style="width:33%;">Debet</th>
-                    <th style="width:33%;">Kredit</th>
-                </tr>
-                <tr ng-repeat="post in posts">
-                    <td>{{post.accountid}} - {{post.accountname}}</td>
-                    <td>{{post.debit}}</td>
-                    <td>{{post.credit}}</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th style="width:33%;">Konto</th>
+                        <th style="width:33%;">Debet</th>
+                        <th style="width:33%;">Kredit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="post in posts">
+                        <td>{{post.accountid}} - {{post.accountname}}</td>
+                        <td>{{post.debit}}</td>
+                        <td>{{post.credit}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>Totalt:</td>
+                        <td>{{sumDebit}}</td>
+                        <td>{{sumCredit}}</td>
+                    </tr>
+                </tfoot>
             </table>
+            <button type="button" class="btn btn-success" ng-click="submit()" ng-disabled="sumDebit !== sumCredit">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Bekräfta
+            </button>
+        </div>
+    </div>
+    <div class="row" ng-show="step === 4">
+        <div class="col-md-12">
+            <h3>Klart!</h3>
+            <div class="alert alert-success" role="alert" style="margin-top:10px;">
+                Verifikationen har skapats.
+            </div>
+            <h4><a href="" ng-click="step=1">Gå tillbaka till steg 1</a></h4>
         </div>
     </div>
 </div>
