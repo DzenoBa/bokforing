@@ -7,7 +7,7 @@
 
 'use strict';
 
-var customerControllers = angular.module('CustomerControllers', []);
+var customerControllers = angular.module('CustomerControllers', ['ui.bootstrap']);
 
 customerControllers.controller('CustomerCtrl', ['$scope', 'CustomerProxy',
     function($scope, CustomerProxy) {
@@ -117,3 +117,65 @@ customerControllers.controller('CustomerCtrl', ['$scope', 'CustomerProxy',
         countCustomers();
     }
 ]);
+
+
+customerControllers.controller('ModalInstanceCustomerCtrl', 
+    function ($scope, $modalInstance, CustomerProxy) {
+
+    $scope.currentPage = 1;
+    
+    $scope.selected = function(customer) {
+        customer: customer;
+    };
+
+    $scope.ok = function () {
+      $modalInstance.close($scope.selected.customer);
+    };
+
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+    
+    $scope.search = function() {
+        $scope.currentPage = 1;
+        search();
+    };
+    
+    $scope.autosearch = function() {
+        if(angular.isDefined($scope.customer)) {
+            $scope.currentPage = 1;
+            if($scope.customer.name.length > 2) {
+                search();
+            } else {
+                $scope.products = {};
+                $scope.maxsize = 0;
+            }
+        }
+    };
+    
+    function search() {
+        var customer;
+        var currentPage = $scope.currentPage - 1;
+        if($scope.customer.name) {
+            customer = {name: $scope.customer.name, startrange: currentPage};
+        } else {
+            return;
+        }
+        CustomerProxy.getCustomers(customer)
+                    .success(function(customers) {
+                        $scope.customers = customers;
+                    }).error(function() {
+                        console.log("modal:getCustomers: error");
+                    });
+        CustomerProxy.countCustomers(customer)
+                    .success(function(size) {
+                        $scope.maxsize = size;
+                    }).error(function() {
+                        console.log("modal:countCustomers: error");
+                    });
+    }
+    
+    $scope.pageChanged = function() {
+        search();
+    };
+});

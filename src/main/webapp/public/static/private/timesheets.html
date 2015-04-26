@@ -1,2 +1,32 @@
 <!--Body content-->
 <h1>Timesheets</h1>
+<form class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Produkt</label>
+        <div class="col-md-9">
+            <div class="input-group">
+                <input class="form-control" type="text" value="{{timesheet.product.name}}" readonly>
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-primary" ng-click="openproducts()">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true" ng-show="!timesheet.product"></span>
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true" ng-show="timesheet.product"></span>
+                    </button>
+                </div>
+            </div> 
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">Kund</label>
+        <div class="col-md-9">
+            <div class="input-group">
+                <input class="form-control" type="text" value="{{timesheet.customer.name}}" readonly>
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-primary" ng-click="opencustomers()">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true" ng-show="!timesheet.customer"></span>
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true" ng-show="timesheet.customer"></span>
+                    </button>
+                </div>
+            </div> 
+        </div>
+    </div>
+</form>

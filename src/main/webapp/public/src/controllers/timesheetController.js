@@ -9,11 +9,13 @@
 
 var timesheetControllers = angular.module('TimesheetControllers', ['ui.bootstrap']);
 
-timesheetControllers.controller('TimesheetCtrl', ['$scope', 'TimesheetProxy', '$modal', '$filter',
-    function($scope, TimesheetProxy, $modal, $filter) {
+timesheetControllers.controller('TimesheetCtrl', ['$scope', 'TimesheetProxy', 'ProductProxy', '$q', '$modal',
+    function($scope, TimesheetProxy, ProductProxy, $q, $modal) {
         
         $scope.currentPage = 1;
         $scope.timesheet = {};
+        $scope.searchproductname = "";
+        $scope.products = [];
         
         $scope.create = function() {
             TimesheetProxy.create($scope.timesheet)
@@ -77,5 +79,31 @@ timesheetControllers.controller('TimesheetCtrl', ['$scope', 'TimesheetProxy', '$
         // INIT
         getTimesheets();
         countTimesheets();
+        
+        $scope.openproducts = function () {
+
+            var modalInstance = $modal.open({
+                templateUrl: 'private/modals/productSelecterModal.html',
+                controller: 'ModalInstanceProductCtrl',
+                size: 'lg'
+            });
+
+            modalInstance.result.then(function (selectedProduct) {
+                $scope.timesheet.product = {number: selectedProduct.id, name: selectedProduct.name};
+            });
+        };
+        
+        $scope.opencustomers = function () {
+
+            var modalInstance = $modal.open({
+                templateUrl: 'private/modals/customerSelecterModal.html',
+                controller: 'ModalInstanceCustomerCtrl',
+                size: 'lg'
+            });
+
+            modalInstance.result.then(function (selectedCustomer) {
+                $scope.timesheet.customer = {number: selectedCustomer.customernumber, name: selectedCustomer.name};
+            });
+        };
     }
 ]);
