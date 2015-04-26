@@ -9,20 +9,20 @@
 
 var timesheetControllers = angular.module('TimesheetControllers', ['ui.bootstrap']);
 
-timesheetControllers.controller('TimesheetCtrl', ['$scope', 'TimesheetProxy', 'ProductProxy', '$q', '$modal',
-    function($scope, TimesheetProxy, ProductProxy, $q, $modal) {
+timesheetControllers.controller('TimesheetCtrl', ['$scope', 'TimesheetProxy', '$filter', '$modal',
+    function($scope, TimesheetProxy, $filter, $modal) {
         
         $scope.currentPage = 1;
-        $scope.timesheet = {};
-        $scope.searchproductname = "";
-        $scope.products = [];
+        $scope.timesheet = {date:  $filter('date')(new Date(),'yyyy-MM-dd')};
+        $scope.createboolean = true;
+        $scope.editboolean = false;
         
         $scope.create = function() {
             TimesheetProxy.create($scope.timesheet)
                     .success(function(form) {
                         $scope.form = form;
                         if(form.numErrors === 0) {
-                            $scope.product = {};
+                            $scope.timesheet = {date:  $filter('date')(new Date(),'yyyy-MM-dd')};;
                             getTimesheets();
                             countTimesheets();
                         }
@@ -68,6 +68,8 @@ timesheetControllers.controller('TimesheetCtrl', ['$scope', 'TimesheetProxy', 'P
                         $scope.form = form;
                         if(form.numErrors === 0) {
                             $scope.timesheet = {};
+                            $scope.editboolean = false;
+                            $scope.deleteboolean = true;
                             getTimesheets();
                             countTimesheets();
                         }
@@ -80,6 +82,30 @@ timesheetControllers.controller('TimesheetCtrl', ['$scope', 'TimesheetProxy', 'P
         getTimesheets();
         countTimesheets();
         
+        $scope.pageChanged = function() {
+            getTimesheets();
+        };
+        
+        $scope.showedit = function(customer) {
+            if(angular.isDefined($scope.form)) {
+                delete $scope.form;
+            }
+            $scope.createboolean = false;
+            $scope.deleteboolean = false;
+            $scope.editboolean = true;
+            $scope.timesheet = angular.copy(customer);
+        };
+        
+        $scope.showcreate = function() {
+            if(angular.isDefined($scope.form)) {
+                delete $scope.form;
+            }
+            $scope.editboolean = false;
+            $scope.deleteboolean = false;
+            $scope.createboolean = true;
+            $scope.timesheet = {date:  $filter('date')(new Date(),'yyyy-MM-dd')};
+        };
+        
         $scope.openproducts = function () {
 
             var modalInstance = $modal.open({
@@ -89,7 +115,7 @@ timesheetControllers.controller('TimesheetCtrl', ['$scope', 'TimesheetProxy', 'P
             });
 
             modalInstance.result.then(function (selectedProduct) {
-                $scope.timesheet.product = {number: selectedProduct.id, name: selectedProduct.name};
+                $scope.timesheet.product = {id: selectedProduct.id, name: selectedProduct.name};
             });
         };
         
@@ -102,8 +128,23 @@ timesheetControllers.controller('TimesheetCtrl', ['$scope', 'TimesheetProxy', 'P
             });
 
             modalInstance.result.then(function (selectedCustomer) {
-                $scope.timesheet.customer = {number: selectedCustomer.customernumber, name: selectedCustomer.name};
+                $scope.timesheet.customer = {customernumber: selectedCustomer.customernumber, name: selectedCustomer.name};
             });
         };
+        
+        $scope.opencal = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            
+            $scope.opened = true;
+        };
+        
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1,
+            yearRange: 1,
+            maxMode: 'month',
+            currentText: 'Idag'
+        };  
     }
 ]);

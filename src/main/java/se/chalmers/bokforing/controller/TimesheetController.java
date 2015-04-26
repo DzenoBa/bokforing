@@ -141,9 +141,11 @@ public class TimesheetController {
             CustomerJSON c_json = new CustomerJSON();
             
             p_json.setName(t.getProduct().getName());
+            p_json.setId(t.getProduct().getId());
             p_json.setPrice(t.getPrice()); // price * quantity
             
             c_json.setName(t.getCustomer().getName());
+            c_json.setCustomernumber(t.getCustomer().getCustomerNumber());
             
             t_json.setId(t.getId());
             t_json.setProduct(p_json);
