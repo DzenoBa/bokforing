@@ -12,17 +12,17 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.lang.model.element.Element;
 import org.dom4j.Document;
 import org.jsoup.Jsoup;
 import org.springframework.data.domain.Pageable;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import se.chalmers.bokforing.model.Account;
-import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.user.UserAccount;
 
 /**
@@ -32,7 +32,6 @@ import se.chalmers.bokforing.model.user.UserAccount;
 public class BalanceSheetPresenter {
 
     private final static boolean DEBUG = true;
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
     private final static DecimalFormat df = new DecimalFormat("#.##");
     Map<Account, List<Double>> balanceSheet;
 
@@ -69,52 +68,34 @@ public class BalanceSheetPresenter {
         replace.text(replaceWith);
     }
 
-    private String assetsGenerator() {
+    //Generates all assetAccounts
+    private String assetAccountsGenerator() {
         StringBuilder sb = new StringBuilder();
-        //HeaderRow
-        sb.append("<table class=\"contentTable\">");
-        sb.append("<tr>");
-        sb.append("<th>Produkt</th>");
-        sb.append("<th>Antal</th>");
-        sb.append("<th>Kostnad</th>");
-        sb.append("</tr>");
-        //Start With Content
-        Iterator<Product> it = cont.getIterator();
-        while (it.hasNext()) {
-            Product p = it.next();
-            sb.append("<tr>");
-            sb.append("<td>").append(p.getName()).append("</td>");
-            sb.append("<td>").append(p.getUnits()).append("</td>");
-            sb.append("<td>").append(df.format((Double) (p.getPrice() * p.getUnits()))).append(" kr</td>");
-            sb.append("</tr>");
+        Set<Account> accountSet = balanceSheet.keySet();
+        
+        for (Account acc : accountSet) {
+            if (acc.getNumber() < 2000) {
+                sb.append("<td>").append(acc.getNumber()).append(acc.getName()).append("</td>");
+                sb.append("<td>").append(balanceSheet.get(acc).get(1)).append("</td>");
+                sb.append("<td>").append(balanceSheet.get(acc).get(0)).append("</td>");
+            }
         }
-
-        //End Table
-        sb.append("</table>");
+        sb.append("</td>");
         return sb.toString();
     }
-     private String debtGenerator() {
-        StringBuilder sb = new StringBuilder();
-        //HeaderRow
-        sb.append("<table class=\"contentTable\">");
-        sb.append("<tr>");
-        sb.append("<th>Produkt</th>");
-        sb.append("<th>Antal</th>");
-        sb.append("<th>Kostnad</th>");
-        sb.append("</tr>");
-        //Start With Content
-        Iterator<Product> it = cont.getIterator();
-        while (it.hasNext()) {
-            Product p = it.next();
-            sb.append("<tr>");
-            sb.append("<td>").append(p.getName()).append("</td>");
-            sb.append("<td>").append(p.getUnits()).append("</td>");
-            sb.append("<td>").append(df.format((Double) (p.getPrice() * p.getUnits()))).append(" kr</td>");
-            sb.append("</tr>");
-        }
 
-        //End Table
-        sb.append("</table>");
+    //Generates all debtAccounts
+
+    private String debtAccountsGenerator() {
+        StringBuilder sb = new StringBuilder();
+        Set<Account> accountSet = balanceSheet.keySet();
+        sb.append("<td>");
+        for (Account acc : accountSet) {
+            if (acc.getNumber() >= 2000) {
+                sb.append(acc.getNumber()).append(acc.getName()).append("<br>");
+            }
+        }
+        sb.append("</td>");
         return sb.toString();
     }
 
@@ -135,12 +116,10 @@ public class BalanceSheetPresenter {
         replacer("verinr", user.getVerifications().get(user.getVerifications().size() - 1).getVerificationNumber().toString());
 
         //ASSETS SECTION
-        Element replace = doc.select("a[id=assets]").first();
-        replace.html(assetsGenerator());
+        replacer("tillgkonto", assetAccountsGenerator());
 
         //DEBT SECTION
-        Element replace = doc.select("a[id=assets]").first();
-        replace.html(debtGenerator());
+        replacer("skuldkonto", debtAccountsGenerator());
 
         //FINAL SECTION
         replacer("totalcost", summaryContent());

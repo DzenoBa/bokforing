@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -72,16 +73,16 @@ public class PostServiceImpl implements PostService {
      * @param endDate
      * @param pageable
      * @return balanceSheet, a mapping from the accounts the user has used to a
-     * list where the first value in the list is the sum of all posts during
-     * that period and the second value is the opening balance of that period.
-     * Other things needed to create the full balanceSheet on the receivers end
-     * is title for the account types, company name, period and so on (look in
-     * docs for specifications).
+     * list where the first value in the list is the sum of all posts with that
+     * account number during that period and the second value is the opening
+     * balance of that account. Other things needed to create the full
+     * balanceSheet on the receivers end is title for the account types, company
+     * name, period and so on (look in docs for specifications).
      */
     @Override
     public Map<Account, List<Double>> getBalanceSheet(UserAccount user, Date startDate,
             Date endDate, Pageable pageable) {
-        Map<Account, List<Double>> balanceSheet = new HashMap<>();
+        Map<Account, List<Double>> balanceSheet = new TreeMap<>();
         List<Verification> givenPeriodVerifications = verRepo.findByUserAccountAndCreationDateBetween(user, startDate, endDate, pageable).getContent();
 
         for (Verification verification : givenPeriodVerifications) {
@@ -105,7 +106,7 @@ public class PostServiceImpl implements PostService {
         }
         Date earlyDate = new Date(00, 00, 00);
         List<Verification> earlierVerifications = verRepo.findByUserAccountAndCreationDateBetween(user, earlyDate, startDate, pageable).getContent();
-        
+
         for (Verification verification : earlierVerifications) {
             List<Post> posts = verification.getPosts();
             for (Post post : posts) {
@@ -143,7 +144,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Map<Account, Double> getIncomeStatement(UserAccount user, Date startDate,
             Date endDate, Pageable pageable) {
-        Map<Account, Double> incomeStatement = new HashMap<>();
+        Map<Account, Double> incomeStatement = new TreeMap<>();
         List<Verification> verifications = verRepo.findByUserAccountAndCreationDateBetween(user, startDate, endDate, pageable).getContent();
 
         for (Verification verification : verifications) {
@@ -181,31 +182,31 @@ public class PostServiceImpl implements PostService {
     @Override
     public double getBalanceForAccountTypeBetweenDates(UserAccount user, AccountType accountType, Date start, Date end) {
         int startingDigit = accountType.getStartingDigit();
-        
+
         int startNumber = startingDigit * 1000;
         int endNumber = startNumber + 999;
-        
+
         List<Post> posts = postRepo.findByVerification_UserAccountAndAccount_NumberBetweenAndVerification_TransactionDateBetween(user, startNumber, endNumber, start, end);
-        
+
         double balance = 0;
-        
-        for(Post post : posts) {
+
+        for (Post post : posts) {
             balance += post.getBalance();
         }
-        
+
         return balance;
     }
 
     @Override
     public Map<Date, Double> getBalanceForAccountAtDate(UserAccount user, AccountType accountType, Date startDate, Date endDate) {
         Map<Date, Double> map = new HashMap<>();
-        
+
         Calendar start = Calendar.getInstance();
         start.setTime(startDate);
         Calendar end = Calendar.getInstance();
         end.setTime(endDate);
 
-        while(!start.after(end)) {
+        while (!start.after(end)) {
             Date date = start.getTime();
 
             // Between the same date gives only one day
@@ -214,7 +215,7 @@ public class PostServiceImpl implements PostService {
 
             start.add(Calendar.DATE, 1);
         }
-        
+
         return map;
     }
 }

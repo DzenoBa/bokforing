@@ -20,7 +20,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "Accounts")
-public class Account implements Serializable {
+public class Account implements Serializable, Comparable {
     
     @Id
     private int number;
@@ -92,5 +92,18 @@ public class Account implements Serializable {
      */
     public void setAccountType(AccountType accountType) {
         this.accountType = accountType;
+    }
+    @Override
+    public int compareTo(Object o) {
+       if (this.number == ((Account) o).number){
+            return 0;
+       }
+           
+        else if (this.number > ((Account) o).number){
+            return 1;
+        }
+        else
+            return -1;
+    
     }
 }
