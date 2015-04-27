@@ -44,7 +44,7 @@ bok.config(['$routeProvider', 'USER_LEVELS',
                     auth: USER_LEVELS.all
                 }).
                 when('/userpage', {
-                    templateUrl: 'private/userpage.html',
+                    templateUrl: 'private/start.html',
                     controller: 'UserPageCtrl',
                     auth: USER_LEVELS.user,
                     resolve: {
