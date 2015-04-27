@@ -30,9 +30,6 @@ public class UserServiceImpl implements UserService {
     
     @Autowired
     private UserInfoRepository infoRep;
-    
-    @Autowired
-    private InitializationUtil initUtil;
 
     @Override
     public List<UserAccount> getUsersByName(String name) {

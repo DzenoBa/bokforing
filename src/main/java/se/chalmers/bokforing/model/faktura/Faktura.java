@@ -12,36 +12,37 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
 import se.chalmers.bokforing.model.user.UserInfo;
 
 /**
  *
  * @author victor
  */
-//@Entity
+@Entity
 public class Faktura implements Serializable {
-    //@Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fakturaId;
 
     private boolean valid = true;
         
     //From
     //We need names, phone numbers and company from the info.
-    //@ManyToOne
+    @ManyToOne
     private UserInfo fromUser;
     
     //To
-    //@ManyToOne
+    @ManyToOne
     private UserInfo toUser;
     
     //Date
-    //@Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date fakturaDate = new Date();
-    //@Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.DATE)
     private Date expireDate = fakturaDate;
     
-    private Content content;
+    //private Content content;
         
     private boolean fskatt = false;
     private String momsRegistredNumber;
@@ -129,20 +130,6 @@ public class Faktura implements Serializable {
      */
     public void setExpireDate(Date expireDate) {
         this.expireDate = expireDate;
-    }
-
-    /**
-     * @return the content
-     */
-    public Content getContent() {
-        return content;
-    }
-
-    /**
-     * @param content the content to set
-     */
-    public void setContent(Content content) {
-        this.content = content;
     }
 
     /**

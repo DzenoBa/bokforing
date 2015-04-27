@@ -27,7 +27,7 @@ import se.chalmers.bokforing.model.user.UserInfo;
  * @author victor
  */
 public class FakturaPresenter {
-    private final static boolean DEBUG = true;
+    private final static boolean DEBUG = false;
     private final static SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
     private final static DecimalFormat df = new DecimalFormat("#.##");
 
@@ -42,7 +42,11 @@ public class FakturaPresenter {
         this.fak = faktura;
         to = fak.getToUser();
         fr = fak.getFromUser();
-        cont = fak.getContent();
+        //cont = fak.getContent();
+        Content prods = new Content();
+        for(int i = 0; i < 15; i++)
+            prods.addProduct("Prod " + i, 100.0, i);
+        cont = prods;
                
     }
     private String summaryContent(){

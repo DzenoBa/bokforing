@@ -20,7 +20,9 @@ ul
     list-style-type: none;
     padding:0; margin:0;
 }
-
+table{
+margin-top: -10px;
+}
 </style>
     </head>
 <body>
@@ -91,7 +93,7 @@ ul
     
     <div id="bottombox" style="position: absolute; top: 800px">
     <p>Invändningar mot faktura ska göras senast 8 dagar efter fakturadatum. Efter förfallodagen debiteras en påminnelsavgift på 50 kr samt dröjsmålsräntan.</p>
-    <table border="1" style="width: 100%; margin-top: -10px;">
+    <table border="1" style="width: 100%;">
 		  <tr>
 			<th rowspan="2">Address</th>
 			<td rowspan="2">

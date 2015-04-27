@@ -50,12 +50,6 @@ public class FakturaTest  extends AbstractIntegrationTest {
         userDb.storeUser(toUh);
         userDb.storeUser(newUh);
         
-        Content prods = new Content();
-        
-        for(int i = 0; i < 15; i++)
-            prods.addProduct("Prod " + i, 100.0, i);
-
-        fak.setContent(prods);
         
         fak.setMomsPrecentage(0.25);
         Calendar cal = Calendar.getInstance();
