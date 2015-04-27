@@ -7,6 +7,7 @@ package se.chalmers.bokforing;
 
 import com.lowagie.text.DocumentException;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +44,9 @@ public class FakturaTest  extends AbstractIntegrationTest {
         newUh.setCompanyAdr("Highway to Hell");
         newUh.setPostCode("666 42");
         newUh.setPhoneNumber("331-10 10 10");
-        fak.setToUser(toUh.getUA());
-        fak.setFromUser(newUh.getUA());
+        newUh.setBankgiro("123-4567");
+        fak.setToUser(toUh.getUI());
+        fak.setFromUser(newUh.getUI());
         userDb.storeUser(toUh);
         userDb.storeUser(newUh);
         
@@ -56,6 +58,12 @@ public class FakturaTest  extends AbstractIntegrationTest {
         fak.setContent(prods);
         
         fak.setMomsPrecentage(0.25);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(fak.getFakturaDate());
+        cal.add(Calendar.DAY_OF_MONTH, 15);
+        fak.setExpireDate(cal.getTime());
+        
+        fak.setMomsRegistredNumber("SE012345678912");
 
         FakturaPresenter fp = new FakturaPresenter(fak);
         try{

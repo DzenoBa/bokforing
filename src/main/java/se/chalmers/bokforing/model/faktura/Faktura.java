@@ -7,7 +7,11 @@ package se.chalmers.bokforing.model.faktura;
 
 import java.io.Serializable;
 import java.util.Date;
-import se.chalmers.bokforing.model.user.UserAccount;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import se.chalmers.bokforing.model.user.UserInfo;
 
 /**
@@ -25,11 +29,11 @@ public class Faktura implements Serializable {
     //From
     //We need names, phone numbers and company from the info.
     //@ManyToOne
-    private UserAccount fromUser;
+    private UserInfo fromUser;
     
     //To
     //@ManyToOne
-    private UserAccount toUser;
+    private UserInfo toUser;
     
     //Date
     //@Temporal(javax.persistence.TemporalType.DATE)
@@ -39,7 +43,7 @@ public class Faktura implements Serializable {
     
     private Content content;
         
-    private Boolean fskatt;
+    private boolean fskatt = false;
     private String momsRegistredNumber;
     private Double momsPrecentage;    
 
@@ -74,28 +78,28 @@ public class Faktura implements Serializable {
     /**
      * @return the fromUser
      */
-    public UserAccount getFromUser() {
+    public UserInfo getFromUser() {
         return fromUser;
     }
 
     /**
      * @param fromUser the fromUser to set
      */
-    public void setFromUser(UserAccount fromUser) {
+    public void setFromUser(UserInfo fromUser) {
         this.fromUser = fromUser;
     }
 
     /**
      * @return the toUser
      */
-    public UserAccount getToUser() {
+    public UserInfo getToUser() {
         return toUser;
     }
 
     /**
      * @param toUser the toUser to set
      */
-    public void setToUser(UserAccount toUser) {
+    public void setToUser(UserInfo toUser) {
         this.toUser = toUser;
     }
 
@@ -107,7 +111,7 @@ public class Faktura implements Serializable {
     }
 
     /**
-     * @param fakturaDatum the fakturaDate to set
+     * @param fakturaDate
      */
     public void setFakturaDate(Date fakturaDate) {
         this.fakturaDate = fakturaDate;

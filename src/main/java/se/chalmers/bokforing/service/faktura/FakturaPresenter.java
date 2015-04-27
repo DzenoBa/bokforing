@@ -20,7 +20,7 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 import se.chalmers.bokforing.model.faktura.Content;
 import se.chalmers.bokforing.model.faktura.Content.Product;
 import se.chalmers.bokforing.model.faktura.Faktura;
-import se.chalmers.bokforing.model.user.UserHandler;
+import se.chalmers.bokforing.model.user.UserInfo;
 
 /**
  *
@@ -34,21 +34,21 @@ public class FakturaPresenter {
     private Document doc;
     private final Faktura fak;
     
-    private final UserHandler to;
-    private final UserHandler fr;
+    private final UserInfo to;
+    private final UserInfo fr;
     
     private final Content cont;
     public FakturaPresenter(Faktura faktura){
         this.fak = faktura;
-        to = new UserHandler(fak.getToUser());
-        fr = new UserHandler(fak.getFromUser());
+        to = fak.getToUser();
+        fr = fak.getFromUser();
         cont = fak.getContent();
                
     }
     private String summaryContent(){
         StringBuilder sb = new StringBuilder();
         final Double momsPre = fak.getMomsPrecentage();
-        sb.append("Belopp utan moms: " + df.format(cont.getTotalPrice()) + "\n");
+        sb.append("Belopp utan moms: " + df.format(cont.getTotalPrice()) + " kr\n");
         sb.append("Moms kr " + (momsPre * 100) + "% " + df.format(cont.getTotalPrice() * momsPre) + " kr\n");
         sb.append("Belopp att betala: " + df.format(cont.getTotalPrice() + (cont.getTotalPrice() * momsPre)) + " kr");
         return sb.toString();
@@ -87,7 +87,7 @@ public class FakturaPresenter {
                 
         //TOP
         replacer("faktnr",fak.getFakturaId().toString());
-        replacer("kundnr","INGET KUND NUMMER");
+        replacer("kundnr",to.getUserInfoId().toString());
         replacer("faktdat",sdf.format(fak.getFakturaDate()));
         replacer("tcnamn",to.getCompanyName());
         replacer("tadr",to.getCompanyAdr());
@@ -113,6 +113,22 @@ public class FakturaPresenter {
         replacer("vpostkod",fr.getPostCode());
         
         replacer("ftel",fr.getPhoneNumber());
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("<ul><li>");
+        sb.append(fak.getMomsRegistredNumber());
+        sb.append("</li><li>");
+        if(fak.getFskatt()){
+            sb.append("Godkänd för F-skatt");
+        } else{
+            sb.append("<b>Ej</b> godkänd för F-skatt");
+        }
+        sb.append("</li></ul>");
+        
+        replace = doc.select("a[id=momsinfo]").first();
+        replace.html(sb.toString());
+        
+        replacer("bankgiro",fr.getBankgiro());
         
 
         

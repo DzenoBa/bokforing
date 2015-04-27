@@ -178,6 +178,16 @@ public class UserHandler {
         return ui.getCompanyAdr();
     }
     
+    public void setBankgiro(String adr){
+        if(ui.getBankgiro() == null || !adr.equals(ui.getBankgiro())){
+            ui.setBankgiro(adr);
+            modUI = true;
+        }
+    }
+    public String getBankgiro(){
+        return ui.getBankgiro();
+    }
+    
         public void setPostCode(String pcode){
         if(ui.getPostCode() == null || !pcode.equals(ui.getPostCode())){
             ui.setPostCode(pcode);

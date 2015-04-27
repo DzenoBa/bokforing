@@ -15,6 +15,11 @@
 .contentTable{
 	width: 100%;
 }
+ul
+{
+    list-style-type: none;
+    padding:0; margin:0;
+}
 
 </style>
     </head>
@@ -86,23 +91,30 @@
     
     <div id="bottombox" style="position: absolute; top: 800px">
     <p>Invändningar mot faktura ska göras senast 8 dagar efter fakturadatum. Efter förfallodagen debiteras en påminnelsavgift på 50 kr samt dröjsmålsräntan.</p>
-    <table border="1" style="width: 100%;">
+    <table border="1" style="width: 100%; margin-top: -10px;">
 		  <tr>
-			<th rowspan="3">Address</th>
-			<td><a id="fcname">[FCNAME]</a></td>
+			<th rowspan="2">Address</th>
+			<td rowspan="2">
+			<ul>
+			
+			<li><a id="fcname">[FCNAME]</a></li>
+			<li><a id="vadr">[VADR]</a></li>
+			<li><a id="vpostkod">[VPOSTKOD]</a></li>
+			
+			</ul>
+			</td>
 			<th>Telefon</th>
 			<td><a id="ftel">[FTEL]</a></td>
+			<th rowspan="2">Bankgiro</th>
+			<td rowspan="2"><a id="bankgiro">[BANKGIRO]</a></td>
 		  </tr>
 		  <tr>
-			<td><a id="vadr">[VADR]</a></td>
-			<th rowspan="2">Momsreg. nr</th>
-			<td rowspan="2"><a id="momsinfo">[MOMSINFO]</a></td>
+			
+			<th rowspan="1">Momsreg. nr</th>
+			<td rowspan="1"><a id="momsinfo">[MOMSINFO]</a></td>
 		</tr>
 		  <tr>
-			<td><a id="vpostkod">[VPOSTKOD]</a></td>
-		  
-			<th>Bankgiro</th>
-			<td><a id="exdat">[EXDAT]</a></td>
+			
 		  </tr>
 		</table> 
     </div>
