@@ -1,0 +1,42 @@
+<div class="modal-header">
+    <h3 class="modal-title">Välj kund</h3>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <label for="name" class="col-sm-3 control-label">Namn</label>
+        <div class="col-sm-9">
+            <div class="input-group">
+                <input type="text" id="name" class="form-control" ng-model="customer.name" ng-change="autosearch()"/>
+                <div class="input-group-btn">
+                    <button class="btn btn-primary" ng-click="search()" ng-disabled="!customer.name">Sök</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th style="width:25%;">Kundnummer</th>
+                <th style="width:55%;">Namn</th>
+                <th style="width:20%;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="customer in customers">
+                <td>{{customer.customernumber}}</td>
+                <td>{{customer.name}}</td>
+                <td><button class="btn btn-success" ng-click="selected.customer = customer">Välj</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <pagination total-items="maxsize" items-per-page="10" ng-model="currentPage" max-size="5" class="pagination-sm" boundary-links="true" ng-change="pageChanged()" ng-show="maxsize > 10"></pagination>
+</div>
+<div class="modal-footer">
+    <div class="col-sm-6" style="text-align:left;">
+        Du har valt: <b>{{selected.customer.name}}</b>
+    </div>
+    <div class="col-sm-6">
+        <button class="btn btn-primary" ng-click="ok()" ng-disabled="!selected.customer">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Avbryt</button>
+    </div>
+</div>

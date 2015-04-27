@@ -141,10 +141,13 @@ public class TimesheetController {
             CustomerJSON c_json = new CustomerJSON();
             
             p_json.setName(t.getProduct().getName());
+            p_json.setId(t.getProduct().getId());
             p_json.setPrice(t.getPrice()); // price * quantity
             
             c_json.setName(t.getCustomer().getName());
+            c_json.setCustomernumber(t.getCustomer().getCustomerNumber());
             
+            t_json.setId(t.getId());
             t_json.setProduct(p_json);
             t_json.setCustomer(c_json);
             t_json.setQuantity(t.getQuantity());
@@ -175,5 +178,114 @@ public class TimesheetController {
         
         size = timesheetPage.getTotalElements();
         return size;
+    }
+    
+    /*
+     * EDIT TIMESHEET
+     */
+    @RequestMapping(value = "/timesheet/edit", method = RequestMethod.POST)
+    public @ResponseBody FormJSON edit(@RequestBody final TimesheetJSON timesheet) {
+        
+        FormJSON form = new FormJSON();
+        
+        // CHECK SESSION
+        if(!authSession.sessionCheck()) {
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
+            return form;
+        }
+        String email = authSession.getEmail();
+        
+        // CHECK ID
+        if(timesheet.getId() == null || !(timesheet.getId() > 0)) {
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
+            return form;
+        }
+        
+        // CHECK PRODUCT
+        if(timesheet.getProduct() == null || !(timesheet.getProduct().getId() > 0)) {
+            form.addError("product", "Vänligen ange en produkt.");
+            return form;
+        }
+        
+        // CHECK CUSTOMER
+        if(timesheet.getCustomer() == null || !(timesheet.getCustomer().getCustomernumber() > 0)) {
+            form.addError("customer", "Vänligen ange en kund.");
+            return form;
+        } 
+        
+        // CHECK QUANTITY
+        if(timesheet.getQuantity() == null || !(timesheet.getQuantity() > 0)) {
+            form.addError("quantity", "Vänligen ange en kvantitet.");
+            return form;
+        }
+        
+        String description = "";
+        if(timesheet.getDescription() != null && !timesheet.getDescription().isEmpty()) {
+            description = timesheet.getDescription();
+        }
+        
+        // CHECK DATE
+        if(timesheet.getDate() == null) {
+            form.addError("date", "Vänligen ange ett datum.");
+            return form;
+        }
+        
+        UserHandler uh = userService.getUser(email);
+        Product product = productService.findProductById(uh.getUA(), timesheet.getProduct().getId());
+        Customer customer = customerService.findByCustomerNumber(uh.getUA(), timesheet.getCustomer().getCustomernumber());
+        if(product == null || customer == null) {
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
+            return form;
+        }
+        
+        // EVERYTHING SEEMS TO BE IN ORDER
+        Timesheet tsDb = timesheetService.findTimesheet(timesheet.getId());
+        if(tsDb == null) {
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
+            return form;
+        }
+        tsDb.setCustomer(customer);
+        tsDb.setProduct(product);
+        tsDb.setQuantity(timesheet.getQuantity());
+        tsDb.setDescription(description);
+        tsDb.setDateWorked(timesheet.getDate());
+
+        timesheetService.save(tsDb);
+        
+        return form;
+    }
+    
+    /*
+     * DELETE TIMESHEET
+     */
+    @RequestMapping(value = "/timesheet/delete", method = RequestMethod.POST)
+    public @ResponseBody FormJSON delete(@RequestBody final TimesheetJSON timesheet) {
+        
+        FormJSON form = new FormJSON();
+        
+        // CHECK SESSION
+        if(!authSession.sessionCheck()) {
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
+            return form;
+        }
+        String email = authSession.getEmail();
+        
+        // CHECK ID
+        if(timesheet.getId() == null || !(timesheet.getId() > 0)) {
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
+            return form;
+        }
+              
+        // EVERYTHING SEEMS TO BE IN ORDER
+        UserHandler uh = userService.getUser(email);
+        Timesheet tsDb = timesheetService.findTimesheet(timesheet.getId());
+        if(tsDb == null) {
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
+            return form;
+        }
+        
+        timesheetService.remove(tsDb);
+        
+        return form;
     }
 }

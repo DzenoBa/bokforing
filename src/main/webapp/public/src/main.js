@@ -15,6 +15,7 @@ require(
         'controllers/defaultDataController',
         'controllers/productControllers',
         'controllers/customerControllers',
+        'controllers/timesheetController',
         'services/userServices',
         'services/authServices',
         'services/authHandler',

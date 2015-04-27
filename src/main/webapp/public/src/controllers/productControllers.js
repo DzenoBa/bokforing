@@ -7,7 +7,7 @@
 
 'use strict';
 
-var productControllers = angular.module('ProductControllers', []);
+var productControllers = angular.module('ProductControllers', ['ui.bootstrap']);
 
 productControllers.controller('ProductCtrl', ['$scope', 'ProductProxy', '$modal',
     function($scope, ProductProxy, $modal) {
@@ -169,3 +169,64 @@ productControllers.controller('ProductCtrl', ['$scope', 'ProductProxy', '$modal'
         getQuantityTypes();
     }
 ]);
+
+productControllers.controller('ModalInstanceProductCtrl', 
+    function ($scope, $modalInstance, ProductProxy) {
+
+    $scope.currentPage = 1;
+    
+    $scope.selected = function(product) {
+        product: product;
+    };
+
+    $scope.ok = function () {
+      $modalInstance.close($scope.selected.product);
+    };
+
+    $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+    
+    $scope.search = function() {
+        $scope.currentPage = 1;
+        search();
+    };
+    
+    $scope.autosearch = function() {
+        if(angular.isDefined($scope.product)) {
+            $scope.currentPage = 1;
+            if($scope.product.name.length > 2) {
+                search();
+            } else {
+                $scope.products = {};
+                $scope.maxsize = 0;
+            }
+        }
+    };
+    
+    function search() {
+        var product;
+        var currentPage = $scope.currentPage - 1;
+        if($scope.product.name) {
+            product = {name: $scope.product.name, startrange: currentPage};
+        } else {
+            return;
+        }
+        ProductProxy.getProducts(product)
+                    .success(function(products) {
+                        $scope.products = products;
+                    }).error(function() {
+                        console.log("modal:getProducts: error");
+                    });
+        ProductProxy.countProducts(product)
+                    .success(function(size) {
+                        $scope.maxsize = size;
+                    }).error(function() {
+                        console.log("modal:countProducts: error");
+                    });
+    }
+    
+    $scope.pageChanged = function() {
+        search();
+    };
+});

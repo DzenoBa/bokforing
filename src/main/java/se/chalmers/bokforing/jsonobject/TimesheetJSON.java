@@ -10,12 +10,20 @@ import java.util.Date;
  */
 public class TimesheetJSON implements Serializable {
     
+    private Long id;
     private ProductJSON product;
     private CustomerJSON customer;
     private Double quantity;
     private String description;
     private Date date;
     private int startrange;
+    
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
     
     public ProductJSON getProduct() {
         return product;

@@ -75,6 +75,7 @@ public class BookkeepingController {
     /*
      * CREATE VERIFICATION
      */
+    @Transactional
     @RequestMapping(value = "/bookkeeping/createman", method = RequestMethod.POST)
     public @ResponseBody FormJSON createVerification(@RequestBody final VerificationJSON verification) {
         
