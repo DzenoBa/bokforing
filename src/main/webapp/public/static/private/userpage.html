@@ -1,32 +1,34 @@
 
 <!--Body content-->
 <div>
-   
-    <h2>User page</h2>
-    <table class="table">
-        <tr>
-            <td>Email:</td>
-            <td>
-                {{session.email}}
-            </td>
-        </tr>
-        <tr>
-            <td>Level:</td>
-            <td>
-                {{session.level}}
-            </td>
-        </tr>
-    </table>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h4>Välkommen</h4>
+            <p>{{session.email}}</p>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-6">
-            <h3>Intäkter</h3>
-            Diagramet nedan visar hur stora dina intäkter är per dag.
-            <canvas id="revenueChart" width="500" height="300"></canvas>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Intäkter</h4>
+                    <p>Diagramet nedan visar hur stora dina intäkter är per dag.</p>
+                </div>
+                <div class="panel-body">
+                    <canvas id="revenueChart" width="500" height="300"></canvas>
+                </div>
+            </div>
         </div>
         <div class="col-md-6">
-            <h3>Utgifter</h3>
-            Diagramet nedan visar hur stora dina utgifter är per dag.
-            <canvas id="costChart" width="500" height="300"></canvas>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Utgifter</h4>
+                    <p>Diagramet nedan visar hur stora dina utgifter är per dag.</p>
+                </div>
+                <div class="panel-body">
+                    <canvas id="costChart" width="500" height="300"></canvas>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
