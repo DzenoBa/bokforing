@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.model.user;
+package se.chalmers.bokforing.model.faktura;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -17,8 +17,12 @@ import java.util.LinkedList;
 public class Content {
     private final LinkedList<Product> list = new LinkedList<>();
     
-    void addProduct(Product add){
-        list.add(add);
+    public void addProduct(String str, Double price){
+        addProduct(str,price,1);
+    }
+    
+    public void addProduct(String str, Double price, Integer amount){
+        list.add(new Product(str,price,amount));
     }
     
     public String recipt(){
@@ -34,37 +38,41 @@ public class Content {
         return sb.toString();
     }
     
-    public Float getTotalPrice(){
-        Float total = 0.0f;
+    public Iterator<Product> getIterator(){
+        return list.iterator();
+    }
+    
+    public Double getTotalPrice(){
+        Double total = 0.0;
         Iterator<Product> it = list.iterator();
         while(it.hasNext()){
             Product cur = it.next();
-            total = cur.getPrice() * cur.getUnits();
+            total += cur.getPrice() * cur.getUnits();
         }
         return total;
     }
     
-    class Product{
+    public class Product{
         private final String name;
-        private final Float price;
+        private final Double price;
         private int units;
-        Product(String name, Float price, int units){
+        Product(String name, Double price, int units){
             this.name = name;
             this.price = price;
             this.units = units;
         }
         
-        public int addUnits(int i){
+        int addUnits(int i){
             return units += i;
         }
-        public int removeUnits(int i){
+        int removeUnits(int i){
             return addUnits(-i);
         }
         
         public String getName(){
             return name;
         }
-        public Float getPrice(){
+        public Double getPrice(){
             return price;
         }
         public int getUnits(){

@@ -64,30 +64,19 @@ public class UserHandlerTest extends AbstractIntegrationTest {
         //The id should not have updated itself
         assertTrue(id.equals(newUh.getUA().getId()));
     }
-    @Test
+    @Test(expected = IllegalArgumentException.class)  
     public void noEmail(){
         UserHandler noEmail = new UserHandler();
-        boolean passed = false;
-        try{
-            userDb.storeUser(noEmail);
-        }catch (IllegalArgumentException e){
-            passed = true;
-        }
-        assertTrue(passed);
+        userDb.storeUser(noEmail);
     }
     
-    @Test
+    @Test(expected = IllegalArgumentException.class)  
     public void nullGroup(){
-        boolean passed = false;
         UserHandler uh = new UserHandler();
         uh.setEmail("nullTest");
-        try{
-            uh.setUserGroup(null);
-            userDb.storeUser(uh);
-        }catch(IllegalArgumentException e){
-            passed = true;
-        }
-        assertTrue(passed);
+        uh.setUserGroup(null);
+        userDb.storeUser(uh);
+
     }
     
     @Test

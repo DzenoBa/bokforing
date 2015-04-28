@@ -3,18 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.model.user;
+package se.chalmers.bokforing.model.faktura;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import se.chalmers.bokforing.model.user.UserInfo;
 
 /**
  *
@@ -39,18 +38,15 @@ public class Faktura implements Serializable {
     
     //Date
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fakturaDatum;
+    private Date fakturaDate = new Date();
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date expireDate;
+    private Date expireDate = fakturaDate;
     
-    private ArrayList<Content> content;
-    
-    private Float totalCost;
-    
-    private String fskatt;
+    //private Content content;
+        
+    private boolean fskatt = false;
     private String momsRegistredNumber;
-    private Float momsCost;
-    private Float momsPrecentage;    
+    private Double momsPrecentage;    
 
     /**
      * @return the fakturaId
@@ -109,17 +105,17 @@ public class Faktura implements Serializable {
     }
 
     /**
-     * @return the fakturaDatum
+     * @return the fakturaDate
      */
-    public Date getFakturaDatum() {
-        return fakturaDatum;
+    public Date getFakturaDate() {
+        return fakturaDate;
     }
 
     /**
-     * @param fakturaDatum the fakturaDatum to set
+     * @param fakturaDate
      */
-    public void setFakturaDatum(Date fakturaDatum) {
-        this.fakturaDatum = fakturaDatum;
+    public void setFakturaDate(Date fakturaDate) {
+        this.fakturaDate = fakturaDate;
     }
 
     /**
@@ -137,44 +133,16 @@ public class Faktura implements Serializable {
     }
 
     /**
-     * @return the content
-     */
-    public ArrayList<Content> getContent() {
-        return content;
-    }
-
-    /**
-     * @param content the content to set
-     */
-    public void setContent(ArrayList<Content> content) {
-        this.content = content;
-    }
-
-    /**
-     * @return the totalCost
-     */
-    public Float getTotalCost() {
-        return totalCost;
-    }
-
-    /**
-     * @param totalCost the totalCost to set
-     */
-    public void setTotalCost(Float totalCost) {
-        this.totalCost = totalCost;
-    }
-
-    /**
      * @return the fskatt
      */
-    public String getFskatt() {
+    public Boolean getFskatt() {
         return fskatt;
     }
 
     /**
      * @param fskatt the fskatt to set
      */
-    public void setFskatt(String fskatt) {
+    public void setFskatt(Boolean fskatt) {
         this.fskatt = fskatt;
     }
 
@@ -193,30 +161,16 @@ public class Faktura implements Serializable {
     }
 
     /**
-     * @return the momsCost
-     */
-    public Float getMomsCost() {
-        return momsCost;
-    }
-
-    /**
-     * @param momsCost the momsCost to set
-     */
-    public void setMomsCost(Float momsCost) {
-        this.momsCost = momsCost;
-    }
-
-    /**
      * @return the momsPrecentage
      */
-    public Float getMomsPrecentage() {
+    public Double getMomsPrecentage() {
         return momsPrecentage;
     }
 
     /**
      * @param momsPrecentage the momsPrecentage to set
      */
-    public void setMomsPrecentage(Float momsPrecentage) {
+    public void setMomsPrecentage(Double momsPrecentage) {
         this.momsPrecentage = momsPrecentage;
     }
 }

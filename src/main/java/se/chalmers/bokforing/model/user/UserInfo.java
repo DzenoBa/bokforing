@@ -27,12 +27,15 @@ protected UserInfo(){
 }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userInfoId;
+    private Integer userInfoId;
     @OneToOne
     private UserAccount ua;
     private String userName;
     private String phoneNumber;
     private String companyName;
+    private String companyAdr;
+    private String postCode;
+    private String bankgiro;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastLogIn;
     private URI logo;
@@ -40,7 +43,7 @@ protected UserInfo(){
     /**
      * @return the UserInfo_Id
      */
-    public int getUserInfoId() {
+    public Integer getUserInfoId() {
         return userInfoId;
     }
 
@@ -74,6 +77,20 @@ protected UserInfo(){
         this.companyName = name;
     }
 
+    public String getCompanyAdr() {
+        return companyAdr;
+    }
+    void setCompanyAdr(String adr){
+        this.companyAdr = adr;
+    }
+    
+    public String getPostCode() {
+        return postCode;
+    }
+    void setPostCode(String pcode){
+        this.postCode = pcode;
+    }
+    
     /**
      * @return the logo
      */
@@ -105,6 +122,13 @@ protected UserInfo(){
     }
     void setLastLogIn(Date date){
         lastLogIn = date;
+    }
+    
+    void setBankgiro(String bankgiro){
+        this.bankgiro = bankgiro;
+    }
+    public String getBankgiro(){
+        return this.bankgiro;
     }
     
     String toStringLight(){

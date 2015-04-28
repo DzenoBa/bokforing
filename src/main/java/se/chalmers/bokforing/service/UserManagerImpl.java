@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.user.UserHandler;
+import se.chalmers.bokforing.service.UserService;
 
 /**
  *

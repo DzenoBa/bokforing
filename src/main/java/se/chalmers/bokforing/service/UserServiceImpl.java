@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     
     @Autowired
     private UserInfoRepository infoRep;
-    
+
     @Override
     public List<UserAccount> getUsersByName(String name) {
         List<UserInfo> uis = infoRep.findByUserName(name);
