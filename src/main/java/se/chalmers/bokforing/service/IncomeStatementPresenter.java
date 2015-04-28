@@ -27,7 +27,7 @@ import se.chalmers.bokforing.model.user.UserAccount;
  *
  * @author Isabelle
  */
-public class BalanceSheetPresenter {
+public class IncomeStatementPresenter {
 
     private final static boolean DEBUG = true;
     Map<Account, List<Double>> balanceSheet;
@@ -37,7 +37,7 @@ public class BalanceSheetPresenter {
     // Maybe not correct
     private PostServiceImpl postService;
 
-    public BalanceSheetPresenter(UserAccount user, Date startDate,
+    public IncomeStatementPresenter(UserAccount user, Date startDate,
             Date endDate, Pageable pageable) {
         balanceSheet = postService.getBalanceSheet(user, startDate,
                 endDate, pageable);
