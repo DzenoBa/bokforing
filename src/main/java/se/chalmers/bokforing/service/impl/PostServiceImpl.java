@@ -105,7 +105,11 @@ public class PostServiceImpl implements PostService {
                 }
             }
         }
-        Date earlyDate = new Date(00, 00, 00);
+        
+        Calendar cal = Calendar.getInstance();
+        cal.set(0, 0, 0);
+        
+        Date earlyDate = cal.getTime();
         List<Verification> earlierVerifications = verRepo.findByUserAccountAndCreationDateBetween(user, earlyDate, startDate, pageable).getContent();
         
         for (Verification verification : earlierVerifications) {
