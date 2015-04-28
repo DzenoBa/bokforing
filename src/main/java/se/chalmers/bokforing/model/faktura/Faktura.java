@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.user.UserInfo;
 
 /**
@@ -34,7 +35,7 @@ public class Faktura implements Serializable {
     
     //To
     @ManyToOne
-    private UserInfo toUser;
+    private Customer toUser;
     
     //Date
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -93,15 +94,13 @@ public class Faktura implements Serializable {
     /**
      * @return the toUser
      */
-    public UserInfo getToUser() {
+    public Customer getToUser() {
         return toUser;
     }
 
-    /**
-     * @param toUser the toUser to set
-     */
-    public void setToUser(UserInfo toUser) {
-        this.toUser = toUser;
+
+    public void setToUser(Customer costumer) {
+        this.toUser = costumer;
     }
 
     /**

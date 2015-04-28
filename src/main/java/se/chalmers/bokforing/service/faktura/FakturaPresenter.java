@@ -17,6 +17,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.xhtmlrenderer.pdf.ITextRenderer;
+import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.faktura.Content;
 import se.chalmers.bokforing.model.faktura.Content.Product;
 import se.chalmers.bokforing.model.faktura.Faktura;
@@ -34,7 +35,7 @@ public class FakturaPresenter {
     private Document doc;
     private final Faktura fak;
     
-    private final UserInfo to;
+    private final Customer to;
     private final UserInfo fr;
     
     private final Content cont;
@@ -91,11 +92,11 @@ public class FakturaPresenter {
                 
         //TOP
         replacer("faktnr",fak.getFakturaId().toString());
-        replacer("kundnr",to.getUserInfoId().toString());
+        replacer("kundnr",to.getCustomerNumber().toString());
         replacer("faktdat",sdf.format(fak.getFakturaDate()));
-        replacer("tcnamn",to.getCompanyName());
-        replacer("tadr",to.getCompanyAdr());
-        replacer("poskod", to.getPostCode());
+        replacer("tcnamn",to.getAddress().getStreetNameAndNumber());
+        replacer("tadr",to.getAddress().getStreetNameAndNumber());
+        replacer("poskod", to.getAddress().getPostalCode());
         
         //MID/TOP
         replacer("ernamn",to.getName());

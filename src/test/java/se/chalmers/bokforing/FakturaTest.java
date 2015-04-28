@@ -13,10 +13,13 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import se.chalmers.bokforing.config.TestApplicationConfig;
+import se.chalmers.bokforing.model.Address;
+import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.faktura.Content;
 import se.chalmers.bokforing.model.faktura.Faktura;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.persistence.user.UserService;
+import se.chalmers.bokforing.service.CustomerService;
 import se.chalmers.bokforing.service.faktura.FakturaPresenter;
 
 /**
@@ -27,28 +30,32 @@ import se.chalmers.bokforing.service.faktura.FakturaPresenter;
 public class FakturaTest  extends AbstractIntegrationTest {
     @Autowired
     private UserService userDb;
+    @Autowired
+    private CustomerService cusDb;
     @Test
     public void printPDF(){
         Faktura fak = new Faktura();
         fak.setFakturaId(0l);
-        UserHandler toUh = new UserHandler();
-        toUh.setEmail("to@to.com");
+        Customer toUh = new Customer();
         toUh.setName("To Who");
-        toUh.setCompanyName("To test is to live.");
-        toUh.setCompanyAdr("Road not found 404");
-        toUh.setPostCode("333 21");
-        UserHandler newUh = new UserHandler();
-        newUh.setEmail("from@from.com");
-        newUh.setName("From who");
-        newUh.setCompanyName("Company from heroes");
-        newUh.setCompanyAdr("Highway to Hell");
-        newUh.setPostCode("666 42");
-        newUh.setPhoneNumber("331-10 10 10");
-        newUh.setBankgiro("123-4567");
-        fak.setToUser(toUh.getUI());
-        fak.setFromUser(newUh.getUI());
-        userDb.storeUser(toUh);
-        userDb.storeUser(newUh);
+        toUh.setCustomerNumber(Long.MIN_VALUE + 5);
+        Address adr = new Address();
+        adr.setStreetNameAndNumber("Road not found 404");
+        adr.setPostalCode("333 21");
+        //toUh.setCompanyName("To test is to live.");
+        toUh.setAddress(adr);
+        UserHandler sender = new UserHandler();
+        sender.setEmail("from@from.com");
+        sender.setName("From who");
+        sender.setCompanyName("Company from heroes");
+        sender.setCompanyAdr("Highway to Hell");
+        sender.setPostCode("666 42");
+        sender.setPhoneNumber("331-10 10 10");
+        sender.setBankgiro("123-4567");
+        fak.setToUser(toUh);
+        fak.setFromUser(sender.getUI());
+        cusDb.save(toUh);
+        userDb.storeUser(sender);
         
         
         fak.setMomsPrecentage(0.25);
