@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.service;
+package se.chalmers.bokforing.service.impl;
 
 import com.lowagie.text.DocumentException;
 import java.io.File;
