@@ -23,10 +23,12 @@ import se.chalmers.bokforing.service.UserService;
  */
 @ContextConfiguration(classes = TestApplicationConfig.class)
 public class UserHandlerTest extends AbstractIntegrationTest {
+    
     @Autowired
     private UserService userDb;
+    
     @Test
-    public void constructorTests(){
+    public void testConstructorTests(){
         //A new handler
         UserHandler newUh = new UserHandler();
         assertNotNull(newUh);
@@ -64,14 +66,15 @@ public class UserHandlerTest extends AbstractIntegrationTest {
         //The id should not have updated itself
         assertTrue(id.equals(newUh.getUA().getId()));
     }
+    
     @Test(expected = IllegalArgumentException.class)  
-    public void noEmail(){
+    public void testNoEmail(){
         UserHandler noEmail = new UserHandler();
         userDb.storeUser(noEmail);
     }
     
     @Test(expected = IllegalArgumentException.class)  
-    public void nullGroup(){
+    public void testNullGroup(){
         UserHandler uh = new UserHandler();
         uh.setEmail("nullTest");
         uh.setUserGroup(null);
@@ -80,37 +83,41 @@ public class UserHandlerTest extends AbstractIntegrationTest {
     }
     
     @Test
-    public void idTest(){
+    public void testIdTest(){
         UserHandler start = new UserHandler();
         
         start.setEmail("start");
         userDb.storeUser(start);
         Long id = start.getUA().getId();
         for(int i = 1; i <= 10; i++){
-                UserHandler temp = new UserHandler();
-                temp.setEmail("temp" + i);
-                userDb.storeUser(temp);
-                assertTrue(id + i == temp.getUA().getId());
+            UserHandler temp = new UserHandler();
+            temp.setEmail("temp" + i);
+            userDb.storeUser(temp);
+            assertTrue(id + i == temp.getUA().getId());
         }
     }
     
     @Test
-    public void changeToBadEmail(){
+    public void testChangeToBadEmail(){
         UserHandler goodEmail = new UserHandler();
+        
         goodEmail.setEmail("good");
         boolean passed1 = true, passed2 = true;
-        try{
+        
+        try {
             goodEmail.setEmail("");
             userDb.storeUser(goodEmail);
-        }catch(IllegalArgumentException e){
+        } catch(IllegalArgumentException e) {
             passed1 = true;
         }
-        try{
+        
+        try {
             goodEmail.setEmail(null);
             userDb.storeUser(goodEmail);
-        }catch(IllegalArgumentException e){
+        } catch(IllegalArgumentException e) {
             passed2 = true;
         }
+        
         assertTrue(passed1 && passed2);
     }
 }
