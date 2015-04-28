@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.user.UserHandler;
-import se.chalmers.bokforing.persistence.user.UserService;
+import se.chalmers.bokforing.service.UserService;
 
 /**
  *

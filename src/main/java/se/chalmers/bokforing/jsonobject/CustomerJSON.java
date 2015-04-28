@@ -20,6 +20,7 @@ public class CustomerJSON implements Serializable {
     private String postalcode;
     private String city;
     private String country;
+    private int startrange;
     
     public Long getCustomernumber() {
         return customernumber;
@@ -68,5 +69,12 @@ public class CustomerJSON implements Serializable {
     }
     public void setCountry(String country) {
         this.country = country;
+    }
+    
+    public int getStartrange() {
+        return startrange;
+    }
+    public void setStartragne(int startrange) {
+        this.startrange = startrange;
     }
 }

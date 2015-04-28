@@ -14,7 +14,10 @@ public class ProductJSON {
     private String description;
     private double price;
     private String quantitytype;
+    private AccountJSON account;
+    private AccountJSON vat;
     private int startrange;
+    private int pagesize;
     
     public Long getId() {
         return id;
@@ -51,10 +54,31 @@ public class ProductJSON {
         this.quantitytype = quantitytype;
     }
     
+    public AccountJSON getAccount() {
+        return account;
+    }
+    public void setAccount(AccountJSON account) {
+        this.account = account;
+    }
+    
+    public AccountJSON getVat() {
+        return vat;
+    }
+    public void setVat(AccountJSON vat) {
+        this.vat = vat;
+    }
+    
     public int getStartrange() {
         return startrange;
     }
     public void setStartragne(int startrange) {
         this.startrange = startrange;
+    }
+    
+    public int getPagesize() {
+        return pagesize;
+    }
+    public void setPagesize(int pagesize) {
+        this.pagesize = pagesize;
     }
 }

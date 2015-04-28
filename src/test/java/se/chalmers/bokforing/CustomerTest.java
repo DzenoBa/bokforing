@@ -5,9 +5,16 @@
  */
 package se.chalmers.bokforing;
 
+import java.util.List;
+import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +26,7 @@ import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
-import se.chalmers.bokforing.persistence.user.UserService;
+import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.CustomerService;
 
@@ -95,6 +102,31 @@ public class CustomerTest extends AbstractIntegrationTest {
         Page<Customer> customers = service.findAllCustomers(user, terms);
         System.out.println("inserted= " + inserted + " customers= " + customers.getTotalElements());
         assertEquals(inserted + INSERTED_BEFORE_TEST, customers.getTotalElements());
+    }
+    
+    @Test
+    @Transactional
+    public void testDeleteCustomer() {
+        Long customerNumber = 555L;
+        
+        Customer customer = manager.createCustomer(user, customerNumber, "Jakob", "031556677", null);
+        
+        assertNotNull(customer);
+        Customer customerFromDb = service.findByCustomerNumber(user, customerNumber);
+        assertNotNull(customerFromDb);
+        assertEquals(customerNumber, customerFromDb.getCustomerNumber());
+        
+        
+        manager.deleteCustomer(customer);
+        Customer customerFromDb2 = service.findByCustomerNumber(user, customerNumber);
+        assertNull(customerFromDb2);
+        
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "customerNumber");
+        List<Customer> customers = service.findAllCustomers(user, terms).getContent();
+        
+        for(Customer customerInList : customers) {
+            assertNotEquals(customerNumber, customerInList.getCustomerNumber());
+        }
     }
     
 }

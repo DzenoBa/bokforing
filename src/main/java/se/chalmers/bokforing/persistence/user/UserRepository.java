@@ -5,7 +5,7 @@ import se.chalmers.bokforing.model.user.UserAccount;
 import org.springframework.stereotype.Repository;
 
 @Repository
-interface UserRepository extends JpaRepository<UserAccount,Long> {
+public interface UserRepository extends JpaRepository<UserAccount,Long> {
 
     /** Finds the user with a certain name
      * @param email

@@ -6,13 +6,17 @@
         <div class="col-sm-3">
             <div class="btn-group">
                 <label class="btn btn-primary" ng-model="radioModel" btn-radio="0">Nummer</label>
-                <label class="btn btn-primary" ng-model="radioModel" btn-radio="1">Namn</label>
+                <label class="btn btn-primary" ng-model="$parent.radioModel" btn-radio="1" ng-if="!(accountType > 0)">Namn</label>
+                <select class="btn" id="vatacc" ng-model="$parent.accountType" ng-if="accountTypes" ng-change="autosearch()">
+                    <option ng-repeat="type in accountTypes" value="{{type}}">{{type}}</option>
+                </select>
             </div>
         </div>
         <div class="col-sm-9">
             <div class="input-group">
-                <input type="number" class="form-control" ng-model="account.number" ng-show="radioModel == 0" ng-change="autosearch()"/>
-                <input type="text" class="form-control" ng-model="account.name" ng-show="radioModel == 1" ng-change="autosearch()"/>
+                <span class="input-group-addon" ng-if="accountType > 0">{{accountType}}</span>
+                <input type="text" class="form-control" ng-model="account.number" ng-show="radioModel === 0" ng-change="autosearch()"/>
+                <input type="text" class="form-control" ng-model="account.name" ng-show="radioModel === 1" ng-change="autosearch()"/>
                 <div class="input-group-btn">
                     <button class="btn btn-primary" ng-click="search()" ng-disabled="!account.number && !account.name">Sök</button>
                 </div>
@@ -21,9 +25,11 @@
     </div>
     <table class="table table-condensed">
         <thead>
-            <th style="width:25%;">Konto nummer</th>
-            <th style="width:55%;">Konto namn</th>
-            <th style="width:20%;"></th>
+            <tr>
+                <th style="width:25%;">Konto nummer</th>
+                <th style="width:55%;">Konto namn</th>
+                <th style="width:20%;"></th>
+            </tr>
         </thead>
         <tbody>
             <tr ng-repeat="account in accounts">

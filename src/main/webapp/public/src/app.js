@@ -16,6 +16,7 @@ var bok = angular.module('Bok', [
     'DefaultDataControllers',
     'ProductControllers',
     'CustomerControllers',
+    'TimesheetControllers',
     'UserService',
     'AuthHandlerService',
     'BookkeepingControllers',
@@ -23,7 +24,8 @@ var bok = angular.module('Bok', [
     'DefaultDataService',
     'ProductService',
     'CustomerService',
-    'StatisticsService'
+    'StatisticsService',
+    'TimesheetService'
      // More here
 ]);
 
@@ -41,7 +43,7 @@ bok.config(['$routeProvider', 'USER_LEVELS',
                     controller: 'DefaultDataCtrl',
                     auth: USER_LEVELS.all
                 }).
-                when('/userpage', {
+                when('/start', {
                     templateUrl: 'private/userpage.html',
                     controller: 'UserPageCtrl',
                     auth: USER_LEVELS.user,
@@ -129,6 +131,16 @@ bok.config(['$routeProvider', 'USER_LEVELS',
                 when('/customers', {
                     templateUrl: 'private/customers.html',
                     controller: 'CustomerCtrl',
+                    auth: USER_LEVELS.user,
+                    resolve: {
+                        auth: ['AuthHandler', function(AuthHandler) {
+                                return AuthHandler.promise();
+                        }]
+                    }
+                }).
+                when('/timesheets', {
+                    templateUrl: 'private/timesheets.html',
+                    controller: 'TimesheetCtrl',
                     auth: USER_LEVELS.user,
                     resolve: {
                         auth: ['AuthHandler', function(AuthHandler) {

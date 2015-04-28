@@ -272,32 +272,64 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.bsc.maven</groupId>
-                <artifactId>maven-processor-plugin</artifactId>
-                <version>2.2.4</version>
+<!--            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.1.201405082137</version>
+                <configuration>
+                    <excludes>
+                         Controllers. Testing these would entail setting
+                             up a mock of the web platform. Too much work. 
+                        <exclude>se/chalmers/bokforing/controller/*</exclude>
+                         Spring Configuration 
+                        <exclude>se/chalmers/bokforing/configuration/*</exclude>
+                         Spring Application initialization 
+                        <exclude>se/chalmers/bokforing/initialization/*</exclude>
+                         Entity classes 
+                        <exclude>se/chalmers/bokforing/model/*</exclude>
+                        <exclude>se/chalmers/bokforing/model/user/*</exclude>	
+                         JSON representations 
+                        <exclude>se/chalmers/bokforing/jsonobject/*</exclude>	
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>process</id>
+                        <id>pre-unit-test</id>
                         <goals>
-                            <goal>process</goal>
+                            <goal>prepare-agent</goal>
                         </goals>
-                        <phase>generate-sources</phase>
+                    </execution>
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>		
+                            <goal>check</goal>
+                        </goals>
                         <configuration>
-                            <processors>
-                                <processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
-                            </processors>
+                            <rules>
+                                  implmentation is needed only for Maven 2  
+                                <rule implementation="org.jacoco.maven.RuleConfiguration">
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit implementation="org.jacoco.report.check.Limit">
+                                            <counter>INSTRUCTION</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.8</minimum>			
+                                        </limit>
+                                          implmentation is needed only for Maven 2  
+                                        <limit implementation="org.jacoco.report.check.Limit">
+                                            <counter>COMPLEXITY</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.75</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
                         </configuration>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>        
-                        <groupId>org.hibernate</groupId>
-                        <artifactId>hibernate-jpamodelgen</artifactId>
-                        <version>4.3.4.Final</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
+            </plugin> -->
         </plugins>
     </build>
     <repositories>

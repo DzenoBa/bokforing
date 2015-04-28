@@ -57,11 +57,6 @@ authControllers.controller('UserPageCtrl', ['$scope', '$q', '$filter', 'AuthProx
             getBalanceList({number: 4}).then(function(data) {
                 updateChart(costChart, data);
             });
-            
-            // GET ASSETS DATA
-            getBalanceList({number: 1}).then(function(data) {
-                updateChart(assetsChart, data);
-            });
         };
         
         function updateChart(chart, data) {
@@ -126,28 +121,12 @@ authControllers.controller('UserPageCtrl', ['$scope', '$q', '$filter', 'AuthProx
             ]
         };
         
-        var assetsData = {
-            labels: getDates(),
-            datasets: [
-                {
-                    label: "Assets",
-                    fillColor: "rgba(74,149,237,0.9)",
-                    strokeColor: "rgba(74,149,237,1)",
-                    pointColor: "#fff",
-                    pointStrokeColor: "rgba(74,149,237,1)",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(74,149,237,1)",
-                    data: [0,0,0,0,0,0,0]
-                }
-            ]
-        };
+      
         
         var revenueCtx = document.getElementById("revenueChart").getContext("2d");
         var revenueChart = new Chart(revenueCtx).Line(revenueData);
         var costCtx = document.getElementById("costChart").getContext("2d");
         var costChart = new Chart(costCtx).Line(costData); 
-        var assetsCtx = document.getElementById("assetsChart").getContext("2d");
-        var assetsChart = new Chart(assetsCtx).Line(assetsData); 
        
         init();
     }

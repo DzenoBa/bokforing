@@ -14,7 +14,7 @@ import se.chalmers.bokforing.config.TestApplicationConfig;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.service.AccountService;
-import se.chalmers.bokforing.service.InitializationUtilImpl;
+import se.chalmers.bokforing.service.impl.InitializationUtilImpl;
 
 /**
  *

@@ -4,9 +4,11 @@ package se.chalmers.bokforing.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,7 +26,7 @@ import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.CustomerService;
-import se.chalmers.bokforing.persistence.user.UserService;
+import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.AccountManager;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.AccountService;
@@ -73,6 +75,7 @@ public class BookkeepingController {
     /*
      * CREATE VERIFICATION
      */
+    @Transactional
     @RequestMapping(value = "/bookkeeping/createman", method = RequestMethod.POST)
     public @ResponseBody FormJSON createVerification(@RequestBody final VerificationJSON verification) {
         
@@ -81,14 +84,14 @@ public class BookkeepingController {
         
         // CHECK SESSION
         if(!(authSession.sessionCheck())) {
-            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd!");
             return form;
         }
         String email = authSession.getEmail();
         
         // CHECK DATE
         if(verification.getTransactionDate() == null) {
-            form.addError("verificationdate", "Ange ett datum");
+            form.addError("verificationdate", "Ange ett datum.");
             return form;
         }
         
@@ -100,7 +103,7 @@ public class BookkeepingController {
         
         // CHECK POSTS
         if(verification.getPosts() == null || verification.getPosts().isEmpty()) {
-            form.addError("general", "Ett fel inträffades vänligen försök igenom om en liten stund");
+            form.addError("general", "Ett fel inträffade, vänligen försök igenom om en liten stund.");
             return form;
         }
             
@@ -108,7 +111,7 @@ public class BookkeepingController {
         List<Post> new_posts = new ArrayList();
         for(PostJSON post : verification.getPosts()) {
             if(post == null) {
-                form.addError("general", "Ett fel inträffades, vänligen försök igen om en liten stund.");
+                form.addError("general", "Ett fel inträffade, vänligen försök igen om en liten stund.");
                 return form;
             }
             
@@ -121,11 +124,11 @@ public class BookkeepingController {
             Account temp_account = accountService.findAccountByNumber(post.getAccountid());
             // THIS SHOULD'NT HAPPEN 
             if(temp_account == null) {
-                form.addError("general", "Något gick fel, vänligen försök igen om en liten stund");
+                form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             }
             // CHECK DEBIT AND CREDIT
             if(post.getDebit() < 0 || post.getCredit() < 0) {
-                form.addError("general", "Både debet och kredit måste innehålla en siffra i rad " + index + "!");
+                form.addError("general", "Både debet och kredit måste innehålla en siffra i rad " + index + ".");
                 return form;
             }
             
@@ -144,7 +147,7 @@ public class BookkeepingController {
             }
             // SOMETHING WRONG
             else {
-                form.addError("general", "Debet och Kredit får ej vara lika eller en av dem måste vara 0; Rad: " + index);
+                form.addError("general", "Rad: " + index + ". Debet och kredit får ej vara lika eller en av dem måste vara 0.");
                 return form;
             }
             
@@ -165,7 +168,7 @@ public class BookkeepingController {
         // CREATE VERIFICATION
         Verification ver = verificationManager.createVerification(uh.getUA(), new_posts, verification.getTransactionDate(), null, description);
         if(ver == null) {
-            form.addError("general", "Verifikationen är ej valid");
+            form.addError("general", "Verifikationen är inte giltig.");
             return form;
         }
         uh.getVerifications().add(ver);
@@ -186,7 +189,7 @@ public class BookkeepingController {
         
         // CHECK SESSION
         if(!(authSession.sessionCheck())) {
-            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
             return form;
         }
         String email = authSession.getEmail();
@@ -195,7 +198,7 @@ public class BookkeepingController {
         // VERIFICATION CHECK
         Verification ver = verificationService.findVerificationById(uh.getUA(), verification.getId());
         if(ver == null) {
-            form.addError("general", "Ett fel inträffades, vänligen försök igen om en liten stund.");
+            form.addError("general", "Ett fel inträffade, vänligen försök igen om en liten stund.");
             return form;
         }
         
@@ -210,7 +213,7 @@ public class BookkeepingController {
         if(verification.getPosts() != null) {
             for(PostJSON post : verification.getPosts()) {
                 if(post == null) {
-                    form.addError("general", "Ett fel inträffades, vänligen försök igen om en liten stund.");
+                    form.addError("general", "Ett fel inträffade, vänligen försök igen om en liten stund.");
                     return form;
                 }
 
@@ -246,7 +249,7 @@ public class BookkeepingController {
                 }
                 // SOMETHING WRONG
                 else {
-                    form.addError("general", "Debet och Kredit får ej vara lika eller en av dem måste vara 0; Rad: " + index);
+                    form.addError("general", "Rad: " + index + ". Debet och kredit får ej vara lika eller en av dem måste vara 0.");
                     return form;
                 }
 
@@ -263,7 +266,7 @@ public class BookkeepingController {
             for(PostJSON post : verification.getOldposts()) {
                 Post temp_post = postService.findPostById(post.getId());
                 if(temp_post == null) {
-                    form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+                    form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
                     return form;
                 }
                 old_posts.add(temp_post);
@@ -481,5 +484,100 @@ public class BookkeepingController {
         }
         
         return verJSONLs;
+    }
+    
+    @Transactional
+    @RequestMapping(value = "/bookkeeping/addtofavaccounts", method = RequestMethod.POST)
+    public @ResponseBody FormJSON addToFavoriteAccounts(@RequestBody final AccountJSON account) {
+        
+        FormJSON form = new FormJSON();
+        
+         // CHECK SESSION
+        if(!(authSession.sessionCheck())) {
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
+            return form;
+        } 
+        String email = authSession.getEmail();
+        
+        // ACCOUNT CHECK
+        if(!(account.getNumber() > 0)) {
+            form.addError("account", "Vänligen ange ett konto.");
+            return form;
+        }
+        Account aDb = accountService.findAccountByNumber(account.getNumber());
+        if(aDb == null) {
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
+            return form;
+        }
+        
+        // EVERYTHING SEEMS TO BE IN ORDER
+        UserHandler uh = userService.getUser(email);
+        Set<Account> accountSet = uh.getUA().getFavoriteAccounts();
+        if(accountSet.contains(aDb)) {
+            form.addError("accounts", "Kontot finns redan i listan.");
+            return form;
+        }
+        accountSet.add(aDb);
+        uh.getUA().setFavoriteAccounts(accountSet);
+        userService.storeUser(uh);
+        
+        return form;
+    }
+    
+    @Transactional
+    @RequestMapping(value = "/bookkeeping/deletefromfavaccounts", method = RequestMethod.POST)
+    public @ResponseBody FormJSON deleteFromFavoriteAccounts(@RequestBody final AccountJSON account) {
+        
+        FormJSON form = new FormJSON();
+        
+         // CHECK SESSION
+        if(!(authSession.sessionCheck())) {
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
+            return form;
+        } 
+        String email = authSession.getEmail();
+        
+        // ACCOUNT CHECK
+        if(!(account.getNumber() > 0)) {
+            form.addError("account", "Vänligen ange ett konto.");
+            return form;
+        }
+        Account aDb = accountService.findAccountByNumber(account.getNumber());
+        if(aDb == null) {
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
+            return form;
+        }
+        
+        // EVERYTHING SEEMS TO BE IN ORDER
+        UserHandler uh = userService.getUser(email);
+        Set<Account> accountSet = uh.getUA().getFavoriteAccounts();
+        accountSet.remove(aDb);
+        uh.getUA().setFavoriteAccounts(accountSet);
+        userService.storeUser(uh);
+        
+        return form;
+    }
+    
+    @Transactional
+    @RequestMapping(value = "/bookkeeping/getfavaccounts", method = RequestMethod.GET)
+    public @ResponseBody List<AccountJSON> getFavoriteAccounts() {
+        
+        List<AccountJSON> accountJSONLs = new ArrayList();
+        
+        if(!authSession.sessionCheck()) {
+            return accountJSONLs;
+        } 
+        UserHandler uh = userService.getUser(authSession.getEmail());
+        Set<Account> accountSet = uh.getUA().getFavoriteAccounts();
+        
+        for(Account a : accountSet) {
+            AccountJSON a_json = new AccountJSON();
+            a_json.setNumber(a.getNumber());
+            a_json.setName(a.getName());
+            
+            accountJSONLs.add(a_json);
+        }
+        
+        return accountJSONLs;
     }
 }
