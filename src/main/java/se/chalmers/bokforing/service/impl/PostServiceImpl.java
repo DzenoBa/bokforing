@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.service;
+package se.chalmers.bokforing.service.impl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,6 +25,8 @@ import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.persistence.PostRepository;
 import se.chalmers.bokforing.persistence.VerificationRepository;
+import se.chalmers.bokforing.service.AccountService;
+import se.chalmers.bokforing.service.PostService;
 import static se.chalmers.bokforing.util.Constants.REVENUE_ACCOUNTS;
 
 /**

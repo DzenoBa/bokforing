@@ -1,5 +1,5 @@
 
-package se.chalmers.bokforing.service;
+package se.chalmers.bokforing.service.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +9,7 @@ import se.chalmers.bokforing.model.AccessKey;
 import se.chalmers.bokforing.model.AccessKeyType;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.persistence.AccessKeyRepository;
+import se.chalmers.bokforing.service.AccessKeyService;
 
 /**
  *

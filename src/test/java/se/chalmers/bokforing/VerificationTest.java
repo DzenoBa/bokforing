@@ -44,7 +44,7 @@ import se.chalmers.bokforing.service.AccountService;
 import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.PostManager;
 import se.chalmers.bokforing.service.PostService;
-import se.chalmers.bokforing.service.PostServiceImpl;
+import se.chalmers.bokforing.service.impl.PostServiceImpl;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.VerificationService;
 import se.chalmers.bokforing.util.Constants;

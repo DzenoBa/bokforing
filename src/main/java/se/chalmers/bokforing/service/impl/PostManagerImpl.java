@@ -3,13 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.service;
+package se.chalmers.bokforing.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.PostSum;
+import se.chalmers.bokforing.service.PostManager;
+import se.chalmers.bokforing.service.PostService;
 import se.chalmers.bokforing.util.DateUtil;
 
 /**

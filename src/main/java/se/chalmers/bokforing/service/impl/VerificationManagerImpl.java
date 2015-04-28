@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.service;
+package se.chalmers.bokforing.service.impl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,6 +16,8 @@ import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.Verification;
+import se.chalmers.bokforing.service.VerificationManager;
+import se.chalmers.bokforing.service.VerificationService;
 import se.chalmers.bokforing.util.DateUtil;
 
 /**

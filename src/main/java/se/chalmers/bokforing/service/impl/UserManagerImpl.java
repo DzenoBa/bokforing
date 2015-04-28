@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.service;
+package se.chalmers.bokforing.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.user.UserHandler;
+import se.chalmers.bokforing.service.UserManager;
+import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.UserService;
 
 /**

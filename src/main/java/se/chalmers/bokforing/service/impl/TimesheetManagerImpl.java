@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.service;
+package se.chalmers.bokforing.service.impl;
 
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,8 @@ import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.Timesheet;
 import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.service.TimesheetManager;
+import se.chalmers.bokforing.service.TimesheetService;
 
 /**
  *

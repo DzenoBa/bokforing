@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.service;
+package se.chalmers.bokforing.service.impl;
 
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.persistence.CustomerRepository;
+import se.chalmers.bokforing.service.CustomerService;
 
 /**
  *

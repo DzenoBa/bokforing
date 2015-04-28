@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.service;
+package se.chalmers.bokforing.service.impl;
 
 import java.util.LinkedList;
 import se.chalmers.bokforing.model.user.UserAccount;
@@ -15,6 +15,7 @@ import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.model.user.UserInfo;
 import se.chalmers.bokforing.persistence.user.UserInfoRepository;
 import se.chalmers.bokforing.persistence.user.UserRepository;
+import se.chalmers.bokforing.service.UserService;
 
 /**
  * Implimentation of userService.

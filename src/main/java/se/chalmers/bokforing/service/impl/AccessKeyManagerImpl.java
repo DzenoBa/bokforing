@@ -1,5 +1,5 @@
 
-package se.chalmers.bokforing.service;
+package se.chalmers.bokforing.service.impl;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.model.AccessKey;
 import se.chalmers.bokforing.model.AccessKeyType;
 import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.service.AccessKeyManager;
+import se.chalmers.bokforing.service.AccessKeyService;
 
 /**
  *

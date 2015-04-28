@@ -1,4 +1,4 @@
-package se.chalmers.bokforing.service;
+package se.chalmers.bokforing.service.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.persistence.AccountRepository;
+import se.chalmers.bokforing.service.AccountManager;
+import se.chalmers.bokforing.service.AccountService;
+import se.chalmers.bokforing.service.InitializationUtil;
 
 /**
  *
