@@ -8,12 +8,14 @@ package se.chalmers.bokforing.model.user;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
+import se.chalmers.bokforing.model.Address;
 
 /**
  * More information about the user.
@@ -32,8 +34,8 @@ protected UserInfo(){
     private UserAccount ua;
     private String userName;
     private String phoneNumber;
-    private String companyName;
-    private String companyAdr;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address adr;
     private String postCode;
     private String bankgiro;
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -67,21 +69,11 @@ protected UserInfo(){
         this.phoneNumber = number;
     }
 
-    /**
-     * @return the companyName
-     */
-    public String getCompanyName() {
-        return companyName;
+    public Address getAddress(){
+        return this.adr;
     }
-    void setCompanyName(String name){
-        this.companyName = name;
-    }
-
-    public String getCompanyAdr() {
-        return companyAdr;
-    }
-    void setCompanyAdr(String adr){
-        this.companyAdr = adr;
+    public void setAddress(Address adr){
+        this.adr = adr;
     }
     
     public String getPostCode() {
@@ -146,7 +138,7 @@ protected UserInfo(){
             sb.append("null");
         sb.append(", username=").append(userName);
         sb.append(", phonenumber= ").append(phoneNumber);
-        sb.append(", companyname=").append(companyName);
+        sb.append(", address=").append(adr.toString());
         sb.append(", lastLogIn=").append(lastLogIn);
         sb.append(", logo=").append(logo);
         sb.append(" }");

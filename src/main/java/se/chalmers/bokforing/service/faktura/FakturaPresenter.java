@@ -94,7 +94,7 @@ public class FakturaPresenter {
         replacer("faktnr",fak.getFakturaId().toString());
         replacer("kundnr",to.getCustomerNumber().toString());
         replacer("faktdat",sdf.format(fak.getFakturaDate()));
-        replacer("tcnamn",to.getAddress().getStreetNameAndNumber());
+        replacer("tcnamn",to.getAddress().getCompanyName());
         replacer("tadr",to.getAddress().getStreetNameAndNumber());
         replacer("poskod", to.getAddress().getPostalCode());
         
@@ -113,8 +113,8 @@ public class FakturaPresenter {
         replacer("totalcost",summaryContent());
         
         //BOT
-        replacer("fcname",fr.getCompanyName());
-        replacer("vadr",fr.getCompanyAdr());
+        replacer("fcname",fr.getAddress().getCompanyName());
+        replacer("vadr",fr.getAddress().getStreetNameAndNumber());
         replacer("vpostkod",fr.getPostCode());
         
         replacer("ftel",fr.getPhoneNumber());
