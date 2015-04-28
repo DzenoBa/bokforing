@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.persistence.user;
+package se.chalmers.bokforing.service;
 
 import java.util.List;
 import se.chalmers.bokforing.model.user.UserAccount;

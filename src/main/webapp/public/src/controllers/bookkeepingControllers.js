@@ -80,7 +80,12 @@ bookkeepingControllers.controller('BookkeepingCtrl', ['$scope', 'BookkeepingProx
             var modalInstance = $modal.open({
                 templateUrl: 'private/modals/accountSelecterModal.html',
                 controller: 'ModalInstanceAccountCtrl',
-                size: 'lg'
+                size: 'lg',
+                resolve: {
+                    accountType: function() {
+                        return null;
+                    }
+                }
             });
 
             modalInstance.result.then(function (selectedAccount) {
@@ -134,7 +139,7 @@ bookkeepingControllers.controller('BookkeepingCtrl', ['$scope', 'BookkeepingProx
 ]);
 
 bookkeepingControllers.controller('ModalInstanceAccountCtrl', 
-    function ($scope, $modalInstance, BookkeepingProxy) {
+    function ($scope, $modalInstance, BookkeepingProxy, accountType) {
 
     $scope.radioModel = 0;
     $scope.currentPage = 1;
@@ -157,20 +162,25 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
     };
     
     $scope.autosearch = function() {
-        $scope.currentPage = 1;
-        if($scope.radioModel === 0 && $scope.account.number > 9 || 
-                $scope.radioModel === 1 && $scope.account.name.length > 2) {
-            search();
-        } else {
-            $scope.accounts = {};
-            $scope.maxsize = 0;
+        if(angular.isDefined($scope.account)) {
+            $scope.currentPage = 1;
+            if($scope.radioModel === 0 && $scope.account.number > 9 || 
+                    $scope.radioModel === 1 && $scope.account.name.length > 2 ||
+                    $scope.accountType > 0) {
+                search();
+            } else {
+                $scope.accounts = {};
+                $scope.maxsize = 0;
+            }
         }
     };
     
     function search() {
         var account;
         var currentPage = $scope.currentPage - 1;
-        if($scope.radioModel === 0 && $scope.account.number) {
+        if($scope.accountType > 0 && $scope.account.number >= 0) {
+            account = {number: "" + + $scope.accountType + $scope.account.number, startrange: currentPage};
+        } else if($scope.radioModel === 0 && $scope.account.number > 0) {
             account = {number: $scope.account.number, startrange: currentPage};
         } else if($scope.radioModel === 1 && $scope.account.name) {
             account = {name: $scope.account.name, startrange: currentPage};
@@ -194,6 +204,20 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
     $scope.pageChanged = function() {
         search();
     };
+    
+    function init() {
+        if(accountType !== null && accountType.length > 0) {
+            $scope.accountType = accountType[0];
+            $scope.accountTypes = accountType;
+        } else
+            $scope.accountType = accountType;
+        if(accountType > 0) {
+            $scope.account = {number: ""};
+            search();
+        }
+    }
+    
+    init();
     
 });
 
@@ -336,7 +360,12 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'Book
             var modalInstance = $modal.open({
                 templateUrl: 'private/modals/accountSelecterModal.html',
                 controller: 'ModalInstanceAccountCtrl',
-                size: 'lg'
+                size: 'lg',
+                resolve: {
+                    accountType: function() {
+                        return null;
+                    }
+                }
             });
 
             modalInstance.result.then(function (selectedAccount) {
@@ -377,40 +406,13 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'Book
     }
 ]);
 
-bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'BookkeepingProxy', '$modal', '$filter',
-    function($scope, BookkeepingProxy, $modal, $filter) {
+bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'BookkeepingProxy', 'ProductProxy', '$modal', '$filter',
+    function($scope, BookkeepingProxy, ProductProxy, $modal, $filter) {
         
         $scope.step = 1;
         $scope.steptype = [0,0,0,0];
         $scope.posts = [];
-        $scope.sum = 0;
-        $scope.moms = 0;
-        
-        $scope.calcStep2 = function() {
-            var moms = $scope.sum * .2;
-            var type;
-            if($scope.steptype[0] === 1)
-                type = "credit";
-            else 
-                type = "debit";
-            addPost(2611, "Utgående moms på försäljning inom Sverige, 25%", type, moms);
-            addPost(3000, "Försäljning inom Sverige", $scope.steptype[1], $scope.sum - moms);
-        };
-        
-        $scope.calcStep3 = function() {
-            var type;
-            if($scope.steptype[0] === 1)
-                type = "debit";
-            else 
-                type = "credit";
-            if($scope.steptype[2] === 1) {
-                addPost(1910, "Kassa", type, $scope.sum);
-            } else {
-                addPost(1920, "PlusGiro", type, $scope.sum);
-            }
-        };
-        
-        
+      
         function addPost(acc_number, acc_name, type, sum) {
             var debit;
             var credit;
@@ -425,5 +427,261 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
                             debit: debit, credit: credit};
             $scope.posts = $scope.posts.concat([temp_post]);
         };
+        
+        $scope.openaccount = function () {
+
+            var modalInstance = $modal.open({
+                templateUrl: 'private/modals/accountSelecterModal.html',
+                controller: 'ModalInstanceAccountCtrl',
+                size: 'lg',
+                resolve: {
+                    accountType: function() {
+                        return [4,5,6,7];
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (selectedAccount) {
+                BookkeepingProxy.addToFavoriteAccounts({number: selectedAccount.number})
+                    .success(function(form) {
+                        $scope.form = form;
+                        if(form.numErrors === 0) {
+                            getFavoriteAccounts();
+                        }
+                    }).error(function() {
+                        console.log("addToFavList: error");
+                    });
+            });
+        };
+        
+        /*
+         * JAG HAR BETALAT
+         */
+        function getFavoriteAccounts() {
+            BookkeepingProxy.getFavoriteAccounts()
+                    .success(function(accounts) {
+                        $scope.accounts = accounts;
+                    }).error(function() {
+                        console.log("getFavAcc: error");
+                    });
+        };
+        
+        $scope.initPayed = function() {
+            getFavoriteAccounts();
+            $scope.transactionDate = $filter('date')(new Date(),'yyyy-MM-dd');
+        };
+        
+        $scope.deleteFavAccount = function(account) {
+            BookkeepingProxy.deleteFromFavoriteAccounts({number: account.number})
+                    .success(function(form) {
+                        $scope.form = form;
+                        if(form.numErrors === 0) {
+                            getFavoriteAccounts();
+                        }
+                    }).error(function() {
+                        console.log("deleteFromFavList: error");
+                    });
+        };
+        
+        $scope.selectAccount = function(account) {
+            $scope.selectedAccount = account;
+        };
+        
+        $scope.calcHavePayed = function() {
+            $scope.posts = [];
+            if(angular.isUndefined($scope.transactionDate) || ($scope.transactionDate === null)) {
+                $scope.form = {errors: {transactiondate: "Vänligen ange ett bokföringsdatum"}};
+                $scope.step = 2;
+                return;
+            } else if(angular.isUndefined($scope.sum) || !($scope.sum > 0)) {
+                $scope.form = {errors: {sum: "Vänligen ange en summa"}};
+                $scope.step = 2;
+                return;
+            } else if(angular.isUndefined($scope.vat) || !($scope.vat >= 0)) {
+                $scope.form = {errors: {vat: "Vänligen ange moms"}};
+                $scope.step = 2;
+                return;
+            } else {
+                $scope.form = null;
+            }
+            var totalSum = $filter('number')($scope.sum, 2);
+            
+            if($scope.steptype[2] === 0) {
+                addPost(1910, "Kassa", "credit", totalSum);
+            } else {
+                addPost(1920, "PlusGiro", "credit", totalSum);
+            }
+            
+            var accountSum = totalSum;
+
+            if($scope.vat !== null && $scope.vat > 0) {
+                var vatSum = $filter('number')(totalSum * $scope.vat);
+                accountSum = $filter('number')(totalSum - vatSum);
+                var vatAccount = vatToAccountConverter($scope.vat);
+                addPost(vatAccount.number, vatAccount.name,
+                    "debit", vatSum);
+            }
+            
+            addPost($scope.selectedAccount.number, $scope.selectedAccount.name,
+                "debit", accountSum);
+            
+            totalDebitCredit();
+        };
+        
+        function vatToAccountConverter(number) {
+            if(number === "0.06")
+                return {number: 2630, name: "Utgående moms, 6 %"};
+            if(number === "0.12")
+                return {number: 2620, name: "Utgående moms, 12 %"};
+            if(number === "0.25")
+                return {number: 2610, name: "Utgående moms, 25 %"};
+            return {number:0, name: ""};
+        };
+        
+        /*
+         * JAG HAR FÅTT BETALT
+         */
+        $scope.currentProductPage = 1;
+        
+        $scope.initGotPayed = function() {
+            getProducts();
+            countProducts();
+            $scope.transactionDate = $filter('date')(new Date(),'yyyy-MM-dd');
+        };
+        
+        function getProducts() {
+            var index = $scope.currentProductPage-1;
+            ProductProxy.getProducts({name: $scope.searchproductname, startrange: index, pagesize: 10})
+                   .success(function(products) {
+                       $scope.products = products;
+                   }).error(function() {
+                       console.log("getProducts: error");
+                   });
+        };
+        
+        function countProducts() {
+            ProductProxy.countProducts({name: $scope.searchproductname, pagesize: 10})
+                   .success(function(long) {
+                       $scope.productmaxsize = long;
+                   }).error(function() {
+                       console.log("getProducts: error");
+                   });
+        };
+        
+        $scope.productPageChanged = function() {
+            getProducts();
+        };
+        
+        $scope.searchproduct = function() {
+            getProducts();
+            countProducts();
+        };
+        
+        $scope.autosearchproduct = function() {
+            if($scope.searchproductname.length > 2 || $scope.searchproductname.length === 0) {
+                $scope.searchproduct();
+            }
+        };
+        
+        $scope.selectProduct = function(product) {
+            $scope.selectedProduct = product;
+        };
+        
+        $scope.calcGotPayed = function() {
+            $scope.posts = [];
+            if(angular.isUndefined($scope.transactionDate) || ($scope.transactionDate === null)) {
+                $scope.form = {errors: {transactiondate: "Vänligen ange ett bokföringsdatum"}};
+                $scope.step = 2;
+                return;
+            } else if(angular.isUndefined($scope.noofproduct) || !($scope.noofproduct > 0)) {
+                $scope.form = {errors: {noofproduct: "Vänligen ange ett antal"}};
+                $scope.step = 2;
+                return;
+            } else {
+                $scope.form = null;
+            }
+            var productSum = $filter('number')($scope.selectedProduct.price * $scope.noofproduct, 2);
+            addPost($scope.selectedProduct.account.number, $scope.selectedProduct.account.name,
+                "credit", productSum);
+            
+            var totalSum = productSum;
+            
+            if($scope.selectedProduct.vat !== null) {
+                var vat = 1 + vatConverter($scope.selectedProduct.vat.number);
+                totalSum = $filter('number')(productSum * vat, 2);
+                var vatSum = $filter('number')(totalSum-productSum, 2);
+                addPost($scope.selectedProduct.vat.number, $scope.selectedProduct.vat.name,
+                    "credit", vatSum);
+            }
+            if($scope.steptype[2] === 0) {
+                addPost(1910, "Kassa", "debit", totalSum);
+            } else {
+                addPost(1920, "PlusGiro", "debit", totalSum);
+            }
+            
+            totalDebitCredit();
+        };
+        
+        function vatConverter(number) {
+            if(number === 2630)
+                return 0.06;
+            if(number === 2620)
+                return 0.12;
+            if(number === 2610)
+                return 0.25;
+            return 1;
+        };
+        
+        $scope.opencal = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            
+            $scope.opened = true;
+        };
+        
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1,
+            yearRange: 1,
+            maxMode: 'month',
+            currentText: 'Idag'
+        };  
+        
+        function totalDebitCredit() {
+            var debit = 0;
+            var credit = 0;
+            
+            angular.forEach($scope.posts, function(value, key) { 
+                debit = debit + parseInt(value.debit, 10);
+                credit = credit + parseInt(value.credit, 10);
+            });
+            
+            $scope.sumDebit = $filter('number')(debit, 2);
+            $scope.sumCredit = $filter('number')(credit, 2);
+        };
+        
+        $scope.submit = function() {
+            var verification = {transactionDate: $scope.transactionDate, posts: $scope.posts};
+            BookkeepingProxy.createManBook(verification)
+                    .success(function(form) {
+                        if(form.numErrors === 0) {
+                            $scope.posts = [];
+                            // REMOVE VARIABLES IN SCOPE
+                            delete $scope.selectedAccount;
+                            delete $scope.selectedProduct;
+                            delete $scope.noofproduct;
+                            delete $scope.sum;
+                            delete $scope.vat;
+                            delete $scope.transactionDate;
+                            $scope.step = 4;
+                        } else {
+                            $scope.form = form;
+                        }
+                    }).error(function() {
+                        console.log("create_ver: error");
+                    });
+        };
     }
+    
+    
 ]);

@@ -4,11 +4,10 @@
         <div class="col-md-6">
             <h2>Återställ lösenord</h2>
             <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
-                Lösenordet har ändrats!
+                Lösenordet har ändrats.
             </div>
             <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
-                <h4>{{form.numErrors}} fel hittades!</h4>
-                Vänligen rätta till dem!
+                <h4>{{form.numErrors}} fel hittades.</h4>
                 <p ng-show="form.errors.general !== null">{{form.errors.general}}</p>
             </div>
             <form class="form-horizontal" ng-show="form.numErrors !== 0">

@@ -7,6 +7,7 @@ package se.chalmers.bokforing.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.user.UserAccount;
 
@@ -21,8 +22,8 @@ public class ProductManagerImpl implements ProductManager {
     private ProductService productService;
     
     @Override
-    public Product createProduct(UserAccount user, String name, double price, Product.QuantityType quantityType, String description) {
-        if(!productIsValid(user, name, price, quantityType, description)) {
+    public Product createProduct(UserAccount user, String name, double price, Product.QuantityType quantityType, String description, Account defaultAccount, Account VATAccount) {
+        if(!productIsValid(user, name, price, quantityType, description, defaultAccount, VATAccount)) {
             return null;
         }
         
@@ -32,6 +33,8 @@ public class ProductManagerImpl implements ProductManager {
         product.setPrice(price);
         product.setQuantityType(quantityType);
         product.setDescription(description);
+        product.setDefaultAccount(defaultAccount);
+        product.setVATAccount(VATAccount);
         
         productService.save(product);
         
@@ -45,7 +48,7 @@ public class ProductManagerImpl implements ProductManager {
         }
     }
 
-    private boolean productIsValid(UserAccount user, String name, double price, Product.QuantityType quantityType, String description) {
+    private boolean productIsValid(UserAccount user, String name, double price, Product.QuantityType quantityType, String description, Account defaultAccount, Account VATAccount) {
         // TODO: validation
         return true;
     }

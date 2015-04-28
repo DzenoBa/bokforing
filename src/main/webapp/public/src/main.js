@@ -15,6 +15,7 @@ require(
         'controllers/defaultDataController',
         'controllers/productControllers',
         'controllers/customerControllers',
+        'controllers/timesheetController',
         'services/userServices',
         'services/authServices',
         'services/authHandler',
@@ -22,7 +23,8 @@ require(
         'services/defaultDataService',
         'services/productService',
         'services/customerService',
-        'services/statisticsService'
+        'services/statisticsService',
+        'services/timesheetService'
         
     ],
     function () {

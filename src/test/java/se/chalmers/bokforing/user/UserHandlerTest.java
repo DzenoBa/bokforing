@@ -15,7 +15,7 @@ import se.chalmers.bokforing.AbstractIntegrationTest;
 import se.chalmers.bokforing.config.TestApplicationConfig;
 import se.chalmers.bokforing.model.user.UserGroup;
 import se.chalmers.bokforing.model.user.UserHandler;
-import se.chalmers.bokforing.persistence.user.UserService;
+import se.chalmers.bokforing.service.UserService;
 
 /**
  *

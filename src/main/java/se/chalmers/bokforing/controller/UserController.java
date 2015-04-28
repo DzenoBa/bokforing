@@ -17,10 +17,10 @@ import se.chalmers.bokforing.model.AccessKey;
 import se.chalmers.bokforing.model.AccessKeyType;
 import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.user.UserHandler;
-import se.chalmers.bokforing.service.user.UserManager;
-import se.chalmers.bokforing.persistence.user.UserService;
+import se.chalmers.bokforing.service.UserManager;
 import se.chalmers.bokforing.service.AccessKeyManager;
 import se.chalmers.bokforing.service.AccessKeyService;
+import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.session.AuthSession;
 
 /**
@@ -60,7 +60,7 @@ public class UserController {
 
         // EMAIL CHECK
         if(user.getEmail() == null || user.getEmail().isEmpty()) {
-            form.addError("email", "Du har inte angett någon e-post adress!");
+            form.addError("email", "Du har inte angett någon e-postadress.");
             return form;
         }
         // CHECK IF VALID EMAIL
@@ -68,27 +68,27 @@ public class UserController {
                         + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         Pattern patternEmail = Pattern.compile(regexEmail);
         if(!(patternEmail.matcher(user.getEmail()).find())) {
-            form.addError("email", "Vänligen ange en e-post adress!");
+            form.addError("email", "Vänligen ange en korrekt e-postadress på formatet exempel@exempel.com");
             return form;
         }
         // CHECK IF EMAIL EXIST
         UserHandler userAccExist = userDb.getUser(user.getEmail());
         if(userAccExist != null) {
-            form.addError("email", "E-post adressen är redan registrerad!");
+            form.addError("email", "E-postadressen är redan registrerad.");
             return form;
         }
         
         // PASSWORD CHECK
         if(user.getNewpasswd() == null || user.getNewpasswd().isEmpty()) {
-            form.addError("newpasswd", "Vänligen ange ett lösenord!");
+            form.addError("newpasswd", "Vänligen ange ett lösenord.");
             return form;
         }
         if(user.getNewpasswd2() == null || user.getNewpasswd2().isEmpty()) {
-            form.addError("newpasswd2", "Vänligen ange ett lösenord!");
+            form.addError("newpasswd2", "Vänligen ange ett lösenord.");
             return form;
         }
         if(!(user.getNewpasswd().equals(user.getNewpasswd2()))) {
-            form.addError("newpasswd2", "Lösenordet matchar inte!");
+            form.addError("newpasswd2", "Lösenorden matchar inte.");
             return form;
         }
         
@@ -110,37 +110,37 @@ public class UserController {
         
         // PASSWORD CHECK
         if(user.getNewpasswd() == null || user.getNewpasswd().isEmpty()) {
-            form.addError("newpasswd", "Vänligen ange ett lösenord!");
+            form.addError("newpasswd", "Vänligen ange ett lösenord.");
             return form;
         }
         if(user.getNewpasswd2() == null || user.getNewpasswd2().isEmpty()) {
-            form.addError("newpasswd2", "Vänligen ange ett lösenord!");
+            form.addError("newpasswd2", "Vänligen ange ett lösenord.");
             return form;
         }
         if(!(user.getNewpasswd().equals(user.getNewpasswd2()))) {
-            form.addError("newpasswd2", "Lösenordet matchar inte!");
+            form.addError("newpasswd2", "Lösenorden matchar inte.");
             return form;
         }
         
         String email = authSession.getEmail();
         if(email == null || email.isEmpty()) {
-            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             return form;
         }
         UserHandler uh =userDb.getUser(email);
         if(uh == null) {
-            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             return form;
         }
         
         // CHECK IF VALID PASSWORD
         if(user.getPasswd() == null || user.getPasswd().isEmpty()) {
-            form.addError("passwd", "Ange ditt nuvarande lösenord!");
+            form.addError("passwd", "Ange ditt nuvarande lösenord.");
             return form;
         }
         String hashPasswd = PasswordUtil.hash(uh.getSalt() + user.getPasswd());
         if(!(hashPasswd.equals(uh.getPass()))) {
-            form.addError("passwd", "Löseordet är fel!");
+            form.addError("passwd", "Löseordet är fel.");
             return form;
         }
         
@@ -161,14 +161,14 @@ public class UserController {
 
         // CHECK SESSION
         if(!authSession.sessionCheck()) {
-            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             return form;
         }
         String email = authSession.getEmail();
         
         // EMAIL CHECK
         if(user.getEmail() == null || user.getEmail().isEmpty()) {
-            form.addError("email", "Ange en e-post adress.");
+            form.addError("email", "Ange en e-postadress.");
             return form;
         }
         // CHECK IF VALID EMAIL
@@ -176,19 +176,19 @@ public class UserController {
                         + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         Pattern patternEmail = Pattern.compile(regexEmail);
         if(!(patternEmail.matcher(user.getEmail()).find())) {
-            form.addError("email", "Vänligen ange en e-post adress!");
+            form.addError("email", "Vänligen ange korrekt e-postadress på formatet exempel@exempel.com");
             return form;
         }
         
         UserHandler uh = userDb.getUser(email);
         // CHECK IF VALID PASSWORD
         if(user.getPasswd() == null || user.getPasswd().isEmpty()) {
-            form.addError("passwd", "Ange ditt nuvarande lösenord!");
+            form.addError("passwd", "Ange ditt nuvarande lösenord.");
             return form;
         }
         String hashPasswd = PasswordUtil.hash(uh.getSalt() + user.getPasswd());
         if(!(hashPasswd.equals(uh.getPass()))) {
-            form.addError("passwd", "Löseordet är fel!");
+            form.addError("passwd", "Löseordet är fel.");
             return form;
         }
 
@@ -199,22 +199,22 @@ public class UserController {
             String hashedKey = randomKey; // TODO
             AccessKey newAccessKey = accessKeyManager.create(hashedKey, AccessKeyType.EMAILCHANGE, uh.getUA());
             if(newAccessKey == null) {
-                form.addError("general", "Något gick fel, vänligen försök igen om en liten stund");
+                form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
                 return form;
             }
         
             // TODO: SEND EMAIL
-            form.addError("accesskey", "En kod har generarats och har skickas till din nuvarande e-post adress!");
+            form.addError("accesskey", "En kod har generarats och har skickas till din nuvarande e-postadress.");
             return form;
         }
         // CHECK IF VALID ACCESSKEY
         if(!user.getAccesskey().isEmpty()) {
             AccessKey accessKey = accessKeyService.findByUserAccountAndType(uh.getUA(), AccessKeyType.EMAILCHANGE);
             if(accessKey == null) {
-                form.addError("general", "Något gick fel, vänligen försök igen om en liten stund");
+                form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
                 return form;
             } else if(!accessKey.getKey().equals(user.getAccesskey())) {
-                form.addError("accesskey", "Koden du angav är invalid");
+                form.addError("accesskey", "Koden du angav är inkorrekt.");
                 return form;
             }
         }
@@ -257,13 +257,13 @@ public class UserController {
         FormJSON form = new FormJSON();
         
         if(userInfo == null) {
-            form.addError("general", "Ett fel inträffades, vänligen försök igen om en liten stund!");
+            form.addError("general", "Ett fel inträffade, vänligen försök igen om en liten stund.");
             return form;
         }
         
         // CHECK SESSION
         if(!(authSession.sessionCheck())) {
-            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
             return form;
         }
         String email = authSession.getEmail();
@@ -298,7 +298,7 @@ public class UserController {
         }
         
         // YOU SHOULD NOT BE ABLE TO REACH THIS PART
-        form.addError("general", "Någon gick fel, vänligen försök igen om en liten stund");
+        form.addError("general", "Någon gick fel, vänligen försök igen om en liten stund.");
         return form;
     }
     
@@ -314,7 +314,7 @@ public class UserController {
         FormJSON form = new FormJSON();
         
         if(user.getEmail() == null) {
-            form.addError("general", "Vänligen ange en e-post adress.");
+            form.addError("general", "Vänligen ange en e-postadress.");
             return form;
         }
         // CHECK IF VALID EMAIL
@@ -322,14 +322,14 @@ public class UserController {
                         + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         Pattern patternEmail = Pattern.compile(regexEmail);
         if(!(patternEmail.matcher(user.getEmail()).find())) {
-            form.addError("general", "Vänligen ange en e-post adress!");
+            form.addError("general", "Vänligen ange en korrekt e-postadress på formatet exempel@exempel.com");
             return form;
         }
         
         // CHECK IF EMAIL EXIST
         UserAccount userAccount = userService.getUser(user.getEmail()).getUA();
         if(userAccount == null) {
-            form.addError("general", "Det finns inget konto registrerat med den angivna e-post adressen.");
+            form.addError("general", "Det finns inget konto registrerat med den angivna e-postadressen.");
             return form;
         }
         
@@ -341,7 +341,7 @@ public class UserController {
             // IF THE DIFFERENCE BETWEEN NOW-TIME AND PREVIOUS KEYS DATE
             // IS LESSER THAN 20 MIN
             if((now.getTime() - freshKey.getCreationDate().getTime()) <= 20*60*1000) {
-                form.addError("general", "Du har redan skickat en nyckel till din e-post adress!");
+                form.addError("general", "Du har redan fått en nyckel skickad till din e-postadress.");
                 return form;
             }
         }
@@ -351,7 +351,7 @@ public class UserController {
         String hashedKey = randomKey; // TODO
         AccessKey newAccessKey = accessKeyManager.create(hashedKey, AccessKeyType.FORGOTPASSWD, userAccount);
         if(newAccessKey == null) {
-            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             return form;
         }
         
@@ -395,31 +395,31 @@ public class UserController {
         // GET USER
         UserHandler userHandler = userService.getUser(user.getEmail());
         if(userHandler == null) {
-            form.addError("general", "Något gick fel, vängligen försök igen om en liten stund");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             return form;
         }
         
         // GET KEY
         AccessKey accessKey = accessKeyService.findByUserAccountAndType(userHandler.getUA(), AccessKeyType.FORGOTPASSWD);
         if(accessKey == null) {
-            form.addError("general", "Något gick fel, vängligen försök igen om en liten stund");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             return form;
         } else if(!accessKey.getKey().equals(user.getAccesskey())) {
-            form.addError("general", "Något gick fel, vängligen försök igen om en liten stund");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             return form;
         }
         
         // PASSWORD CHECK
         if(user.getNewpasswd() == null || user.getNewpasswd().isEmpty()) {
-            form.addError("newpasswd", "Vänligen ange ett lösenord!");
+            form.addError("newpasswd", "Vänligen ange ett lösenord.");
             return form;
         }
         if(user.getNewpasswd2() == null || user.getNewpasswd2().isEmpty()) {
-            form.addError("newpasswd2", "Vänligen ange ett lösenord!");
+            form.addError("newpasswd2", "Vänligen ange ett lösenord.");
             return form;
         }
         if(!(user.getNewpasswd().equals(user.getNewpasswd2()))) {
-            form.addError("newpasswd2", "Lösenordet matchar inte!");
+            form.addError("newpasswd2", "Lösenorden matchar inte.");
             return form;
         }
 

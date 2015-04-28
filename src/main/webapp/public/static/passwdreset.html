@@ -4,17 +4,16 @@
         <div class="col-md-6">
             <h2>Återställ lösenord</h2>
             <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
-                En kod har skickats till din e-post adress!
+                En kod har skickats till din e-postadress.
             </div>
             <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
-                <h4>{{form.numErrors}} fel hittades!</h4>
-                Vänligen rätta till dem!
+                <h4>{{form.numErrors}} fel hittades.</h4>
                 <p ng-show="form.errors.general !== null">{{form.errors.general}}</p>
             </div>
             <form class="form-horizontal">
                 <div class="form-group">
                     <div class="col-sm-3">
-                        <label for="email">E-post adress</label>
+                        <label for="email">E-postadress</label>
                     </div>
                     <div class="col-sm-9">
                         <input id="email" class="form-control" ng-model="user.email" type="text" value="{{user.email}}" placeholder="Ange din e-post adress"/>

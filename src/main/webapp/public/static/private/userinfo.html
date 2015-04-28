@@ -2,9 +2,23 @@
 <div>
     <h1>Användarinformation</h1>
     <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
-        <h4>{{form.numErrors}} fel hittades!</h4>
+        <h4>{{form.numErrors}} fel hittades.</h4>
         <p ng-show="form.errors.general !== null">{{form.errors.general}}</p>
     </div>
+    <table class="table">
+        <tr>
+            <td>Email:</td>
+            <td>
+                {{session.email}}
+            </td>
+        </tr>
+        <tr>
+            <td>Level:</td>
+            <td>
+                {{session.level}}
+            </td>
+        </tr>
+    </table>
     <form class="form-horizontal">
         <div class="form-group" ng-mouseenter="hoverfn = true" ng-mouseleave="hoverfn = false">
             <label for="firstname" class="col-sm-2 control-label">Förnamn</label>

@@ -9,10 +9,10 @@
         <div class="col-md-6">
             <h3>Ändra lösenord</h3>
             <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
-                Ändringarna har sparats!
+                Ändringarna har sparats.
             </div>
             <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
-                <h4>{{form.numErrors}} fel hittades!</h4>
+                <h4>{{form.numErrors}} fel hittades.</h4>
                 <p>{{form.errors.general}}</p>
             </div>
             <form class="form-horizontal">
@@ -84,7 +84,7 @@
             </form>
         </div>
         <div class="col-md-6">
-            <h3>Välj ett säkert lösenord!</h3>
+            <h3>Välj ett säkert lösenord.</h3>
             <ul>
                 <li>Ett säkert lösenord har både stora och små bokstäver samt siffror.</li>
             </ul>
@@ -95,16 +95,16 @@
         <div class="col-md-6">
             <h3>Ändra email</h3>
             <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
-                Ändringarna har sparats!
+                Ändringarna har sparats.
             </div>
             <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
-                <h4>{{form.numErrors}} fel hittades!</h4>
+                <h4>{{form.numErrors}} fel hittades.</h4>
                 <p>{{form.errors.general}}</p>
             </div>
             <form class="form-horizontal">
                 <div class="form-group">
                     <div class="col-sm-3">
-                        <label for="email">E-post adress</label>
+                        <label for="email">E-postadress</label>
                     </div>
                     <div class="col-sm-9">
                         <input id="email" class="form-control" ng-model="user.email" type="text" placeholder="Ange ett ny e-post adress"/>
@@ -139,8 +139,8 @@
                 <div class="form-group">
                     <div class="col-sm-3"></div><!-- Offset -->
                     <div class="col-sm-9">
-                        En kod kommer att skickas till din nuvarande e-post adress. 
-                        Du behöver denna för att slutföra ändringen av e-post adressen!
+                        En kod kommer att skickas till din nuvarande e-postadress. 
+                        Du behöver denna för att slutföra ändringen av e-postadressen.
                     </div>
                 </div>
                 <div class="form-group">
@@ -156,7 +156,7 @@
     
     <script type="text/ng-template" id="emailModalContent.html">
         <div class="modal-header">
-            <h3 class="modal-title">Ange en kod för att forsätta!</h3>
+            <h3 class="modal-title">Ange en kod för att forsätta.</h3>
         </div>
         <div class="modal-body">
             <div class="alert alert-info" role="alert">
@@ -176,7 +176,7 @@
         <div class="modal-footer">
             <div class="col-sm-6"></div>
             <div class="col-sm-6">
-                <button class="btn btn-primary" ng-click="resend()">Skicka om koden</button>
+                <button class="btn btn-primary" ng-click="resend()">Skicka koden igen</button>
                 <button class="btn btn-primary" ng-click="edit()" ng-disabled="!accesskey">Ändra</button>
                 <button class="btn btn-warning" ng-click="cancel()">Avbryt</button>
             </div>

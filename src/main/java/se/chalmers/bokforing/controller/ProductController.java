@@ -10,15 +10,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import se.chalmers.bokforing.jsonobject.AccountJSON;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.ProductJSON;
+import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
-import se.chalmers.bokforing.persistence.user.UserService;
+import se.chalmers.bokforing.service.AccountService;
+import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.ProductManager;
 import se.chalmers.bokforing.service.ProductService;
 import se.chalmers.bokforing.session.AuthSession;
+import se.chalmers.bokforing.util.Constants;
 
 /**
  *
@@ -39,6 +43,9 @@ public class ProductController {
     @Autowired
     private UserService userService;
     
+    @Autowired
+    private AccountService accountService;
+    
     /*
      * CREATE PRODUCT
      */
@@ -49,14 +56,14 @@ public class ProductController {
         
         // CHECK SESSION
         if(!authSession.sessionCheck()) {
-            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
             return form;
         }
         String email = authSession.getEmail();
         
         // CHECK NAME
         if(product.getName() == null || product.getName().isEmpty()) {
-            form.addError("name", "Vänligen ange ett namn");
+            form.addError("name", "Vänligen ange ett namn.");
             return form;
         }
         
@@ -67,7 +74,7 @@ public class ProductController {
         
         // PRICE CHECK
         if(!(product.getPrice() > 0)) {
-            form.addError("price", "Vänligen ange ett korrekt pris");
+            form.addError("price", "Priset måste vara en positiv summa.");
             return form;
         }
         
@@ -77,12 +84,38 @@ public class ProductController {
             return form;
         }
         
+        // ACCOUNT CHECK
+        if(product.getAccount() == null || !(product.getAccount().getNumber() > 0)) {
+            form.addError("account", "Vänligen ange ett konto");
+            return form;
+        }
+        
+        // VAT-ACCOUNT CHECK
+        int vat_number = 0;
+        if(product.getVat() != null) {
+            if(product.getVat().getNumber() > 0)
+                vat_number = product.getVat().getNumber();
+            else {
+                form.addError("account", "Vänligen ange moms");
+                return form;
+            }
+        }
+        
+        Account account = accountService.findAccountByNumber(product.getAccount().getNumber());
+        // IF(vat_number==0) IT SHOULD RETURN NULL
+        Account vat_account = accountService.findAccountByNumber(vat_number); 
+        
+        if(account == null) {
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
+            return form;
+        }
+        
         // EVERYTHING SEEMS TO BE IN ORDER
         UserHandler uh = userService.getUser(email);
         Product pDb = productManager.createProduct(uh.getUA(), product.getName(), 
-                product.getPrice(), Product.QuantityType.valueOf(product.getQuantitytype()), description);
+                product.getPrice(), Product.QuantityType.valueOf(product.getQuantitytype()), description, account, vat_account);
         if(pDb == null) {
-            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
         }
         return form;
     }
@@ -95,6 +128,7 @@ public class ProductController {
         
         List<ProductJSON> productJSONLs = new ArrayList();
         int startPos = 0;
+        int pageSize = Constants.DEFAULT_PAGE_SIZE;
         
         if(!authSession.sessionCheck()) {
             return productJSONLs;
@@ -104,8 +138,11 @@ public class ProductController {
         if(product.getStartrange() > 0) {
             startPos = product.getStartrange();
         }
+        if(product.getPagesize() > 0) {
+            pageSize = product.getPagesize();
+        }
         
-        PagingAndSortingTerms terms = new PagingAndSortingTerms(startPos, Boolean.TRUE, "name");
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(startPos, Boolean.TRUE, "name", pageSize);
         Page<Product> productPage;
         if(product.getName() != null && !product.getName().isEmpty()) {
             productPage = productService.findByNameLike(ua.getUA(), product.getName(), terms);
@@ -121,6 +158,18 @@ public class ProductController {
             temp.setQuantitytype(p.getQuantityType().toString());
             temp.setDescription(p.getDescription());
             
+            AccountJSON temp_a = new AccountJSON();
+            temp_a.setNumber(p.getDefaultAccount().getNumber());
+            temp_a.setName(p.getDefaultAccount().getName());
+            temp.setAccount(temp_a);
+            
+            if(p.getVATAccount() != null) {
+                AccountJSON temp_a_vat = new AccountJSON();
+                temp_a_vat.setNumber(p.getVATAccount().getNumber());
+                temp_a_vat.setName(p.getVATAccount().getName());
+                temp.setVat(temp_a_vat);
+            }
+            
             productJSONLs.add(temp);
         }
         
@@ -134,13 +183,18 @@ public class ProductController {
     public @ResponseBody long countProducts(@RequestBody final ProductJSON product) {
         
         long size = 0;
+        int pageSize = Constants.DEFAULT_PAGE_SIZE;
         
         if(!authSession.sessionCheck()) {
             return size;
         }
         UserHandler ua = userService.getUser(authSession.getEmail());
 
-        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.TRUE, "name");
+        if(product.getPagesize() > 0) {
+            pageSize = product.getPagesize();
+        }
+        
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.TRUE, "name", pageSize);
         Page<Product> productPage;
         if(product.getName() != null && !product.getName().isEmpty()) {
             productPage = productService.findByNameLike(ua.getUA(), product.getName(), terms);
@@ -162,20 +216,20 @@ public class ProductController {
         
         // CHECK SESSION
         if(!authSession.sessionCheck()) {
-            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
             return form;
         }
         String email = authSession.getEmail();
         
         // CHECK ID
         if(product.getId() == null || product.getId() <= 0) {
-            form.addError("genaral", "Något gick fel, vänligen försök igen om en liten stund.");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             return form;
         }
         
         // CHECK NAME
         if(product.getName() == null || product.getName().isEmpty()) {
-            form.addError("name", "Vänligen ange ett namn");
+            form.addError("name", "Vänligen ange ett namn.");
             return form;
         }
         
@@ -186,13 +240,39 @@ public class ProductController {
         
         // PRICE CHECK
         if(!(product.getPrice() > 0)) {
-            form.addError("price", "Vänligen ange ett korrekt pris");
+            form.addError("price", "Vänligen ange ett korrekt pris.");
             return form;
         }
         
         // QUANNTITY-TYPE CHECK
         if(product.getQuantitytype() == null || product.getQuantitytype().isEmpty()) {
-            form.addError("quantitytype", "Vänligen ange en enhet");
+            form.addError("quantitytype", "Vänligen ange en enhet.");
+            return form;
+        }
+        
+        // ACCOUNT CHECK
+        if(product.getAccount() == null || !(product.getAccount().getNumber() > 0)) {
+            form.addError("account", "Vänligen ange ett konto");
+            return form;
+        }
+        
+        // VAT-ACCOUNT CHECK
+        int vat_number = 0;
+        if(product.getVat() != null) {
+            if(product.getVat().getNumber() > 0)
+                vat_number = product.getVat().getNumber();
+            else {
+                form.addError("account", "Vänligen ange moms");
+                return form;
+            }
+        }
+        
+        Account account = accountService.findAccountByNumber(product.getAccount().getNumber());
+        // IF(vat_number==0) IT SHOULD RETURN NULL
+        Account vat_account = accountService.findAccountByNumber(vat_number); 
+        
+        if(account == null) {
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             return form;
         }
         
@@ -200,13 +280,16 @@ public class ProductController {
         UserHandler uh = userService.getUser(email);
         Product pDb = productService.findProductById(uh.getUA(), product.getId());
         if(pDb == null) {
-            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
+            return form;
         }
         pDb.setName(product.getName());
         pDb.setPrice(product.getPrice());
         pDb.setQuantityType(Product.QuantityType.valueOf(product.getQuantitytype()));
         pDb.setDescription(description);
-        
+        pDb.setDefaultAccount(account);
+        pDb.setVATAccount(vat_account);
+
         productService.save(pDb);
         
         return form;
@@ -222,14 +305,14 @@ public class ProductController {
         
         // CHECK SESSION
         if(!authSession.sessionCheck()) {
-            form.addError("general", "Ett fel inträffades, du har inte rätt tillstånd för att utföra denna åtgärd!");
+            form.addError("general", "Ett fel inträffade, du har inte rätt tillstånd för att utföra denna åtgärd.");
             return form;
         }
         String email = authSession.getEmail();
         
         // CHECK ID
         if(product.getId() == null || product.getId() <= 0) {
-            form.addError("genaral", "Något gick fel, vänligen försök igen om en liten stund.");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             return form;
         }
               
@@ -237,7 +320,7 @@ public class ProductController {
         UserHandler uh = userService.getUser(email);
         Product pDb = productService.findProductById(uh.getUA(), product.getId());
         if(pDb == null) {
-            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund.");
             return form;
         }
         

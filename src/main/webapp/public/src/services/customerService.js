@@ -16,11 +16,11 @@ customerService.factory('CustomerProxy', ['$http', '$location',
             create: function(customer) {
                 return $http.post(url + '/create', customer);
             },
-            getCustomers: function(start) {
-                return $http.post(url + '/getcustomers', start);
+            getCustomers: function(customer) {
+                return $http.post(url + '/getcustomers', customer);
             },
-            countCustomers: function() {
-                return $http.get(url + '/countcustomers');
+            countCustomers: function(customer) {
+                return $http.post(url + '/countcustomers', customer);
             },
             edit: function(customer) {
                 return $http.post(url + '/edit', customer);

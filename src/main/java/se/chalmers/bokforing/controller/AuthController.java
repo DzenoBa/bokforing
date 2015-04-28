@@ -10,7 +10,7 @@ import se.chalmers.bokforing.util.PasswordUtil;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
 import se.chalmers.bokforing.model.user.UserHandler;
-import se.chalmers.bokforing.persistence.user.UserService;
+import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.session.AuthSession;
 
 /**
@@ -38,7 +38,7 @@ public class AuthController {
         
         // EMAIL CHECK
         if(user.getEmail() == null || user.getEmail().isEmpty()) {
-            form.addError("email", "Du har inte angett någon e-post adress!");
+            form.addError("email", "Du har inte angett någon e-postadress.");
             return form;
         }
         // CHECK IF VALID EMAIL
@@ -46,25 +46,25 @@ public class AuthController {
                         + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         Pattern patternEmail = Pattern.compile(regexEmail);
         if(!(patternEmail.matcher(user.getEmail()).find())) {
-            form.addError("email", "Vänligen ange en e-post adress!");
+            form.addError("email", "Vänligen ange en korrekt e-postadress på formatet exempel@exempel.com.");
             return form;
         }
         // CHECK IF EMAIL EXIST
         UserHandler userEnt= userDb.getUser(user.getEmail());
         if(userEnt == null) {
-            form.addError("email", "E-post adressen existerar inte!");
+            form.addError("email", "E-postadressen existerar inte.");
             return form;
         }
         
         // PASSWORD CHECK
         if(user.getPasswd() == null || user.getPasswd().isEmpty()) {
-            form.addError("passwd", "Du har inte angett något lösenord!");
+            form.addError("passwd", "Du har inte angett något lösenord.");
             return form;
         }
         //CONCAT SALT + PASSWD; THEN HASH IT
         String hashPasswd = PasswordUtil.hash(userEnt.getSalt() + user.getPasswd());
         if(!hashPasswd.equals(userEnt.getPass())) {
-            form.addError("passwd", "Lösenordet är fel!");
+            form.addError("passwd", "Lösenordet är fel.");
             return form;
         }
         

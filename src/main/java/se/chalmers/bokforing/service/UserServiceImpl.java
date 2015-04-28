@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.persistence.user;
+package se.chalmers.bokforing.service;
 
 import java.util.LinkedList;
 import se.chalmers.bokforing.model.user.UserAccount;
@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.model.user.UserInfo;
-import se.chalmers.bokforing.service.InitializationUtil;
+import se.chalmers.bokforing.persistence.user.UserInfoRepository;
+import se.chalmers.bokforing.persistence.user.UserRepository;
 
 /**
  * Implimentation of userService.

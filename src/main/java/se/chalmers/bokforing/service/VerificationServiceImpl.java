@@ -18,7 +18,6 @@ import se.chalmers.bokforing.util.Constants;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.persistence.VerificationRepository;
-import se.chalmers.bokforing.persistence.VerificationSpecs;
 
 /**
  *
@@ -54,10 +53,6 @@ public class VerificationServiceImpl implements VerificationService {
         return repository.findByUserAccount(user, request);
     }
     
-    private Specifications<Verification> whereUser(UserAccount userAccount) {
-        return Specifications.where(VerificationSpecs.hasUserAccount(userAccount));
-    }
-
     @Override
     public Verification findByUserAndVerificationNumber(UserAccount user, long verNbr) {
         return repository.findByUserAccountAndVerificationNumber(user, verNbr);
