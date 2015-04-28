@@ -17,7 +17,7 @@ import se.chalmers.bokforing.model.faktura.Content;
 import se.chalmers.bokforing.model.faktura.Faktura;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.service.UserService;
-import se.chalmers.bokforing.service.faktura.FakturaPresenter;
+import se.chalmers.bokforing.service.FakturaPresenter;
 
 /**
  *
@@ -62,10 +62,11 @@ public class FakturaTest  extends AbstractIntegrationTest {
         FakturaPresenter fp = new FakturaPresenter(fak);
         
         // Doesn't work without the correct files
-//        try{
-//            fp.print();
-//        } catch (IOException | DocumentException e){
+        try{
+            fp.print();
+        } catch (IOException | DocumentException e){
+            // TODO: fix path
 //            assert(false);
-//        }
+        }
     }
 }
