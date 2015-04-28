@@ -115,7 +115,7 @@ public class FakturaPresenter {
         //BOT
         replacer("fcname",fr.getAddress().getCompanyName());
         replacer("vadr",fr.getAddress().getStreetNameAndNumber());
-        replacer("vpostkod",fr.getPostCode());
+        replacer("vpostkod",fr.getAddress().getPostalCode());
         
         replacer("ftel",fr.getPhoneNumber());
         

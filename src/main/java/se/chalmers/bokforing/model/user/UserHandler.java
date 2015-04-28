@@ -179,16 +179,6 @@ public class UserHandler {
     public String getBankgiro(){
         return ui.getBankgiro();
     }
-    
-        public void setPostCode(String pcode){
-        if(ui.getPostCode() == null || !pcode.equals(ui.getPostCode())){
-            ui.setPostCode(pcode);
-            modUI = true;
-        }
-    }
-    public String getPostCode(){
-        return ui.getPostCode();
-    }
 
 public void setLogo(final URI logo){
     if(ui.getLogo() == null || !logo.equals(ui.getLogo())){

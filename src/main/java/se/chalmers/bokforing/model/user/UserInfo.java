@@ -36,7 +36,6 @@ protected UserInfo(){
     private String phoneNumber;
     @OneToOne(cascade = CascadeType.ALL)
     private Address adr;
-    private String postCode;
     private String bankgiro;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date lastLogIn;
@@ -74,13 +73,6 @@ protected UserInfo(){
     }
     public void setAddress(Address adr){
         this.adr = adr;
-    }
-    
-    public String getPostCode() {
-        return postCode;
-    }
-    void setPostCode(String pcode){
-        this.postCode = pcode;
     }
     
     /**

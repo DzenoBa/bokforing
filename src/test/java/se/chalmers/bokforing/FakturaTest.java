@@ -50,7 +50,6 @@ public class FakturaTest  extends AbstractIntegrationTest {
         adr.setPostalCode("666 42");
         adr.setCompanyName("THE COMPANY THAT SELLS");
         sender.setAddress(adr);
-        sender.setPostCode("666 42");
         sender.setPhoneNumber("331-10 10 10");
         sender.setBankgiro("123-4567");
         fak.setToUser(toUh);
