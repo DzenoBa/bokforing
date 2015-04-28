@@ -11,12 +11,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -731,6 +733,56 @@ public class VerificationTest extends AbstractIntegrationTest {
 
         double expectedBalance = post2.getBalance() + post4.getBalance();
         assertTrue(expectedBalance == balance);
+    }
+    
+    @Test
+    @Transactional
+    public void testGetBalanceForAccountAtDate() {
+        Customer customer = customerManager.createCustomer(user, 1, "Jakob", "6316361", null);
+        Account account = accountManager.createAccount(1050, "Test");
+        
+        Calendar cal = Calendar.getInstance();
+        cal.set(2014, 4, 28);
+        Date transDate = cal.getTime();
+        
+        double sum1 = 100;
+        double sum2 = 100;
+        
+        PostSum postSum = new PostSum();
+        postSum.setSumTotal(sum1);
+        postSum.setType(PostType.Debit);
+        Post post = postManager.createPost(postSum, account);
+        
+        PostSum postSum2 = new PostSum();
+        postSum2.setSumTotal(sum2);
+        postSum2.setType(PostType.Credit);
+        Post post2 = postManager.createPost(postSum2, account);
+        
+        List<Post> postList = new ArrayList<>();
+        postList.add(post);
+        postList.add(post2);
+        
+        Verification ver = manager.createVerification(user, postList, transDate, customer, "");
+        assertNotNull(ver);
+        
+        cal.set(2015, 4, 20);
+        Date startDate = cal.getTime();
+        cal.set(2015, 4, 30);
+        Date endDate = cal.getTime();
+        
+        Map<Date, Double> map = postService.getBalanceForAccountAtDate(user, AccountType.ASSETS, startDate, endDate);
+        
+        double expectedBalanceForTransactionDate = post.getBalance() + post2.getBalance();
+        
+        for(Entry<Date, Double> entry : map.entrySet()) {
+            if(transDate.equals(entry.getKey())) {
+                assertTrue(entry.getValue() == expectedBalanceForTransactionDate);
+            } else {
+                assertTrue(entry.getValue() == 0);
+            }
+        }
+        
+        
     }
 
 }
