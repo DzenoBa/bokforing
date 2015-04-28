@@ -273,11 +273,15 @@ public class VerificationTest extends AbstractIntegrationTest {
 
         double sum3Amount = 200.0;
         double sum4Amount = 200.0;
+        
+        double sum5Amount = 100.0;
+        double sum6Amount = 100.0;
 
         Calendar cal = Calendar.getInstance();
 
         Account account = accountManager.createAccount(2018, "Egna insättningar");
         Account account2 = accountManager.createAccount(1055, "Saker");
+        Account account3 = accountManager.createAccount(3055, "Fel");
 
         PostSum sum = new PostSum();
         sum.setSumTotal(sum1Amount);
@@ -294,27 +298,26 @@ public class VerificationTest extends AbstractIntegrationTest {
         PostSum sum4 = new PostSum();
         sum4.setSumTotal(sum4Amount);
         sum4.setType(PostType.Credit);
+        
+        PostSum sum5 = new PostSum();
+        sum5.setSumTotal(sum5Amount);
+        sum5.setType(PostType.Debit);
+        
+        PostSum sum6 = new PostSum();
+        sum6.setSumTotal(sum6Amount);
+        sum6.setType(PostType.Credit);
 
-        Customer customer = customerManager.createCustomer(user, 123, null, null, null);
-        customer.setCustomerNumber(1L);
-        customer.setName("Jakob");
-        customer.setPhoneNumber("031132314");
+        Customer customer = customerManager.createCustomer(user, 123, "Jakob", "03484838", null);
 
         Post post = postManager.createPost(sum, account);
-        post.setPostSum(sum);
-        post.setAccount(account);
-
         Post post2 = postManager.createPost(sum2, account2);
-        post2.setPostSum(sum2);
-        post2.setAccount(account2);
-
         Post post3 = postManager.createPost(sum3, account2);
-        post3.setPostSum(sum3);
-        post3.setAccount(account2);
-
         Post post4 = postManager.createPost(sum4, account);
-        post4.setPostSum(sum4);
-        post4.setAccount(account);
+        Post post5 = postManager.createPost(sum5, account);
+        Post post6 = postManager.createPost(sum6, account);
+        
+        Post post7 = postManager.createPost(sum, account3);
+        Post post8 = postManager.createPost(sum2, account3);
 
         ArrayList<Post> postList = new ArrayList<>();
         postList.add(post);
@@ -323,6 +326,14 @@ public class VerificationTest extends AbstractIntegrationTest {
         ArrayList<Post> postList2 = new ArrayList<>();
         postList2.add(post3);
         postList2.add(post4);
+        
+        ArrayList<Post> postList3 = new ArrayList<>();
+        postList3.add(post5);
+        postList3.add(post6);
+        
+        ArrayList<Post> postList4 = new ArrayList<>();
+        postList4.add(post7);
+        postList4.add(post8);
 
         Long verNbr = 7372L; // one higher than the highest inserted row
         Verification verification = manager.createVerification(user, verNbr, postList, cal.getTime(), customer, "");
@@ -330,17 +341,29 @@ public class VerificationTest extends AbstractIntegrationTest {
 
         Verification verification2 = manager.createVerification(user, verNbr + 1, postList2, cal.getTime(), customer, "");
         assertNotNull(verification2);
+        
+        cal.set(500, 10, 10);
+        Date pastDate = cal.getTime();
+        Verification pastVerification = manager.createVerification(user, postList3, pastDate, customer, "");
+        assertNotNull(pastVerification);
+        
+        // This will not be included in the final result because it is of account type
+        Verification pastVerificationWithWrongAccounts = manager.createVerification(user, postList4, pastDate, customer, "");
+        assertNotNull(pastVerificationWithWrongAccounts);
 
         Verification verificationFromDb = service.findByUserAndVerificationNumber(user, verNbr);
         assertNotNull(verificationFromDb);
         Account accountFromDb = accountService.findAccountByNumber(2018);
         Account accountFromDb2 = accountService.findAccountByNumber(1055);
+        
         PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate");
+
         List<Post> posts = postService.findPostsForUserAndAccount(user, accountFromDb, true, terms).getContent();
-        assertEquals(2, posts.size());
+        assertEquals(4, posts.size());
+        
         List<Post> posts2 = postService.findPostsForUserAndAccount(user, accountFromDb2, true, terms).getContent();
         assertEquals(2, posts2.size());
-
+        
         cal.set(1000, 10, 10);
         Date startDate = cal.getTime();
         cal.set(3000, 1, 1);
@@ -354,16 +377,14 @@ public class VerificationTest extends AbstractIntegrationTest {
         List<Double> expResult2 = new ArrayList<>();
 
         Double totalSum = 0.0;
-        for (int i = 0; i < posts.size(); i++) {
-
-            totalSum += posts.get(i).getBalance();
+        for (Post post1 : posts) {
+            totalSum += post1.getBalance();
         }
         Double totalSum2 = 0.0;
-        for (int i = 0; i < posts2.size(); i++) {
-
-            totalSum2 += posts2.get(i).getBalance();
+        for (Post posts21 : posts2) {
+            totalSum2 += posts21.getBalance();
         }
-
+        
         expResult.add(0, totalSum);
         expResult.add(1, 0.0);
         expResult2.add(0, totalSum2);
@@ -450,17 +471,17 @@ public class VerificationTest extends AbstractIntegrationTest {
         assertEquals(2, posts.size());
         List<Post> posts2 = postService.findPostsForUserAndAccount(user, accountFromDb2, true, terms).getContent();
         assertEquals(2, posts2.size());
-
+        
         cal.set(1000, 10, 10);
         Date startDate = cal.getTime();
         cal.set(3000, 1, 1);
         Date endDate = cal.getTime();
-
+        
         long begin = System.currentTimeMillis();
         PagingAndSortingTerms terms2 = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate");
         Map<Account, Double> result = postService.getIncomeStatement(user, startDate, endDate, terms2.getPageRequest());
         System.out.println("Time to get Income Statement: " + (System.currentTimeMillis() - begin));
-        Double expResult =  post.getBalance() + post4.getBalance();
+        Double expResult = post.getBalance() + post4.getBalance();
         Double expResult2 = post2.getBalance() + post3.getBalance();
 
         assertEquals(result.get(accountFromDb), expResult);
@@ -781,8 +802,5 @@ public class VerificationTest extends AbstractIntegrationTest {
                 assertTrue(entry.getValue() == 0);
             }
         }
-        
-        
     }
-
 }

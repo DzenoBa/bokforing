@@ -84,7 +84,7 @@ public class PostServiceImpl implements PostService {
     public Map<Account, List<Double>> getBalanceSheet(UserAccount user, Date startDate,
             Date endDate, Pageable pageable) {
         Map<Account, List<Double>> balanceSheet = new HashMap<>();
-        List<Verification> givenPeriodVerifications = verRepo.findByUserAccountAndCreationDateBetween(user, startDate, endDate, pageable).getContent();
+        List<Verification> givenPeriodVerifications = verRepo.findByUserAccountAndTransactionDateBetween(user, startDate, endDate, pageable).getContent();
 
         for (Verification verification : givenPeriodVerifications) {
             List<Post> posts = verification.getPosts();
@@ -110,7 +110,7 @@ public class PostServiceImpl implements PostService {
         cal.set(0, 0, 0);
         
         Date earlyDate = cal.getTime();
-        List<Verification> earlierVerifications = verRepo.findByUserAccountAndCreationDateBetween(user, earlyDate, startDate, pageable).getContent();
+        List<Verification> earlierVerifications = verRepo.findByUserAccountAndTransactionDateBetween(user, earlyDate, startDate, pageable).getContent();
         
         for (Verification verification : earlierVerifications) {
             List<Post> posts = verification.getPosts();
