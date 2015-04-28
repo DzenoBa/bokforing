@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.lang.model.element.Element;
@@ -30,7 +29,7 @@ import se.chalmers.bokforing.model.user.UserAccount;
 public class IncomeStatementPresenter {
 
     private final static boolean DEBUG = true;
-    Map<Account, List<Double>> balanceSheet;
+    Map<Account, Double> incomeStatement;
 
     private Document doc;
 
@@ -39,7 +38,7 @@ public class IncomeStatementPresenter {
 
     public IncomeStatementPresenter(UserAccount user, Date startDate,
             Date endDate, Pageable pageable) {
-        balanceSheet = postService.getBalanceSheet(user, startDate,
+        incomeStatement = postService.getIncomeStatement(user, startDate,
                 endDate, pageable);
 
     }
@@ -50,16 +49,15 @@ public class IncomeStatementPresenter {
     }
 
     //Generates all assetAccounts
-    private String assetAccountsGenerator() {
+    private String revenueAccountsGenerator() {
         StringBuilder sb = new StringBuilder();
-        Set<Account> accountSet = balanceSheet.keySet();
+        Set<Account> accountSet = incomeStatement.keySet();
 
         for (Account acc : accountSet) {
             if (acc.getNumber() < 2000) {
                 sb.append("<tr>");
                 sb.append("<td>").append(acc.getNumber()).append(acc.getName()).append("</td>");
-                sb.append("<td>").append(balanceSheet.get(acc).get(1)).append("</td>");
-                sb.append("<td>").append(balanceSheet.get(acc).get(0)).append("</td>");
+                sb.append("<td>").append(incomeStatement.get(acc)).append("</td>");
                 sb.append("</tr>");
             }
         }
@@ -68,16 +66,15 @@ public class IncomeStatementPresenter {
     }
 
     //Generates all debtAccounts
-    private String debtAccountsGenerator() {
+    private String costAccountsGenerator() {
         StringBuilder sb = new StringBuilder();
-        Set<Account> accountSet = balanceSheet.keySet();
+        Set<Account> accountSet = incomeStatement.keySet();
 
         for (Account acc : accountSet) {
             if (acc.getNumber() >= 2000) {
                 sb.append("<tr>");
                 sb.append("<td>").append(acc.getNumber()).append(acc.getName()).append("</td>");
-                sb.append("<td>").append(balanceSheet.get(acc).get(1)).append("</td>");
-                sb.append("<td>").append(balanceSheet.get(acc).get(0)).append("</td>");
+                sb.append("<td>").append(incomeStatement.get(acc)).append("</td>");
                 sb.append("</tr>");
             }
         }
@@ -88,17 +85,13 @@ public class IncomeStatementPresenter {
     //Generates the result
     private String resultGenerator() {
         StringBuilder sb = new StringBuilder();
-        Set<Account> accountSet = balanceSheet.keySet();
-        int startingBalance = 0;
-        int totalBalance = 0;
+        Set<Account> accountSet = incomeStatement.keySet();
+        double totalBalance = 0.0;
         for (Account acc : accountSet) {     
-            
-            startingBalance += balanceSheet.get(acc).get(1);
-            totalBalance += balanceSheet.get(acc).get(0);
+           
+            totalBalance += incomeStatement.get(acc);
         }     
-        totalBalance += startingBalance;
                 sb.append("<tr>");
-                sb.append("<td>").append(startingBalance).append("</td>");
                 sb.append("<td colspan=2>").append(totalBalance).append("</td>");
                 sb.append("</tr>");
 
@@ -107,7 +100,7 @@ public class IncomeStatementPresenter {
 
     public void print(UserAccount user, Date startDate,
             Date endDate, Pageable pageable) throws IOException, DocumentException {
-        File input = new File("xhtml/faktura.xhtml");
+        File input = new File("incomeStatement.html");
         doc = Jsoup.parse(input, "UTF-8");
 
         //SPECIFICATION
@@ -121,14 +114,14 @@ public class IncomeStatementPresenter {
         //VERIFICATION NUMBER
         replacer("verinr", user.getVerifications().get(user.getVerifications().size() - 1).getVerificationNumber().toString());
 
-        //ASSETS SECTION
-        replacer("tillgkonto", assetAccountsGenerator());
+        //REVENUE SECTION
+        replacer("intaktkonto", revenueAccountsGenerator());
 
-        //DEBT SECTION
-        replacer("skuldkonto", debtAccountsGenerator());
+        //COST SECTION
+        replacer("kostnadkonto", costAccountsGenerator());
 
-        //FINAL SECTION
-        replacer("ingresultat", resultGenerator());
+        //RESULT SECTION
+        replacer("resultat", resultGenerator());
 
         if (DEBUG) {
             System.out.println(doc.outerHtml());

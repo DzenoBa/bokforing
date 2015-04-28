@@ -89,8 +89,8 @@ public class BalanceSheetPresenter {
     private String resultGenerator() {
         StringBuilder sb = new StringBuilder();
         Set<Account> accountSet = balanceSheet.keySet();
-        int startingBalance = 0;
-        int totalBalance = 0;
+        double startingBalance = 0.0;
+        double totalBalance = 0.0;
         for (Account acc : accountSet) {     
             
             startingBalance += balanceSheet.get(acc).get(1);
@@ -107,7 +107,7 @@ public class BalanceSheetPresenter {
 
     public void print(UserAccount user, Date startDate,
             Date endDate, Pageable pageable) throws IOException, DocumentException {
-        File input = new File("xhtml/faktura.xhtml");
+        File input = new File("balanceSheet.html");
         doc = Jsoup.parse(input, "UTF-8");
 
         //SPECIFICATION
@@ -127,7 +127,7 @@ public class BalanceSheetPresenter {
         //DEBT SECTION
         replacer("skuldkonto", debtAccountsGenerator());
 
-        //FINAL SECTION
+        // SECTION
         replacer("ingresultat", resultGenerator());
 
         if (DEBUG) {
