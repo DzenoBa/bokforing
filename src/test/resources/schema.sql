@@ -1,4 +1,5 @@
-insert into UserAccount (id, email) VALUES(1, 'apa@test.com');
+insert into UserInfo (userInfoId, userName) VALUES(1, 'Jakob');
+insert into UserAccount (id, email, userInfoId) VALUES(1, 'apa@test.com', 1);
 insert into Customers (customerNumber, name, phoneNumber, userAccount_id) VALUES (1, '123', '123', 1);
 
 insert into Verifications (id, verificationNumber, userAccount_id) VALUES (1, 125, 1);

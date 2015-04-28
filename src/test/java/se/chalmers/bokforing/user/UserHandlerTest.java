@@ -5,6 +5,8 @@
  */
 package se.chalmers.bokforing.user;
 
+import java.util.List;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -13,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import se.chalmers.bokforing.AbstractIntegrationTest;
 import se.chalmers.bokforing.config.TestApplicationConfig;
+import se.chalmers.bokforing.model.user.UserAccount;
 import se.chalmers.bokforing.model.user.UserGroup;
 import se.chalmers.bokforing.model.user.UserHandler;
+import se.chalmers.bokforing.service.UserManager;
 import se.chalmers.bokforing.service.UserService;
 
 /**
@@ -25,7 +29,10 @@ import se.chalmers.bokforing.service.UserService;
 public class UserHandlerTest extends AbstractIntegrationTest {
     
     @Autowired
-    private UserService userDb;
+    private UserManager manager;
+    
+    @Autowired
+    private UserService service;
     
     @Test
     public void testConstructorTests(){
@@ -37,7 +44,7 @@ public class UserHandlerTest extends AbstractIntegrationTest {
         
         //store it in db and then load it
         newUh.setEmail("constructor");
-        userDb.storeUser(newUh);
+        service.storeUser(newUh);
         Long id = newUh.getUA().getId();
 
         //This one should be the same as newUh as they both share the same UserAccount.
@@ -49,7 +56,7 @@ public class UserHandlerTest extends AbstractIntegrationTest {
         
         //The change from before should not have gone through here.
         //So this one should be different
-        UserHandler newUh3 = userDb.getUser("constructor");
+        UserHandler newUh3 = service.getUser("constructor");
         assertNotNull(newUh3);
         assertNotNull(newUh3.getUA());
         assertNotNull(newUh3.getUI());
@@ -58,10 +65,10 @@ public class UserHandlerTest extends AbstractIntegrationTest {
         //NOTICE My modifed variables cause a bit of problem here
         //storing newUh would not update anything as its modified variables are still false.
         //But newUh2 have them set on true so its changes are saved.
-        userDb.storeUser(newUh2);
+        service.storeUser(newUh2);
         
         //Reload
-        newUh3 = userDb.getUser("constructor");
+        newUh3 = service.getUser("constructor");
         assertTrue(newUh.equals(newUh3));
         //The id should not have updated itself
         assertTrue(id.equals(newUh.getUA().getId()));
@@ -70,7 +77,14 @@ public class UserHandlerTest extends AbstractIntegrationTest {
     @Test(expected = IllegalArgumentException.class)  
     public void testNoEmail(){
         UserHandler noEmail = new UserHandler();
-        userDb.storeUser(noEmail);
+        service.storeUser(noEmail);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)  
+    public void testEmptyEmail() {
+        UserHandler emptyEmail = new UserHandler();
+        emptyEmail.setEmail("");
+        service.storeUser(emptyEmail);
     }
     
     @Test(expected = IllegalArgumentException.class)  
@@ -78,8 +92,7 @@ public class UserHandlerTest extends AbstractIntegrationTest {
         UserHandler uh = new UserHandler();
         uh.setEmail("nullTest");
         uh.setUserGroup(null);
-        userDb.storeUser(uh);
-
+        service.storeUser(uh);
     }
     
     @Test
@@ -87,12 +100,12 @@ public class UserHandlerTest extends AbstractIntegrationTest {
         UserHandler start = new UserHandler();
         
         start.setEmail("start");
-        userDb.storeUser(start);
+        service.storeUser(start);
         Long id = start.getUA().getId();
         for(int i = 1; i <= 10; i++){
             UserHandler temp = new UserHandler();
             temp.setEmail("temp" + i);
-            userDb.storeUser(temp);
+            service.storeUser(temp);
             assertTrue(id + i == temp.getUA().getId());
         }
     }
@@ -106,18 +119,45 @@ public class UserHandlerTest extends AbstractIntegrationTest {
         
         try {
             goodEmail.setEmail("");
-            userDb.storeUser(goodEmail);
+            service.storeUser(goodEmail);
         } catch(IllegalArgumentException e) {
             passed1 = true;
         }
         
         try {
             goodEmail.setEmail(null);
-            userDb.storeUser(goodEmail);
+            service.storeUser(goodEmail);
         } catch(IllegalArgumentException e) {
             passed2 = true;
         }
         
         assertTrue(passed1 && passed2);
+    }
+    
+    @Test
+    public void testGetUserByName() {
+        List<UserAccount> usersByName = service.getUsersByName("Jakob");
+        
+        // Only one user inserted into database so we should only find one by
+        // the name of "Jakob" too
+        assertEquals(1, usersByName.size());
+    }
+    
+    @Test
+    public void testGetUser() {
+        String email = "hej@hej.com";
+        String pass = "jakob";
+        
+        UserHandler handler = new UserHandler();
+        handler.setEmail(email);
+        handler.setPass(pass);
+        
+        manager.createUser(handler);
+        
+        UserHandler userFromDb = service.getUser(email, pass);
+        assertEquals(handler.getEmail(), userFromDb.getEmail());
+        assertEquals(handler.getPass(), userFromDb.getPass());
+        
+        
     }
 }
