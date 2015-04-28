@@ -406,13 +406,28 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'Book
     }
 ]);
 
-bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'BookkeepingProxy', 'ProductProxy', '$modal', '$filter',
-    function($scope, BookkeepingProxy, ProductProxy, $modal, $filter) {
+bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'BookkeepingProxy', 'ProductProxy', '$modal', '$filter', '$location',
+    function($scope, BookkeepingProxy, ProductProxy, $modal, $filter, $location) {
         
         $scope.step = 1;
         $scope.steptype = [0,0,0,0];
         $scope.posts = [];
-      
+        initLocation();
+        
+        function initLocation() {
+            if(angular.isDefined($location.search().type)) {
+                if(angular.equals($location.search().type, "1")) {
+                    $scope.step = 2; 
+                    $scope.steptype[0] = 1; 
+                    $scope.initGotPayed;
+                } else if (angular.equals($location.search().type, "2")) {
+                    $scope.step = 2; 
+                    $scope.steptype[0] = 2; 
+                    $scope.initPayed;
+                }
+            }
+        }
+    
         function addPost(acc_number, acc_name, type, sum) {
             var debit;
             var credit;
