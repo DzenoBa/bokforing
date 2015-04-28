@@ -15,6 +15,7 @@ customerControllers.controller('CustomerCtrl', ['$scope', 'CustomerProxy',
         $scope.currentPage = 1;
         $scope.createboolean = true;
         $scope.editboolean = false;
+        $scope.viewboolean = false;
         
         $scope.create = function() {
             CustomerProxy.create($scope.customer)
@@ -34,12 +35,21 @@ customerControllers.controller('CustomerCtrl', ['$scope', 'CustomerProxy',
             getCustomers();
         };
         
+        $scope.showview = function(customer) {
+            $scope.createboolean = false;
+            $scope.deleteboolean = false;
+            $scope.editboolean = false;
+            $scope.viewboolean = true;
+            $scope.customer = angular.copy(customer);
+        };
+        
         $scope.showedit = function(customer) {
             if(angular.isDefined($scope.form)) {
                 delete $scope.form;
             }
             $scope.createboolean = false;
             $scope.deleteboolean = false;
+            $scope.viewboolean = false;
             $scope.editboolean = true;
             $scope.customer = angular.copy(customer);
         };
@@ -50,6 +60,7 @@ customerControllers.controller('CustomerCtrl', ['$scope', 'CustomerProxy',
             }
             $scope.editboolean = false;
             $scope.deleteboolean = false;
+            $scope.viewboolean = false;
             $scope.createboolean = true;
             $scope.customer = {};
         };
@@ -103,6 +114,7 @@ customerControllers.controller('CustomerCtrl', ['$scope', 'CustomerProxy',
                         if(form.numErrors === 0) {
                             $scope.customers = {};
                             $scope.editboolean = false;
+                            $scope.viewboolean = false;
                             $scope.deleteboolean = true;
                             getCustomers();
                             countCustomers();

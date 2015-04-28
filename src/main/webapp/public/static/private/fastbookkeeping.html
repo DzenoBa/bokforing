@@ -210,7 +210,7 @@
                             </a></li>
                         <li><a href="" ng-click="step=3; steptype[2] = 1; calcHavePayed()">
                                 <h4>Kort</h4>
-                                <p>Pengar kommer att tas från ditt bankgirokonto</p>
+                                <p>Pengar kommer att dras från ditt bankgirokonto</p>
                             </a></li>
                     </ul>
                 </div>
@@ -219,7 +219,7 @@
     </div>
     <div class="row" ng-show="step === 3">
         <div class="col-md-12">
-            <h3>Kontrolera & Bekräfta</h3>
+            <h3>Kontrollera & bekräfta</h3>
             <div class="alert alert-danger" role="alert" style="margin-top: 10px;" ng-show="form.numErrors > 0">
                 <h4>{{form.numErrors}} fel hittades.</h4>
                 <p>{{form.errors.general}}</p>
@@ -261,5 +261,25 @@
             </div>
             <h4><a href="" ng-click="step=1">Gå tillbaka till steg 1</a></h4>
         </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Intäkter</h3>
+            Diagramet nedan visar hur stora dina intäkter är per dag.
+            <canvas id="revenueChart" width="500" height="300"></canvas>
+        </div>
+        <div class="col-md-6">
+            <h3>Utgifter</h3>
+            Diagramet nedan visar hur stora dina utgifter är per dag.
+            <canvas id="costChart" width="500" height="300"></canvas>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <canvas id="assetsChart" width="500" height="300"></canvas>
+        </div>
+        <div class="col-md-6"></div><!--Offset-->
     </div>
 </div>

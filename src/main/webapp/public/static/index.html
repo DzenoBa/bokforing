@@ -13,13 +13,16 @@
         <script src="/bokforing/public/src/main.js"></script>   
         <link rel="stylesheet" type="text/css" href="/bokforing/public/libs/bootstrap/css/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="/bokforing/public/css/default.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <!--<link rel="stylesheet" type="text/css" href="/bokforing/public/libs/fontawesome/css/font-awesome.css">-->
+
     </head>
     <body>
         <div class="container-fluid">
             <div class="row" ng-controller="IndexCtrl">
                 <div class="col-sm-3 col-md-2 sidebar" ng-show="authShow('user')">
                     <ul class="nav nav-sidebar">
-                        <li ng-class="{'active': page('userpage')}"><a href="#userpage">Startsida</a></li>
+                        <li ng-class="{'active': page('fastbookkeeping')}"><a href="#fastbookkeeping">Startsida</a></li>
                     </ul>
                     <ul class="nav nav-sidebar">
                         <li ng-class="{'active': page('verifications')}"><a href="#verifications">Verifikationer</a></li>
@@ -30,8 +33,8 @@
                         <li ng-class="{'active': page('timesheets')}"><a href="#timesheets">Tidsloggar</a></li>
                     </ul>
                     <ul class="nav nav-sidebar">
-                        <li ng-class="{'active': page('userinfo')}"><a href="#userinfo">Användarinformation</a></li>
-                        <li ng-class="{'active': page('edituser')}"><a href="#edituser">Användarinställningar</a></li>
+                        <li ng-class="{'active': page('userinfo')}"><a href="#userinfo">annat eller inget här</a></li>
+                        <li ng-class="{'active': page('edituser')}"><a href="#edituser">annat eller inget här</a></li>
                     </ul>
                 </div>
                 <div ng-class="{'main': authShow('guest'), 'col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main': authShow('user')}">
@@ -41,10 +44,11 @@
                         </div>
                         <div id="navbar" class="mynavbar-right" ng-controller="IndexCtrl">
                             <ul class="nav mynav navbar-nav navbar-right">
-                                <li><a href="#">Home</a></li>
+                                <li><a href="#/userinfo" ng-show="authShow('user')"><i class="fa fa-user"></i> Min profil</a></li>
                                 <li><a href="#/login" ng-show="authShow('guest')">Logga in</a></li>
                                 <li><a href="#/register" ng-show="authShow('guest')">Registrera dig!</a></li>
                                 <li><a href="" ng-click="logout()" ng-show="authShow('user')">Logga ut</a></li>
+                                <li><a href="#/edituser" ng-show="authShow('user')"><i class="fa fa-cog"></i></a></li>
                             </ul>
                         </div>
                     </nav>
