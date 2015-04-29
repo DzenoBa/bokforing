@@ -21,7 +21,7 @@
         <div class="container-fluid">
             <div class="row" ng-controller="IndexCtrl">
                 <div class="col-sm-3 col-md-2 sidebar" ng-show="authShow('user')">
-                    <a href="#start"> <img src="/bokforing/public/images/logo-h50px.png" alt="" width="205" height="50"/></a>
+                  <!--  <a href="#start"> <img src="/bokforing/public/images/logo-h50px.png" alt="" width="205" height="50"/></a> -->
                     <ul class="nav nav-sidebar">
                         <li ng-class="{'active': page('start')}"><a href="#start"><i class="fa fa-home fa-2x"></i> Start</a></li>
                         <li ng-class="{'active': page('verifications')}"><a href="#verifications"><i class="fa fa-file-o fa-2x" ></i> Verifikationer</a></li>
@@ -37,7 +37,7 @@
                     </ul> -->
                 </div>
                 <div ng-class="{'main': authShow('guest'), 'col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main': authShow('user')}">
-                    <nav class="navbar navbar-static-top" role="navigation">
+                  <!--  <nav class="navbar navbar-static-top" role="navigation">
                         <div class="navbar-header">
                             <a href="#start"> <img src="/bokforing/public/images/logo-h50px.png" alt="" width="205" height="50"/></a>
                         </div>
@@ -50,7 +50,7 @@
                                 <li><a href="#/edituser" ng-show="authShow('user')"><i class="fa fa-cog"></i></a></li>
                             </ul>
                         </div>
-                    </nav>
+                    </nav> -->
                     <div class="container" ng-if="authShow('guest')">
                         <!-- Include the view template for the current route -->
                         <div ng-view></div>
@@ -61,6 +61,20 @@
                     </div>
                 </div>
             </div>
+            <nav class="navbar navbar-fixed-top" role="navigation">
+                        <div class="navbar-header">
+                            <a href="#start"> <img src="/bokforing/public/images/superbooky_new.png" alt=""/></a>
+                        </div>
+                        <div id="navbar" class="mynavbar-right" ng-controller="IndexCtrl">
+                            <ul class="nav mynav navbar-nav navbar-right">
+                                <li><a href="#/userinfo" ng-show="authShow('user')"><i class="fa fa-user"></i> Min profil</a></li>
+                                <li><a href="#/login" ng-show="authShow('guest')">Logga in</a></li>
+                                <li><a href="#/register" ng-show="authShow('guest')">Registrera dig!</a></li>
+                                <li><a href="" ng-click="logout()" ng-show="authShow('user')">Logga ut</a></li>
+                                <li><a href="#/edituser" ng-show="authShow('user')"><i class="fa fa-cog"></i></a></li>
+                            </ul>
+                        </div>
+                    </nav>
         </div>
     </body>
 </html>
