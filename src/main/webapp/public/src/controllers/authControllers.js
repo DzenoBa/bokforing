@@ -47,25 +47,27 @@ authControllers.controller('UserPageCtrl', ['$scope', '$q', '$filter', 'AuthProx
         
         var init = function() {
             $scope.session = AuthProxy.class().getSession();
-            
+
             // GET REVENUE DATA
             getBalanceList({number: 3}).then(function(data) {
-                updateChart(revenueChart, data);
+                updateChart(revenueChart, revenueData, data);
             });
-            
+
             // GET COST DATA
             getBalanceList({number: 4}).then(function(data) {
-                updateChart(costChart, data);
+                updateChart(costChart, costData, data);
             });
         };
         
-        function updateChart(chart, data) {
+        function updateChart(chart, chartData, data) {
             var dd = {};
             angular.forEach(data, function(value, key) {
                 dd[$filter('date')(key,'dd/MM')] = value;
             });
             for(var i=0; i<7; i++){
-                chart.datasets[0].points[i].value = dd[chart.datasets[0].points[i].label];
+                var temp_value = dd[chart.datasets[0].points[i].label];
+                chart.datasets[0].points[i].value = temp_value;
+                chartData.datasets[0].data[i] = temp_value;
             }
             chart.update();
         }
@@ -121,13 +123,47 @@ authControllers.controller('UserPageCtrl', ['$scope', '$q', '$filter', 'AuthProx
             ]
         };
         
-      
+        // RENDER CHARTS
+        var revenueChart = renderChart('revenueChart', revenueData);
+        var costChart = renderChart('costChart', costData);
         
-        var revenueCtx = document.getElementById("revenueChart").getContext("2d");
-        var revenueChart = new Chart(revenueCtx).Line(revenueData);
-        var costCtx = document.getElementById("costChart").getContext("2d");
-        var costChart = new Chart(costCtx).Line(costData); 
-       
+        /*
+        * SOMETIMES IF THE USER REFRESHES THE PAGE
+        * THE CHART MIGHT BE RENDERED BEFORE THE CSS IS LOADED
+        * THIS LEADS TO SIZE PROBLEMS
+        * TO RESOLVE THIS: RENDER THE CHARTS AGAIN 
+        * WHEN DOCUMENT IS LOADED
+        */
+        window.onload = function () {
+            revenueChart = renderChart('revenueChart', revenueData);
+            costChart = renderChart('costChart', costData);
+        };
+        
+        window.onresize = function(event) {
+            // RESIZE THE CHARTS WHEN THE WINDOW SIZE CHANGES
+            revenueChart = renderChart('revenueChart', revenueData);
+            costChart = renderChart('costChart', costData);
+        };
+        
+        /*
+         * THIS FUNCTION REMOVES THE OLD CANVAS 
+         * AND CREATES A NEW ONE
+         * THIS RESOLVES A BUG FOR CHARTJS
+         */
+        function renderChart(id, data){
+            var $canvas = $('#' + id);
+            var $parent = $canvas.parent(); 
+            $canvas.remove();
+            var width = $parent.width();
+            var height = width/2;
+            $parent.prepend("<canvas width='" + width + "' height='" + height + "' id='" + id + "'>");
+
+            var ctx = $parent.find('#' + id).get(0).getContext("2d");
+            return new Chart(ctx).Line(data, {
+                animation: false
+            });
+        }
+        
         init();
     }
 ]);
