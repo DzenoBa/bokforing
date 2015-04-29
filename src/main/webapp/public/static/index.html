@@ -21,10 +21,9 @@
         <div class="container-fluid">
             <div class="row" ng-controller="IndexCtrl">
                 <div class="col-sm-3 col-md-2 sidebar" ng-show="authShow('user')">
+                    <a href="#start"> <img src="/bokforing/public/images/logo-h50px.png" alt="" width="205" height="50"/></a>
                     <ul class="nav nav-sidebar">
-                        <li ng-class="{'active': page('start')}"><a href="#start"><i class="fa fa-home fa-2x"></i> Startsida</a></li>
-                    </ul>
-                    <ul class="nav nav-sidebar">
+                        <li ng-class="{'active': page('start')}"><a href="#start"><i class="fa fa-home fa-2x"></i> Start</a></li>
                         <li ng-class="{'active': page('verifications')}"><a href="#verifications"><i class="fa fa-file-o fa-2x" ></i> Verifikationer</a></li>
                        <!-- <li ng-class="{'active': page('fastbookkeeping')}"><a href="#fastbookkeeping">Snabb Bokföring</a></li> -->
                         <li ng-class="{'active': page('bookkeeping')}"><a href="#bookkeeping"><i class="fa fa-book fa-2x" ></i> Bokföring</a></li>
@@ -32,15 +31,15 @@
                         <li ng-class="{'active': page('customers')}"><a href="#customers"><i class="fa fa-users fa-2x" ></i> Kunder</a></li>
                         <li ng-class="{'active': page('timesheets')}"><a href="#timesheets"><i class="fa fa-calendar fa-2x" ></i> Tidsloggar</a></li>
                     </ul>
-                    <ul class="nav nav-sidebar">
+                  <!--  <ul class="nav nav-sidebar">
                         <li ng-class="{'active': page('userinfo')}"><a href="#userinfo">annat eller inget här</a></li>
                         <li ng-class="{'active': page('edituser')}"><a href="#edituser">annat eller inget här</a></li>
-                    </ul>
+                    </ul> -->
                 </div>
                 <div ng-class="{'main': authShow('guest'), 'col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main': authShow('user')}">
                     <nav class="navbar navbar-static-top" role="navigation">
                         <div class="navbar-header">
-                            <img src="/bokforing/public/images/logo-h50px.png" alt="" />
+                            <a href="#start"> <img src="/bokforing/public/images/logo-h50px.png" alt="" width="205" height="50"/></a>
                         </div>
                         <div id="navbar" class="mynavbar-right" ng-controller="IndexCtrl">
                             <ul class="nav mynav navbar-nav navbar-right">

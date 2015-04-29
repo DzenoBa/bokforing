@@ -17,11 +17,11 @@ header {
 }
 
 nav a {
-    color:#000000;
+    color:#575757;
 }
 .mynav > li > a:hover,
 .mynav > li > a:focus {
-    background-color: #2E4050;
+    background-color: #cd6a35;
     color: #ffffff;
 }
 
@@ -45,7 +45,7 @@ nav a {
         padding: 20px;
         overflow-x: hidden;
         overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-        background-color: #2E4050;
+        background-color: #f1e0cd;
         border-right: 1px solid #eee;
     }
 }
@@ -59,7 +59,7 @@ nav a {
 .nav-sidebar > li > a {
     padding-right: 20px;
     padding-left: 20px;
-    color: #A7B1C2;
+    color: #575757;
 }
 .nav-sidebar > .active > a,
 .nav-sidebar > .active > a:hover,
@@ -67,7 +67,7 @@ nav a {
 .nav-sidebar > li > a:hover,
 .nav-sidebar > li > a:focus {
     color: #FFFFFF;
-    background-color: #283845;
+    background-color: #cd6a35;
 }
 
 
