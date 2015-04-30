@@ -1,6 +1,6 @@
 <!--Body content-->
 <div>
-    <h2>Användar inställingar</h2>
+    <h2>Användarinställingar</h2>
     <ul class="nav nav-tabs nav-justified" style="margin-top: 10px;">
         <li role="presentation" ng-class="{active: !activeli}" ng-click="activeli = false"><a href="">Lösenord</a></li>
         <li role="presentation" ng-class="{active: activeli}"><a href="" ng-click="activeli = true">Email</a></li>
@@ -93,7 +93,7 @@
     <!-- ** EDIT EMAIL ** -->
     <div class="row" ng-show="activeli">
         <div class="col-md-6">
-            <h3>Ändra email</h3>
+            <h3>Ändra e-postadress</h3>
             <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
                 Ändringarna har sparats.
             </div>
@@ -107,7 +107,7 @@
                         <label for="email">E-postadress</label>
                     </div>
                     <div class="col-sm-9">
-                        <input id="email" class="form-control" ng-model="user.email" type="text" placeholder="Ange ett ny e-post adress"/>
+                        <input id="email" class="form-control" ng-model="user.email" type="text" placeholder="Ange en ny e-post adress"/>
                     </div>
                 </div>
                 <div class="form-group" ng-show="form.errors.email !== null">
