@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.model.faktura;
+package se.chalmers.bokforing.model.orders;
 
 import java.util.Iterator;
 import java.util.LinkedList;

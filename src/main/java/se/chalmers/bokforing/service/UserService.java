@@ -15,7 +15,7 @@ import se.chalmers.bokforing.model.user.UserHandler;
  */
 public interface UserService {
     
-    public List<UserAccount> getUsersByName(String name);
+    List<UserAccount> getUsersByName(String name);
     
     /**
      * Get a user by email
@@ -23,7 +23,7 @@ public interface UserService {
      * @param email of the User
      * @return UserAccount with the email
      */
-    public UserHandler getUser(String email);
+    UserHandler getUser(String email);
 
     /**
      * Gets a user by email and password.
@@ -33,7 +33,7 @@ public interface UserService {
      * @param pass encrypted password of the user
      * @return UserAccount with the email and password
      */
-    public UserHandler getUser(String email, String pass);
+    UserHandler getUser(String email, String pass);
     
-    public void storeUser(UserHandler uh);
+    void storeUser(UserHandler uh);
 }

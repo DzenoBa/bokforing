@@ -14,9 +14,11 @@ import org.springframework.test.context.ContextConfiguration;
 import se.chalmers.bokforing.config.TestApplicationConfig;
 import se.chalmers.bokforing.model.Address;
 import se.chalmers.bokforing.model.Customer;
-import se.chalmers.bokforing.model.faktura.Faktura;
+import se.chalmers.bokforing.model.orders.Faktura;
+import se.chalmers.bokforing.model.orders.OrderEntity;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.service.CustomerService;
+import se.chalmers.bokforing.service.OrderEntityService;
 import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.impl.FakturaPresenter;
 
@@ -30,10 +32,16 @@ public class FakturaTest  extends AbstractIntegrationTest {
     private UserService userDb;
     @Autowired
     private CustomerService cusDb;
+    @Autowired
+    private OrderEntityService oeDb;
     @Test
     public void printPDF(){
+        OrderEntity oe = new OrderEntity();
         Faktura fak = new Faktura();
+        oe.addFaktura(fak);
+        fak.setOrderEntity(oe);
         fak.setFakturaId(0l);
+        oeDb.storeOrderEntity(oe);
         Customer toUh = new Customer();
         toUh.setName("To Who");
         toUh.setCustomerNumber(Long.MIN_VALUE + 5);

@@ -7,10 +7,12 @@ package se.chalmers.bokforing.service.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import se.chalmers.bokforing.model.faktura.Faktura;
+import se.chalmers.bokforing.model.Customer;
+import se.chalmers.bokforing.model.orders.Faktura;
+import se.chalmers.bokforing.model.orders.OrderEntity;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.model.user.UserInfo;
-import se.chalmers.bokforing.persistence.FakturaRepository;
+import se.chalmers.bokforing.persistence.orders.FakturaRepository;
 import se.chalmers.bokforing.service.FakturaService;
 
 /**
@@ -27,28 +29,13 @@ public class FakturaServiceImpl implements FakturaService {
     }
 
     @Override
-    public List<Faktura> findByFromUser(UserInfo fromUser) {
-        return frep.findByFromUser(fromUser);
-    }
-
-    @Override
-    public List<Faktura> findByToUser(UserInfo toUser) {
-        return frep.findByToUser(toUser);
-    }
-    
-        @Override
-    public List<Faktura> findByFromUser(UserHandler fromUser) {
-        return frep.findByFromUser(fromUser.getUI());
-    }
-
-    @Override
-    public List<Faktura> findByToUser(UserHandler toUser) {
-        return frep.findByToUser(toUser.getUI());
-    }
-
-    @Override
     public void storeFaktura(Faktura fak) {
         frep.save(fak);
+    }
+
+    @Override
+    public List<Faktura> getByOrderEntity(OrderEntity oe) {
+     return frep.findByOrderEntity(oe);
     }
     
 }

@@ -18,9 +18,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import se.chalmers.bokforing.model.Customer;
-import se.chalmers.bokforing.model.faktura.Content;
-import se.chalmers.bokforing.model.faktura.Content.Product;
-import se.chalmers.bokforing.model.faktura.Faktura;
+import se.chalmers.bokforing.model.orders.Content;
+import se.chalmers.bokforing.model.orders.Content.Product;
+import se.chalmers.bokforing.model.orders.Faktura;
 import se.chalmers.bokforing.model.user.UserInfo;
 
 /**

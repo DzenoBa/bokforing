@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.model.faktura;
+package se.chalmers.bokforing.model.orders;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -22,21 +22,18 @@ import se.chalmers.bokforing.model.user.UserInfo;
  */
 @Entity
 public class Faktura implements Serializable {
+    @ManyToOne
+    private OrderEntity orderEntity;
+    
+    public void setOrderEntity(OrderEntity oe){
+        orderEntity = oe;
+    }
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fakturaId;
 
     private boolean valid = true;
-        
-    //From
-    //We need names, phone numbers and company from the info.
-    @ManyToOne
-    private UserInfo fromUser;
-    
-    //To
-    @ManyToOne
-    private Customer toUser;
-    
     //Date
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fakturaDate = new Date();
@@ -81,26 +78,26 @@ public class Faktura implements Serializable {
      * @return the fromUser
      */
     public UserInfo getFromUser() {
-        return fromUser;
+        return orderEntity.getSeller();
     }
 
     /**
      * @param fromUser the fromUser to set
      */
     public void setFromUser(UserInfo fromUser) {
-        this.fromUser = fromUser;
+        orderEntity.setSeller(fromUser);
     }
 
     /**
      * @return the toUser
      */
     public Customer getToUser() {
-        return toUser;
+        return orderEntity.getBuyer();
     }
 
 
     public void setToUser(Customer costumer) {
-        this.toUser = costumer;
+        orderEntity.setBuyer(costumer);
     }
 
     /**
