@@ -419,11 +419,11 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
                 if(angular.equals($location.search().type, "1")) {
                     $scope.step = 2; 
                     $scope.steptype[0] = 1; 
-                    $scope.initGotPayed;
+                    initGotPayed();
                 } else if (angular.equals($location.search().type, "2")) {
                     $scope.step = 2; 
                     $scope.steptype[0] = 2; 
-                    $scope.initPayed;
+                    initPayed();
                 }
             }
         }
@@ -482,6 +482,10 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
         };
         
         $scope.initPayed = function() {
+            initPayed();
+        };
+        
+        function initPayed() {
             getFavoriteAccounts();
             $scope.transactionDate = $filter('date')(new Date(),'yyyy-MM-dd');
         };
@@ -559,6 +563,10 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
         $scope.currentProductPage = 1;
         
         $scope.initGotPayed = function() {
+            initGotPayed();
+        };
+        
+        function initGotPayed() {
             getProducts();
             countProducts();
             $scope.transactionDate = $filter('date')(new Date(),'yyyy-MM-dd');

@@ -115,8 +115,15 @@
                     <div class="alert alert-danger" role="alert" style="margin-top:10px;" ng-show="form.numErrors > 0 && form.errors.accounts">
                         {{form.errors.accounts}}
                     </div>
+<<<<<<< HEAD
                     
                     <h3>Dina favorit konton</h3>
+=======
+                    <button type="button" class="btn btn-success" ng-click="openaccount()">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Lägg till konto
+                    </button>
+                    <h3>Dina favoritkonton</h3>
+>>>>>>> origin/develop
                     <div style="height:250px; width:100%; border: 1px solid #ccc; overflow:auto;">
                         <table class="table">
                             <tr>
@@ -212,6 +219,12 @@
                         <li><a href="" ng-click="step=3; steptype[2] = 1; calcHavePayed()">
                                  <i class="fa fa-credit-card fa-2x"></i> <h4>Kort</h4>
                                 <p>Pengar kommer att dras från ditt bankgirokonto.</p>
+                                <h4>Kontant</h4>
+                                <p>Bokförs som utgift i kassakontot.</p>
+                            </a></li>
+                        <li><a href="" ng-click="step=3; steptype[2] = 1; calcHavePayed()">
+                                <h4>Kort</h4>
+                                <p>Bokförs som utgift i bankgirokontot.</p>
                             </a></li>
                     </ul>
                 </div>
