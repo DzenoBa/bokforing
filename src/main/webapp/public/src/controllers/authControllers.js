@@ -19,7 +19,7 @@ authControllers.controller('LoginCtrl', ['$scope',
                             if(form.numErrors === 0) {
                                 // UPDATE THE SESSION
                                 AuthProxy.class().getAuthentication().then(function(value) {
-                                    $location.path('/userpage');
+                                    $location.path('/start');
                                 });                                
                             } else {
                                 $scope.form = form;
