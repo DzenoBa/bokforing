@@ -9,37 +9,68 @@
     </div> -->
     <br/>
     <div class="row">
-        <div class="col-md-12">
-            <ul class="nav nav-pills nav-justified">
-                <li><a href="#fastbookkeeping?type=1">
-                        <i class="fa fa-money fa-5x"></i> <h2>Jag har fått betalt</h2>
-                        <p>Bokför försäljning</p>
-                    </a></li>
-                <li><a href="#fastbookkeeping?type=2">
-                         <i class="fa fa-credit-card fa-5x"></i> <h2>Jag har betalat</h2>
-                        <p>Bokför inköp</p>
-                    </a></li>
-            </ul>
+        <div class="col-md-4">
+            <div class="panel panel-dz">
+                <div class="panel-body">
+                    <ul class="nav nav-pills nav-justified">
+                        <li><a href="#fastbookkeeping?type=1">
+                                <i class="fa fa-money fa-5x"></i> <h2>Jag har fått betalt</h2>
+                                <p>Bokför försäljning</p>
+                            </a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-   <br/>    
-    <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-default">
+        <div class="col-md-4">
+            <div class="panel panel-dz">
+                <div class="panel-body">
+                    <center>
+                        <h5>DINA INTÄKTER IDAG</h5>
+                        <h2><small>SEK</small> {{revenueToday}}</h2>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit vestibulum.
+                    </center>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-dz">
                 <div class="panel-heading">
-                    <h4>Intäkter</h4>
-                    <p>Diagramet nedan visar hur stora dina intäkter är per dag.</p>
+                    <h5>INTÄKTER DENNA VECKA</h5>
                 </div>
                 <div class="panel-body">
                     <canvas id="revenueChart"></canvas>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="panel panel-default">
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-dz">
+                <div class="panel-body">
+                    <ul class="nav nav-pills nav-justified">
+                        <li><a href="#fastbookkeeping?type=2">
+                                 <i class="fa fa-credit-card fa-5x"></i> <h2>Jag har betalat</h2>
+                                <p>Bokför inköp</p>
+                            </a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-dz">
+                <div class="panel-body">
+                    <center>
+                        <h5>DINA UTGIFTER IDAG</h5>
+                        <h2><small>SEK</small> {{costToday}}</h2>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit vestibulum.
+                    </center>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-dz">
                 <div class="panel-heading">
-                    <h4>Utgifter</h4>
-                    <p>Diagramet nedan visar hur stora dina utgifter är per dag.</p>
+                    <h5>UTGIFTER DENNA VECKA</h5>
                 </div>
                 <div class="panel-body">
                     <canvas id="costChart"></canvas>
