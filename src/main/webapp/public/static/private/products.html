@@ -3,8 +3,8 @@
     <!-- LST PRODUCTS -->
     <div class="col-md-6">
         <h2>Dina produkter</h2>
-        <button type="button" class="btn btn-success" ng-click="showcreate()">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Ny produkt
+        <button type="button" class="btn btn-success" ng-show="!createboolean" ng-click="showcreate()">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Skapa ny produkt
         </button>
         <p style="margin-top:10px;">Här visas alla produkter som du har skapat. Du kan söka efter en produkt genom att agne ett namn.
         Om fältet lämnas tomt kommer istället alla dina produkter att visas.</p>

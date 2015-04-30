@@ -14,6 +14,7 @@
         <link rel="stylesheet" type="text/css" href="/bokforing/public/libs/bootstrap/css/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="/bokforing/public/css/default.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
         <!--<link rel="stylesheet" type="text/css" href="/bokforing/public/libs/fontawesome/css/font-awesome.css">-->
 
     </head>
@@ -24,12 +25,12 @@
                   <!--  <a href="#start"> <img src="/bokforing/public/images/logo-h50px.png" alt="" width="205" height="50"/></a> -->
                     <ul class="nav nav-sidebar">
                         <li ng-class="{'active': page('start')}"><a href="#start"><i class="fa fa-home fa-2x"></i> Start</a></li>
-                        <li ng-class="{'active': page('verifications')}"><a href="#verifications"><i class="fa fa-file-o fa-2x" ></i> Verifikationer</a></li>
+                        <li ng-class="{'active': page('verifications')}"><a href="#verifications" title="Lista över dina verifikationer."><i class="fa fa-file-o fa-2x" ></i> Verifikationer</a></li>
                        <!-- <li ng-class="{'active': page('fastbookkeeping')}"><a href="#fastbookkeeping">Snabb Bokföring</a></li> -->
-                        <li ng-class="{'active': page('bookkeeping')}"><a href="#bookkeeping"><i class="fa fa-book fa-2x" ></i> Bokföring</a></li>
-                        <li ng-class="{'active': page('products')}"><a href="#products"><i class="fa fa-archive fa-2x" ></i> Produkter</a></li>
-                        <li ng-class="{'active': page('customers')}"><a href="#customers"><i class="fa fa-users fa-2x" ></i> Kunder</a></li>
-                        <li ng-class="{'active': page('timesheets')}"><a href="#timesheets"><i class="fa fa-calendar fa-2x" ></i> Tidsloggar</a></li>
+                        <li ng-class="{'active': page('bookkeeping')}"><a href="#bookkeeping" title="Få översikt över konton och gör manuella bokföringar."><i class="fa fa-book fa-2x" ></i> Bokföring</a></li>
+                        <li ng-class="{'active': page('products')}"><a href="#products" title="Se över eller lägg till nya produkter/tjänster."><i class="fa fa-archive fa-2x" ></i> Produkter</a></li>
+                        <li ng-class="{'active': page('customers')}"><a href="#customers" title="Se över eller lägg till nya kunder."><i class="fa fa-users fa-2x" ></i> Kunder</a></li>
+                        <li ng-class="{'active': page('timesheets')}"><a href="#timesheets" title="Se över arbetade timmar eller logga nya."><i class="fa fa-calendar fa-2x" ></i> Tidsloggar</a></li>
                     </ul>
                   <!--  <ul class="nav nav-sidebar">
                         <li ng-class="{'active': page('userinfo')}"><a href="#userinfo">annat eller inget här</a></li>
@@ -63,7 +64,7 @@
             </div>
             <nav class="navbar navbar-fixed-top" role="navigation">
                         <div class="navbar-header">
-                            <a href="#start"> <img src="/bokforing/public/images/superbooky_new.png" alt=""/></a>
+                            <a href="#start" title=""> <img src="/bokforing/public/images/superbooky_new.png" alt=""/></a>
                         </div>
                         <div id="navbar" class="mynavbar-right" ng-controller="IndexCtrl">
                             <ul class="nav mynav navbar-nav navbar-right">

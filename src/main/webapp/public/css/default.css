@@ -111,3 +111,12 @@ footer {
 .log-out-btn:hover {
     color:#9e3127
 }
+
+/* Fonts */
+
+h1{
+    font-family: 'Lato';
+}
+div {
+    font-family: 'Lato';
+}
