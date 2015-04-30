@@ -21,6 +21,7 @@ import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.orders.Content;
 import se.chalmers.bokforing.model.orders.Content.Product;
 import se.chalmers.bokforing.model.orders.Faktura;
+import se.chalmers.bokforing.model.orders.OrderEntity;
 import se.chalmers.bokforing.model.user.UserInfo;
 
 /**
@@ -35,14 +36,15 @@ public class FakturaPresenter {
     private Document doc;
     private final Faktura fak;
     
-    private final Customer to;
-    private final UserInfo fr;
+    private final Customer buyer;
+    private final UserInfo seller;
     
     private final Content cont;
     public FakturaPresenter(Faktura faktura){
         this.fak = faktura;
-        to = fak.getToUser();
-        fr = fak.getFromUser();
+        OrderEntity oe = fak.getOrderEntity();
+        buyer = oe.getBuyer();
+        seller = oe.getSeller();
         //cont = fak.getContent();
         Content prods = new Content();
         for(int i = 0; i < 15; i++)
@@ -92,17 +94,17 @@ public class FakturaPresenter {
                 
         //TOP
         replacer("faktnr",fak.getFakturaId().toString());
-        replacer("kundnr",to.getCustomerNumber().toString());
+        replacer("kundnr",buyer.getCustomerNumber().toString());
         replacer("faktdat",sdf.format(fak.getFakturaDate()));
-        replacer("tcnamn",to.getAddress().getCompanyName());
-        replacer("tadr",to.getAddress().getStreetNameAndNumber());
-        replacer("poskod", to.getAddress().getPostalCode());
+        replacer("tcnamn",buyer.getAddress().getCompanyName());
+        replacer("tadr",buyer.getAddress().getStreetNameAndNumber());
+        replacer("poskod", buyer.getAddress().getPostalCode());
         
         //MID/TOP
-        replacer("ernamn",to.getName());
+        replacer("ernamn",buyer.getName());
         replacer("ordnr","INGET ORDER NUMMER");
         
-        replacer("vnamn", fr.getName());
+        replacer("vnamn", seller.getName());
         replacer("betvil","INGA VILKOR");
         replacer("exdat",sdf.format(fak.getExpireDate()));
         replacer("intrest", "INGEN DRÖJSMÅLSRÄNTA");
@@ -113,11 +115,11 @@ public class FakturaPresenter {
         replacer("totalcost",summaryContent());
         
         //BOT
-        replacer("fcname",fr.getAddress().getCompanyName());
-        replacer("vadr",fr.getAddress().getStreetNameAndNumber());
-        replacer("vpostkod",fr.getAddress().getPostalCode());
+        replacer("fcname",seller.getAddress().getCompanyName());
+        replacer("vadr",seller.getAddress().getStreetNameAndNumber());
+        replacer("vpostkod",seller.getAddress().getPostalCode());
         
-        replacer("ftel",fr.getPhoneNumber());
+        replacer("ftel",seller.getPhoneNumber());
         
         StringBuilder sb = new StringBuilder();
         sb.append("<ul><li>");
@@ -133,7 +135,7 @@ public class FakturaPresenter {
         replace = doc.select("a[id=momsinfo]").first();
         replace.html(sb.toString());
         
-        replacer("bankgiro",fr.getBankgiro());
+        replacer("bankgiro",seller.getBankgiro());
         
 
         

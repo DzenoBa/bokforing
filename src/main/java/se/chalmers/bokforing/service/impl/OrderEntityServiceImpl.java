@@ -7,6 +7,7 @@ package se.chalmers.bokforing.service.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.orders.OrderEntity;
 import se.chalmers.bokforing.model.user.UserHandler;
@@ -18,6 +19,7 @@ import se.chalmers.bokforing.service.OrderEntityService;
  *
  * @author victor
  */
+@Service
 public class OrderEntityServiceImpl implements OrderEntityService {
     
     @Autowired

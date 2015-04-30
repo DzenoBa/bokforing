@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.orders.OrderEntity;
-import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.model.user.UserInfo;
 
 /**

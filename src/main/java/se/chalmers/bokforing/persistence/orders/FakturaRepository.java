@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import se.chalmers.bokforing.model.orders.Faktura;
 import se.chalmers.bokforing.model.orders.OrderEntity;
-import se.chalmers.bokforing.model.user.UserInfo;
 
 @Repository
 public interface FakturaRepository extends JpaRepository<Faktura,Long> {

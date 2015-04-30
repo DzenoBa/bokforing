@@ -30,18 +30,22 @@ import se.chalmers.bokforing.service.impl.FakturaPresenter;
 public class FakturaTest  extends AbstractIntegrationTest {
     @Autowired
     private UserService userDb;
+    
     @Autowired
     private CustomerService cusDb;
+    
     @Autowired
     private OrderEntityService oeDb;
+    
     @Test
     public void printPDF(){
         OrderEntity oe = new OrderEntity();
         Faktura fak = new Faktura();
+        
+        oeDb.storeOrderEntity(oe);
         oe.addFaktura(fak);
         fak.setOrderEntity(oe);
         fak.setFakturaId(0l);
-        oeDb.storeOrderEntity(oe);
         Customer toUh = new Customer();
         toUh.setName("To Who");
         toUh.setCustomerNumber(Long.MIN_VALUE + 5);
@@ -59,9 +63,9 @@ public class FakturaTest  extends AbstractIntegrationTest {
         adr.setCompanyName("THE COMPANY THAT SELLS");
         sender.setAddress(adr);
         sender.setPhoneNumber("331-10 10 10");
+        oe.setBuyer(toUh);
+        oe.setSeller(sender.getUI());
         sender.setBankgiro("123-4567");
-        fak.setToUser(toUh);
-        fak.setFromUser(sender.getUI());
         cusDb.save(toUh);
         userDb.storeUser(sender);
         

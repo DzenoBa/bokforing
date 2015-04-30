@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import se.chalmers.bokforing.model.Customer;
+import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.model.user.UserInfo;
 
 /**
@@ -36,6 +37,10 @@ public class OrderEntity implements Serializable {
     @OneToMany(mappedBy = "orderEntity")
     private final List<Faktura> fakturas = new LinkedList<>();
     
+    public Long getOrderEntityId(){
+        return orderEntityId;
+    }
+    
     public UserInfo getSeller(){
         return seller;
     }
@@ -46,6 +51,10 @@ public class OrderEntity implements Serializable {
     
     public void setSeller(UserInfo ui){
         seller = ui;
+    }
+    
+    public void setSeller(UserHandler uh){
+        seller = uh.getUI();
     }
     public void setBuyer(Customer cus){
         buyer = cus;

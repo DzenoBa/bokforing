@@ -13,8 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
-import se.chalmers.bokforing.model.Customer;
-import se.chalmers.bokforing.model.user.UserInfo;
 
 /**
  *
@@ -24,6 +22,10 @@ import se.chalmers.bokforing.model.user.UserInfo;
 public class Faktura implements Serializable {
     @ManyToOne
     private OrderEntity orderEntity;
+    
+    public OrderEntity getOrderEntity(){
+        return orderEntity;
+    }
     
     public void setOrderEntity(OrderEntity oe){
         orderEntity = oe;
@@ -72,32 +74,6 @@ public class Faktura implements Serializable {
      */
     public void setValid(boolean valid) {
         this.valid = valid;
-    }
-
-    /**
-     * @return the fromUser
-     */
-    public UserInfo getFromUser() {
-        return orderEntity.getSeller();
-    }
-
-    /**
-     * @param fromUser the fromUser to set
-     */
-    public void setFromUser(UserInfo fromUser) {
-        orderEntity.setSeller(fromUser);
-    }
-
-    /**
-     * @return the toUser
-     */
-    public Customer getToUser() {
-        return orderEntity.getBuyer();
-    }
-
-
-    public void setToUser(Customer costumer) {
-        orderEntity.setBuyer(costumer);
     }
 
     /**
