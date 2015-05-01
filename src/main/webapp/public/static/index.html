@@ -24,13 +24,13 @@
                 <div class="col-sm-3 col-md-2 sidebar" ng-show="authShow('user')">
                   <!--  <a href="#start"> <img src="/bokforing/public/images/logo-h50px.png" alt="" width="205" height="50"/></a> -->
                     <ul class="nav nav-sidebar">
-                        <li ng-class="{'active': page('start')}"><a href="#start"><i class="fa fa-home fa-2x"></i> Start</a></li>
-                        <li ng-class="{'active': page('verifications')}"><a href="#verifications" title="Lista över dina verifikationer."><i class="fa fa-file-o fa-2x" ></i> Verifikationer</a></li>
+                        <li ng-class="{'active': page('start')}"><a href="#start"><i class="fa fa-home fa-2x"></i> <span>Start</span></a></li>
+                        <li ng-class="{'active': page('verifications')}"><a href="#verifications" title="Lista över dina verifikationer."><i class="fa fa-file-o fa-2x" ></i> <span>Verifikationer</span></a></li>
                        <!-- <li ng-class="{'active': page('fastbookkeeping')}"><a href="#fastbookkeeping">Snabb Bokföring</a></li> -->
-                        <li ng-class="{'active': page('bookkeeping')}"><a href="#bookkeeping" title="Få översikt över konton och gör manuella bokföringar."><i class="fa fa-book fa-2x" ></i> Bokföring</a></li>
-                        <li ng-class="{'active': page('products')}"><a href="#products" title="Se över eller lägg till nya produkter/tjänster."><i class="fa fa-archive fa-2x" ></i> Produkter</a></li>
-                        <li ng-class="{'active': page('customers')}"><a href="#customers" title="Se över eller lägg till nya kunder."><i class="fa fa-users fa-2x" ></i> Kunder</a></li>
-                        <li ng-class="{'active': page('timesheets')}"><a href="#timesheets" title="Se över arbetade timmar eller logga nya."><i class="fa fa-calendar fa-2x" ></i> Tidsloggar</a></li>
+                       <li ng-class="{'active': page('bookkeeping')}"><a href="#bookkeeping" title="Få översikt över konton och gör manuella bokföringar."><i class="fa fa-book fa-2x" ></i> <span>Bokföring</span></a></li>
+                       <li ng-class="{'active': page('products')}"><a href="#products" title="Se över eller lägg till nya produkter/tjänster."><i class="fa fa-archive fa-2x" ></i> <span>Produkter</span></a></li>
+                       <li ng-class="{'active': page('customers')}"><a href="#customers" title="Se över eller lägg till nya kunder."><i class="fa fa-users fa-2x" ></i> <span>Kunder</span></a></li>
+                       <li ng-class="{'active': page('timesheets')}"><a href="#timesheets" title="Se över arbetade timmar eller logga nya."><i class="fa fa-calendar fa-2x" ></i> <span>Tidsloggar</span></a></li>
                     </ul>
                   <!--  <ul class="nav nav-sidebar">
                         <li ng-class="{'active': page('userinfo')}"><a href="#userinfo">annat eller inget här</a></li>
@@ -71,7 +71,7 @@
                                 <li><a href="#/userinfo" ng-show="authShow('user')"><i class="fa fa-user"></i> Min profil</a></li>
                                 <li><a href="#/login" ng-show="authShow('guest')">Logga in</a></li>
                                 <li><a href="#/register" ng-show="authShow('guest')">Registrera dig!</a></li>
-                                <li><a href="" ng-click="logout()" ng-show="authShow('user')">Logga ut</a></li>
+                                <li id="log-out-btn"><a href="" ng-click="logout()" ng-show="authShow('user')">Logga ut</a></li>
                                 <li><a href="#/edituser" ng-show="authShow('user')"><i class="fa fa-cog"></i></a></li>
                             </ul>
                         </div>

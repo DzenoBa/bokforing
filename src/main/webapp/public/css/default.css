@@ -64,6 +64,16 @@ nav a {
     padding-left: 20px;
     color: #575757;
 }
+
+.nav-sidebar > li > a > i {
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.nav-sidebar > li > a > span {
+    vertical-align: middle;
+}
+
 .nav-sidebar > .active > a,
 .nav-sidebar > .active > a:hover,
 .nav-sidebar > .active > a:focus,
@@ -104,12 +114,11 @@ footer {
 
 /* Buttons */
 
-.log-out-btn {
+#log-out-btn > a {
     color: #d17849;
-    padding: 0px 0px 0px 0px
 }
-.log-out-btn:hover {
-    color:#9e3127
+#log-out-btn > a:hover {
+    color:#ffffff;
 }
 
 /* Fonts */
