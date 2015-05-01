@@ -15,6 +15,6 @@ public class RootController {
     
     @RequestMapping(method = RequestMethod.GET)
     public String getIndex() {
-        return "index";
+        return "redirect:public/static/index.html";
     }
 }
