@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.config.TestApplicationConfig;
 import se.chalmers.bokforing.model.AccessKey;
 import se.chalmers.bokforing.model.AccessKeyType;
-import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.AccessKeyManager;
 import se.chalmers.bokforing.service.AccessKeyService;

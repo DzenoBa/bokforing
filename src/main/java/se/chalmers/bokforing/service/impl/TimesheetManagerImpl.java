@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.Timesheet;
-import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.service.TimesheetManager;
 import se.chalmers.bokforing.service.TimesheetService;
 

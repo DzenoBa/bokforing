@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.persistence.user;
+package se.chalmers.bokforing.persistence;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
-import se.chalmers.bokforing.model.user.UserInfo;
+import se.chalmers.bokforing.model.UserInfo;
 
 /**
  *

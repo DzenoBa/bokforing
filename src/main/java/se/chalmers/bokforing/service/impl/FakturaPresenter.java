@@ -17,10 +17,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.xhtmlrenderer.pdf.ITextRenderer;
-import se.chalmers.bokforing.model.faktura.Content;
-import se.chalmers.bokforing.model.faktura.Content.Product;
-import se.chalmers.bokforing.model.faktura.Faktura;
-import se.chalmers.bokforing.model.user.UserInfo;
+import se.chalmers.bokforing.model.Content;
+import se.chalmers.bokforing.model.Content.Product;
+import se.chalmers.bokforing.model.Faktura;
+import se.chalmers.bokforing.model.UserInfo;
 
 /**
  *

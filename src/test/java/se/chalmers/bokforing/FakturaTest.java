@@ -13,9 +13,9 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import se.chalmers.bokforing.config.TestApplicationConfig;
-import se.chalmers.bokforing.model.faktura.Content;
-import se.chalmers.bokforing.model.faktura.Faktura;
-import se.chalmers.bokforing.model.user.UserHandler;
+import se.chalmers.bokforing.model.Content;
+import se.chalmers.bokforing.model.Faktura;
+import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.impl.FakturaPresenter;
 

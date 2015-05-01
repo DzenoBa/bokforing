@@ -21,7 +21,7 @@ import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.AccountType;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.Verification;
-import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.persistence.PostRepository;
 import se.chalmers.bokforing.persistence.VerificationRepository;

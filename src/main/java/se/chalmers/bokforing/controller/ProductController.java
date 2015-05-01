@@ -15,7 +15,7 @@ import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.ProductJSON;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.Product;
-import se.chalmers.bokforing.model.user.UserHandler;
+import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.service.AccountService;
 import se.chalmers.bokforing.service.UserService;

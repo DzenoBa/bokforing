@@ -7,9 +7,9 @@ package se.chalmers.bokforing.service.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import se.chalmers.bokforing.model.faktura.Faktura;
-import se.chalmers.bokforing.model.user.UserHandler;
-import se.chalmers.bokforing.model.user.UserInfo;
+import se.chalmers.bokforing.model.Faktura;
+import se.chalmers.bokforing.model.UserHandler;
+import se.chalmers.bokforing.model.UserInfo;
 import se.chalmers.bokforing.persistence.FakturaRepository;
 import se.chalmers.bokforing.service.FakturaService;
 

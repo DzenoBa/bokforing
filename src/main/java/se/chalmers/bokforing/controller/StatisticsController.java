@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import se.chalmers.bokforing.jsonobject.AccountJSON;
 import se.chalmers.bokforing.model.AccountType;
-import se.chalmers.bokforing.model.user.UserHandler;
+import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.PostService;
 import se.chalmers.bokforing.session.AuthSession;

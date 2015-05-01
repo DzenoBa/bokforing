@@ -1,7 +1,7 @@
-package se.chalmers.bokforing.persistence.user;
+package se.chalmers.bokforing.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.UserAccount;
 import org.springframework.stereotype.Repository;
 
 @Repository

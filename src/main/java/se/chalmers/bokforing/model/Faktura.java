@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.model.faktura;
+package se.chalmers.bokforing.model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,7 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
-import se.chalmers.bokforing.model.user.UserInfo;
+import se.chalmers.bokforing.model.UserInfo;
 
 /**
  *

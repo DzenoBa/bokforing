@@ -3,8 +3,8 @@ package se.chalmers.bokforing.persistence;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import se.chalmers.bokforing.model.faktura.Faktura;
-import se.chalmers.bokforing.model.user.UserInfo;
+import se.chalmers.bokforing.model.Faktura;
+import se.chalmers.bokforing.model.UserInfo;
 
 @Repository
 public interface FakturaRepository extends JpaRepository<Faktura,Long> {

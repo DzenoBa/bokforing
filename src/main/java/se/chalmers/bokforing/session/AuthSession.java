@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import se.chalmers.bokforing.model.user.UserAccount;
-import se.chalmers.bokforing.model.user.UserHandler;
+import se.chalmers.bokforing.model.UserAccount;
+import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.service.UserService;
 
 /**

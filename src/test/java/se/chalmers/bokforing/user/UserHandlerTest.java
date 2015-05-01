@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import se.chalmers.bokforing.AbstractIntegrationTest;
 import se.chalmers.bokforing.config.TestApplicationConfig;
-import se.chalmers.bokforing.model.user.UserAccount;
-import se.chalmers.bokforing.model.user.UserGroup;
-import se.chalmers.bokforing.model.user.UserHandler;
+import se.chalmers.bokforing.model.UserAccount;
+import se.chalmers.bokforing.model.UserGroup;
+import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.service.UserManager;
 import se.chalmers.bokforing.service.UserService;
 

@@ -6,15 +6,15 @@
 package se.chalmers.bokforing.service.impl;
 
 import java.util.LinkedList;
-import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.UserAccount;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import se.chalmers.bokforing.model.user.UserHandler;
-import se.chalmers.bokforing.model.user.UserInfo;
-import se.chalmers.bokforing.persistence.user.UserInfoRepository;
-import se.chalmers.bokforing.persistence.user.UserRepository;
+import se.chalmers.bokforing.model.UserHandler;
+import se.chalmers.bokforing.model.UserInfo;
+import se.chalmers.bokforing.persistence.UserInfoRepository;
+import se.chalmers.bokforing.persistence.UserRepository;
 import se.chalmers.bokforing.service.UserService;
 
 /**

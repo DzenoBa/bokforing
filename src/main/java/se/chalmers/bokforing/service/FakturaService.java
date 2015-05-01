@@ -6,9 +6,9 @@
 package se.chalmers.bokforing.service;
 
 import java.util.List;
-import se.chalmers.bokforing.model.faktura.Faktura;
-import se.chalmers.bokforing.model.user.UserHandler;
-import se.chalmers.bokforing.model.user.UserInfo;
+import se.chalmers.bokforing.model.Faktura;
+import se.chalmers.bokforing.model.UserHandler;
+import se.chalmers.bokforing.model.UserInfo;
 
 /**
  *
