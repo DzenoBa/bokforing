@@ -11,6 +11,7 @@
     <div class="row">
         <div class="col-md-4">
             <div class="panel panel-dz">
+                <div class="panel-heading"></div>
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-justified">
                         <li><a href="#fastbookkeeping?type=1">
@@ -23,11 +24,19 @@
         </div>
         <div class="col-md-4">
             <div class="panel panel-dz">
+                <div class="panel-heading">
+                    Dina intäkter idag
+                </div>
                 <div class="panel-body">
                     <center>
-                        <h5>DINA INTÄKTER IDAG</h5>
-                        <h2><small>SEK</small> {{revenueToday}}</h2>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit vestibulum.
+                        <h1><small>SEK</small> {{revenueToday}}</h1>
+                        <p style="padding-top: 10px">
+                            <span ng-show="revenueToday === revenueYesterday">Samma värde som igår,</span>
+                            <span ng-show="revenueToday > revenueYesterday">En ökning med SEK {{revenueToday-revenueYesterday | number:1}} sen igår,</span>
+                            <span ng-show="revenueToday < revenueYesterday">En minskning med SEK {{revenueYesterday-revenueToday | number:1}} sen igår,</span>
+                            <br/>
+                            dina intäkter igår var SEK {{revenueYesterday}}.
+                        </p>
                     </center>
                 </div>
             </div>
@@ -35,7 +44,7 @@
         <div class="col-md-4">
             <div class="panel panel-dz">
                 <div class="panel-heading">
-                    <h5>INTÄKTER DENNA VECKA</h5>
+                    Intäkter denna vecka
                 </div>
                 <div class="panel-body">
                     <canvas id="revenueChart"></canvas>
@@ -46,6 +55,7 @@
     <div class="row">
         <div class="col-md-4">
             <div class="panel panel-dz">
+                <div class="panel-heading"></div>
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-justified">
                         <li><a href="#fastbookkeeping?type=2">
@@ -58,11 +68,19 @@
         </div>
         <div class="col-md-4">
             <div class="panel panel-dz">
+                <div class="panel-heading">
+                    Dina utgifter idag
+                </div>
                 <div class="panel-body">
                     <center>
-                        <h5>DINA UTGIFTER IDAG</h5>
-                        <h2><small>SEK</small> {{costToday}}</h2>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit vestibulum.
+                        <h1><small>SEK</small> {{costToday}}</h1>
+                        <p style="padding-top: 10px">
+                            <span ng-show="costToday === costYesterday">Samma värde som igår,</span>
+                            <span ng-show="costToday > costYesterday">En ökning med SEK {{costToday-costYesterday | number:1}} sen igår,</span>
+                            <span ng-show="costToday < costYesterday">En minskning med SEK {{costYesterday-costToday  | number:1}} sen igår,</span>
+                            <br/>
+                            dina utgifter igår var SEK {{costYesterday}}.
+                        </p>
                     </center>
                 </div>
             </div>
@@ -70,7 +88,7 @@
         <div class="col-md-4">
             <div class="panel panel-dz">
                 <div class="panel-heading">
-                    <h5>UTGIFTER DENNA VECKA</h5>
+                    Utgifter denna vecka
                 </div>
                 <div class="panel-body">
                     <canvas id="costChart"></canvas>

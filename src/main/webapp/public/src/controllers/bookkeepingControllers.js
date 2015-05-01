@@ -675,8 +675,8 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
             var credit = 0;
             
             angular.forEach($scope.posts, function(value, key) { 
-                debit = debit + parseInt(value.debit, 10);
-                credit = credit + parseInt(value.credit, 10);
+                debit = debit + parseFloat(value.debit);
+                credit = credit + parseFloat(value.credit);
             });
             
             $scope.sumDebit = $filter('number')(debit, 2);

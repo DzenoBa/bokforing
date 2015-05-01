@@ -55,12 +55,14 @@ authControllers.controller('UserPageCtrl', ['$scope', '$q', '$filter', 'AuthProx
             getBalanceList({number: 3}).then(function(data) {
                 updateChart(revenueChart, revenueData, data);
                 $scope.revenueToday = revenueData.datasets[0].data[6];
+                $scope.revenueYesterday = revenueData.datasets[0].data[5];
             });
 
             // GET COST DATA
             getBalanceList({number: 4}).then(function(data) {
                 updateChart(costChart, costData, data);
                 $scope.costToday = costData.datasets[0].data[6];
+                $scope.costYesterday = costData.datasets[0].data[5];
             });
         };
         
@@ -160,7 +162,7 @@ authControllers.controller('UserPageCtrl', ['$scope', '$q', '$filter', 'AuthProx
             var $parent = $canvas.parent(); 
             $canvas.remove();
             var width = $parent.width();
-            var height = 130;
+            var height = 160;
             $parent.prepend("<canvas width='" + width + "' height='" + height + "' id='" + id + "'>");
 
             var ctx = $parent.find('#' + id).get(0).getContext("2d");
