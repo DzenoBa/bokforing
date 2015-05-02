@@ -41,6 +41,7 @@ public class IncomeStatementPresenter {
     private Document doc;
 
     // Maybe not correct
+    
     private PostServiceImpl postService;
 
     public IncomeStatementPresenter(UserAccount user, Date startDate,
