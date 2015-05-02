@@ -62,10 +62,10 @@ public class FakturaTest  extends AbstractIntegrationTest {
         FakturaPresenter fp = new FakturaPresenter(fak);
         
         // Doesn't work without the correct files
-//        try{
-//            fp.print();
-//        } catch (IOException | DocumentException e){
-//            assert(false);
-//        }
+        try{
+            fp.print();
+        } catch (IOException | DocumentException e){
+            assert(false);
+        }
     }
 }
