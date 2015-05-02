@@ -18,6 +18,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Document;
 import org.jsoup.Jsoup;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.UserAccount;
@@ -32,6 +33,11 @@ public class IncomeStatementPresenter {
     private final static boolean DEBUG = true;
     Map<Account, Double> incomeStatement;
 
+    private final UserAccount user;
+    private final Date startDate;
+    private final Date endDate;
+    private final Pageable pageable;
+
     private Document doc;
 
     // Maybe not correct
@@ -39,8 +45,12 @@ public class IncomeStatementPresenter {
 
     public IncomeStatementPresenter(UserAccount user, Date startDate,
             Date endDate, Pageable pageable) {
-        incomeStatement = postService.getIncomeStatement(user, startDate,
-                endDate, pageable);
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.user = user;
+        this.pageable = pageable;
+        incomeStatement = postService.getIncomeStatement(this.user, this.startDate,
+                this.endDate, this.pageable);
 
     }
 
@@ -88,19 +98,18 @@ public class IncomeStatementPresenter {
         StringBuilder sb = new StringBuilder();
         Set<Account> accountSet = incomeStatement.keySet();
         double totalBalance = 0.0;
-        for (Account acc : accountSet) {     
-           
+        for (Account acc : accountSet) {
+
             totalBalance += incomeStatement.get(acc);
-        }     
-                sb.append("<tr>");
-                sb.append("<td colspan=2>").append(totalBalance).append("</td>");
-                sb.append("</tr>");
+        }
+        sb.append("<tr>");
+        sb.append("<td colspan=2>").append(totalBalance).append("</td>");
+        sb.append("</tr>");
 
         return sb.toString();
     }
 
-    public void print(UserAccount user, Date startDate,
-            Date endDate, Pageable pageable) throws IOException, DocumentException {
+    public void print() throws IOException, DocumentException {
         File input = new File("incomeStatement.html");
         doc = Jsoup.parse(input, "UTF-8");
 

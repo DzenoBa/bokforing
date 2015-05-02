@@ -35,13 +35,22 @@ public class BalanceSheetPresenter {
 
     private Document doc;
 
+    private final UserAccount user;
+    private final Date startDate;
+    private final Date endDate;
+    private final Pageable pageable;
+
     // Maybe not correct
     private PostServiceImpl postService;
 
     public BalanceSheetPresenter(UserAccount user, Date startDate,
             Date endDate, Pageable pageable) {
-        balanceSheet = postService.getBalanceSheet(user, startDate,
-                endDate, pageable);
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.user = user; 
+        this.pageable = pageable;
+        balanceSheet = postService.getBalanceSheet(this.user, this.startDate,
+                this.endDate, this.pageable);
 
     }
 
@@ -92,22 +101,21 @@ public class BalanceSheetPresenter {
         Set<Account> accountSet = balanceSheet.keySet();
         double startingBalance = 0.0;
         double totalBalance = 0.0;
-        for (Account acc : accountSet) {     
-            
+        for (Account acc : accountSet) {
+
             startingBalance += balanceSheet.get(acc).get(1);
             totalBalance += balanceSheet.get(acc).get(0);
-        }     
+        }
         totalBalance += startingBalance;
-                sb.append("<tr>");
-                sb.append("<td>").append(startingBalance).append("</td>");
-                sb.append("<td colspan=2>").append(totalBalance).append("</td>");
-                sb.append("</tr>");
+        sb.append("<tr>");
+        sb.append("<td>").append(startingBalance).append("</td>");
+        sb.append("<td colspan=2>").append(totalBalance).append("</td>");
+        sb.append("</tr>");
 
         return sb.toString();
     }
 
-    public void print(UserAccount user, Date startDate,
-            Date endDate, Pageable pageable) throws IOException, DocumentException {
+    public void print() throws IOException, DocumentException {
         File input = new File("balanceSheet.html");
         doc = Jsoup.parse(input, "UTF-8");
 
