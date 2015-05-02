@@ -17,12 +17,11 @@ import java.util.Set;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Document;
 import org.jsoup.Jsoup;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.UserAccount;
-import se.chalmers.bokforing.service.impl.PostServiceImpl;
 
 /**
  *
@@ -41,8 +40,8 @@ public class IncomeStatementPresenter {
     private Document doc;
 
     // Maybe not correct
-    
-    private PostServiceImpl postService;
+    @Autowired
+    private PostService postService;
 
     public IncomeStatementPresenter(UserAccount user, Date startDate,
             Date endDate, Pageable pageable) {
