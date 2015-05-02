@@ -14,6 +14,7 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.config.TestApplicationConfig;
@@ -58,6 +59,12 @@ public class ReportTest extends AbstractIntegrationTest {
 
     @Autowired
     PostManager postManager;
+    
+    @Autowired
+    IncomeStatementPresenter incStatement;
+    
+    @Autowired
+    BalanceSheetPresenter balanceSheet;
 
     private UserAccount user;
 
@@ -163,9 +170,8 @@ public class ReportTest extends AbstractIntegrationTest {
         cal.set(3000, 1, 1);
         Date endDate = cal.getTime();
 
-        BalanceSheetPresenter presenter = new BalanceSheetPresenter(user, startDate, endDate, terms.getPageRequest());
         try {
-            presenter.print();
+            balanceSheet.print(user, startDate, endDate, terms.getPageRequest());
         } catch (IOException | DocumentException e) {
             assert (false);
             // TODO: fix path
@@ -269,9 +275,10 @@ public class ReportTest extends AbstractIntegrationTest {
         cal.set(3000, 1, 1);
         Date endDate = cal.getTime();
 
-        IncomeStatementPresenter presenter = new IncomeStatementPresenter(user, startDate, endDate, terms.getPageRequest());
+
         try {
-            presenter.print();
+            incStatement.print(user, startDate,
+            endDate, terms.getPageRequest());
         } catch (IOException | DocumentException e) {
             assert (false);
             // TODO: fix path

@@ -20,6 +20,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.UserAccount;
@@ -28,6 +30,9 @@ import se.chalmers.bokforing.model.UserAccount;
  *
  * @author Isabelle
  */
+
+@Service
+@Transactional
 public class BalanceSheetPresenter {
 
     private final static boolean DEBUG = true;
@@ -35,24 +40,8 @@ public class BalanceSheetPresenter {
 
     private Document doc;
 
-    private final UserAccount user;
-    private final Date startDate;
-    private final Date endDate;
-    private final Pageable pageable;
-
     @Autowired
     private PostService postService;
-
-    public BalanceSheetPresenter(UserAccount user, Date startDate,
-            Date endDate, Pageable pageable) {
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.user = user; 
-        this.pageable = pageable;
-        balanceSheet = postService.getBalanceSheet(this.user, this.startDate,
-                this.endDate, this.pageable);
-
-    }
 
     private void replacer(String tag, String replaceWith) {
         Element replace = doc.select("a[id=" + tag + "]").first();
@@ -115,7 +104,10 @@ public class BalanceSheetPresenter {
         return sb.toString();
     }
 
-    public void print() throws IOException, DocumentException {
+    public void print(UserAccount user, Date startDate,
+            Date endDate, Pageable pageable) throws IOException, DocumentException {
+         balanceSheet = postService.getBalanceSheet(user, startDate,
+                endDate, pageable);
         File input = new File("balanceSheet.html");
         doc = Jsoup.parse(input, "UTF-8");
 
