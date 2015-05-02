@@ -406,13 +406,28 @@ bookkeepingControllers.controller('VerificationCtrl', ['$scope', '$modal', 'Book
     }
 ]);
 
-bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'BookkeepingProxy', 'ProductProxy', '$modal', '$filter',
-    function($scope, BookkeepingProxy, ProductProxy, $modal, $filter) {
+bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'BookkeepingProxy', 'ProductProxy', '$modal', '$filter', '$location',
+    function($scope, BookkeepingProxy, ProductProxy, $modal, $filter, $location) {
         
         $scope.step = 1;
         $scope.steptype = [0,0,0,0];
         $scope.posts = [];
-      
+        initLocation();
+        
+        function initLocation() {
+            if(angular.isDefined($location.search().type)) {
+                if(angular.equals($location.search().type, "1")) {
+                    $scope.step = 2; 
+                    $scope.steptype[0] = 1; 
+                    initGotPayed();
+                } else if (angular.equals($location.search().type, "2")) {
+                    $scope.step = 2; 
+                    $scope.steptype[0] = 2; 
+                    initPayed();
+                }
+            }
+        }
+    
         function addPost(acc_number, acc_name, type, sum) {
             var debit;
             var credit;
@@ -467,6 +482,10 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
         };
         
         $scope.initPayed = function() {
+            initPayed();
+        };
+        
+        function initPayed() {
             getFavoriteAccounts();
             $scope.transactionDate = $filter('date')(new Date(),'yyyy-MM-dd');
         };
@@ -544,6 +563,10 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
         $scope.currentProductPage = 1;
         
         $scope.initGotPayed = function() {
+            initGotPayed();
+        };
+        
+        function initGotPayed() {
             getProducts();
             countProducts();
             $scope.transactionDate = $filter('date')(new Date(),'yyyy-MM-dd');
@@ -652,8 +675,8 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
             var credit = 0;
             
             angular.forEach($scope.posts, function(value, key) { 
-                debit = debit + parseInt(value.debit, 10);
-                credit = credit + parseInt(value.credit, 10);
+                debit = debit + parseFloat(value.debit);
+                credit = credit + parseFloat(value.credit);
             });
             
             $scope.sumDebit = $filter('number')(debit, 2);

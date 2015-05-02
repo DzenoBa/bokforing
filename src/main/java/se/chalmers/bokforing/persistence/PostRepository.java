@@ -15,7 +15,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.Post;
-import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.UserAccount;
 
 /**
  *

@@ -1,40 +1,99 @@
 
 <!--Body content-->
 <div>
-    <div class="panel panel-default">
+   <!-- <div class="panel panel-default">
         <div class="panel-body">
             <h4>Välkommen</h4>
             <p>{{session.email}}</p>
         </div>
-    </div>
+    </div> -->
+    <br/>
     <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4>Intäkter</h4>
-                    <p>Diagramet nedan visar hur stora dina intäkter är per dag.</p>
-                </div>
+        <div class="col-md-4">
+            <div class="panel panel-dz">
+                <div class="panel-heading"></div>
                 <div class="panel-body">
-                    <canvas id="revenueChart" width="500" height="300"></canvas>
+                    <ul class="nav nav-pills nav-justified">
+                        <li><a href="#fastbookkeeping?type=1">
+                                <i class="fa fa-money fa-5x"></i> <h2>Jag har fått betalt</h2>
+                                <p>Bokför försäljning</p>
+                            </a></li>
+                    </ul>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="panel panel-default">
+        <div class="col-md-4">
+            <div class="panel panel-dz">
                 <div class="panel-heading">
-                    <h4>Utgifter</h4>
-                    <p>Diagramet nedan visar hur stora dina utgifter är per dag.</p>
+                    Dina intäkter idag
                 </div>
                 <div class="panel-body">
-                    <canvas id="costChart" width="500" height="300"></canvas>
+                    <center>
+                        <h1><small>SEK</small> {{revenueToday}}</h1>
+                        <p style="padding-top: 10px">
+                            <span ng-show="revenueToday === revenueYesterday">Samma värde som igår,</span>
+                            <span ng-show="revenueToday > revenueYesterday">En ökning med SEK {{revenueToday-revenueYesterday | number:1}} sen igår,</span>
+                            <span ng-show="revenueToday < revenueYesterday">En minskning med SEK {{revenueYesterday-revenueToday | number:1}} sen igår,</span>
+                            <br/>
+                            dina intäkter igår var SEK {{revenueYesterday}}.
+                        </p>
+                    </center>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-dz">
+                <div class="panel-heading">
+                    Intäkter denna vecka
+                </div>
+                <div class="panel-body">
+                    <canvas id="revenueChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
-            <canvas id="assetsChart" width="500" height="300"></canvas>
+        <div class="col-md-4">
+            <div class="panel panel-dz">
+                <div class="panel-heading"></div>
+                <div class="panel-body">
+                    <ul class="nav nav-pills nav-justified">
+                        <li><a href="#fastbookkeeping?type=2">
+                                 <i class="fa fa-credit-card fa-5x"></i> <h2>Jag har betalat</h2>
+                                <p>Bokför inköp</p>
+                            </a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6"></div><!--Offset-->
+        <div class="col-md-4">
+            <div class="panel panel-dz">
+                <div class="panel-heading">
+                    Dina utgifter idag
+                </div>
+                <div class="panel-body">
+                    <center>
+                        <h1><small>SEK</small> {{costToday}}</h1>
+                        <p style="padding-top: 10px">
+                            <span ng-show="costToday === costYesterday">Samma värde som igår,</span>
+                            <span ng-show="costToday > costYesterday">En ökning med SEK {{costToday-costYesterday | number:1}} sen igår,</span>
+                            <span ng-show="costToday < costYesterday">En minskning med SEK {{costYesterday-costToday  | number:1}} sen igår,</span>
+                            <br/>
+                            dina utgifter igår var SEK {{costYesterday}}.
+                        </p>
+                    </center>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-dz">
+                <div class="panel-heading">
+                    Utgifter denna vecka
+                </div>
+                <div class="panel-body">
+                    <canvas id="costChart"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

@@ -148,12 +148,19 @@ userControllers.controller('ModalInstanceEmailCtrl',
 /**
  * USER INFO
  */
-userControllers.controller('UserInfoCtrl', ['$scope', 'UserProxy',
-    function($scope, UserProxy) {
+
+/**
+ * skapa authservice, auth proxy, skapa ett scope = email eller session
+ * authproxy class.getSession
+ */
+userControllers.controller('UserInfoCtrl', ['$scope', 'UserProxy', 'AuthProxy',
+    function($scope, UserProxy, AuthProxy) {
               
         var init = function() {
             getUserInfo();
         };
+        
+        $scope.session = AuthProxy.class().getSession();
         
         function getUserInfo() {
             UserProxy.getUserInfo()

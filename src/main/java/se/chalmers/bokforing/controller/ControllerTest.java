@@ -14,7 +14,7 @@ import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
 import se.chalmers.bokforing.model.Verification;
-import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.VerificationManager;
 import se.chalmers.bokforing.service.VerificationService;

@@ -7,7 +7,7 @@ package se.chalmers.bokforing.service;
 
 import org.springframework.data.domain.Page;
 import se.chalmers.bokforing.model.Product;
-import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 
 /**

@@ -23,7 +23,7 @@ import se.chalmers.bokforing.model.PostSum;
 import se.chalmers.bokforing.model.PostType;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
-import se.chalmers.bokforing.model.user.UserHandler;
+import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.CustomerService;
 import se.chalmers.bokforing.service.UserService;

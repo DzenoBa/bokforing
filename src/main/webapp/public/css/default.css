@@ -6,10 +6,10 @@ header {
 }
 
 .navbar {
-    background: #efefef;
-    margin-top: -20px;
-    margin-left: -40px;
-    margin-right: -40px;
+    background: #f9f9f9;
+   /* margin-top: -20px; */
+    margin-left: -30px;
+    /* margin-right: -40px; */
     padding-left: 40px;
 }
 .mynavbar-right {
@@ -21,7 +21,7 @@ nav a {
 }
 .mynav > li > a:hover,
 .mynav > li > a:focus {
-    background-color: #2E4050;
+    background-color: #86c968;
     color: #ffffff;
 }
 
@@ -42,16 +42,19 @@ nav a {
         left: 0;
         z-index: 1000;
         display: block;
-        padding: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 10px;
         overflow-x: hidden;
         overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-        background-color: #2E4050;
+        background-color: #f1e0cd;
         border-right: 1px solid #eee;
     }
 }
 
 /* Sidebar navigation */
 .nav-sidebar {
+    margin-top: 40px;
     margin-right: -21px; /* 20px padding + 1px border */
     margin-bottom: 20px;
     margin-left: -20px;
@@ -59,15 +62,25 @@ nav a {
 .nav-sidebar > li > a {
     padding-right: 20px;
     padding-left: 20px;
-    color: #A7B1C2;
+    color: #575757;
 }
+
+.nav-sidebar > li > a > i {
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.nav-sidebar > li > a > span {
+    vertical-align: middle;
+}
+
 .nav-sidebar > .active > a,
 .nav-sidebar > .active > a:hover,
 .nav-sidebar > .active > a:focus,
 .nav-sidebar > li > a:hover,
 .nav-sidebar > li > a:focus {
     color: #FFFFFF;
-    background-color: #283845;
+    background-color: #cd6a35;
 }
 
 
@@ -76,7 +89,7 @@ nav a {
  */
 
 .main {
-  padding: 20px;
+  padding: 65px;
 }
 @media (min-width: 768px) {
   .main {
@@ -97,4 +110,54 @@ footer {
 
 .error {
     color: #d9534f;
+}
+
+/* Buttons */
+
+#log-out-btn > a {
+    color: #d17849;
+}
+#log-out-btn > a:hover {
+    color:#ffffff;
+}
+
+/* Fonts */
+
+h1{
+    font-family: 'Lato';
+}
+div {
+    font-family: 'Lato';
+}
+/*
+ * DZ - PANEL
+ */
+.panel-dz {
+  border-color: #ddd;
+  border-radius: 0px;
+  height:220px;
+}
+.panel-dz > .panel-heading {
+  color: #333;
+  background-color: #ffffff;
+  text-align: center;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+  font-weight: bold;
+  font-size: 20px;
+}
+.panel-dz > .panel-heading + .panel-collapse > .panel-body {
+  border-top-color: #ffffff;
+  vertical-align: middle;
+}
+.panel-dz > .panel-heading .badge {
+  color: #f5f5f5;
+  background-color: #333;
+}
+.panel-dz > .panel-body {
+    margin-top: 0px;
+    padding-top: 0px;
+}
+.panel-dz > .panel-footer + .panel-collapse > .panel-body {
+  border-bottom-color: #ddd;
 }

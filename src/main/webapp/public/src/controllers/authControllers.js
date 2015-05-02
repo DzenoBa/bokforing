@@ -19,7 +19,7 @@ authControllers.controller('LoginCtrl', ['$scope',
                             if(form.numErrors === 0) {
                                 // UPDATE THE SESSION
                                 AuthProxy.class().getAuthentication().then(function(value) {
-                                    $location.path('/userpage');
+                                    $location.path('/start');
                                 });                                
                             } else {
                                 $scope.form = form;
@@ -45,32 +45,36 @@ authControllers.controller('LoginCtrl', ['$scope',
 authControllers.controller('UserPageCtrl', ['$scope', '$q', '$filter', 'AuthProxy', 'StatisticsProxy',
     function($scope, $q, $filter, AuthProxy, StatisticsProxy) {
         
+        $scope.revenueToday = 0;
+        $scope.costToday = 0;
+        
         var init = function() {
             $scope.session = AuthProxy.class().getSession();
-            
+
             // GET REVENUE DATA
             getBalanceList({number: 3}).then(function(data) {
-                updateChart(revenueChart, data);
+                updateChart(revenueChart, revenueData, data);
+                $scope.revenueToday = revenueData.datasets[0].data[6];
+                $scope.revenueYesterday = revenueData.datasets[0].data[5];
             });
-            
+
             // GET COST DATA
             getBalanceList({number: 4}).then(function(data) {
-                updateChart(costChart, data);
-            });
-            
-            // GET ASSETS DATA
-            getBalanceList({number: 1}).then(function(data) {
-                updateChart(assetsChart, data);
+                updateChart(costChart, costData, data);
+                $scope.costToday = costData.datasets[0].data[6];
+                $scope.costYesterday = costData.datasets[0].data[5];
             });
         };
         
-        function updateChart(chart, data) {
+        function updateChart(chart, chartData, data) {
             var dd = {};
             angular.forEach(data, function(value, key) {
                 dd[$filter('date')(key,'dd/MM')] = value;
             });
             for(var i=0; i<7; i++){
-                chart.datasets[0].points[i].value = dd[chart.datasets[0].points[i].label];
+                var temp_value = dd[chart.datasets[0].points[i].label];
+                chart.datasets[0].points[i].value = temp_value;
+                chartData.datasets[0].data[i] = temp_value;
             }
             chart.update();
         }
@@ -126,29 +130,47 @@ authControllers.controller('UserPageCtrl', ['$scope', '$q', '$filter', 'AuthProx
             ]
         };
         
-        var assetsData = {
-            labels: getDates(),
-            datasets: [
-                {
-                    label: "Assets",
-                    fillColor: "rgba(74,149,237,0.9)",
-                    strokeColor: "rgba(74,149,237,1)",
-                    pointColor: "#fff",
-                    pointStrokeColor: "rgba(74,149,237,1)",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(74,149,237,1)",
-                    data: [0,0,0,0,0,0,0]
-                }
-            ]
+        // RENDER CHARTS
+        var revenueChart = renderChart('revenueChart', revenueData);
+        var costChart = renderChart('costChart', costData);
+        
+        /*
+        * SOMETIMES IF THE USER REFRESHES THE PAGE
+        * THE CHART MIGHT BE RENDERED BEFORE THE CSS IS LOADED
+        * THIS LEADS TO SIZE PROBLEMS
+        * TO RESOLVE THIS: RENDER THE CHARTS AGAIN 
+        * WHEN DOCUMENT IS LOADED
+        */
+        window.onload = function () {
+            revenueChart = renderChart('revenueChart', revenueData);
+            costChart = renderChart('costChart', costData);
         };
         
-        var revenueCtx = document.getElementById("revenueChart").getContext("2d");
-        var revenueChart = new Chart(revenueCtx).Line(revenueData);
-        var costCtx = document.getElementById("costChart").getContext("2d");
-        var costChart = new Chart(costCtx).Line(costData); 
-        var assetsCtx = document.getElementById("assetsChart").getContext("2d");
-        var assetsChart = new Chart(assetsCtx).Line(assetsData); 
-       
+        window.onresize = function(event) {
+            // RESIZE THE CHARTS WHEN THE WINDOW SIZE CHANGES
+            revenueChart = renderChart('revenueChart', revenueData);
+            costChart = renderChart('costChart', costData);
+        };
+        
+        /*
+         * THIS FUNCTION REMOVES THE OLD CANVAS 
+         * AND CREATES A NEW ONE
+         * THIS RESOLVES A BUG FOR CHARTJS
+         */
+        function renderChart(id, data){
+            var $canvas = $('#' + id);
+            var $parent = $canvas.parent(); 
+            $canvas.remove();
+            var width = $parent.width();
+            var height = 160;
+            $parent.prepend("<canvas width='" + width + "' height='" + height + "' id='" + id + "'>");
+
+            var ctx = $parent.find('#' + id).get(0).getContext("2d");
+            return new Chart(ctx).Line(data, {
+                animation: false
+            });
+        }
+        
         init();
     }
 ]);

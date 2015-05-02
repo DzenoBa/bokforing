@@ -14,6 +14,7 @@
         <link rel="stylesheet" type="text/css" href="/bokforing/public/libs/bootstrap/css/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="/bokforing/public/css/default.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link href='//fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
         <!--<link rel="stylesheet" type="text/css" href="/bokforing/public/libs/fontawesome/css/font-awesome.css">-->
 
     </head>
@@ -21,26 +22,25 @@
         <div class="container-fluid">
             <div class="row" ng-controller="IndexCtrl">
                 <div class="col-sm-3 col-md-2 sidebar" ng-show="authShow('user')">
+                  <!--  <a href="#start"> <img src="/bokforing/public/images/logo-h50px.png" alt="" width="205" height="50"/></a> -->
                     <ul class="nav nav-sidebar">
-                        <li ng-class="{'active': page('fastbookkeeping')}"><a href="#fastbookkeeping">Startsida</a></li>
+                        <li ng-class="{'active': page('start')}"><a href="#start"><i class="fa fa-home fa-2x"></i> <span>Start</span></a></li>
+                        <li ng-class="{'active': page('verifications')}"><a href="#verifications" title="Lista över dina verifikationer."><i class="fa fa-file-o fa-2x" ></i> <span>Verifikationer</span></a></li>
+                       <!-- <li ng-class="{'active': page('fastbookkeeping')}"><a href="#fastbookkeeping">Snabb Bokföring</a></li> -->
+                       <li ng-class="{'active': page('bookkeeping')}"><a href="#bookkeeping" title="Få översikt över konton och gör manuella bokföringar."><i class="fa fa-book fa-2x" ></i> <span>Bokföring</span></a></li>
+                       <li ng-class="{'active': page('products')}"><a href="#products" title="Se över eller lägg till nya produkter/tjänster."><i class="fa fa-archive fa-2x" ></i> <span>Produkter</span></a></li>
+                       <li ng-class="{'active': page('customers')}"><a href="#customers" title="Se över eller lägg till nya kunder."><i class="fa fa-users fa-2x" ></i> <span>Kunder</span></a></li>
+                       <li ng-class="{'active': page('timesheets')}"><a href="#timesheets" title="Se över arbetade timmar eller logga nya."><i class="fa fa-calendar fa-2x" ></i> <span>Tidsloggar</span></a></li>
                     </ul>
-                    <ul class="nav nav-sidebar">
-                        <li ng-class="{'active': page('verifications')}"><a href="#verifications">Verifikationer</a></li>
-                        <li ng-class="{'active': page('fastbookkeeping')}"><a href="#fastbookkeeping">Snabb Bokföring</a></li>
-                        <li ng-class="{'active': page('bookkeeping')}"><a href="#bookkeeping">Bokföring</a></li>
-                        <li ng-class="{'active': page('products')}"><a href="#products">Produkter</a></li>
-                        <li ng-class="{'active': page('customers')}"><a href="#customers">Kunder</a></li>
-                        <li ng-class="{'active': page('timesheets')}"><a href="#timesheets">Tidsloggar</a></li>
-                    </ul>
-                    <ul class="nav nav-sidebar">
+                  <!--  <ul class="nav nav-sidebar">
                         <li ng-class="{'active': page('userinfo')}"><a href="#userinfo">annat eller inget här</a></li>
                         <li ng-class="{'active': page('edituser')}"><a href="#edituser">annat eller inget här</a></li>
-                    </ul>
+                    </ul> -->
                 </div>
                 <div ng-class="{'main': authShow('guest'), 'col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main': authShow('user')}">
-                    <nav class="navbar navbar-static-top" role="navigation">
+                  <!--  <nav class="navbar navbar-static-top" role="navigation">
                         <div class="navbar-header">
-                            <img src="/bokforing/public/images/logo-h50px.png" alt="" />
+                            <a href="#start"> <img src="/bokforing/public/images/logo-h50px.png" alt="" width="205" height="50"/></a>
                         </div>
                         <div id="navbar" class="mynavbar-right" ng-controller="IndexCtrl">
                             <ul class="nav mynav navbar-nav navbar-right">
@@ -51,7 +51,7 @@
                                 <li><a href="#/edituser" ng-show="authShow('user')"><i class="fa fa-cog"></i></a></li>
                             </ul>
                         </div>
-                    </nav>
+                    </nav> -->
                     <div class="container" ng-if="authShow('guest')">
                         <!-- Include the view template for the current route -->
                         <div ng-view></div>
@@ -62,6 +62,20 @@
                     </div>
                 </div>
             </div>
+            <nav class="navbar navbar-fixed-top" role="navigation">
+                        <div class="navbar-header">
+                            <a href="#start" title=""> <img src="/bokforing/public/images/superbooky_new.png" alt=""/></a>
+                        </div>
+                        <div id="navbar" class="mynavbar-right" ng-controller="IndexCtrl">
+                            <ul class="nav mynav navbar-nav navbar-right">
+                                <li><a href="#/userinfo" ng-show="authShow('user')"><i class="fa fa-user"></i> Min profil</a></li>
+                                <li><a href="#/login" ng-show="authShow('guest')">Logga in</a></li>
+                                <li><a href="#/register" ng-show="authShow('guest')">Registrera dig!</a></li>
+                                <li id="log-out-btn"><a href="" ng-click="logout()" ng-show="authShow('user')">Logga ut</a></li>
+                                <li><a href="#/edituser" ng-show="authShow('user')"><i class="fa fa-cog"></i></a></li>
+                            </ul>
+                        </div>
+                    </nav>
         </div>
     </body>
 </html>

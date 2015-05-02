@@ -16,11 +16,11 @@
         <div class="col-md-12">
             <ul class="nav nav-pills nav-justified">
                 <li><a href="" ng-click="step = 2; steptype[0] = 1; initGotPayed()">
-                        <h3>Jag har fått betalt</h3>
+                        <i class="fa fa-money fa-5x"></i><h2>Jag har fått betalt</h2>
                         <p>Bokför försäljning</p>
                     </a></li>
                 <li><a href="" ng-click="step = 2; steptype[0] = 2; initPayed()">
-                        <h3>Jag har betalat</h3>
+                        <i class="fa fa-credit-card fa-5x"></i><h2>Jag har betalat</h2>
                         <p>Bokför inköp</p>
                     </a></li>
             </ul>
@@ -28,7 +28,7 @@
     </div>
     <div class="row" ng-show="step === 2">
         <div class="col-md-12">
-            <h3>Välj bokföringstyp</h3>
+           <!-- <h3>Välj bokföringstyp</h3> -->
             <div class="row" ng-show="steptype[0]===1">
                 <div class="col-md-6">
                     <h3>Välj produkt</h3>
@@ -97,11 +97,11 @@
                     <h3>Hur har du fått betalt?</h3>
                     <ul class="nav nav-pills nav-justified">
                         <li><a href="" ng-click="step = 3; steptype[2] = 0; calcGotPayed()">
-                                <h4>Kontant</h4>
+                                 <i class="fa fa-money fa-5x"></i> <h4>Kontant</h4>
                                 <p>Pengar kommer att läggas in i ditt kassakonto</p>
                             </a></li>
                         <li><a href="" ng-click="step = 3; steptype[2] = 1; calcGotPayed()">
-                                <h4>Kort</h4>
+                                 <i class="fa fa-credit-card fa-5x"></i> <h4>Kort</h4>
                                 <p>Pengar kommer att läggas in i ditt bankgirokonto</p>
                             </a></li>
                     </ul>
@@ -114,11 +114,12 @@
                     </div>
                     <div class="alert alert-danger" role="alert" style="margin-top:10px;" ng-show="form.numErrors > 0 && form.errors.accounts">
                         {{form.errors.accounts}}
-                    </div>
+                    </div> 
+                    <h3>Dina favorit konton</h3>
                     <button type="button" class="btn btn-success" ng-click="openaccount()">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Lägg till konto
                     </button>
-                    <h3>Dina favorit konton</h3>
+                    <h3>Dina favoritkonton</h3>
                     <div style="height:250px; width:100%; border: 1px solid #ccc; overflow:auto;">
                         <table class="table">
                             <tr>
@@ -140,6 +141,9 @@
                             </tr>
                         </table>
                     </div>
+                    <button type="button" class="btn btn-success" ng-click="openaccount()">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Lägg till konto
+                    </button>
                 </div>
                 <div class="col-md-6" ng-show="selectedAccount">
                     <form class="form-horizontal">
@@ -205,12 +209,12 @@
                     <h3>Hur har du betalat?</h3>
                     <ul class="nav nav-pills nav-justified">
                         <li><a href="" ng-click="step=3; steptype[2] = 0; calcHavePayed()">
-                                <h4>Kontant</h4>
-                                <p>Pengar kommer att dras från ditt kassakonto</p>
+                                <i class="fa fa-money fa-2x"></i> <h4>Kontant</h4>
+                                <p>Bokförs som utgift i kassakontot.</p>
                             </a></li>
                         <li><a href="" ng-click="step=3; steptype[2] = 1; calcHavePayed()">
-                                <h4>Kort</h4>
-                                <p>Pengar kommer att dras från ditt bankgirokonto</p>
+                                <i class="fa fa-credit-card fa-2x"></i> <h4>Kort</h4>
+                                <p>Bokförs som utgift i bankgirokontot.</p>
                             </a></li>
                     </ul>
                 </div>
@@ -261,25 +265,5 @@
             </div>
             <h4><a href="" ng-click="step=1">Gå tillbaka till steg 1</a></h4>
         </div>
-    </div>
-    
-    <div class="row">
-        <div class="col-md-6">
-            <h3>Intäkter</h3>
-            Diagramet nedan visar hur stora dina intäkter är per dag.
-            <canvas id="revenueChart" width="500" height="300"></canvas>
-        </div>
-        <div class="col-md-6">
-            <h3>Utgifter</h3>
-            Diagramet nedan visar hur stora dina utgifter är per dag.
-            <canvas id="costChart" width="500" height="300"></canvas>
-        </div>
-    </div>
-    
-    <div class="row">
-        <div class="col-md-6">
-            <canvas id="assetsChart" width="500" height="300"></canvas>
-        </div>
-        <div class="col-md-6"></div><!--Offset-->
     </div>
 </div>

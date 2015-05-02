@@ -3,8 +3,8 @@
     <!-- LST CUSTOMERS -->
     <div class="col-md-6">
         <h2>Dina kunder</h2>
-        <button type="button" class="btn btn-success" ng-click="showcreate()">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        <button type="button" class="btn btn-success" ng-show="!createboolean" ng-click="showcreate()">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Skapa ny kund
         </button>
         <p style="margin-top:10px;">Här visas alla dina kunder. Du kan söka efter en kund genom att agne ett namn.
         Om fältet lämnas tomt kommer istället alla dina kunder att visas.</p>

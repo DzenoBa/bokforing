@@ -8,7 +8,7 @@ package se.chalmers.bokforing.service;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.Product.QuantityType;
-import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.UserAccount;
 
 /**
  *

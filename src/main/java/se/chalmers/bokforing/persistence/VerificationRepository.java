@@ -14,7 +14,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.model.Verification;
 
 /**
@@ -43,4 +43,6 @@ public interface VerificationRepository extends JpaRepository<Verification, Long
 
     // it's not this simple since account is in post. maybe we don't want this anyway?
     // Page<Verification> findByAccount(Account account, Pageable pageable);
+
+    Page<Verification> findByUserAccountAndTransactionDateBetween(UserAccount user, Date startDate, Date endDate, Pageable pageable);
 }

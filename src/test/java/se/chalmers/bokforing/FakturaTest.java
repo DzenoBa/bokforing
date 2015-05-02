@@ -8,16 +8,14 @@ package se.chalmers.bokforing;
 import com.lowagie.text.DocumentException;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Date;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import se.chalmers.bokforing.config.TestApplicationConfig;
-import se.chalmers.bokforing.model.faktura.Content;
-import se.chalmers.bokforing.model.faktura.Faktura;
-import se.chalmers.bokforing.model.user.UserHandler;
+import se.chalmers.bokforing.model.Faktura;
+import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.service.UserService;
-import se.chalmers.bokforing.service.faktura.FakturaPresenter;
+import se.chalmers.bokforing.service.impl.FakturaPresenter;
 
 /**
  *
@@ -66,6 +64,8 @@ public class FakturaTest  extends AbstractIntegrationTest {
             fp.print();
         } catch (IOException | DocumentException e){
             assert(false);
+            // TODO: fix path
+//            assert(false);
         }
     }
 }

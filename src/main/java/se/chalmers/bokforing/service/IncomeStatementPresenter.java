@@ -20,7 +20,8 @@ import org.jsoup.Jsoup;
 import org.springframework.data.domain.Pageable;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import se.chalmers.bokforing.model.Account;
-import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.UserAccount;
+import se.chalmers.bokforing.service.impl.PostServiceImpl;
 
 /**
  *

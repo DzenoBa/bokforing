@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import se.chalmers.bokforing.model.AccessKey;
 import se.chalmers.bokforing.model.AccessKeyType;
-import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.UserAccount;
 
 /**
  *

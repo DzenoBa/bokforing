@@ -17,7 +17,7 @@ import se.chalmers.bokforing.jsonobject.TimesheetJSON;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.Timesheet;
-import se.chalmers.bokforing.model.user.UserHandler;
+import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.CustomerService;

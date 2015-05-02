@@ -20,7 +20,7 @@ import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.Product.QuantityType;
 import se.chalmers.bokforing.model.Timesheet;
-import se.chalmers.bokforing.model.user.UserAccount;
+import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.service.AccountManager;
 import se.chalmers.bokforing.service.UserService;
