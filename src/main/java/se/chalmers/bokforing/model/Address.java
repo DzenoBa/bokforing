@@ -26,6 +26,7 @@ public class Address implements Serializable {
     private String postalCode;
     private String postTown;
     private String country;
+    private String companyName;
 
     /**
      * @return the id
@@ -96,6 +97,14 @@ public class Address implements Serializable {
     public void setCountry(String country) {
         this.country = country;
     }
+    
+    public void setCompanyName(String companyName){
+        this.companyName = companyName;
+    }
+    
+    public String getCompanyName(){
+        return this.companyName;
+    }
 
     @Override
     public int hashCode() {
@@ -104,6 +113,7 @@ public class Address implements Serializable {
         hash = 59 * hash + Objects.hashCode(this.postalCode);
         hash = 59 * hash + Objects.hashCode(this.postTown);
         hash = 59 * hash + Objects.hashCode(this.country);
+        hash = 59 * hash + Objects.hashCode(this.companyName);
         return hash;
     }
 
@@ -119,13 +129,16 @@ public class Address implements Serializable {
         if (!Objects.equals(this.streetNameAndNumber, other.streetNameAndNumber)) {
             return false;
         }
-        if (!Objects.equals(this.postalCode, other.postalCode)) {
+        else if (!Objects.equals(this.postalCode, other.postalCode)) {
             return false;
         }
-        if (!Objects.equals(this.postTown, other.postTown)) {
+        else if (!Objects.equals(this.postTown, other.postTown)) {
             return false;
         }
-        if (!Objects.equals(this.country, other.country)) {
+        else if (!Objects.equals(this.country, other.country)) {
+            return false;
+        }
+        else if (!Objects.equals(this.companyName, other.companyName)) {
             return false;
         }
         return true;

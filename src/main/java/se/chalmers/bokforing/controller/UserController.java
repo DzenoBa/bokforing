@@ -245,7 +245,7 @@ public class UserController {
         // SET
         userInfo.setFirstname(ua.getName());
         userInfo.setPhonenumber(ua.getPhoneNumber());
-        userInfo.setCompanyname(ua.getCompanyName());
+        userInfo.setCompanyname(ua.getAddress().getCompanyName());
         
         return userInfo;
     }
@@ -292,7 +292,7 @@ public class UserController {
         
         // USER REQUESTED TO CHANGE COMPANY NAME
         if(userInfo.getCompanyname() != null) {
-            uh.setCompanyName(userInfo.getCompanyname());
+            uh.getAddress().setCompanyName(userInfo.getCompanyname());
             userDb.storeUser(uh);
             return form;
         }

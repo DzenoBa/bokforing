@@ -8,6 +8,7 @@ package se.chalmers.bokforing.model;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
+import se.chalmers.bokforing.model.Address;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Verification;
 
@@ -158,24 +159,15 @@ public class UserHandler {
         return ui.getPhoneNumber();
     }
     
-    public void setCompanyName(String name){
-        if(ui.getCompanyName() == null || !name.equals(ui.getCompanyName())){
-            ui.setCompanyName(name);
+    public void setAddress(Address adr){
+        if(ui.getAddress()== null || !adr.equals(ui.getAddress())){
+            ui.setAddress(adr);
             modUI = true;
         }
-    }
-    public String getCompanyName(){
-        return ui.getCompanyName();
     }
     
-    public void setCompanyAdr(String adr){
-        if(ui.getCompanyAdr() == null || !adr.equals(ui.getCompanyAdr())){
-            ui.setCompanyAdr(adr);
-            modUI = true;
-        }
-    }
-    public String getCompanyAdr(){
-        return ui.getCompanyAdr();
+    public Address getAddress(){
+        return ui.getAddress();
     }
     
     public void setBankgiro(String adr){
@@ -186,16 +178,6 @@ public class UserHandler {
     }
     public String getBankgiro(){
         return ui.getBankgiro();
-    }
-    
-        public void setPostCode(String pcode){
-        if(ui.getPostCode() == null || !pcode.equals(ui.getPostCode())){
-            ui.setPostCode(pcode);
-            modUI = true;
-        }
-    }
-    public String getPostCode(){
-        return ui.getPostCode();
     }
 
 public void setLogo(final URI logo){
