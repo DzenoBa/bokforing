@@ -21,7 +21,7 @@ import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.model.user.UserInfo;
-import se.chalmers.bokforing.service.FakturaService;
+import se.chalmers.bokforing.service.InvoiceService;
 
 /**
  *
@@ -39,7 +39,7 @@ public class OrderEntity implements Serializable {
     private Customer buyer;
 
     @OneToMany(mappedBy = "orderEntity")
-    private final List<Faktura> fakturas = new LinkedList<>();
+    private final List<Invoice> fakturas = new LinkedList<>();
 
     @ManyToMany
     private final List<Product> prod = new LinkedList<>();
@@ -83,7 +83,7 @@ public class OrderEntity implements Serializable {
     private String momsRegistredNumber;
     private Double momsPrecentage;
 
-    public List<Faktura> getFakturas() {
+    public List<Invoice> getFakturas() {
         return fakturas;
     }
 
@@ -111,7 +111,7 @@ public class OrderEntity implements Serializable {
         buyer = cus;
     }
 
-    public void addFaktura(Faktura fak) {
+    public void addFaktura(Invoice fak) {
         fakturas.add(fak);
     }
 

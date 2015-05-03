@@ -7,7 +7,7 @@ package se.chalmers.bokforing.service;
 
 import java.util.List;
 import se.chalmers.bokforing.model.Customer;
-import se.chalmers.bokforing.model.orders.Faktura;
+import se.chalmers.bokforing.model.orders.Invoice;
 import se.chalmers.bokforing.model.orders.OrderEntity;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.model.user.UserInfo;
@@ -16,10 +16,10 @@ import se.chalmers.bokforing.model.user.UserInfo;
  *
  * @author victor
  */
-public interface FakturaService {
-    Faktura getById(Long id);
+public interface InvoiceService {
+    Invoice getById(Long id);
     
-    List<Faktura> getByOrderEntity(OrderEntity oe);
+    List<Invoice> getByOrderEntity(OrderEntity oe);
     
-    void storeFaktura(Faktura fak);
+    void storeFaktura(Invoice fak);
 }

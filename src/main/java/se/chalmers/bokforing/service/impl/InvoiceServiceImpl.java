@@ -8,33 +8,33 @@ package se.chalmers.bokforing.service.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import se.chalmers.bokforing.model.Customer;
-import se.chalmers.bokforing.model.orders.Faktura;
+import se.chalmers.bokforing.model.orders.Invoice;
 import se.chalmers.bokforing.model.orders.OrderEntity;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.model.user.UserInfo;
-import se.chalmers.bokforing.persistence.orders.FakturaRepository;
-import se.chalmers.bokforing.service.FakturaService;
+import se.chalmers.bokforing.persistence.orders.InvoiceRepository;
+import se.chalmers.bokforing.service.InvoiceService;
 
 /**
  *
  * @author victor
  */
-public class FakturaServiceImpl implements FakturaService {
+public class InvoiceServiceImpl implements InvoiceService {
     @Autowired
-    private FakturaRepository frep;
+    private InvoiceRepository frep;
     
     @Override
-    public Faktura getById(Long id) {
+    public Invoice getById(Long id) {
         return frep.findByFakturaId(id);
     }
 
     @Override
-    public void storeFaktura(Faktura fak) {
+    public void storeFaktura(Invoice fak) {
         frep.save(fak);
     }
 
     @Override
-    public List<Faktura> getByOrderEntity(OrderEntity oe) {
+    public List<Invoice> getByOrderEntity(OrderEntity oe) {
      return frep.findByOrderEntity(oe);
     }
     

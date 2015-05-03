@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Product;
-import se.chalmers.bokforing.model.orders.Faktura;
+import se.chalmers.bokforing.model.orders.Invoice;
 import se.chalmers.bokforing.model.orders.OrderEntity;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.model.user.UserInfo;
-import se.chalmers.bokforing.persistence.orders.FakturaRepository;
+import se.chalmers.bokforing.persistence.orders.InvoiceRepository;
 import se.chalmers.bokforing.persistence.orders.OrderEntityRepository;
-import se.chalmers.bokforing.service.FakturaService;
+import se.chalmers.bokforing.service.InvoiceService;
 import se.chalmers.bokforing.service.OrderEntityService;
 
 /**
@@ -31,7 +31,7 @@ public class OrderEntityServiceImpl implements OrderEntityService {
     private OrderEntityRepository oeRep;
     
     @Autowired
-    private FakturaRepository fakDb;
+    private InvoiceRepository fakDb;
     
     @Override
     public OrderEntity getById(Long id) {
@@ -45,18 +45,18 @@ public class OrderEntityServiceImpl implements OrderEntityService {
 
     @Override
     public void storeOrderEntity(OrderEntity oe) {
-        List<Faktura> faks = oe.getFakturas();
-        for (Faktura fak : faks) {
+        List<Invoice> faks = oe.getFakturas();
+        for (Invoice fak : faks) {
             fak.setValid(false);
         }
         List<Product> prod= oe.getProd();
         List<Integer> countList = oe.getCountList();
         
         int fakNum = -1;
-        Faktura fak;
+        Invoice fak;
         for (int i = 0; i < prod.size(); i++) {
             if (i % 15 == 0) {
-                fak = new Faktura();
+                fak = new Invoice();
                 fak.setOrderEntity(oe);
                 oe.addFaktura(fak);
                 

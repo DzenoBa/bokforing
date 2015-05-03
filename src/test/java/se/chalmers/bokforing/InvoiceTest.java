@@ -15,21 +15,21 @@ import se.chalmers.bokforing.config.TestApplicationConfig;
 import se.chalmers.bokforing.model.Address;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Product;
-import se.chalmers.bokforing.model.orders.Faktura;
+import se.chalmers.bokforing.model.orders.Invoice;
 import se.chalmers.bokforing.model.orders.OrderEntity;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.service.CustomerService;
 import se.chalmers.bokforing.service.OrderEntityService;
 import se.chalmers.bokforing.service.ProductService;
 import se.chalmers.bokforing.service.UserService;
-import se.chalmers.bokforing.service.impl.FakturaPresenter;
+import se.chalmers.bokforing.service.impl.InvoicePresenter;
 
 /**
  *
  * @author victor
  */
 @ContextConfiguration(classes = TestApplicationConfig.class)
-public class FakturaTest extends AbstractIntegrationTest {
+public class InvoiceTest extends AbstractIntegrationTest {
 
     @Autowired
     private UserService userDb;
@@ -90,7 +90,7 @@ public class FakturaTest extends AbstractIntegrationTest {
 
         oeDb.storeOrderEntity(oe);
 
-        for (Faktura fak : oe.getFakturas()) {
+        for (Invoice fak : oe.getFakturas()) {
             print(fak);
         }
     }
@@ -108,14 +108,14 @@ public class FakturaTest extends AbstractIntegrationTest {
         }
         oeDb.storeOrderEntity(oe);
 
-        for (Faktura fak : oe.getFakturas()) {
+        for (Invoice fak : oe.getFakturas()) {
             print(fak);
         }
 
     }
 
-    private void print(Faktura fak) {
-        FakturaPresenter fp = new FakturaPresenter(fak);
+    private void print(Invoice fak) {
+        InvoicePresenter fp = new InvoicePresenter(fak);
         // Doesn't work without the correct files
         try {
             fp.print();

@@ -20,7 +20,7 @@ import org.jsoup.nodes.Element;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Product;
-import se.chalmers.bokforing.model.orders.Faktura;
+import se.chalmers.bokforing.model.orders.Invoice;
 import se.chalmers.bokforing.model.orders.OrderEntity;
 import se.chalmers.bokforing.model.user.UserInfo;
 
@@ -28,19 +28,19 @@ import se.chalmers.bokforing.model.user.UserInfo;
  *
  * @author victor
  */
-public class FakturaPresenter {
+public class InvoicePresenter {
     private final static boolean DEBUG = false;
     private final static SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
     private final static DecimalFormat df = new DecimalFormat("#.##");
 
     private Document doc;
-    private final Faktura fak;
+    private final Invoice fak;
     
     private final Customer buyer;
     private final UserInfo seller;
     
     private final HashMap<Product,Integer> cont;
-    public FakturaPresenter(Faktura faktura){
+    public InvoicePresenter(Invoice faktura){
         this.fak = faktura;
         OrderEntity oe = fak.getOrderEntity();
         buyer = oe.getBuyer();

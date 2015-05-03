@@ -25,7 +25,7 @@ import se.chalmers.bokforing.model.Product;
  * @author victor
  */
 @Entity
-public class Faktura implements Serializable {
+public class Invoice implements Serializable {
     @ManyToOne
     private OrderEntity orderEntity;
     
