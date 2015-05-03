@@ -14,11 +14,13 @@ import org.springframework.test.context.ContextConfiguration;
 import se.chalmers.bokforing.config.TestApplicationConfig;
 import se.chalmers.bokforing.model.Address;
 import se.chalmers.bokforing.model.Customer;
+import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.orders.Faktura;
 import se.chalmers.bokforing.model.orders.OrderEntity;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.service.CustomerService;
 import se.chalmers.bokforing.service.OrderEntityService;
+import se.chalmers.bokforing.service.ProductService;
 import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.service.impl.FakturaPresenter;
 
@@ -27,25 +29,24 @@ import se.chalmers.bokforing.service.impl.FakturaPresenter;
  * @author victor
  */
 @ContextConfiguration(classes = TestApplicationConfig.class)
-public class FakturaTest  extends AbstractIntegrationTest {
+public class FakturaTest extends AbstractIntegrationTest {
+
     @Autowired
     private UserService userDb;
-    
+
     @Autowired
     private CustomerService cusDb;
-    
+
     @Autowired
     private OrderEntityService oeDb;
-    
-    @Test
-    public void printPDF(){
+
+    @Autowired
+    private ProductService psDb;
+
+    private OrderEntity setUp() {
         OrderEntity oe = new OrderEntity();
-        Faktura fak = new Faktura();
-        
+
         oeDb.storeOrderEntity(oe);
-        oe.addFaktura(fak);
-        fak.setOrderEntity(oe);
-        fak.setFakturaId(0l);
         Customer toUh = new Customer();
         toUh.setName("To Who");
         toUh.setCustomerNumber(Long.MIN_VALUE + 5);
@@ -68,22 +69,57 @@ public class FakturaTest  extends AbstractIntegrationTest {
         sender.setBankgiro("123-4567");
         cusDb.save(toUh);
         userDb.storeUser(sender);
-        
-        
-        fak.setMomsPrecentage(0.25);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(fak.getFakturaDate());
-        cal.add(Calendar.DAY_OF_MONTH, 15);
-        fak.setExpireDate(cal.getTime());
-        
-        fak.setMomsRegistredNumber("SE012345678912");
 
+        oe.setMomsPrecentage(0.25);
+        oe.setMomsRegistredNumber("SE012345678912");
+
+        return oe;
+    }
+
+    @Test
+    public void printPDF() {
+        OrderEntity oe = setUp();
+
+        //Add products
+        Product p = new Product();
+        p.setName("Thing");
+        p.setPrice(10.0);
+        psDb.save(p);
+
+        oe.addProduct(p, 10);
+
+        oeDb.storeOrderEntity(oe);
+
+        for (Faktura fak : oe.getFakturas()) {
+            print(fak);
+        }
+    }
+
+    @Test
+    public void printPDFManyPages() {
+        OrderEntity oe = setUp();
+        //Add products
+        for (int i = 0; i < 30; i++) {
+            Product p = new Product();
+            p.setName("Thing" + i);
+            p.setPrice(i * 2.0 + 1.0);
+            psDb.save(p);
+            oe.addProduct(p, (i * 3) / 2);
+        }
+        oeDb.storeOrderEntity(oe);
+
+        for (Faktura fak : oe.getFakturas()) {
+            print(fak);
+        }
+
+    }
+
+    private void print(Faktura fak) {
         FakturaPresenter fp = new FakturaPresenter(fak);
-        
         // Doesn't work without the correct files
-        try{
+        try {
             fp.print();
-        } catch (IOException | DocumentException e){
+        } catch (IOException | DocumentException e) {
             // TODO: fix path
 //            assert(false);
         }

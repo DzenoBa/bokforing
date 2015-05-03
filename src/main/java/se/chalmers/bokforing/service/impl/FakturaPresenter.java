@@ -12,14 +12,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Iterator;
+import java.util.HashMap;
+import java.util.Map;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import se.chalmers.bokforing.model.Customer;
-import se.chalmers.bokforing.model.orders.Content;
-import se.chalmers.bokforing.model.orders.Content.Product;
+import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.orders.Faktura;
 import se.chalmers.bokforing.model.orders.OrderEntity;
 import se.chalmers.bokforing.model.user.UserInfo;
@@ -39,25 +39,33 @@ public class FakturaPresenter {
     private final Customer buyer;
     private final UserInfo seller;
     
-    private final Content cont;
+    private final HashMap<Product,Integer> cont;
     public FakturaPresenter(Faktura faktura){
         this.fak = faktura;
         OrderEntity oe = fak.getOrderEntity();
         buyer = oe.getBuyer();
         seller = oe.getSeller();
-        //cont = fak.getContent();
-        Content prods = new Content();
-        for(int i = 0; i < 15; i++)
-            prods.addProduct("Prod " + i, 100.0, i);
-        cont = prods;
+        cont = fak.Products();
                
     }
+    
+    private double getTotalPrice(){
+        double cost = 0;
+        for (Map.Entry<Product, Integer> entry : cont.entrySet())
+            {
+                System.out.println(entry.getKey() + "/" + entry.getValue());
+                cost += entry.getKey().getPrice() * entry.getValue();
+            }
+        return cost;
+    }
+    
     private String summaryContent(){
         StringBuilder sb = new StringBuilder();
-        final Double momsPre = fak.getMomsPrecentage();
-        sb.append("Belopp utan moms: " + df.format(cont.getTotalPrice()) + " kr\n");
-        sb.append("Moms kr " + (momsPre * 100) + "% " + df.format(cont.getTotalPrice() * momsPre) + " kr\n");
-        sb.append("Belopp att betala: " + df.format(cont.getTotalPrice() + (cont.getTotalPrice() * momsPre)) + " kr");
+        double cost = getTotalPrice();
+        final Double momsPre = fak.getOrderEntity().getMomsPrecentage();
+        sb.append("Belopp utan moms: " + df.format(cost) + " kr\n");
+        sb.append("Moms kr " + (momsPre * 100) + "% " + df.format(cost * momsPre) + " kr\n");
+        sb.append("Belopp att betala: " + df.format(cost + (cost * momsPre)) + " kr");
         return sb.toString();
     }
     private void replacer(String tag, String replaceWith){
@@ -74,13 +82,11 @@ public class FakturaPresenter {
     	sb.append("<th>Kostnad</th>");
     	sb.append("</tr>");
         //Start With Content
-        Iterator<Product> it = cont.getIterator();
-        while(it.hasNext()){
-            Product p = it.next();
+        for (Map.Entry<Product, Integer> entry : cont.entrySet()){
             sb.append("<tr>");
-            sb.append("<td>").append(p.getName()).append("</td>");
-            sb.append("<td>").append(p.getUnits()).append("</td>");
-            sb.append("<td>").append(df.format((Double) (p.getPrice() * p.getUnits()))).append(" kr</td>");
+            sb.append("<td>").append(entry.getKey().getName()).append("</td>");
+            sb.append("<td>").append(entry.getValue()).append("</td>");
+            sb.append("<td>").append(df.format((Double) (entry.getKey().getPrice() * entry.getValue()))).append(" kr</td>");
             sb.append("</tr>");
         }
         
@@ -102,7 +108,7 @@ public class FakturaPresenter {
         
         //MID/TOP
         replacer("ernamn",buyer.getName());
-        replacer("ordnr","INGET ORDER NUMMER");
+        replacer("ordnr",fak.getOrderEntity().getOrderEntityId().toString());
         
         replacer("vnamn", seller.getName());
         replacer("betvil","INGA VILKOR");
@@ -123,9 +129,9 @@ public class FakturaPresenter {
         
         StringBuilder sb = new StringBuilder();
         sb.append("<ul><li>");
-        sb.append(fak.getMomsRegistredNumber());
+        sb.append(fak.getOrderEntity().getMomsRegistredNumber());
         sb.append("</li><li>");
-        if(fak.getFskatt()){
+        if(fak.getOrderEntity().isFskatt()){
             sb.append("Godkänd för F-skatt");
         } else{
             sb.append("<b>Ej</b> godkänd för F-skatt");

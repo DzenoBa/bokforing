@@ -23,5 +23,5 @@ public interface OrderEntityService {
     
     List<OrderEntity> findByFromUser(UserHandler fromUser);
     
-    public void storeOrderEntity(OrderEntity fak);
+    public void storeOrderEntity(OrderEntity oe);
 }

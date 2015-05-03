@@ -7,12 +7,18 @@ package se.chalmers.bokforing.model.orders;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import se.chalmers.bokforing.model.Product;
 
 /**
  *
@@ -31,6 +37,12 @@ public class Faktura implements Serializable {
         orderEntity = oe;
     }
     
+    @ManyToMany
+    private final List<Product> prod = new LinkedList<>();
+
+    @ElementCollection
+    private final List<Integer> countList = new LinkedList<>();
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fakturaId;
@@ -41,12 +53,6 @@ public class Faktura implements Serializable {
     private Date fakturaDate = new Date();
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date expireDate = fakturaDate;
-    
-    //private Content content;
-        
-    private boolean fskatt = false;
-    private String momsRegistredNumber;
-    private Double momsPrecentage;    
 
     /**
      * @return the fakturaId
@@ -103,46 +109,17 @@ public class Faktura implements Serializable {
     public void setExpireDate(Date expireDate) {
         this.expireDate = expireDate;
     }
-
-    /**
-     * @return the fskatt
-     */
-    public Boolean getFskatt() {
-        return fskatt;
+    
+    public void addProduct(Product p, Integer amount) {
+            prod.add(p);
+            countList.add(amount);
     }
-
-    /**
-     * @param fskatt the fskatt to set
-     */
-    public void setFskatt(Boolean fskatt) {
-        this.fskatt = fskatt;
-    }
-
-    /**
-     * @return the momsRegistredNumber
-     */
-    public String getMomsRegistredNumber() {
-        return momsRegistredNumber;
-    }
-
-    /**
-     * @param momsRegistredNumber the momsRegistredNumber to set
-     */
-    public void setMomsRegistredNumber(String momsRegistredNumber) {
-        this.momsRegistredNumber = momsRegistredNumber;
-    }
-
-    /**
-     * @return the momsPrecentage
-     */
-    public Double getMomsPrecentage() {
-        return momsPrecentage;
-    }
-
-    /**
-     * @param momsPrecentage the momsPrecentage to set
-     */
-    public void setMomsPrecentage(Double momsPrecentage) {
-        this.momsPrecentage = momsPrecentage;
+    
+    public HashMap Products(){
+        HashMap<Product,Integer> hm = new HashMap<>();
+        for(int i = 0; i < prod.size(); i++){
+            hm.put(prod.get(i), countList.get(i));
+        }
+        return hm;
     }
 }
