@@ -16,12 +16,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import org.springframework.beans.factory.annotation.Autowired;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.user.UserHandler;
 import se.chalmers.bokforing.model.user.UserInfo;
-import se.chalmers.bokforing.service.InvoiceService;
 
 /**
  *
@@ -39,7 +37,7 @@ public class OrderEntity implements Serializable {
     private Customer buyer;
 
     @OneToMany(mappedBy = "orderEntity")
-    private final List<Invoice> fakturas = new LinkedList<>();
+    private final List<Invoice> invoices = new LinkedList<>();
 
     @ManyToMany
     private final List<Product> prod = new LinkedList<>();
@@ -83,8 +81,8 @@ public class OrderEntity implements Serializable {
     private String momsRegistredNumber;
     private Double momsPrecentage;
 
-    public List<Invoice> getFakturas() {
-        return fakturas;
+    public List<Invoice> getInvoices() {
+        return invoices;
     }
 
     public Long getOrderEntityId() {
@@ -112,7 +110,7 @@ public class OrderEntity implements Serializable {
     }
 
     public void addFaktura(Invoice fak) {
-        fakturas.add(fak);
+        invoices.add(fak);
     }
 
     public void addProduct(Product p) {

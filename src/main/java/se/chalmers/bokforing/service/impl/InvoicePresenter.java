@@ -29,37 +29,37 @@ import se.chalmers.bokforing.model.user.UserInfo;
  * @author victor
  */
 public class InvoicePresenter {
+
     private final static boolean DEBUG = false;
     private final static SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
     private final static DecimalFormat df = new DecimalFormat("#.##");
 
     private Document doc;
     private final Invoice fak;
-    
+
     private final Customer buyer;
     private final UserInfo seller;
-    
-    private final HashMap<Product,Integer> cont;
-    public InvoicePresenter(Invoice faktura){
+
+    private final HashMap<Product, Integer> cont;
+
+    public InvoicePresenter(Invoice faktura) {
         this.fak = faktura;
         OrderEntity oe = fak.getOrderEntity();
         buyer = oe.getBuyer();
         seller = oe.getSeller();
         cont = fak.Products();
-               
+
     }
-    
-    private double getTotalPrice(){
+
+    private double getTotalPrice() {
         double cost = 0;
-        for (Map.Entry<Product, Integer> entry : cont.entrySet())
-            {
-                System.out.println(entry.getKey() + "/" + entry.getValue());
-                cost += entry.getKey().getPrice() * entry.getValue();
-            }
+        for (Map.Entry<Product, Integer> entry : cont.entrySet()) {
+            cost += entry.getKey().getPrice() * entry.getValue();
+        }
         return cost;
     }
-    
-    private String summaryContent(){
+
+    private String summaryContent() {
         StringBuilder sb = new StringBuilder();
         double cost = getTotalPrice();
         final Double momsPre = fak.getOrderEntity().getMomsPrecentage();
@@ -68,86 +68,88 @@ public class InvoicePresenter {
         sb.append("Belopp att betala: " + df.format(cost + (cost * momsPre)) + " kr");
         return sb.toString();
     }
-    private void replacer(String tag, String replaceWith){
-        Element replace = doc.select("a[id="+tag+"]").first();
+
+    private void replacer(String tag, String replaceWith) {
+        Element replace = doc.select("a[id=" + tag + "]").first();
         replace.text(replaceWith);
     }
-    private String contentListGenerator(){
+
+    private String contentListGenerator() {
         StringBuilder sb = new StringBuilder();
         //HeaderRow
         sb.append("<table class=\"contentTable\">");
         sb.append("<tr>");
         sb.append("<th>Produkt</th>");
         sb.append("<th>Antal</th>");
-    	sb.append("<th>Kostnad</th>");
-    	sb.append("</tr>");
+        sb.append("<th>Kostnad</th>");
+        sb.append("</tr>");
         //Start With Content
-        for (Map.Entry<Product, Integer> entry : cont.entrySet()){
+        for (Map.Entry<Product, Integer> entry : cont.entrySet()) {
             sb.append("<tr>");
             sb.append("<td>").append(entry.getKey().getName()).append("</td>");
             sb.append("<td>").append(entry.getValue()).append("</td>");
             sb.append("<td>").append(df.format((Double) (entry.getKey().getPrice() * entry.getValue()))).append(" kr</td>");
             sb.append("</tr>");
         }
-        
+
         //End Table
         sb.append("</table>");
         return sb.toString();
     }
-    public void print() throws IOException, DocumentException {        
+
+    public void print() throws IOException, DocumentException {
         File input = new File("xhtml/faktura.xhtml");
         doc = Jsoup.parse(input, "UTF-8");
-                
+
         //TOP
-        replacer("faktnr",fak.getFakturaId().toString());
-        replacer("kundnr",buyer.getCustomerNumber().toString());
-        replacer("faktdat",sdf.format(fak.getFakturaDate()));
-        replacer("tcnamn",buyer.getAddress().getCompanyName());
-        replacer("tadr",buyer.getAddress().getStreetNameAndNumber());
+        replacer("faktnr", fak.getFakturaId().toString());
+        replacer("kundnr", buyer.getCustomerNumber().toString());
+        replacer("faktdat", sdf.format(fak.getFakturaDate()));
+        replacer("tcnamn", buyer.getAddress().getCompanyName());
+        replacer("tadr", buyer.getAddress().getStreetNameAndNumber());
         replacer("poskod", buyer.getAddress().getPostalCode());
-        
+
         //MID/TOP
-        replacer("ernamn",buyer.getName());
-        replacer("ordnr",fak.getOrderEntity().getOrderEntityId().toString());
-        
+        replacer("ernamn", buyer.getName());
+        replacer("ordnr", fak.getOrderEntity().getOrderEntityId().toString());
+
         replacer("vnamn", seller.getName());
-        replacer("betvil","INGA VILKOR");
-        replacer("exdat",sdf.format(fak.getExpireDate()));
-        replacer("intrest", "INGEN DRÖJSMÅLSRÄNTA");
-        
+        replacer("betvil", "30 dagar betalnings tid");
+        replacer("exdat", sdf.format(fak.getExpireDate()));
+        replacer("intrest", "50 kr betalnings ränta");
+
         //MID
         Element replace = doc.select("a[id=content]").first();
         replace.html(contentListGenerator());
-        replacer("totalcost",summaryContent());
-        
+        replacer("totalcost", summaryContent());
+
         //BOT
-        replacer("fcname",seller.getAddress().getCompanyName());
-        replacer("vadr",seller.getAddress().getStreetNameAndNumber());
-        replacer("vpostkod",seller.getAddress().getPostalCode());
-        
-        replacer("ftel",seller.getPhoneNumber());
-        
+        replacer("fcname", seller.getAddress().getCompanyName());
+        replacer("vadr", seller.getAddress().getStreetNameAndNumber());
+        replacer("vpostkod", seller.getAddress().getPostalCode());
+
+        replacer("ftel", seller.getPhoneNumber());
+
         StringBuilder sb = new StringBuilder();
         sb.append("<ul><li>");
         sb.append(fak.getOrderEntity().getMomsRegistredNumber());
         sb.append("</li><li>");
-        if(fak.getOrderEntity().isFskatt()){
+        if (fak.getOrderEntity().isFskatt()) {
             sb.append("Godkänd för F-skatt");
-        } else{
+        } else {
             sb.append("<b>Ej</b> godkänd för F-skatt");
         }
         sb.append("</li></ul>");
-        
+
         replace = doc.select("a[id=momsinfo]").first();
         replace.html(sb.toString());
-        
-        replacer("bankgiro",seller.getBankgiro());
-        
 
-        
-        if(DEBUG)
+        replacer("bankgiro", seller.getBankgiro());
+
+        if (DEBUG) {
             System.out.println(doc.outerHtml());
-        
+        }
+
         String outputFile = "pdf/fak" + fak.getFakturaId().toString() + ".pdf";
         try (OutputStream os = new FileOutputStream(outputFile)) {
             ITextRenderer renderer = new ITextRenderer();
@@ -156,5 +158,5 @@ public class InvoicePresenter {
             renderer.createPDF(os);
         }
     }
-    
+
 }

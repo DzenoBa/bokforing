@@ -45,16 +45,33 @@ public class OrderEntityServiceImpl implements OrderEntityService {
 
     @Override
     public void storeOrderEntity(OrderEntity oe) {
-        List<Invoice> faks = oe.getFakturas();
+        oeRep.save(oe);
+    }
+    
+    @Override
+    public void invalidate(OrderEntity oe){
+        List<Invoice> faks = oe.getInvoices();
         for (Invoice fak : faks) {
             fak.setValid(false);
         }
+    }
+    
+    @Override
+    public int generateInvoice(OrderEntity oe) {
+        invalidate(oe);
+        
         List<Product> prod= oe.getProd();
         List<Integer> countList = oe.getCountList();
         
-        int fakNum = -1;
+        int offset = oe.getInvoices().size();
+        int prodOffset = 0;
+        for(Invoice fak:oe.getInvoices()){
+        prodOffset += fak.Products().size();
+    }
+        
+        int fakNum = offset - 1;
         Invoice fak;
-        for (int i = 0; i < prod.size(); i++) {
+        for (int i = 0; i < prod.size() - prodOffset; i++) {
             if (i % 15 == 0) {
                 fak = new Invoice();
                 fak.setOrderEntity(oe);
@@ -68,11 +85,13 @@ public class OrderEntityServiceImpl implements OrderEntityService {
                 fakDb.save(fak);
                 //Do the next page
             }
-            oe.getFakturas().get(fakNum).addProduct(prod.get(i), countList.get(i));
+            System.out.println(prod.get( i).getName() + "/" +  countList.get( i));
+            oe.getInvoices().get(fakNum).addProduct(prod.get(i), countList.get(i));
         }
         oeRep.save(oe);
+        return fakNum + 1;
     }
-
+    
     @Override
     public List<OrderEntity> findByToUser(Customer toUser) {
         return oeRep.findByBuyer(toUser);

@@ -24,4 +24,8 @@ public interface OrderEntityService {
     List<OrderEntity> findByFromUser(UserHandler fromUser);
     
     public void storeOrderEntity(OrderEntity oe);
+    
+    public int generateInvoice(OrderEntity oe);
+    
+    public void invalidate(OrderEntity oe);
 }

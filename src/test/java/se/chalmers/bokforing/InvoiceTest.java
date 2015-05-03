@@ -7,7 +7,6 @@ package se.chalmers.bokforing;
 
 import com.lowagie.text.DocumentException;
 import java.io.IOException;
-import java.util.Calendar;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -89,8 +88,9 @@ public class InvoiceTest extends AbstractIntegrationTest {
         oe.addProduct(p, 10);
 
         oeDb.storeOrderEntity(oe);
+        oeDb.generateInvoice(oe);
 
-        for (Invoice fak : oe.getFakturas()) {
+        for (Invoice fak : oe.getInvoices()) {
             print(fak);
         }
     }
@@ -107,11 +107,40 @@ public class InvoiceTest extends AbstractIntegrationTest {
             oe.addProduct(p, (i * 3) / 2);
         }
         oeDb.storeOrderEntity(oe);
+        oeDb.generateInvoice(oe);
 
-        for (Invoice fak : oe.getFakturas()) {
+        for (Invoice fak : oe.getInvoices()) {
             print(fak);
         }
+    }
 
+    @Test
+    public void printPDFInvalid() {
+        OrderEntity oe = setUp();
+        //Add products
+        for (int i = 0; i < 20; i++) {
+            Product p = new Product();
+            p.setName("Thing" + i);
+            p.setPrice(i+0.0);
+            psDb.save(p);
+            oe.addProduct(p, i);
+        }
+        oeDb.storeOrderEntity(oe);
+        oeDb.generateInvoice(oe);
+
+        for (int i = 0; i < 5; i++) {
+            Product p = new Product();
+            p.setName("Valid" + i);
+            p.setPrice(i + 0.0);
+            psDb.save(p);
+            oe.addProduct(p, i);
+        }
+        oeDb.storeOrderEntity(oe);
+        oeDb.generateInvoice(oe);
+
+        for (Invoice fak : oe.getInvoices()) {
+            print(fak);
+        }
     }
 
     private void print(Invoice fak) {
