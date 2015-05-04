@@ -6,10 +6,12 @@
 package se.chalmers.bokforing.service;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.orders.OrderEntity;
 import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.model.UserInfo;
+import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 
 /**
  *
@@ -18,10 +20,11 @@ import se.chalmers.bokforing.model.UserInfo;
 public interface OrderEntityService {
     public OrderEntity getById(Long id);
     
-    List<OrderEntity> findByFromUser(UserInfo fromUser);
-    List<OrderEntity> findByToUser(Customer toUser);
+    Page<OrderEntity> findByFromUser(UserInfo fromUser, PagingAndSortingTerms terms);
     
-    List<OrderEntity> findByFromUser(UserHandler fromUser);
+    Page<OrderEntity> findByToUser(Customer toUser, PagingAndSortingTerms terms);
+    
+    Page<OrderEntity> findByFromUser(UserHandler fromUser, PagingAndSortingTerms terms);
     
     public void storeOrderEntity(OrderEntity oe);
     

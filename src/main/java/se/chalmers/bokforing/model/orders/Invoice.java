@@ -26,6 +26,11 @@ import se.chalmers.bokforing.model.Product;
  */
 @Entity
 public class Invoice implements Serializable {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long fakturaId;
+    
     @ManyToOne
     private OrderEntity orderEntity;
     
@@ -43,10 +48,6 @@ public class Invoice implements Serializable {
     @ElementCollection
     private final List<Integer> countList = new LinkedList<>();
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long fakturaId;
-
     private boolean valid = true;
     //Date
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -111,15 +112,29 @@ public class Invoice implements Serializable {
     }
     
     public void addProduct(Product p, Integer amount) {
-            prod.add(p);
-            countList.add(amount);
+            getProd().add(p);
+            getCountList().add(amount);
     }
     
     public HashMap Products(){
         HashMap<Product,Integer> hm = new HashMap<>();
-        for(int i = 0; i < prod.size(); i++){
-            hm.put(prod.get(i), countList.get(i));
+        for(int i = 0; i < getProd().size(); i++){
+            hm.put(getProd().get(i), getCountList().get(i));
         }
         return hm;
+    }
+
+    /**
+     * @return the prod
+     */
+    public List<Product> getProd() {
+        return prod;
+    }
+
+    /**
+     * @return the countList
+     */
+    public List<Integer> getCountList() {
+        return countList;
     }
 }

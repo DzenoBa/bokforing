@@ -8,15 +8,19 @@ package se.chalmers.bokforing.service.impl;
 import java.util.Calendar;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.orders.Invoice;
 import se.chalmers.bokforing.model.orders.OrderEntity;
 import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.model.UserInfo;
-import se.chalmers.bokforing.persistence.orders.InvoiceRepository;
-import se.chalmers.bokforing.persistence.orders.OrderEntityRepository;
+import se.chalmers.bokforing.persistence.InvoiceRepository;
+import se.chalmers.bokforing.persistence.OrderEntityRepository;
+import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.service.OrderEntityService;
 
 /**
@@ -24,6 +28,7 @@ import se.chalmers.bokforing.service.OrderEntityService;
  * @author victor
  */
 @Service
+@Transactional
 public class OrderEntityServiceImpl implements OrderEntityService {
     
     @Autowired
@@ -38,8 +43,10 @@ public class OrderEntityServiceImpl implements OrderEntityService {
     }
 
     @Override
-    public List<OrderEntity> findByFromUser(UserInfo fromUser) {
-        return oeRep.findBySeller(fromUser);
+    public Page<OrderEntity> findByFromUser(UserInfo fromUser, PagingAndSortingTerms terms) {
+        PageRequest request = terms.getPageRequest();
+        
+        return oeRep.findBySeller(fromUser, request);
     }
 
     @Override
@@ -73,6 +80,7 @@ public class OrderEntityServiceImpl implements OrderEntityService {
         for (int i = 0; i < prod.size() - prodOffset; i++) {
             if (i % 15 == 0) {
                 fak = new Invoice();
+                fak.setUserAccount(oe.getSeller().getUa());
                 fak.setOrderEntity(oe);
                 oe.addFaktura(fak);
                 
@@ -91,13 +99,17 @@ public class OrderEntityServiceImpl implements OrderEntityService {
     }
     
     @Override
-    public List<OrderEntity> findByToUser(Customer toUser) {
-        return oeRep.findByBuyer(toUser);
+    public Page<OrderEntity> findByToUser(Customer toUser, PagingAndSortingTerms terms) {
+        PageRequest pageRequest = terms.getPageRequest();
+        
+        return oeRep.findByBuyer(toUser, pageRequest);
     }
 
     @Override
-    public List<OrderEntity> findByFromUser(UserHandler fromUser) {
-        return oeRep.findBySeller(fromUser.getUI());
+    public Page<OrderEntity> findByFromUser(UserHandler fromUser, PagingAndSortingTerms terms) {
+        PageRequest pageRequest = terms.getPageRequest();
+        
+        return oeRep.findBySeller(fromUser.getUI(), pageRequest);
     }
     
 }
