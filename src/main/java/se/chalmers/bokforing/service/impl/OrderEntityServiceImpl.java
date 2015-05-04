@@ -80,7 +80,6 @@ public class OrderEntityServiceImpl implements OrderEntityService {
         for (int i = 0; i < prod.size() - prodOffset; i++) {
             if (i % 15 == 0) {
                 fak = new Invoice();
-                fak.setUserAccount(oe.getSeller().getUa());
                 fak.setOrderEntity(oe);
                 oe.addFaktura(fak);
                 
