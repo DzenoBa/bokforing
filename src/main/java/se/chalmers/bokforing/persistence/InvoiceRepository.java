@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.UserAccount;
-import se.chalmers.bokforing.model.orders.Invoice;
-import se.chalmers.bokforing.model.orders.OrderEntity;
+import se.chalmers.bokforing.model.Invoice;
+import se.chalmers.bokforing.model.OrderEntity;
 
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, Long> {

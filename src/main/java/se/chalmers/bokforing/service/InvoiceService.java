@@ -10,8 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.UserAccount;
-import se.chalmers.bokforing.model.orders.Invoice;
-import se.chalmers.bokforing.model.orders.OrderEntity;
+import se.chalmers.bokforing.model.Invoice;
+import se.chalmers.bokforing.model.OrderEntity;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 
 /**

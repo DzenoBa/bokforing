@@ -8,7 +8,7 @@ package se.chalmers.bokforing.service;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import se.chalmers.bokforing.model.Customer;
-import se.chalmers.bokforing.model.orders.OrderEntity;
+import se.chalmers.bokforing.model.OrderEntity;
 import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.model.UserInfo;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;

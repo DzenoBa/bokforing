@@ -20,8 +20,8 @@ import org.jsoup.nodes.Element;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Product;
-import se.chalmers.bokforing.model.orders.Invoice;
-import se.chalmers.bokforing.model.orders.OrderEntity;
+import se.chalmers.bokforing.model.Invoice;
+import se.chalmers.bokforing.model.OrderEntity;
 import se.chalmers.bokforing.model.UserInfo;
 
 /**
