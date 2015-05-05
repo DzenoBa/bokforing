@@ -105,7 +105,7 @@ public class IncomeStatementPresenter {
 
         //SPECIFICATION
         //don't know how to find company name
-        //replacer("fornamn", fak.getFakturaId().toString());
+        replacer("fornamn", user.getUserInfo().getName());
         replacer("utskrd", new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
         replacer("raken", new SimpleDateFormat("yyyy").format(startDate));
         replacer("valdper", new SimpleDateFormat("dd/MM/yyyy").format(startDate) + " - "
