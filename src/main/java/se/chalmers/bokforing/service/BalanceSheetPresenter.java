@@ -35,7 +35,7 @@ import se.chalmers.bokforing.model.UserAccount;
 @Transactional
 public class BalanceSheetPresenter {
 
-    private final static boolean DEBUG = true;
+    private final static boolean DEBUG = false;
     Map<Account, List<Double>> balanceSheet;
 
     private Document doc;
@@ -108,7 +108,9 @@ public class BalanceSheetPresenter {
             Date endDate, Pageable pageable) throws IOException, DocumentException {
          balanceSheet = postService.getBalanceSheet(user, startDate,
                 endDate, pageable);
-        File input = new File("xhtml/balanceSheet.html");
+         File input = new File(getClass().getResource("/xhtml/balanceSheet.xhtml").toString().substring(6));
+
+        //File input = new File("/xhtml/balanceSheet.html");
         doc = Jsoup.parse(input, "UTF-8");
 
         //SPECIFICATION
@@ -135,7 +137,10 @@ public class BalanceSheetPresenter {
             System.out.println(doc.outerHtml());
         }
 
-        String outputFile = "pdf/balansrapport.pdf";
+        String outputFile = getClass().getResource("/").toString().substring(6);
+        outputFile = outputFile + "balanceSheet.pdf";
+        
+        //String outputFile = "/pdf/balansrapport.pdf";
         try (OutputStream os = new FileOutputStream(outputFile)) {
             ITextRenderer renderer = new ITextRenderer();
             renderer.setDocumentFromString(doc.outerHtml());

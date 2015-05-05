@@ -33,7 +33,7 @@ import se.chalmers.bokforing.model.UserAccount;
 @Transactional
 public class IncomeStatementPresenter {
 
-    private final static boolean DEBUG = true;
+    private final static boolean DEBUG = false;
     Map<Account, Double> incomeStatement;
 
     private Document doc;
@@ -100,7 +100,7 @@ public class IncomeStatementPresenter {
             Date endDate, Pageable pageable) throws IOException, DocumentException {
         incomeStatement = postService.getIncomeStatement(user, startDate,
                 endDate, pageable);
-        File input = new File("xhtml/incomeStatement.html");
+        File input = new File(getClass().getResource("/xhtml/incomeStatement.xhtml").toString().substring(6));
         doc = Jsoup.parse(input, "UTF-8");
 
         //SPECIFICATION
@@ -126,15 +126,14 @@ public class IncomeStatementPresenter {
         if (DEBUG) {
             System.out.println(doc.outerHtml());
         }
-
-        String outputFile = "pdf/balansrapport.pdf";
+        String outputFile = getClass().getResource("/").toString().substring(6);
+        outputFile = outputFile + "incomeStatement.pdf";
+        //String outputFile = "/pdf/balansrapport.pdf";
         try (OutputStream os = new FileOutputStream(outputFile)) {
             ITextRenderer renderer = new ITextRenderer();
             renderer.setDocumentFromString(doc.outerHtml());
             renderer.layout();
             renderer.createPDF(os);
         }
-        
     }
-
 }

@@ -58,10 +58,10 @@ public class ReportTest extends AbstractIntegrationTest {
 
     @Autowired
     PostManager postManager;
-    
+
     @Autowired
     IncomeStatementPresenter incStatement;
-    
+
     @Autowired
     BalanceSheetPresenter balanceSheet;
 
@@ -172,7 +172,8 @@ public class ReportTest extends AbstractIntegrationTest {
         try {
             balanceSheet.print(user, startDate, endDate, terms.getPageRequest());
         } catch (IOException | DocumentException e) {
-            assert (false);
+            System.out.println(e.getMessage());
+             assert (false);
             // TODO: fix path
 //            assert(false);
         }
@@ -277,7 +278,7 @@ public class ReportTest extends AbstractIntegrationTest {
         try {
             incStatement.print(user, startDate, endDate, terms.getPageRequest());
         } catch (IOException | DocumentException e) {
-            //assert (false);
+            assert (false);
             // TODO: fix path
         }
     }
