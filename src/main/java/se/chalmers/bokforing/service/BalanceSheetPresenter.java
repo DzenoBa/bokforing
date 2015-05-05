@@ -47,6 +47,11 @@ public class BalanceSheetPresenter {
         Element replace = doc.select("a[id=" + tag + "]").first();
         replace.text(replaceWith);
     }
+    
+       private void replacerHTML(String tag, String replaceWith) {
+        Element replace = doc.select("a[id=" + tag + "]").first();
+        replace.html(replaceWith);
+    }
 
     //Generates all assetAccounts
     private String assetAccountsGenerator() {
@@ -56,7 +61,7 @@ public class BalanceSheetPresenter {
         for (Account acc : accountSet) {
             if (acc.getNumber() < 2000) {
                 sb.append("<tr>");
-                sb.append("<td>").append(acc.getNumber()).append(acc.getName()).append("</td>");
+                sb.append("<td>").append(acc.getNumber()).append("  ").append(acc.getName()).append("</td>");
                 sb.append("<td>").append(balanceSheet.get(acc).get(1)).append("</td>");
                 sb.append("<td>").append(balanceSheet.get(acc).get(0)).append("</td>");
                 sb.append("</tr>");
@@ -74,7 +79,7 @@ public class BalanceSheetPresenter {
         for (Account acc : accountSet) {
             if (acc.getNumber() >= 2000) {
                 sb.append("<tr>");
-                sb.append("<td>").append(acc.getNumber()).append(acc.getName()).append("</td>");
+                sb.append("<td>").append(acc.getNumber()).append("  ").append(acc.getName()).append("</td>");
                 sb.append("<td>").append(balanceSheet.get(acc).get(1)).append("</td>");
                 sb.append("<td>").append(balanceSheet.get(acc).get(0)).append("</td>");
                 sb.append("</tr>");
@@ -125,13 +130,13 @@ public class BalanceSheetPresenter {
         replacer("verinr", user.getVerifications().get(user.getVerifications().size() - 1).getVerificationNumber().toString());
 
         //ASSETS SECTION
-        replacer("tillgkonto", assetAccountsGenerator());
+        replacerHTML("tillgkonto", assetAccountsGenerator());
 
         //DEBT SECTION
-        replacer("skuldkonto", debtAccountsGenerator());
+        replacerHTML("skuldkonto", debtAccountsGenerator());
 
-        // SECTION
-        replacer("ingresultat", resultGenerator());
+        //FINAL SECTION
+        replacerHTML("ingresultat", resultGenerator());
 
         if (DEBUG) {
             System.out.println(doc.outerHtml());
