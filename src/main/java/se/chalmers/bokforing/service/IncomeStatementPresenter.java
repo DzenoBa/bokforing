@@ -45,6 +45,12 @@ public class IncomeStatementPresenter {
         Element replace = doc.select("a[id=" + tag + "]").first();
         replace.text(replaceWith);
     }
+    
+       private void replacerHTML(String tag, String replaceWith) {
+        Element replace = doc.select("a[id=" + tag + "]").first();
+        replace.html(replaceWith);
+    }
+
 
     //Generates all assetAccounts
     private String revenueAccountsGenerator() {
@@ -52,7 +58,7 @@ public class IncomeStatementPresenter {
         Set<Account> accountSet = incomeStatement.keySet();
 
         for (Account acc : accountSet) {
-            if (acc.getNumber() < 2000) {
+            if (acc.getNumber() / 1000 == 3) {
                 sb.append("<tr>");
                 sb.append("<td>").append(acc.getNumber()).append(acc.getName()).append("</td>");
                 sb.append("<td>").append(incomeStatement.get(acc)).append("</td>");
@@ -69,7 +75,7 @@ public class IncomeStatementPresenter {
         Set<Account> accountSet = incomeStatement.keySet();
 
         for (Account acc : accountSet) {
-            if (acc.getNumber() >= 2000) {
+            if (acc.getNumber() / 1000 >= 4) {
                 sb.append("<tr>");
                 sb.append("<td>").append(acc.getNumber()).append(acc.getName()).append("</td>");
                 sb.append("<td>").append(incomeStatement.get(acc)).append("</td>");
@@ -115,13 +121,13 @@ public class IncomeStatementPresenter {
         replacer("verinr", user.getVerifications().get(user.getVerifications().size() - 1).getVerificationNumber().toString());
 
         //REVENUE SECTION
-        replacer("intaktkonto", revenueAccountsGenerator());
+        replacerHTML("intaktkonto", revenueAccountsGenerator());
 
         //COST SECTION
-        replacer("kostnadkonto", costAccountsGenerator());
+        replacerHTML("kostnadkonto", costAccountsGenerator());
 
         //RESULT SECTION
-        replacer("resultat", resultGenerator());
+        replacerHTML("resultat", resultGenerator());
 
         if (DEBUG) {
             System.out.println(doc.outerHtml());
