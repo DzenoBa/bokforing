@@ -100,7 +100,7 @@ public class IncomeStatementPresenter {
             Date endDate, Pageable pageable) throws IOException, DocumentException {
         incomeStatement = postService.getIncomeStatement(user, startDate,
                 endDate, pageable);
-        File input = new File("incomeStatement.html");
+        File input = new File("xhtml/incomeStatement.html");
         doc = Jsoup.parse(input, "UTF-8");
 
         //SPECIFICATION
@@ -134,6 +134,7 @@ public class IncomeStatementPresenter {
             renderer.layout();
             renderer.createPDF(os);
         }
+        
     }
 
 }

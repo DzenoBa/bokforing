@@ -108,7 +108,7 @@ public class BalanceSheetPresenter {
             Date endDate, Pageable pageable) throws IOException, DocumentException {
          balanceSheet = postService.getBalanceSheet(user, startDate,
                 endDate, pageable);
-        File input = new File("balanceSheet.html");
+        File input = new File("xhtml/balanceSheet.html");
         doc = Jsoup.parse(input, "UTF-8");
 
         //SPECIFICATION

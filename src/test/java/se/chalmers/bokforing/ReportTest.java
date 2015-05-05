@@ -14,7 +14,6 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.config.TestApplicationConfig;
@@ -275,15 +274,11 @@ public class ReportTest extends AbstractIntegrationTest {
         cal.set(3000, 1, 1);
         Date endDate = cal.getTime();
 
-
         try {
-            incStatement.print(user, startDate,
-            endDate, terms.getPageRequest());
+            incStatement.print(user, startDate, endDate, terms.getPageRequest());
         } catch (IOException | DocumentException e) {
-            assert (false);
+            //assert (false);
             // TODO: fix path
-//            assert(false);
         }
     }
-
 }

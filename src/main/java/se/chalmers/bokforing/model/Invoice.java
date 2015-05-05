@@ -7,46 +7,53 @@ package se.chalmers.bokforing.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
-import se.chalmers.bokforing.model.UserInfo;
+import se.chalmers.bokforing.model.Product;
 
 /**
  *
  * @author victor
  */
 @Entity
-public class Faktura implements Serializable {
+public class Invoice implements Serializable {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fakturaId;
+    
+    @ManyToOne
+    private OrderEntity orderEntity;
+    
+    public OrderEntity getOrderEntity(){
+        return orderEntity;
+    }
+    
+    public void setOrderEntity(OrderEntity oe){
+        orderEntity = oe;
+    }
+    
+    @ManyToMany
+    private final List<Product> prod = new LinkedList<>();
 
+    @ElementCollection
+    private final List<Integer> countList = new LinkedList<>();
+    
     private boolean valid = true;
-        
-    //From
-    //We need names, phone numbers and company from the info.
-    @ManyToOne
-    private UserInfo fromUser;
-    
-    //To
-    @ManyToOne
-    private UserInfo toUser;
-    
     //Date
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fakturaDate = new Date();
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date expireDate = fakturaDate;
-    
-    //private Content content;
-        
-    private boolean fskatt = false;
-    private String momsRegistredNumber;
-    private Double momsPrecentage;    
 
     /**
      * @return the fakturaId
@@ -77,34 +84,6 @@ public class Faktura implements Serializable {
     }
 
     /**
-     * @return the fromUser
-     */
-    public UserInfo getFromUser() {
-        return fromUser;
-    }
-
-    /**
-     * @param fromUser the fromUser to set
-     */
-    public void setFromUser(UserInfo fromUser) {
-        this.fromUser = fromUser;
-    }
-
-    /**
-     * @return the toUser
-     */
-    public UserInfo getToUser() {
-        return toUser;
-    }
-
-    /**
-     * @param toUser the toUser to set
-     */
-    public void setToUser(UserInfo toUser) {
-        this.toUser = toUser;
-    }
-
-    /**
      * @return the fakturaDate
      */
     public Date getFakturaDate() {
@@ -131,46 +110,31 @@ public class Faktura implements Serializable {
     public void setExpireDate(Date expireDate) {
         this.expireDate = expireDate;
     }
-
-    /**
-     * @return the fskatt
-     */
-    public Boolean getFskatt() {
-        return fskatt;
+    
+    public void addProduct(Product p, Integer amount) {
+            getProd().add(p);
+            getCountList().add(amount);
+    }
+    
+    public HashMap Products(){
+        HashMap<Product,Integer> hm = new HashMap<>();
+        for(int i = 0; i < getProd().size(); i++){
+            hm.put(getProd().get(i), getCountList().get(i));
+        }
+        return hm;
     }
 
     /**
-     * @param fskatt the fskatt to set
+     * @return the prod
      */
-    public void setFskatt(Boolean fskatt) {
-        this.fskatt = fskatt;
+    public List<Product> getProd() {
+        return prod;
     }
 
     /**
-     * @return the momsRegistredNumber
+     * @return the countList
      */
-    public String getMomsRegistredNumber() {
-        return momsRegistredNumber;
-    }
-
-    /**
-     * @param momsRegistredNumber the momsRegistredNumber to set
-     */
-    public void setMomsRegistredNumber(String momsRegistredNumber) {
-        this.momsRegistredNumber = momsRegistredNumber;
-    }
-
-    /**
-     * @return the momsPrecentage
-     */
-    public Double getMomsPrecentage() {
-        return momsPrecentage;
-    }
-
-    /**
-     * @param momsPrecentage the momsPrecentage to set
-     */
-    public void setMomsPrecentage(Double momsPrecentage) {
-        this.momsPrecentage = momsPrecentage;
+    public List<Integer> getCountList() {
+        return countList;
     }
 }
