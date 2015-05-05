@@ -17,11 +17,11 @@ import javax.persistence.Id;
  */
 @Entity
 public class Address implements Serializable {
-    
+
     @Id
     @GeneratedValue
     private Long id;
-    
+
     private String streetNameAndNumber;
     private String postalCode;
     private String postTown;
@@ -97,12 +97,12 @@ public class Address implements Serializable {
     public void setCountry(String country) {
         this.country = country;
     }
-    
-    public void setCompanyName(String companyName){
+
+    public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
-    
-    public String getCompanyName(){
+
+    public String getCompanyName() {
         return this.companyName;
     }
 
@@ -128,21 +128,16 @@ public class Address implements Serializable {
         final Address other = (Address) obj;
         if (!Objects.equals(this.streetNameAndNumber, other.streetNameAndNumber)) {
             return false;
-        }
-        else if (!Objects.equals(this.postalCode, other.postalCode)) {
+        } else if (!Objects.equals(this.postalCode, other.postalCode)) {
             return false;
-        }
-        else if (!Objects.equals(this.postTown, other.postTown)) {
+        } else if (!Objects.equals(this.postTown, other.postTown)) {
             return false;
-        }
-        else if (!Objects.equals(this.country, other.country)) {
+        } else if (!Objects.equals(this.country, other.country)) {
             return false;
-        }
-        else if (!Objects.equals(this.companyName, other.companyName)) {
+        } else if (!Objects.equals(this.companyName, other.companyName)) {
             return false;
         }
         return true;
     }
-    
-    
+
 }

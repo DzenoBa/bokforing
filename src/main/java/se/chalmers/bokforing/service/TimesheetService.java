@@ -5,7 +5,6 @@
  */
 package se.chalmers.bokforing.service;
 
-import java.util.List;
 import org.springframework.data.domain.Page;
 import se.chalmers.bokforing.model.Timesheet;
 import se.chalmers.bokforing.model.UserAccount;
@@ -16,13 +15,13 @@ import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
  * @author Jakob
  */
 public interface TimesheetService {
-    
+
     Timesheet findTimesheet(long id);
-    
+
     Page<Timesheet> findAllTimesheets(UserAccount user, PagingAndSortingTerms terms);
-    
+
     void save(Timesheet timesheet);
-    
+
     void remove(Timesheet timesheet);
-    
+
 }

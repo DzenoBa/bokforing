@@ -26,31 +26,34 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "Posts")
 public class Post implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @OneToOne(cascade = CascadeType.ALL)
     private PostSum postSum;
-    
+
     @ManyToOne
     private Account account;
-    
+
     @ManyToOne
     private Verification verification;
-    
+
     @Temporal(TemporalType.DATE)
     private Date creationDate;
-    
-    /** It it necessary to be able to tell if a Post has been corrected.
-     * See 5 kap. 5 § BFL */
+
+    /**
+     * It it necessary to be able to tell if a Post has been corrected. See 5
+     * kap. 5 § BFL
+     */
     private boolean correction;
-    
-    /** So we know which Posts to use for validation. */
+
+    /**
+     * So we know which Posts to use for validation.
+     */
     private boolean active;
 
-    
     /**
      * @return the postSum
      */
@@ -139,7 +142,7 @@ public class Post implements Serializable {
     public void setCorrection(boolean correction) {
         this.correction = correction;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -194,19 +197,19 @@ public class Post implements Serializable {
     public void setActive(boolean active) {
         this.active = active;
     }
-    
+
     public double getBalance() {
-        if(!isActive()) { // we only care about ones that haven't been replaced
+        if (!isActive()) { // we only care about ones that haven't been replaced
             return 0;
         }
-        
+
         double debitAccountTypeFactor = 0;
         double creditAccountTypeFactor = 0;
-        
+
         // Different account types count the debit and credit sides of the
         // post differently. Some make credit negative, some make credit 
         // positive etc.
-        switch(account.getAccountType()) {
+        switch (account.getAccountType()) {
             case ASSETS:    // 1
             case MATERIAL_AND_PRODUCT_COSTS: // 4
             case COSTS_5: // 5
@@ -222,11 +225,11 @@ public class Post implements Serializable {
                 creditAccountTypeFactor = 1;
                 break;
         }
-        
+
         double balance = 0;
-        
-        if(postSum != null && postSum.getType() != null) {
-            switch(postSum.getType()) {
+
+        if (postSum != null && postSum.getType() != null) {
+            switch (postSum.getType()) {
                 case Credit:
                     balance += postSum.getSumTotal() * creditAccountTypeFactor;
                     break;
@@ -235,19 +238,19 @@ public class Post implements Serializable {
                     break;
             }
         }
-        
+
         return balance;
     }
-    
+
     public double getBalanceIgnoreSign() {
-        if(!isActive()) { // we only care about ones that haven't been replaced
+        if (!isActive()) { // we only care about ones that haven't been replaced
             return 0;
         }
-        
+
         double balance = 0;
-        
-        if(postSum != null && postSum.getType() != null) {
-            switch(postSum.getType()) {
+
+        if (postSum != null && postSum.getType() != null) {
+            switch (postSum.getType()) {
                 case Credit:
                     balance -= postSum.getSumTotal();
                     break;
@@ -256,7 +259,7 @@ public class Post implements Serializable {
                     break;
             }
         }
-        
+
         return balance;
     }
 }

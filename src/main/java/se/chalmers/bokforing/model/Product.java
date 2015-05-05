@@ -21,27 +21,28 @@ import javax.persistence.ManyToOne;
  */
 @Entity
 public class Product implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     private String name;
     private String description;
     private Double price;
-    
+
     @Enumerated(EnumType.STRING)
     private QuantityType quantityType;
-    
-    /** This is the default Account for which transactions involving this product
+
+    /**
+     * This is the default Account for which transactions involving this product
      * should be placed in.
      */
     @ManyToOne
     private Account defaultAccount;
-    
+
     @ManyToOne
     private Account VATAccount;
-    
+
     @ManyToOne
     private UserAccount userAccount;
 
@@ -114,7 +115,7 @@ public class Product implements Serializable {
     public void setQuantityType(QuantityType quantityType) {
         this.quantityType = quantityType;
     }
-    
+
     public double getTotal(double quantity) {
         return getPrice() * quantity;
     }
@@ -160,21 +161,22 @@ public class Product implements Serializable {
     public void setVATAccount(Account VATAccount) {
         this.VATAccount = VATAccount;
     }
-    
+
     public enum QuantityType {
+
         KILOGRAM("kg"),
         HOUR("h"),
         UNIT("st"),
         CENTIMETER("cm"),
         METER("m"),
         KILOMETER("km");
-        
+
         private final String acronym;
-        
+
         QuantityType(String acronym) {
             this.acronym = acronym;
         }
-        
+
         public String getAcronym() {
             return this.acronym;
         }
@@ -195,28 +197,22 @@ public class Product implements Serializable {
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
-        }
-        if (getClass() != obj.getClass()) {
+        } else if (getClass() != obj.getClass()) {
             return false;
         }
         final Product other = (Product) obj;
         if (!Objects.equals(this.name, other.name)) {
             return false;
-        }
-        if (!Objects.equals(this.description, other.description)) {
+        } else if (!Objects.equals(this.description, other.description)) {
             return false;
-        }
-        if (!Objects.equals(this.price, other.price)) {
+        } else if (!Objects.equals(this.price, other.price)) {
             return false;
-        }
-        if (this.getQuantityType() != other.getQuantityType()) {
+        } else if (this.getQuantityType() != other.getQuantityType()) {
             return false;
-        }
-        if (!Objects.equals(this.userAccount, other.userAccount)) {
+        } else if (!Objects.equals(this.userAccount, other.userAccount)) {
             return false;
         }
         return true;
     }
-    
-    
+
 }

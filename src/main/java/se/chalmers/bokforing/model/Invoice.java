@@ -18,7 +18,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
-import se.chalmers.bokforing.model.Product;
 
 /**
  *
@@ -26,28 +25,28 @@ import se.chalmers.bokforing.model.Product;
  */
 @Entity
 public class Invoice implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fakturaId;
-    
+
     @ManyToOne
     private OrderEntity orderEntity;
-    
-    public OrderEntity getOrderEntity(){
+
+    public OrderEntity getOrderEntity() {
         return orderEntity;
     }
-    
-    public void setOrderEntity(OrderEntity oe){
+
+    public void setOrderEntity(OrderEntity oe) {
         orderEntity = oe;
     }
-    
+
     @ManyToMany
     private final List<Product> prod = new LinkedList<>();
 
     @ElementCollection
     private final List<Integer> countList = new LinkedList<>();
-    
+
     private boolean valid = true;
     //Date
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -110,15 +109,15 @@ public class Invoice implements Serializable {
     public void setExpireDate(Date expireDate) {
         this.expireDate = expireDate;
     }
-    
+
     public void addProduct(Product p, Integer amount) {
-            getProd().add(p);
-            getCountList().add(amount);
+        getProd().add(p);
+        getCountList().add(amount);
     }
-    
-    public HashMap Products(){
-        HashMap<Product,Integer> hm = new HashMap<>();
-        for(int i = 0; i < getProd().size(); i++){
+
+    public HashMap Products() {
+        HashMap<Product, Integer> hm = new HashMap<>();
+        for (int i = 0; i < getProd().size(); i++) {
             hm.put(getProd().get(i), getCountList().get(i));
         }
         return hm;

@@ -22,13 +22,13 @@ public class ProductManagerImpl implements ProductManager {
 
     @Autowired
     private ProductService productService;
-    
+
     @Override
     public Product createProduct(UserAccount user, String name, double price, Product.QuantityType quantityType, String description, Account defaultAccount, Account VATAccount) {
-        if(!productIsValid(user, name, price, quantityType, description, defaultAccount, VATAccount)) {
+        if (!productIsValid(user, name, price, quantityType, description, defaultAccount, VATAccount)) {
             return null;
         }
-        
+
         Product product = new Product();
         product.setUserAccount(user);
         product.setName(name);
@@ -37,15 +37,15 @@ public class ProductManagerImpl implements ProductManager {
         product.setDescription(description);
         product.setDefaultAccount(defaultAccount);
         product.setVATAccount(VATAccount);
-        
+
         productService.save(product);
-        
+
         return product;
     }
 
     @Override
     public void removeProduct(Product product) {
-        if(product != null) {
+        if (product != null) {
             productService.remove(product);
         }
     }
@@ -54,5 +54,5 @@ public class ProductManagerImpl implements ProductManager {
         // TODO: validation
         return true;
     }
-    
+
 }

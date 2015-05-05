@@ -16,8 +16,8 @@ import se.chalmers.bokforing.model.UserAccount;
  * @author Jakob
  */
 public interface TimesheetManager {
-    
+
     Timesheet createTimesheet(UserAccount user, Customer customer, Product product, double quantity, String description, Date date);
-    
+
     void removeTimesheet(Timesheet timesheet);
 }

@@ -24,13 +24,13 @@ public class TimesheetManagerImpl implements TimesheetManager {
 
     @Autowired
     private TimesheetService service;
-    
+
     @Override
     public Timesheet createTimesheet(UserAccount user, Customer customer, Product product, double quantity, String description, Date date) {
-        if(!timeSheetIsValid(user, customer, product, quantity, description, date)) {
+        if (!timeSheetIsValid(user, customer, product, quantity, description, date)) {
             return null;
         }
-        
+
         Timesheet timesheet = new Timesheet();
         timesheet.setUserAccount(user);
         timesheet.setCustomer(customer);
@@ -38,7 +38,7 @@ public class TimesheetManagerImpl implements TimesheetManager {
         timesheet.setQuantity(quantity);
         timesheet.setDescription(description);
         timesheet.setDateWorked(date);
-        
+
         service.save(timesheet);
         return timesheet;
     }
@@ -52,5 +52,5 @@ public class TimesheetManagerImpl implements TimesheetManager {
         // TODO: validation here
         return true;
     }
-    
+
 }

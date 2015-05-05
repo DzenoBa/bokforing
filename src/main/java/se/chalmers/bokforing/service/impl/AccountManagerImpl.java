@@ -21,34 +21,34 @@ public class AccountManagerImpl implements AccountManager {
 
     @Autowired
     private AccountService service;
-    
+
     @Override
     public Account createAccount(int number, String name) {
-        if(!accountIsValid(number, name)) {
+        if (!accountIsValid(number, name)) {
             return null;
         }
-        
+
         Account account = new Account();
 
         int firstDigit = Integer.parseInt(Integer.toString(number).substring(0, 1));
-        
+
         // A bit hacky bit should work
-        for(AccountType type : AccountType.values()) {
-            if(type.getStartingDigit() == firstDigit) {
+        for (AccountType type : AccountType.values()) {
+            if (type.getStartingDigit() == firstDigit) {
                 account.setAccountType(type);
             }
-        } 
-        
+        }
+
         account.setNumber(number);
         account.setName(name);
         service.save(account);
-        
+
         return account;
     }
 
     @Override
     public void removeAccount(Account account) {
-        if(account != null) {
+        if (account != null) {
             service.delete(null);
         }
     }
@@ -57,5 +57,5 @@ public class AccountManagerImpl implements AccountManager {
         // TODO: Validate data, cannot exist already
         return true;
     }
-    
+
 }

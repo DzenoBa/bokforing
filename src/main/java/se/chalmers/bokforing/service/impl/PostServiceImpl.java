@@ -20,8 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.AccountType;
 import se.chalmers.bokforing.model.Post;
-import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.model.UserAccount;
+import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.persistence.PostRepository;
 import se.chalmers.bokforing.persistence.VerificationRepository;
@@ -105,13 +105,13 @@ public class PostServiceImpl implements PostService {
                 }
             }
         }
-        
+
         Calendar cal = Calendar.getInstance();
         cal.set(0, 0, 0);
-        
+
         Date earlyDate = cal.getTime();
         List<Verification> earlierVerifications = verRepo.findByUserAccountAndTransactionDateBetween(user, earlyDate, startDate, pageable).getContent();
-        
+
         for (Verification verification : earlierVerifications) {
             List<Post> posts = verification.getPosts();
             for (Post post : posts) {
@@ -187,31 +187,31 @@ public class PostServiceImpl implements PostService {
     @Override
     public double getBalanceForAccountTypeBetweenDates(UserAccount user, AccountType accountType, Date start, Date end) {
         int startingDigit = accountType.getStartingDigit();
-        
+
         int startNumber = startingDigit * 1000;
         int endNumber = startNumber + 999;
-        
+
         List<Post> posts = postRepo.findByVerification_UserAccountAndAccount_NumberBetweenAndVerification_TransactionDateBetween(user, startNumber, endNumber, start, end);
-        
+
         double balance = 0;
-        
-        for(Post post : posts) {
+
+        for (Post post : posts) {
             balance += post.getBalance();
         }
-        
+
         return balance;
     }
 
     @Override
     public Map<Date, Double> getBalanceForAccountAtDate(UserAccount user, AccountType accountType, Date startDate, Date endDate) {
         Map<Date, Double> map = new HashMap<>();
-        
+
         Calendar start = Calendar.getInstance();
         start.setTime(startDate);
         Calendar end = Calendar.getInstance();
         end.setTime(endDate);
 
-        while(!start.after(end)) {
+        while (!start.after(end)) {
             Date date = start.getTime();
 
             // Between the same date gives only one day
@@ -220,7 +220,7 @@ public class PostServiceImpl implements PostService {
 
             start.add(Calendar.DATE, 1);
         }
-        
+
         return map;
     }
 }

@@ -10,5 +10,6 @@ package se.chalmers.bokforing.model;
  * @author Jakob
  */
 public enum UserGroup {
+
     Admin, User;
 }

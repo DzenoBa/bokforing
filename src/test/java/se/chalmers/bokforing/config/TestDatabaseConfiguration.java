@@ -19,19 +19,19 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * Database configuration for the tests. This configuration uses the HSQL database
- * which is embedded. Embedded in this case means that it will run in-memory,
- * and not be stored between tests or test suites.
- * 
+ * Database configuration for the tests. This configuration uses the HSQL
+ * database which is embedded. Embedded in this case means that it will run
+ * in-memory, and not be stored between tests or test suites.
+ *
  * @author Jakob
  */
 @Configuration
 @EnableJpaRepositories(basePackages = "se.chalmers.bokforing.persistence")
 @EnableTransactionManagement
 public class TestDatabaseConfiguration {
-    
+
     private static final String ENTITY_PACKAGE = "se.chalmers.bokforing.model";
-    
+
     @Bean
     public DataSource dataSource() {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
@@ -60,5 +60,5 @@ public class TestDatabaseConfiguration {
         txManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return txManager;
     }
-    
+
 }

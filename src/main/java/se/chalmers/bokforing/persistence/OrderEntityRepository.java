@@ -5,7 +5,6 @@
  */
 package se.chalmers.bokforing.persistence;
 
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,7 +19,7 @@ import se.chalmers.bokforing.model.UserInfo;
  */
 @Repository
 public interface OrderEntityRepository extends JpaRepository<OrderEntity, Long> {
-    
+
     OrderEntity findByOrderEntityId(Long OrderEntityId);
 
     Page<OrderEntity> findBySeller(UserInfo fromUser, Pageable pageable);

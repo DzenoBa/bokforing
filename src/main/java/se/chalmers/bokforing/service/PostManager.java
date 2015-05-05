@@ -14,7 +14,7 @@ import se.chalmers.bokforing.model.PostSum;
  * @author Jakob
  */
 public interface PostManager {
-    
+
     Post createPost(PostSum sum, Account account);
-    
+
 }

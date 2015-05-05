@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * This controller exists to map our index page.
- * 
+ *
  * @author Jakob
  */
 @Controller
 @RequestMapping("/")
 public class RootController {
-    
+
     @RequestMapping(method = RequestMethod.GET)
     public String getIndex() {
         return "redirect:public/static/index.html";

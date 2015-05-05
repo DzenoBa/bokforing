@@ -20,22 +20,22 @@ import se.chalmers.bokforing.util.DateUtil;
  */
 @Service
 public class PostManagerImpl implements PostManager {
-    
+
     @Autowired
     private PostService service;
 
     @Override
     public Post createPost(PostSum sum, Account account) {
         Post post = new Post();
-        
+
         post.setPostSum(sum);
         post.setAccount(account);
         post.setCreationDate(DateUtil.getTodaysDate());
         post.setCorrection(false);
         post.setActive(true);
-        
+
         service.save(post);
-        
+
         return post;
     }
 }

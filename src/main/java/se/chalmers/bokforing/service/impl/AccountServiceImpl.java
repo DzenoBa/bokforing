@@ -1,4 +1,3 @@
-
 package se.chalmers.bokforing.service.impl;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountRepository repository;
-    
+
     @Override
     public List<Account> findAllAccounts() {
         return repository.findAll();
@@ -44,20 +43,21 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Page<Account> findAccountBetween(int first, int last, PagingAndSortingTerms terms) {
         PageRequest request = terms.getPageRequest();
-        
-        if (first < 0 || last < 0)
+
+        if (first < 0 || last < 0) {
             return null;
-        else if (first > last)
+        } else if (first > last) {
             return null;
-        else
+        } else {
             return repository.findByNumberBetween(first, last, request);
+        }
     }
-    
+
     @Override
     public Page<Account> findByNumberLike(int number, PagingAndSortingTerms terms) {
         PageRequest request = terms.getPageRequest();
-        
-        if(number > 999) {
+
+        if (number > 999) {
             List<Account> ls = new ArrayList();
             ls.add(repository.findByNumber(number));
             Page<Account> pageLs = new PageImpl(ls);
@@ -65,11 +65,11 @@ public class AccountServiceImpl implements AccountService {
         }
         int first;
         int last;
-        if(number > 99) {
+        if (number > 99) {
             first = number * 10;
             last = first + 9;
             return repository.findByNumberBetween(first, last, request);
-        } else if(number >9) {
+        } else if (number > 9) {
             first = number * 100;
             last = first + 99;
         } else {
@@ -78,11 +78,11 @@ public class AccountServiceImpl implements AccountService {
         }
         return repository.findByNumberBetween(first, last, request);
     }
-    
+
     @Override
     public Page<Account> findByNameLike(String name, PagingAndSortingTerms terms) {
         PageRequest request = terms.getPageRequest();
-        String tmp = "%"+ name + "%";
+        String tmp = "%" + name + "%";
         return repository.findByNameLikeIgnoreCase(tmp, request);
     }
 

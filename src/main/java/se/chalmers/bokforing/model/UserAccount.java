@@ -17,71 +17,70 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import se.chalmers.bokforing.model.Account;
-import se.chalmers.bokforing.model.Customer;
-import se.chalmers.bokforing.model.Product;
-import se.chalmers.bokforing.model.Timesheet;
-import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.util.PasswordUtil;
 
-/**
- *
- * @author victor
- */
+
+
 @Entity
 public class UserAccount implements Serializable {
-  
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="userInfoId")
+    @JoinColumn(name = "userInfoId")
     private UserInfo userInfo;
-    
-    /** The password of the user */
+
+    /**
+     * The password of the user
+     */
     private String pass;
-    
+
     private String salt = PasswordUtil.randomString(8);
-    
-    /** The unique email of the users */
+
+    /**
+     * The unique email of the users
+     */
     @Column(unique = true)
     private String email;
-    
+
     //Group is a reserved word. We cannot have it as a column name.   
     @Enumerated(EnumType.STRING)
     private UserGroup userGroup = UserGroup.User;
-   
+
     private String sessionid;
-    
+
     @OneToMany(mappedBy = "userAccount")
     private List<Verification> verifications;
-    
+
     @OneToMany(mappedBy = "userAccount")
     private List<Customer> customers;
-    
+
     @OneToMany(mappedBy = "userAccount")
     private List<Timesheet> timesheets;
-    
+
     @OneToMany(mappedBy = "userAccount")
     private List<Product> products;
-    
+
     @OneToMany
     private Set<Account> favoriteAccounts;
-    
-    protected UserAccount(){
-        
+
+    protected UserAccount() {
+
     }
-    public Long getId(){
+
+    public Long getId() {
         return id;
     }
-    
-    void setUserInfo(UserInfo userInfo){
+
+    void setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
     }
+
     /**
      * @return the name
      */
@@ -102,10 +101,11 @@ public class UserAccount implements Serializable {
     void setPass(String pass) {
         this.pass = pass;
     }
-    
-    void setSalt(String salt){
+
+    void setSalt(String salt) {
         this.salt = salt;
     }
+
     /**
      * @return the salt
      */
@@ -134,6 +134,7 @@ public class UserAccount implements Serializable {
     public String getSessionid() {
         return sessionid;
     }
+
     void setSessionid(String sessionid) {
         this.sessionid = sessionid;
     }
@@ -170,8 +171,9 @@ public class UserAccount implements Serializable {
      * @param userGroup the userGroup to set
      */
     void setUserGroup(UserGroup userGroup) {
-        if(userGroup == null)
+        if (userGroup == null) {
             throw new IllegalArgumentException("null is not allowed");
+        }
         this.userGroup = userGroup;
     }
 
@@ -188,47 +190,47 @@ public class UserAccount implements Serializable {
     void setCustomers(List<Customer> customers) {
         this.customers = customers;
     }
-    
-    String toStringLight(){
+
+    String toStringLight() {
         return getId() + ":" + getEmail();
     }
-    
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("UserEnt{ id= ").append(getId());
         sb.append(", userInfo=");
-        if(getUserInfo() != null)
+        if (getUserInfo() != null) {
             sb.append(getUserInfo().toStringLight());
-        else
+        } else {
             sb.append("null");
+        }
         sb.append(", pass=").append(getPass());
         sb.append(", salt= ").append(getSalt());
         sb.append(", email=").append(getEmail());
         sb.append(", group=").append(getUserGroup());
         sb.append(", sessionid=").append(getSessionid());
         sb.append(" }");
-        return  sb.toString();  
+        return sb.toString();
     }
-    
+
     @Override
-    public boolean equals(Object obj){
-    if(obj == this)
+    public boolean equals(Object obj) {
+        if (obj == this) {
             return true;
-    else if((obj == null) || (obj.getClass() != this.getClass()))
-        return false;
-    else{
-        UserAccount other = (UserAccount) obj; 
+        } else if ((obj == null) || (obj.getClass() != this.getClass())) {
+            return false;
+        } else {
+            UserAccount other = (UserAccount) obj;
             return (getId() == null ? other.getId() == null : getId().equals(other.getId()))
-                && (getEmail() == null ? other.getEmail() == null : getEmail().equals(other.getEmail()))
-                && (getPass() == null ? other.getPass() == null : getPass().equals(other.getPass()))
-                && (getSalt() == null ? other.getSalt() == null : getSalt().equals(other.getSalt()))
-                && (getSessionid() == null ? other.getSessionid() == null : getSessionid().equals(other.getSessionid()))
-                && (getUserGroup() == null ? other.getUserGroup() == null : getUserGroup().equals(other.getUserGroup()))
-                //&& (userInfo == other.userInfo || (userInfo != null && userInfo.equals(other.userInfo)))
-                //&& (verifications == null ? other.verifications == null : verifications.equals(other.verifications))
-                //&& (customers == null ? other.customers == null : customers.equals(other.customers))
-                ;
+                    && (getEmail() == null ? other.getEmail() == null : getEmail().equals(other.getEmail()))
+                    && (getPass() == null ? other.getPass() == null : getPass().equals(other.getPass()))
+                    && (getSalt() == null ? other.getSalt() == null : getSalt().equals(other.getSalt()))
+                    && (getSessionid() == null ? other.getSessionid() == null : getSessionid().equals(other.getSessionid()))
+                    && (getUserGroup() == null ? other.getUserGroup() == null : getUserGroup().equals(other.getUserGroup())) //&& (userInfo == other.userInfo || (userInfo != null && userInfo.equals(other.userInfo)))
+                    //&& (verifications == null ? other.verifications == null : verifications.equals(other.verifications))
+                    //&& (customers == null ? other.customers == null : customers.equals(other.customers))
+                    ;
         }
     }
 

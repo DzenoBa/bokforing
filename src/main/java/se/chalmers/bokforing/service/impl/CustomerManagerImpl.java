@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.model.Address;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.UserAccount;
-import se.chalmers.bokforing.persistence.CustomerRepository;
 import se.chalmers.bokforing.service.CustomerManager;
 import se.chalmers.bokforing.service.CustomerService;
 
@@ -23,13 +22,13 @@ public class CustomerManagerImpl implements CustomerManager {
 
     @Autowired
     private CustomerService service;
-    
+
     @Override
     public Customer createCustomer(UserAccount user, long number, String name, String phoneNumber, Address address) {
-        if(customerNumberAlreadyExists(user, number)) {
+        if (customerNumberAlreadyExists(user, number)) {
             return null;
         }
-        
+
         Customer customer = new Customer();
         customer.setCustomerNumber(number);
         customer.setName(name);
@@ -37,9 +36,9 @@ public class CustomerManagerImpl implements CustomerManager {
         customer.setAddress(address);
         customer.setUserAccount(user);
         service.save(customer);
-        
+
         return customer;
-    }        
+    }
 
     private boolean customerNumberAlreadyExists(UserAccount user, long number) {
         Customer customer = service.findByCustomerNumber(user, number);
@@ -48,9 +47,9 @@ public class CustomerManagerImpl implements CustomerManager {
 
     @Override
     public void deleteCustomer(Customer customer) {
-        if(customer != null) {
+        if (customer != null) {
             service.delete(customer);
         }
     }
-    
+
 }

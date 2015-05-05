@@ -28,20 +28,19 @@ public class DateUtil {
     public static boolean isDateRangeValid(Date from, Date to) {
         return from != null && to != null && from.compareTo(to) <= 0;
     }
-    
+
     /**
      * Note that this takes no consideration for time zones, as this application
      * is intended for use only in Sweden.
-     * 
+     *
      * @param inputDate
-     * @return 
+     * @return
      */
     public static boolean isDateBeforeToday(Date inputDate) {
 //        LocalDate today = LocalDate.now();
-        
+
         // Convert the java.util.Date to java.time.LocalDate
 //        LocalDate date = inputDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); 
-
         return false;
     }
 
