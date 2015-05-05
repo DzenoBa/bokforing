@@ -23,6 +23,8 @@ public interface InvoiceService {
     Page<Invoice> getByOrderEntity(OrderEntity oe, PagingAndSortingTerms terms);
 
     Page<Invoice> findByCustomer(UserAccount user, Customer customer, PagingAndSortingTerms terms);
-
+    
+    Page<Invoice> findByUser(UserAccount user, PagingAndSortingTerms terms);
+    
     void storeFaktura(Invoice fak);
 }

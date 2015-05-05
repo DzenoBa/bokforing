@@ -54,4 +54,10 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     }
 
+    @Override
+    public Page<Invoice> findByUser(UserAccount user, PagingAndSortingTerms terms) {
+        PageRequest request = terms.getPageRequest();
+        
+        return frep.findByOrderEntity_Seller_Ua(user, request);
+    }
 }
