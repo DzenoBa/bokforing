@@ -96,10 +96,10 @@ public class BalanceSheetPresenter {
             totalBalance += balanceSheet.get(acc).get(0);
         }
         totalBalance += startingBalance;
-        sb.append("<tr>");
+      
         sb.append("<td>").append(startingBalance).append("</td>");
         sb.append("<td colspan=2>").append(totalBalance).append("</td>");
-        sb.append("</tr>");
+      
 
         return sb.toString();
     }
