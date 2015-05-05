@@ -9,11 +9,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import se.chalmers.bokforing.model.Account;
+import se.chalmers.bokforing.model.AccountType;
 import se.chalmers.bokforing.model.Post;
 import se.chalmers.bokforing.model.UserAccount;
-import org.springframework.data.domain.Pageable;
-import se.chalmers.bokforing.model.AccountType;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 
 /**
@@ -33,7 +33,7 @@ public interface PostService {
     Page<Post> findPostsForUserAndAccount(UserAccount user, Account account, boolean isActive, PagingAndSortingTerms terms);
 
     Post findPostById(long id);
-    
+
     double getBalanceForAccountTypeBetweenDates(UserAccount user, AccountType accountType, Date start, Date end);
 
     Map<Date, Double> getBalanceForAccountAtDate(UserAccount user, AccountType accountType, Date startDate, Date endDate);

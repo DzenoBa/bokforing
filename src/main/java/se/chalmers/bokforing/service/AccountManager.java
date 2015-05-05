@@ -12,9 +12,9 @@ import se.chalmers.bokforing.model.Account;
  * @author Jakob
  */
 public interface AccountManager {
-    
+
     Account createAccount(int number, String name);
-    
+
     void removeAccount(Account account);
 
 }

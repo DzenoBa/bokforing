@@ -24,12 +24,12 @@ public class PostSum implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    
+
     private double sumTotal;
-    
+
     @Enumerated(EnumType.STRING)
     private PostType type;
-    
+
     /**
      * @return the type
      */
@@ -71,7 +71,7 @@ public class PostSum implements Serializable {
     public void setSumTotal(double sumTotal) {
         this.sumTotal = sumTotal;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -84,15 +84,13 @@ public class PostSum implements Serializable {
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
-        }
-        if (getClass() != obj.getClass()) {
+        } else if (getClass() != obj.getClass()) {
             return false;
         }
         final PostSum other = (PostSum) obj;
         if (Double.doubleToLongBits(this.sumTotal) != Double.doubleToLongBits(other.sumTotal)) {
             return false;
-        }
-        if (this.type != other.type) {
+        } else if (this.type != other.type) {
             return false;
         }
         return true;

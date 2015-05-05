@@ -26,42 +26,42 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository repository;
-    
+
     @Override
     public void save(Product product) {
-        if(product != null) {
+        if (product != null) {
             repository.save(product);
         }
     }
 
     @Override
     public void remove(Product product) {
-        if(product != null) {
+        if (product != null) {
             repository.delete(product);
         }
     }
-    
+
     @Override
     public Product findProductById(UserAccount user, Long id) {
         return repository.findByIdAndUserAccount(id, user);
     }
-    
+
     @Override
     public Page<Product> findAllProducts(UserAccount user, PagingAndSortingTerms terms) {
         PageRequest request = terms.getPageRequest();
-        
+
         return repository.findByUserAccount(user, request);
     }
 
     @Override
     public Page<Product> findByNameLike(UserAccount user, String name, PagingAndSortingTerms terms) {
-        if(user == null || name == null || name.isEmpty() || terms == null) {
+        if (user == null || name == null || name.isEmpty() || terms == null) {
             return null;
         }
-        
+
         PageRequest request = terms.getPageRequest();
-        
+
         return repository.findByUserAccountAndNameContainingIgnoreCase(user, name, request);
     }
-    
+
 }

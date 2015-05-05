@@ -10,16 +10,16 @@ import org.springframework.data.domain.Sort;
 import se.chalmers.bokforing.util.Constants;
 
 /**
- * The point of this class is to encapsulate sorting terms for a PageRequest.
- * It seemed more intuitive to put this in its own class to make creating
+ * The point of this class is to encapsulate sorting terms for a PageRequest. It
+ * seemed more intuitive to put this in its own class to make creating
  * PageRequests simpler. The intended usage is to construct one of these, and
- * then to send it to a service method. The service method should then
- * use the PagingAndSortingTerms#getPageRequest method to send the paging request.
+ * then to send it to a service method. The service method should then use the
+ * PagingAndSortingTerms#getPageRequest method to send the paging request.
  *
  * @author Jakob
  */
 public class PagingAndSortingTerms {
-    
+
     private Integer pageNumber;
     private Boolean ascendingSort;
     private String fieldToSortBy;
@@ -28,10 +28,11 @@ public class PagingAndSortingTerms {
     public PagingAndSortingTerms(Integer pageNumber, Boolean ascendingSort, String fieldToSortBy) {
         this(pageNumber, ascendingSort, fieldToSortBy, null);
     }
-    
+
     /**
-     * Pagesize is optional. If not included, will use Constants.DEFAULT_PAGE_SIZE.
-     * 
+     * Pagesize is optional. If not included, will use
+     * Constants.DEFAULT_PAGE_SIZE.
+     *
      * @param pageNumber
      * @param ascendingSort
      * @param fieldToSortBy
@@ -43,10 +44,10 @@ public class PagingAndSortingTerms {
         this.fieldToSortBy = fieldToSortBy;
         this.pageSize = pageSize;
     }
-    
+
     public PageRequest getPageRequest() {
         Integer tempPageNumber = pageNumber;
-        
+
         if (pageNumber == null) {
             tempPageNumber = 0;
         }
@@ -61,10 +62,10 @@ public class PagingAndSortingTerms {
         }
 
         Sort sort = new Sort(dir, fieldToSortBy);
-        
+
         Integer pageSizeLocal = null;
         pageSizeLocal = this.pageSize == null ? Constants.DEFAULT_PAGE_SIZE : this.pageSize;
-        
+
         PageRequest request = new PageRequest(tempPageNumber, pageSizeLocal, sort);
         return request;
     }
@@ -110,6 +111,5 @@ public class PagingAndSortingTerms {
     public void setFieldToSortBy(String fieldToSortBy) {
         this.fieldToSortBy = fieldToSortBy;
     }
-        
-    
+
 }

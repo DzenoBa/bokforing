@@ -7,7 +7,6 @@ package se.chalmers.bokforing.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,23 +21,23 @@ import javax.persistence.TemporalType;
  */
 @Entity
 public class Timesheet implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @ManyToOne
     private Product product;
-    
+
     @ManyToOne
     private Customer customer;
-    
+
     private Double quantity;
     private String description;
-    
+
     @Temporal(TemporalType.DATE)
     private Date dateWorked;
-    
+
     @ManyToOne
     private UserAccount userAccount;
 
@@ -111,7 +110,7 @@ public class Timesheet implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     public double getPrice() {
         return this.getProduct().getTotal(this.getQuantity());
     }

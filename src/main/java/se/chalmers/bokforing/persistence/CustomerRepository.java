@@ -18,10 +18,10 @@ import se.chalmers.bokforing.model.UserAccount;
  */
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
-    
+
     Customer findByUserAccountAndCustomerNumber(UserAccount user, long customerNumber);
 
     Page<Customer> findByUserAccount(UserAccount user, Pageable request);
-    
+
     Page<Customer> findByUserAccountAndNameContainingIgnoreCase(UserAccount userAccount, String name, Pageable pageable);
 }

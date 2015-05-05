@@ -12,5 +12,5 @@ package se.chalmers.bokforing.service;
 public interface InitializationUtil {
 
     boolean insertDefaultAccounts();
-    
+
 }

@@ -21,8 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.AccountType;
 import se.chalmers.bokforing.model.Post;
-import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.model.UserAccount;
+import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.persistence.PostRepository;
 import se.chalmers.bokforing.persistence.VerificationRepository;
@@ -108,13 +108,13 @@ public class PostServiceImpl implements PostService {
             }
         }
 
-        
+
         Calendar cal = Calendar.getInstance();
         cal.set(0, 0, 0);
-        
+
         Date earlyDate = cal.getTime();
         List<Verification> earlierVerifications = verRepo.findByUserAccountAndTransactionDateBetween(user, earlyDate, startDate, pageable).getContent();
-        
+
         for (Verification verification : earlierVerifications) {
             List<Post> posts = verification.getPosts();
             for (Post post : posts) {

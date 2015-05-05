@@ -16,11 +16,11 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import({TestDatabaseConfiguration.class})
 @ComponentScan(basePackages = {
-    "se.chalmers.bokforing.controller", 
-    "se.chalmers.bokforing.persistence", 
+    "se.chalmers.bokforing.controller",
+    "se.chalmers.bokforing.persistence",
     "se.chalmers.bokforing.session",
     "se.chalmers.bokforing.service"
 })
 public class TestApplicationConfig {
-    
+
 }

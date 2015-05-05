@@ -24,20 +24,20 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Customers")
 public class Customer implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @Column(nullable = false)
     private Long customerNumber;
-    
+
     private String name;
     private String phoneNumber;
-    
+
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;
-    
+
     @ManyToOne
     private UserAccount userAccount;
 
@@ -147,22 +147,16 @@ public class Customer implements Serializable {
         final Customer other = (Customer) obj;
         if (!Objects.equals(this.customerNumber, other.customerNumber)) {
             return false;
-        }
-        if (!Objects.equals(this.name, other.name)) {
+        } else if (!Objects.equals(this.name, other.name)) {
             return false;
-        }
-        if (!Objects.equals(this.phoneNumber, other.phoneNumber)) {
+        } else if (!Objects.equals(this.phoneNumber, other.phoneNumber)) {
             return false;
-        }
-        if (!Objects.equals(this.address, other.address)) {
+        } else if (!Objects.equals(this.address, other.address)) {
             return false;
-        }
-        if (!Objects.equals(this.userAccount, other.userAccount)) {
+        } else if (!Objects.equals(this.userAccount, other.userAccount)) {
             return false;
         }
         return true;
     }
-    
-    
-    
+
 }

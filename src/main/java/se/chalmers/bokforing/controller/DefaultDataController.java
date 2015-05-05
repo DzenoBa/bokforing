@@ -21,30 +21,31 @@ import se.chalmers.bokforing.service.InitializationUtil;
  */
 @Controller
 public class DefaultDataController {
-    
+
     @Autowired
     private AccountService accountService;
-    
+
     @Autowired
     private InitializationUtil initUtil;
-    
+
     @RequestMapping(value = "/defaultdata/accounts", method = RequestMethod.GET)
-    public @ResponseBody FormJSON initAccounts() {
-        
+    public @ResponseBody
+    FormJSON initAccounts() {
+
         System.out.println("* PING defaultdata/accounts");
         FormJSON form = new FormJSON();
-        
+
         PagingAndSortingTerms terms = new PagingAndSortingTerms(0, false, "name");
-        if(accountService.findAllAccounts(terms).getNumberOfElements() > 0) {
+        if (accountService.findAllAccounts(terms).getNumberOfElements() > 0) {
             form.addError("general", "Denna funktion kan inte användas eftersom data redan finns i tabellen.");
             return form;
         } else {
-            if(!initUtil.insertDefaultAccounts()) {
+            if (!initUtil.insertDefaultAccounts()) {
                 form.addError("general", "Något fick fel.");
                 return form;
             }
         }
-        
+
         return form;
     }
 }

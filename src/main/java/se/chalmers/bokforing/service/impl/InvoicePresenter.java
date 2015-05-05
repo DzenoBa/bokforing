@@ -73,7 +73,7 @@ public class InvoicePresenter {
         Element replace = doc.select("a[id=" + tag + "]").first();
         replace.text(replaceWith);
     }
-    
+
     private void replacerHTML(String tag, String replaceWith) {
         Element replace = doc.select("a[id=" + tag + "]").first();
         replace.html(replaceWith);
@@ -106,11 +106,12 @@ public class InvoicePresenter {
         File input = new File("xhtml/faktura.xhtml");
         doc = Jsoup.parse(input, "UTF-8");
 
-        if(fak.isValid())
-            replacer("head","Faktura");
-        else
-            replacerHTML("head","<a style=\"color: red;\">Ogiltlig Faktura</a>");
-        
+        if (fak.isValid()) {
+            replacer("head", "Faktura");
+        } else {
+            replacerHTML("head", "<a style=\"color: red;\">Ogiltlig Faktura</a>");
+        }
+
         //TOP
         replacer("faktnr", fak.getFakturaId().toString());
         replacer("kundnr", buyer.getCustomerNumber().toString());
@@ -129,7 +130,7 @@ public class InvoicePresenter {
         replacer("intrest", "50 kr betalnings ränta");
 
         //MID
-        replacerHTML("content",contentListGenerator());
+        replacerHTML("content", contentListGenerator());
         replacer("totalcost", summaryContent());
 
         //BOT
@@ -150,7 +151,7 @@ public class InvoicePresenter {
         }
         sb.append("</li></ul>");
 
-        replacerHTML("momsinfo",sb.toString());
+        replacerHTML("momsinfo", sb.toString());
 
         replacer("bankgiro", seller.getBankgiro());
 

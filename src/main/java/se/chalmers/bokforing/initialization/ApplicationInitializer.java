@@ -23,18 +23,18 @@ public class ApplicationInitializer implements WebApplicationInitializer {
     @Override
     public void onStartup(ServletContext sc) throws ServletException {
         WebApplicationContext context = createWebAppContext();
-        
+
         // Register and map the dispatcher servlet
-        ServletRegistration.Dynamic dispatcher = sc.addServlet("dispatcher", 
+        ServletRegistration.Dynamic dispatcher = sc.addServlet("dispatcher",
                 new DispatcherServlet(context));
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
     }
-    
+
     private WebApplicationContext createWebAppContext() {
-      AnnotationConfigWebApplicationContext appContext = new AnnotationConfigWebApplicationContext();
-      appContext.register(ApplicationConfig.class);
-      return appContext;
-   }
-    
+        AnnotationConfigWebApplicationContext appContext = new AnnotationConfigWebApplicationContext();
+        appContext.register(ApplicationConfig.class);
+        return appContext;
+    }
+
 }

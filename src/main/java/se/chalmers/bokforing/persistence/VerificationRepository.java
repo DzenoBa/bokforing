@@ -39,10 +39,9 @@ public interface VerificationRepository extends JpaRepository<Verification, Long
 
     Verification findByUserAccountAndVerificationNumber(UserAccount userAccount, Long verificationNumber);
 
-    List<Verification> findByUserAccountAndCreationDateBetween (UserAccount userAccount, Date startDate, Date endDate);
+    List<Verification> findByUserAccountAndCreationDateBetween(UserAccount userAccount, Date startDate, Date endDate);
 
     // it's not this simple since account is in post. maybe we don't want this anyway?
     // Page<Verification> findByAccount(Account account, Pageable pageable);
-
     Page<Verification> findByUserAccountAndTransactionDateBetween(UserAccount user, Date startDate, Date endDate, Pageable pageable);
 }

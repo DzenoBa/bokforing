@@ -15,15 +15,15 @@ import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
  * @author Jakob
  */
 public interface CustomerService {
-    
+
     Page<Customer> findAllCustomers(UserAccount user, PagingAndSortingTerms terms);
-    
+
     Customer findByCustomerNumber(UserAccount user, long customerNumber);
-    
+
     Page<Customer> findByNameLike(UserAccount user, String name, PagingAndSortingTerms terms);
-    
+
     void save(Customer customer);
-    
+
     void delete(Customer customer);
-    
+
 }

@@ -5,7 +5,6 @@
  */
 package se.chalmers.bokforing.persistence;
 
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,7 +18,7 @@ import se.chalmers.bokforing.model.UserAccount;
  */
 @Repository
 public interface TimesheetRepository extends JpaRepository<Timesheet, Long> {
-    
+
     Page<Timesheet> findByUserAccount(UserAccount userAccount, Pageable pageable);
-    
+
 }

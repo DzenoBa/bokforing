@@ -13,9 +13,9 @@ import org.springframework.test.context.ContextConfiguration;
 import se.chalmers.bokforing.config.TestApplicationConfig;
 import se.chalmers.bokforing.model.Address;
 import se.chalmers.bokforing.model.Customer;
-import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.Invoice;
 import se.chalmers.bokforing.model.OrderEntity;
+import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.service.CustomerService;
 import se.chalmers.bokforing.service.OrderEntityService;
@@ -121,7 +121,7 @@ public class InvoiceTest extends AbstractIntegrationTest {
         for (int i = 0; i < 20; i++) {
             Product p = new Product();
             p.setName("Thing" + i);
-            p.setPrice(i+0.0);
+            p.setPrice(i + 0.0);
             psDb.save(p);
             oe.addProduct(p, i);
         }

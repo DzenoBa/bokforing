@@ -1,6 +1,5 @@
 package se.chalmers.bokforing;
 
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import javax.sql.DataSource;
@@ -19,36 +18,36 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  * Base class for use in tests that require the database. Populates the database
  * with tables from the schema.sql file.
- * 
- * The @DirtiesContext annotation drops and creates the database for each 
+ *
+ * The @DirtiesContext annotation drops and creates the database for each
+ *
  * @Test method.
- * 
+ *
  * @author Jakob
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@DirtiesContext(classMode=ClassMode.AFTER_EACH_TEST_METHOD)
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public abstract class AbstractIntegrationTest {
-    
+
     @Autowired
     private DataSource dataSource;
-    
+
     @Before
     public void setupDatabase() throws SQLException {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(new ClassPathResource("schema.sql"));
-        
+
         Connection connection = null;
-        
+
         try {
             connection = DataSourceUtils.getConnection(dataSource);
 
             populator.populate(connection);
         } finally {
-            if(connection != null) {
+            if (connection != null) {
                 DataSourceUtils.releaseConnection(connection, dataSource);
             }
         }

@@ -14,21 +14,23 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Isabelle
- * To be called from a controller, though only ones to avoid duplicates.
- * 
+ * @author Isabelle 
+ * To be called from a controller, though only ones to avoid
+ * duplicates.
+ *
  */
 @Entity
 @Table(name = "Accounts")
 public class Account implements Serializable, Comparable {
     
+
     @Id
     private int number;
     private String name;
-    
+
     @Enumerated
     private AccountType accountType;
-    
+
     /**
      * @return the number
      */

@@ -16,10 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import se.chalmers.bokforing.model.Customer;
-import se.chalmers.bokforing.model.Product;
-import se.chalmers.bokforing.model.UserHandler;
-import se.chalmers.bokforing.model.UserInfo;
 
 /**
  *
@@ -27,6 +23,7 @@ import se.chalmers.bokforing.model.UserInfo;
  */
 @Entity
 public class OrderEntity implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderEntityId;

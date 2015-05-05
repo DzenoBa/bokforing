@@ -26,39 +26,43 @@ import javax.persistence.TemporalType;
  * Swedish law about verifications, see especially §6.
  * http://www.riksdagen.se/sv/Dokument-Lagar/Lagar/Svenskforfattningssamling/
  * Bokforingslag-19991078_sfs-1999-1078/?bet=1999:1078#K5
- * 
+ *
  * @author Isabelle
  */
 @Entity
 @Table(name = "Verifications")
 public class Verification implements Serializable {
-    
+
     @Id
     @GeneratedValue
     private Long id;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     private UserAccount userAccount;
-    
+
     @Column(nullable = false)
     private Long verificationNumber;
-    
+
     @OneToMany(mappedBy = "verification", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Post> posts;
 
-    /** The date that the transaction which the verification concerns was made. */
+    /**
+     * The date that the transaction which the verification concerns was made.
+     */
     @Temporal(TemporalType.DATE)
     private Date transactionDate;
-    
-    /** The date that this verification was created. */ 
+
+    /**
+     * The date that this verification was created.
+     */
     @Temporal(TemporalType.DATE)
     private Date creationDate;
-    
+
     @OneToOne(cascade = CascadeType.REMOVE)
     private Customer customer;
-    
+
     private String description;
-    
+
     /**
      * @return the posts
      */
@@ -114,7 +118,7 @@ public class Verification implements Serializable {
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
-    
+
     /**
      * @return the customer
      */
@@ -178,24 +182,19 @@ public class Verification implements Serializable {
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
-        }
-        if (getClass() != obj.getClass()) {
+        } else if (getClass() != obj.getClass()) {
             return false;
         }
         final Verification other = (Verification) obj;
         if (!Objects.equals(this.userAccount, other.userAccount)) {
             return false;
-        }
-        if (!Objects.equals(this.verificationNumber, other.verificationNumber)) {
+        } else if (!Objects.equals(this.verificationNumber, other.verificationNumber)) {
             return false;
-        }
-        if (!Objects.equals(this.transactionDate, other.transactionDate)) {
+        } else if (!Objects.equals(this.transactionDate, other.transactionDate)) {
             return false;
-        }
-        if (!Objects.equals(this.creationDate, other.creationDate)) {
+        } else if (!Objects.equals(this.creationDate, other.creationDate)) {
             return false;
-        }
-        if (!Objects.equals(this.customer, other.customer)) {
+        } else if (!Objects.equals(this.customer, other.customer)) {
             return false;
         }
         return true;
@@ -214,6 +213,5 @@ public class Verification implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-    
-    
+
 }

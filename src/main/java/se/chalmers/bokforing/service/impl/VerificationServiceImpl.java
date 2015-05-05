@@ -8,13 +8,9 @@ package se.chalmers.bokforing.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.UserAccount;
-import se.chalmers.bokforing.util.Constants;
 import se.chalmers.bokforing.model.Verification;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.persistence.VerificationRepository;
@@ -40,7 +36,7 @@ public class VerificationServiceImpl implements VerificationService {
     public void save(Verification verification) {
         repository.save(verification);
     }
-    
+
     @Override
     public long findHighestVerificationNumber(UserAccount user) {
         Long res = repository.findHighestVerificationNumber(user.getId());
@@ -50,10 +46,10 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     public Page<Verification> findAllVerifications(UserAccount user, PagingAndSortingTerms terms) {
         PageRequest request = terms.getPageRequest();
-        
+
         return repository.findByUserAccount(user, request);
     }
-    
+
     @Override
     public Verification findByUserAndVerificationNumber(UserAccount user, long verNbr) {
         return repository.findByUserAccountAndVerificationNumber(user, verNbr);

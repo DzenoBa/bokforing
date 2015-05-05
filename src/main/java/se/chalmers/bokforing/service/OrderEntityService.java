@@ -5,7 +5,6 @@
  */
 package se.chalmers.bokforing.service;
 
-import java.util.List;
 import org.springframework.data.domain.Page;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.OrderEntity;
@@ -18,17 +17,18 @@ import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
  * @author victor
  */
 public interface OrderEntityService {
+
     public OrderEntity getById(Long id);
-    
+
     Page<OrderEntity> findByFromUser(UserInfo fromUser, PagingAndSortingTerms terms);
-    
+
     Page<OrderEntity> findByToUser(Customer toUser, PagingAndSortingTerms terms);
-    
+
     Page<OrderEntity> findByFromUser(UserHandler fromUser, PagingAndSortingTerms terms);
-    
+
     public void storeOrderEntity(OrderEntity oe);
-    
+
     public int generateInvoice(OrderEntity oe);
-    
+
     public void invalidate(OrderEntity oe);
 }

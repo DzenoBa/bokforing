@@ -5,9 +5,7 @@
  */
 package se.chalmers.bokforing.service;
 
-import java.util.List;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.model.Invoice;
@@ -19,11 +17,14 @@ import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
  * @author victor
  */
 public interface InvoiceService {
+
     Invoice getById(Long id);
-    
+
     Page<Invoice> getByOrderEntity(OrderEntity oe, PagingAndSortingTerms terms);
-    
+
     Page<Invoice> findByCustomer(UserAccount user, Customer customer, PagingAndSortingTerms terms);
+    
+    Page<Invoice> findByUser(UserAccount user, PagingAndSortingTerms terms);
     
     void storeFaktura(Invoice fak);
 }

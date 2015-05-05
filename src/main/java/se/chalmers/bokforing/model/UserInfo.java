@@ -15,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
-import se.chalmers.bokforing.model.Address;
 
 /**
  * More information about the user.
@@ -24,9 +23,10 @@ import se.chalmers.bokforing.model.Address;
  */
 @Entity
 public class UserInfo implements Serializable {
-protected UserInfo(){
-    
-}
+
+    protected UserInfo() {
+
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userInfoId;
@@ -54,7 +54,8 @@ protected UserInfo(){
     public String getName() {
         return userName;
     }
-    void setName(String name){
+
+    void setName(String name) {
         this.userName = name;
     }
 
@@ -64,24 +65,27 @@ protected UserInfo(){
     public String getPhoneNumber() {
         return phoneNumber;
     }
-    void setPhoneNumber(String number){
+
+    void setPhoneNumber(String number) {
         this.phoneNumber = number;
     }
 
-    public Address getAddress(){
+    public Address getAddress() {
         return this.adr;
     }
-    public void setAddress(Address adr){
+
+    public void setAddress(Address adr) {
         this.adr = adr;
     }
-    
+
     /**
      * @return the logo
      */
     public URI getLogo() {
         return logo;
     }
-    void setLogo(URI logo){
+
+    void setLogo(URI logo) {
         this.logo = logo;
     }
 
@@ -91,50 +95,55 @@ protected UserInfo(){
     public UserAccount getUa() {
         return ua;
     }
-    void setUa(UserAccount ua){
+
+    void setUa(UserAccount ua) {
         this.ua = ua;
     }
-    
-        /**
+
+    /**
      * @return the lastLogIn
      */
     public Date getLastLogIn() {
         return lastLogIn;
     }
-    void setLastLogIn(){
+
+    void setLastLogIn() {
         setLastLogIn(new Date());
     }
-    void setLastLogIn(Date date){
+
+    void setLastLogIn(Date date) {
         lastLogIn = date;
     }
-    
-    void setBankgiro(String bankgiro){
+
+    void setBankgiro(String bankgiro) {
         this.bankgiro = bankgiro;
     }
-    public String getBankgiro(){
+
+    public String getBankgiro() {
         return this.bankgiro;
     }
-    
-    String toStringLight(){
+
+    String toStringLight() {
         return userInfoId + ":" + userName;
     }
-    
+
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("UserInfo{ id= ").append(userInfoId);
         sb.append(", userAccount=");
-        if(ua != null)
+        if (ua != null) {
             sb.append(ua.toStringLight());
-        else
+        } else {
             sb.append("null");
+        }
         sb.append(", username=").append(userName);
         sb.append(", phonenumber= ").append(phoneNumber);
         sb.append(", address=").append(adr.toString());
         sb.append(", lastLogIn=").append(lastLogIn);
         sb.append(", logo=").append(logo);
         sb.append(" }");
-        return  sb.toString();  
+        return sb.toString();
     }
 
 }

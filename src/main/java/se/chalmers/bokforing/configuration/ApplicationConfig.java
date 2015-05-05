@@ -5,7 +5,6 @@
  */
 package se.chalmers.bokforing.configuration;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -16,12 +15,11 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import({WebConfig.class, DatabaseConfiguration.class})
 public class ApplicationConfig {
-    
+
     /**
      * Nothing here at the moment, used for configuring spring application.
      */
     //@Bean
     public static void getConfig() {
-        ;
     }
 }

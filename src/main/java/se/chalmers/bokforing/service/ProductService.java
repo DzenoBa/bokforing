@@ -15,14 +15,14 @@ import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
  * @author Jakob
  */
 public interface ProductService {
-    
+
     void save(Product product);
-    
+
     void remove(Product product);
-    
+
     Product findProductById(UserAccount user, Long id);
-    
+
     Page<Product> findAllProducts(UserAccount user, PagingAndSortingTerms terms);
-    
+
     Page<Product> findByNameLike(UserAccount user, String name, PagingAndSortingTerms terms);
 }

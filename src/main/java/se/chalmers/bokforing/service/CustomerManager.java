@@ -8,16 +8,15 @@ package se.chalmers.bokforing.service;
 import se.chalmers.bokforing.model.Address;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.UserAccount;
-import se.chalmers.bokforing.model.UserHandler;
 
 /**
  *
  * @author Jakob
  */
 public interface CustomerManager {
-    
+
     Customer createCustomer(UserAccount user, long number, String name, String phoneNumber, Address address);
-    
+
     void deleteCustomer(Customer customer);
-    
+
 }

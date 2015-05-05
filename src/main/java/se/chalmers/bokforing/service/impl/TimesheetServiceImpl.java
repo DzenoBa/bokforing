@@ -5,8 +5,6 @@
  */
 package se.chalmers.bokforing.service.impl;
 
-import java.util.List;
-import se.chalmers.bokforing.persistence.TimesheetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.Timesheet;
 import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
+import se.chalmers.bokforing.persistence.TimesheetRepository;
 import se.chalmers.bokforing.service.TimesheetService;
 
 /**
@@ -27,7 +26,7 @@ public class TimesheetServiceImpl implements TimesheetService {
 
     @Autowired
     private TimesheetRepository repository;
-    
+
     @Override
     public Timesheet findTimesheet(long id) {
         return repository.findOne(id);
@@ -35,28 +34,27 @@ public class TimesheetServiceImpl implements TimesheetService {
 
     @Override
     public Page<Timesheet> findAllTimesheets(UserAccount user, PagingAndSortingTerms terms) {
-        if(user == null) {
+        if (user == null) {
             return null;
         }
-        
+
         PageRequest pageRequest = terms.getPageRequest();
-        
+
         return repository.findByUserAccount(user, pageRequest);
     }
-    
+
     @Override
     public void save(Timesheet timesheet) {
-        if(timesheet != null) {
+        if (timesheet != null) {
             repository.save(timesheet);
         }
     }
 
     @Override
     public void remove(Timesheet timesheet) {
-        if(timesheet != null) {
+        if (timesheet != null) {
             repository.delete(timesheet);
         }
     }
 
-    
 }

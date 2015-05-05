@@ -27,21 +27,21 @@ import se.chalmers.bokforing.service.UserService;
  */
 @ContextConfiguration(classes = TestApplicationConfig.class)
 public class UserHandlerTest extends AbstractIntegrationTest {
-    
+
     @Autowired
     private UserManager manager;
-    
+
     @Autowired
     private UserService service;
-    
+
     @Test
-    public void testConstructorTests(){
+    public void testConstructorTests() {
         //A new handler
         UserHandler newUh = new UserHandler();
         assertNotNull(newUh);
         assertNotNull(newUh.getUA());
         assertNotNull(newUh.getUI());
-        
+
         //store it in db and then load it
         newUh.setEmail("constructor");
         service.storeUser(newUh);
@@ -53,7 +53,7 @@ public class UserHandlerTest extends AbstractIntegrationTest {
         assertTrue(newUh.equals(newUh2));
         newUh2.setUserGroup(UserGroup.Admin);
         assertTrue(newUh.equals(newUh2));
-        
+
         //The change from before should not have gone through here.
         //So this one should be different
         UserHandler newUh3 = service.getUser("constructor");
@@ -66,98 +66,97 @@ public class UserHandlerTest extends AbstractIntegrationTest {
         //storing newUh would not update anything as its modified variables are still false.
         //But newUh2 have them set on true so its changes are saved.
         service.storeUser(newUh2);
-        
+
         //Reload
         newUh3 = service.getUser("constructor");
         assertTrue(newUh.equals(newUh3));
         //The id should not have updated itself
         assertTrue(id.equals(newUh.getUA().getId()));
     }
-    
-    @Test(expected = IllegalArgumentException.class)  
-    public void testNoEmail(){
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNoEmail() {
         UserHandler noEmail = new UserHandler();
         service.storeUser(noEmail);
     }
-    
-    @Test(expected = IllegalArgumentException.class)  
+
+    @Test(expected = IllegalArgumentException.class)
     public void testEmptyEmail() {
         UserHandler emptyEmail = new UserHandler();
         emptyEmail.setEmail("");
         service.storeUser(emptyEmail);
     }
-    
-    @Test(expected = IllegalArgumentException.class)  
-    public void testNullGroup(){
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testNullGroup() {
         UserHandler uh = new UserHandler();
         uh.setEmail("nullTest");
         uh.setUserGroup(null);
         service.storeUser(uh);
     }
-    
+
     @Test
-    public void testIdTest(){
+    public void testIdTest() {
         UserHandler start = new UserHandler();
-        
+
         start.setEmail("start");
         service.storeUser(start);
         Long id = start.getUA().getId();
-        for(int i = 1; i <= 10; i++){
+        for (int i = 1; i <= 10; i++) {
             UserHandler temp = new UserHandler();
             temp.setEmail("temp" + i);
             service.storeUser(temp);
             assertTrue(id + i == temp.getUA().getId());
         }
     }
-    
+
     @Test
-    public void testChangeToBadEmail(){
+    public void testChangeToBadEmail() {
         UserHandler goodEmail = new UserHandler();
-        
+
         goodEmail.setEmail("good");
         boolean passed1 = true, passed2 = true;
-        
+
         try {
             goodEmail.setEmail("");
             service.storeUser(goodEmail);
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             passed1 = true;
         }
-        
+
         try {
             goodEmail.setEmail(null);
             service.storeUser(goodEmail);
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             passed2 = true;
         }
-        
+
         assertTrue(passed1 && passed2);
     }
-    
+
     @Test
     public void testGetUserByName() {
         List<UserAccount> usersByName = service.getUsersByName("Jakob");
-        
+
         // Only one user inserted into database so we should only find one by
         // the name of "Jakob" too
         assertEquals(1, usersByName.size());
     }
-    
+
     @Test
     public void testGetUser() {
         String email = "hej@hej.com";
         String pass = "jakob";
-        
+
         UserHandler handler = new UserHandler();
         handler.setEmail(email);
         handler.setPass(pass);
-        
+
         manager.createUser(handler);
-        
+
         UserHandler userFromDb = service.getUser(email, pass);
         assertEquals(handler.getEmail(), userFromDb.getEmail());
         assertEquals(handler.getPass(), userFromDb.getPass());
-        
-        
+
     }
 }
