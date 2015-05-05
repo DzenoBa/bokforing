@@ -11,7 +11,8 @@ var bookkeepingService = angular.module('BookkeepingService', []);
 
 bookkeepingService.factory('BookkeepingProxy', ['$http', '$location',
     function($http, $location) {
-        var url = '//localhost:'+$location.port()+'/bokforing/bookkeeping';
+        //var url = '//localhost:'+$location.port()+'/bokforing/bookkeeping';
+        var url = '//'+window.location.hostname+':'+$location.port()+'/bokforing/bookkeeping';
         
         return {
             createManBook: function(verification) {

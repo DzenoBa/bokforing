@@ -13,6 +13,7 @@ public class ProductJSON {
     private String quantitytype;
     private AccountJSON account;
     private AccountJSON vat;
+    private int amount;
     private int startrange;
     private int pagesize;
 
@@ -72,6 +73,14 @@ public class ProductJSON {
         this.vat = vat;
     }
 
+    public int getAmount() {
+        return amount;
+    }
+    
+    public void setAmount(int amount) {
+        this.amount = amount;
+    } 
+    
     public int getStartrange() {
         return startrange;
     }
