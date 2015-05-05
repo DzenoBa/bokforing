@@ -12,7 +12,7 @@ var timesheetService = angular.module('TimesheetService', []);
 timesheetService.factory('TimesheetProxy', ['$http', '$location',
     function($http, $location) {
        //var url = '//localhost:'+$location.port()+'/bokforing/timesheet';
-       var url = '//'+window.location.hostname+':'+$location.port()+'/bokforing/auth';
+       var url = '//'+window.location.hostname+':'+$location.port()+'/bokforing/timesheet';
         return {
             create: function(timesheet) {
                 return $http.post(url + '/create', timesheet);

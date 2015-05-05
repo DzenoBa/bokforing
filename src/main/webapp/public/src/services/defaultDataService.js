@@ -12,7 +12,7 @@ var defualtDataService = angular.module('DefaultDataService', []);
 defualtDataService.factory('DefaultDataProxy', ['$http', '$location',
     function($http, $location) {
         //var url = '//localhost:'+$location.port()+'/bokforing/defaultdata';
-        var url = '//'+window.location.hostname+':'+$location.port()+'/bokforing/auth';
+        var url = '//'+window.location.hostname+':'+$location.port()+'/bokforing/defaultdata';
         
         return {
             initAccounts: function() {

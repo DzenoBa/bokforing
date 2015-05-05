@@ -12,7 +12,7 @@ var customerService = angular.module('CustomerService', []);
 customerService.factory('CustomerProxy', ['$http', '$location',
     function($http, $location) {
        //var url = '//localhost:'+$location.port()+'/bokforing/customer';
-       var url = '//'+window.location.hostname+':'+$location.port()+'/bokforing/auth';
+       var url = '//'+window.location.hostname+':'+$location.port()+'/bokforing/customer';
         return {
             create: function(customer) {
                 return $http.post(url + '/create', customer);

@@ -12,7 +12,7 @@ var statisticsService = angular.module('StatisticsService', []);
 statisticsService.factory('StatisticsProxy', ['$http', '$location',
     function($http, $location) {
         //var url = '//localhost:'+$location.port()+'/bokforing/statistics';
-        var url = '//'+window.location.hostname+':'+$location.port()+'/bokforing/auth';
+        var url = '//'+window.location.hostname+':'+$location.port()+'/bokforing/statistics';
         
         return {
             getBalanceList: function(account) {
