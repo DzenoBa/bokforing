@@ -18,14 +18,14 @@ import java.util.Set;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.UserAccount;
-import se.chalmers.bokforing.service.PostService;
-import se.chalmers.bokforing.service.PostService;
+import se.chalmers.bokforing.model.Verification;
+import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 
 /**
  *
@@ -41,6 +41,9 @@ public class BalanceSheetPresenter {
 
     @Autowired
     private PostService postService;
+    
+    @Autowired
+    private VerificationService verificationService;
 
     //Generates all assetAccounts
     private String assetAccountsGenerator() {
@@ -97,7 +100,7 @@ public class BalanceSheetPresenter {
 
         return sb.toString();
     }
-
+    
     public void print(UserAccount user, Date startDate,
             Date endDate, Pageable pageable) throws IOException, DocumentException {
          balanceSheet = postService.getBalanceSheet(user, startDate,
@@ -117,7 +120,12 @@ public class BalanceSheetPresenter {
                 + new SimpleDateFormat("dd/MM/yyyy").format(endDate));
 
         //VERIFICATION NUMBER
-        ph.replacer("verinr", user.getVerifications().get(user.getVerifications().size() - 1).getVerificationNumber().toString());
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "verificationNumber");
+        Page<Verification> pageVer = verificationService.findAllVerifications(user, terms);
+        if(pageVer.getContent().size() > 0)
+            ph.replacer("verinr", pageVer.getContent().get(0).getVerificationNumber().toString());
+        else
+            ph.replacer("verinr", "");
 
         //ASSETS SECTION
         ph.replacerHTML("tillgkonto", assetAccountsGenerator());
