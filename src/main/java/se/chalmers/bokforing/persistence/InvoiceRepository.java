@@ -17,5 +17,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     Page<Invoice> findByOrderEntity(OrderEntity oe, Pageable pageable);
 
     Page<Invoice> findByOrderEntity_Seller_UaAndOrderEntity_Buyer(UserAccount user, Customer customer, Pageable pageable);
+    
+    Page<Invoice> findByOrderEntity_Seller_Ua(UserAccount user, Pageable pageable);
 
 }

@@ -1,0 +1,134 @@
+<!--Body content-->
+<div class="row">
+    <!-- LST INVOICES -->
+    <div class="col-md-6">
+        <h2>Dina fakturor</h2>
+    </div>
+    <!-- NEW INVOICE -->
+    <div class="col-md-6" ng-show="createboolean">
+        <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
+            Fakturan har skapats.
+        </div>
+        <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
+            <h4>{{form.numErrors}} fel hittades.</h4>
+            <p>{{form.errors.general}}</p>
+        </div>
+        <h2>Ny faktura</h2>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Kund</label>
+                <div class="col-md-9">
+                    <div class="input-group">
+                        <input class="form-control" type="text" value="{{invoice.customer.name}}" readonly>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-primary" ng-click="opencustomers()">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true" ng-show="!invoice.customer"></span>
+                                <span class="glyphicon glyphicon-pencil" aria-hidden="true" ng-show="invoice.customer"></span>
+                            </button>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.customer !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.customer}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Produkter</label>
+                <div class="col-md-9">
+                    <table class="table" style="width:100%; margin:0; padding:0;">
+                        <thead>
+                            <th style="width:50%;">Produkt</th>
+                            <th style="width:35%;">Antal</th>
+                            <th style="width:15%;"></th>
+                        </thead>
+                        <tr ng-repeat="product in invoice.productls track by $index">
+                            <td>
+                                <div class="input-group">
+                                    <input class="form-control" type="text" value="{{product.name}}" readonly>
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-primary" ng-click="openproducts($index)">
+                                            <span class="glyphicon glyphicon-plus" aria-hidden="true" ng-show="!product.name"></span>
+                                            <span class="glyphicon glyphicon-pencil" aria-hidden="true" ng-show="product.name"></span>
+                                        </button>
+                                    </div>
+                                </div>  
+                            </td>
+                            <td><input type="number" class="form-control" ng-model="product.amount"/></td>
+                            <td>
+                                <button type="button" class="btn btn-danger" ng-click="removeProduct(product)" ng-show="invoice.productls.length > 1">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <button type="button" class="btn btn-primary" ng-click="addProduct()">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.productls !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.productls}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="unit" class="col-sm-3 control-label">F-skatt</label>
+                <div class="col-md-9">
+                    <div class="btn-group">
+                        <label class="btn btn-primary" ng-model="invoice.ftax" btn-radio="true">Ja</label>
+                        <label class="btn btn-primary" ng-model="invoice.ftax" btn-radio="false">Nej</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.ftax !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.ftax}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="vatnumber" class="col-sm-3 control-label">Momsnummer</label>
+                <div class="col-md-9">
+                    <input id="vatnumber" type="text" class="form-control" ng-model="invoice.vatnumber"/>
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.vatnumber !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.vatnumber}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="vat" class="col-sm-3 control-label">Moms</label>
+                <div class="col-md-9">
+                    <select class="form-control" id="vat" ng-model="invoice.vat">
+                        <option value="0">0 %</option>
+                        <option value="6">6 %</option>
+                        <option value="12">12 %</option>
+                        <option value="25">25 %</option>
+                     </select>
+                </div>
+            </div>
+            <div class="form-group" ng-show="form.errors.vat !== null">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <span class="error">{{form.errors.vat}}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <input type="button" value="Skapa" class="btn btn-success btn-block" ng-click="create()" ng-disabled="!invoice"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

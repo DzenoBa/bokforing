@@ -16,6 +16,7 @@ require(
         'controllers/productControllers',
         'controllers/customerControllers',
         'controllers/timesheetController',
+        'controllers/invoiceControllers',
         'services/userServices',
         'services/authServices',
         'services/authHandler',
@@ -24,7 +25,8 @@ require(
         'services/productService',
         'services/customerService',
         'services/statisticsService',
-        'services/timesheetService'
+        'services/timesheetService',
+        'services/invoiceService'
         
     ],
     function () {

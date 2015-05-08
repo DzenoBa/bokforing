@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Balansrapport</title>
+        <style type="text/css">
+            h4 { text-align: Right}
+        </style>
+        <style type="text/css">
+            h1 { text-align: Center}
+        </style>
+        <style type = "text/css">
+            table, th, td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+            th, td {
+                padding: 5px;
+            }
+            th {
+                text-align: left;
+            }
+        </style>
+
+    </head>
+
+    <body>
+        <div>
+
+            <h1>Balansrapport</h1>
+        </div>
+
+        <table width = "30%">
+            <tr>
+                <td>Företagsnamn</td>
+                <td><a id="fornamn">[FORNAMN]</a> </td> 
+            </tr>
+            <tr>
+                <td>Utskriftsdatum</td> 
+                <td><a id="utskrd">[UTSKRD]</a></td> 
+            </tr>
+            <tr>
+                <td>Räkenskapsår</td> 
+                <td><a id="raken">[RAKEN]</a></td> 
+            </tr>
+            <tr>
+                <td>Period</td>
+                <td><a id="valdper">[VALDPER]</a></td> 
+            </tr>
+        </table>
+
+        <h4>Senaste verifikationsnummret: <a id="verinr">[VERINR]</a> </h4> 
+
+
+
+        <table width = "100%">
+            <tr>
+                <th>Tillgångar</th>
+                <th>Ingående balans</th>		
+                <th>Utgående balans</th>
+            </tr>
+            <tr>
+                <td><a id="tillgkonto">[TILLGKONTO]</a></td>
+
+            </tr>
+            <tr>
+                <th>Eget kapital och skulder </th>
+                <th>Ingående balans</th>		
+                <th>Utgående balans</th>
+            </tr>
+            <tr>
+                <td><a id="skuldkonto">[SKULDKONTO]</a></td>
+
+            </tr>
+            <tr>
+                <th>Ingående resultat</th>
+                <th colspan="2">Resultat</th>		
+
+            </tr>
+            <tr>
+                <td><a id="ingresultat">[INGRESULTAT]</a></td>
+                
+
+            </tr>
+        </table>
+    </body>
+</html>

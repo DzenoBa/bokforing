@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -74,15 +75,16 @@ public class PostServiceImpl implements PostService {
      * @param endDate
      * @param pageable
      * @return balanceSheet, a mapping from the accounts the user has used to a
-     * list where the first value in the list is the sum of all posts during
-     * that period and the second value is the opening balance of that period.
-     * Other things needed to create the full balanceSheet on the receivers end
-     * is title for the account types, company name, period and so on (look in
-     * docs for specifications).
+     * list where the first value in the list is the sum of all posts with that
+     * account number during that period and the second value is the opening
+     * balance of that account. Other things needed to create the full
+     * balanceSheet on the receivers end is title for the account types, company
+     * name, period and so on (look in docs for specifications).
      */
     @Override
     public Map<Account, List<Double>> getBalanceSheet(UserAccount user, Date startDate,
             Date endDate, Pageable pageable) {
+
         Map<Account, List<Double>> balanceSheet = new HashMap<>();
         List<Verification> givenPeriodVerifications = verRepo.findByUserAccountAndTransactionDateBetween(user, startDate, endDate, pageable).getContent();
 
@@ -105,6 +107,7 @@ public class PostServiceImpl implements PostService {
                 }
             }
         }
+
 
         Calendar cal = Calendar.getInstance();
         cal.set(0, 0, 0);
@@ -149,7 +152,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Map<Account, Double> getIncomeStatement(UserAccount user, Date startDate,
             Date endDate, Pageable pageable) {
-        Map<Account, Double> incomeStatement = new HashMap<>();
+        Map<Account, Double> incomeStatement = new TreeMap<>();
         List<Verification> verifications = verRepo.findByUserAccountAndCreationDateBetween(user, startDate, endDate, pageable).getContent();
 
         for (Verification verification : verifications) {
