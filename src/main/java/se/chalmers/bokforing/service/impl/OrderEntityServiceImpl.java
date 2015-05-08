@@ -13,9 +13,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.Customer;
-import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.Invoice;
 import se.chalmers.bokforing.model.OrderEntity;
+import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.model.UserInfo;
 import se.chalmers.bokforing.persistence.InvoiceRepository;
@@ -70,14 +70,10 @@ public class OrderEntityServiceImpl implements OrderEntityService {
         List<Integer> countList = oe.getCountList();
 
         int offset = oe.getInvoices().size();
-        int prodOffset = 0;
-        for (Invoice fak : oe.getInvoices()) {
-            prodOffset += fak.Products().size();
-        }
 
         int fakNum = offset - 1;
         Invoice fak;
-        for (int i = 0; i < prod.size() - prodOffset; i++) {
+        for (int i = 0; i < prod.size(); i++) {
             if (i % 15 == 0) {
                 fak = new Invoice();
                 fak.setOrderEntity(oe);
