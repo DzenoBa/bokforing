@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.service.impl;
+package se.chalmers.bokforing.presenter;
 
 import com.lowagie.text.DocumentException;
 import java.io.File;
@@ -16,12 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import se.chalmers.bokforing.model.Customer;
-import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.Invoice;
 import se.chalmers.bokforing.model.OrderEntity;
+import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.UserInfo;
 
 /**
@@ -34,7 +33,6 @@ public class InvoicePresenter {
     private final static SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
     private final static DecimalFormat df = new DecimalFormat("#.##");
 
-    private Document doc;
     private final Invoice fak;
 
     private final Customer buyer;
@@ -69,16 +67,6 @@ public class InvoicePresenter {
         return sb.toString();
     }
 
-    private void replacer(String tag, String replaceWith) {
-        Element replace = doc.select("a[id=" + tag + "]").first();
-        replace.text(replaceWith);
-    }
-
-    private void replacerHTML(String tag, String replaceWith) {
-        Element replace = doc.select("a[id=" + tag + "]").first();
-        replace.html(replaceWith);
-    }
-
     private String contentListGenerator() {
         StringBuilder sb = new StringBuilder();
         //HeaderRow
@@ -104,41 +92,42 @@ public class InvoicePresenter {
 
     public void print() throws IOException, DocumentException {
         File input = new File("xhtml/faktura.xhtml");
-        doc = Jsoup.parse(input, "UTF-8");
+        Document doc = Jsoup.parse(input, "UTF-8");
+        PresenterHelper ph = new PresenterHelper(doc);
 
         if (fak.isValid()) {
-            replacer("head", "Faktura");
+            ph.replacer("head", "Faktura");
         } else {
-            replacerHTML("head", "<a style=\"color: red;\">Ogiltlig Faktura</a>");
+            ph.replacerHTML("head", "<a style=\"color: red;\">Ogiltlig Faktura</a>");
         }
 
         //TOP
-        replacer("faktnr", fak.getFakturaId().toString());
-        replacer("kundnr", buyer.getCustomerNumber().toString());
-        replacer("faktdat", sdf.format(fak.getFakturaDate()));
-        replacer("tcnamn", buyer.getAddress().getCompanyName());
-        replacer("tadr", buyer.getAddress().getStreetNameAndNumber());
-        replacer("poskod", buyer.getAddress().getPostalCode());
+        ph.replacer("faktnr", fak.getFakturaId().toString());
+        ph.replacer("kundnr", buyer.getCustomerNumber().toString());
+        ph.replacer("faktdat", sdf.format(fak.getFakturaDate()));
+        ph.replacer("tcnamn", buyer.getAddress().getCompanyName());
+        ph.replacer("tadr", buyer.getAddress().getStreetNameAndNumber());
+        ph.replacer("poskod", buyer.getAddress().getPostalCode());
 
         //MID/TOP
-        replacer("ernamn", buyer.getName());
-        replacer("ordnr", fak.getOrderEntity().getOrderEntityId().toString());
+        ph.replacer("ernamn", buyer.getName());
+        ph.replacer("ordnr", fak.getOrderEntity().getOrderEntityId().toString());
 
-        replacer("vnamn", seller.getName());
-        replacer("betvil", "30 dagars betalnings tid");
-        replacer("exdat", sdf.format(fak.getExpireDate()));
-        replacer("intrest", "50 kr betalnings ränta");
+        ph.replacer("vnamn", seller.getName());
+        ph.replacer("betvil", "30 dagars betalnings tid");
+        ph.replacer("exdat", sdf.format(fak.getExpireDate()));
+        ph.replacer("intrest", "50 kr betalnings ränta");
 
         //MID
-        replacerHTML("content", contentListGenerator());
-        replacer("totalcost", summaryContent());
+        ph.replacerHTML("content", contentListGenerator());
+        ph.replacer("totalcost", summaryContent());
 
         //BOT
-        replacer("fcname", seller.getAddress().getCompanyName());
-        replacer("vadr", seller.getAddress().getStreetNameAndNumber());
-        replacer("vpostkod", seller.getAddress().getPostalCode());
+        ph.replacer("fcname", seller.getAddress().getCompanyName());
+        ph.replacer("vadr", seller.getAddress().getStreetNameAndNumber());
+        ph.replacer("vpostkod", seller.getAddress().getPostalCode());
 
-        replacer("ftel", seller.getPhoneNumber());
+        ph.replacer("ftel", seller.getPhoneNumber());
 
         StringBuilder sb = new StringBuilder();
         sb.append("<ul><li>");
@@ -151,9 +140,9 @@ public class InvoicePresenter {
         }
         sb.append("</li></ul>");
 
-        replacerHTML("momsinfo", sb.toString());
+        ph.replacerHTML("momsinfo", sb.toString());
 
-        replacer("bankgiro", seller.getBankgiro());
+        ph.replacer("bankgiro", seller.getBankgiro());
 
         if (DEBUG) {
             System.out.println(doc.outerHtml());
