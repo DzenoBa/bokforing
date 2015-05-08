@@ -15,8 +15,8 @@ import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.ReportJSON;
 import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
-import se.chalmers.bokforing.service.BalanceSheetPresenter;
-import se.chalmers.bokforing.service.IncomeStatementPresenter;
+import se.chalmers.bokforing.presenter.BalanceSheetPresenter;
+import se.chalmers.bokforing.presenter.IncomeStatementPresenter;
 import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.session.AuthSession;
 
