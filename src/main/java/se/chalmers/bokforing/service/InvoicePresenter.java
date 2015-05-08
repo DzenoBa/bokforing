@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.presenter;
+package se.chalmers.bokforing.service;
 
 import com.lowagie.text.DocumentException;
 import java.io.File;
@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.stereotype.Service;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Invoice;

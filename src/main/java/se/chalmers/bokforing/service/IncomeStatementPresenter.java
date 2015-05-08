@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.presenter;
+package se.chalmers.bokforing.service;
 
 import com.lowagie.text.DocumentException;
 import java.io.File;
@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.jsoup.Jsoup;
@@ -25,34 +24,32 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 import se.chalmers.bokforing.model.Account;
 import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.service.PostService;
+import se.chalmers.bokforing.service.PostService;
 
 /**
  *
  * @author Isabelle
  */
-
 @Service
 @Transactional
-public class BalanceSheetPresenter {
+public class IncomeStatementPresenter {
 
     private final static boolean DEBUG = false;
-    Map<Account, List<Double>> balanceSheet;
-
+    Map<Account, Double> incomeStatement;
 
     @Autowired
     private PostService postService;
 
     //Generates all assetAccounts
-    private String assetAccountsGenerator() {
+    private String revenueAccountsGenerator() {
         StringBuilder sb = new StringBuilder();
-        Set<Account> accountSet = balanceSheet.keySet();
+        Set<Account> accountSet = incomeStatement.keySet();
 
         for (Account acc : accountSet) {
-            if (acc.getNumber() < 2000) {
+            if (acc.getNumber() / 1000 == 3) {
                 sb.append("<tr>");
-                sb.append("<td>").append(acc.getNumber()).append("  ").append(acc.getName()).append("</td>");
-                sb.append("<td>").append(balanceSheet.get(acc).get(1)).append("</td>");
-                sb.append("<td>").append(balanceSheet.get(acc).get(0)).append("</td>");
+                sb.append("<td>").append(acc.getNumber()).append(acc.getName()).append("</td>");
+                sb.append("<td>").append(incomeStatement.get(acc)).append("</td>");
                 sb.append("</tr>");
             }
         }
@@ -61,16 +58,15 @@ public class BalanceSheetPresenter {
     }
 
     //Generates all debtAccounts
-    private String debtAccountsGenerator() {
+    private String costAccountsGenerator() {
         StringBuilder sb = new StringBuilder();
-        Set<Account> accountSet = balanceSheet.keySet();
+        Set<Account> accountSet = incomeStatement.keySet();
 
         for (Account acc : accountSet) {
-            if (acc.getNumber() >= 2000) {
+            if (acc.getNumber() / 1000 >= 4) {
                 sb.append("<tr>");
-                sb.append("<td>").append(acc.getNumber()).append("  ").append(acc.getName()).append("</td>");
-                sb.append("<td>").append(balanceSheet.get(acc).get(1)).append("</td>");
-                sb.append("<td>").append(balanceSheet.get(acc).get(0)).append("</td>");
+                sb.append("<td>").append(acc.getNumber()).append(acc.getName()).append("</td>");
+                sb.append("<td>").append(incomeStatement.get(acc)).append("</td>");
                 sb.append("</tr>");
             }
         }
@@ -81,30 +77,24 @@ public class BalanceSheetPresenter {
     //Generates the result
     private String resultGenerator() {
         StringBuilder sb = new StringBuilder();
-        Set<Account> accountSet = balanceSheet.keySet();
-        double startingBalance = 0.0;
+        Set<Account> accountSet = incomeStatement.keySet();
         double totalBalance = 0.0;
         for (Account acc : accountSet) {
 
-            startingBalance += balanceSheet.get(acc).get(1);
-            totalBalance += balanceSheet.get(acc).get(0);
+            totalBalance += incomeStatement.get(acc);
         }
-        totalBalance += startingBalance;
-      
-        sb.append("<td>").append(startingBalance).append("</td>");
+        sb.append("<tr>");
         sb.append("<td colspan=2>").append(totalBalance).append("</td>");
-      
+        sb.append("</tr>");
 
         return sb.toString();
     }
 
     public void print(UserAccount user, Date startDate,
             Date endDate, Pageable pageable) throws IOException, DocumentException {
-         balanceSheet = postService.getBalanceSheet(user, startDate,
+        incomeStatement = postService.getIncomeStatement(user, startDate,
                 endDate, pageable);
-         File input = new File(getClass().getResource("/xhtml/balanceSheet.xhtml").toString().substring(6));
-
-        //File input = new File("/xhtml/balanceSheet.html");
+        File input = new File(getClass().getResource("/xhtml/incomeStatement.xhtml").toString().substring(6));
         Document doc = Jsoup.parse(input, "UTF-8");
         PresenterHelper ph = new PresenterHelper(doc);
 
@@ -119,22 +109,20 @@ public class BalanceSheetPresenter {
         //VERIFICATION NUMBER
         ph.replacer("verinr", user.getVerifications().get(user.getVerifications().size() - 1).getVerificationNumber().toString());
 
-        //ASSETS SECTION
-        ph.replacerHTML("tillgkonto", assetAccountsGenerator());
+        //REVENUE SECTION
+        ph.replacerHTML("intaktkonto", revenueAccountsGenerator());
 
-        //DEBT SECTION
-        ph.replacerHTML("skuldkonto", debtAccountsGenerator());
+        //COST SECTION
+        ph.replacerHTML("kostnadkonto", costAccountsGenerator());
 
-        //FINAL SECTION
-        ph.replacerHTML("ingresultat", resultGenerator());
+        //RESULT SECTION
+        ph.replacerHTML("resultat", resultGenerator());
 
         if (DEBUG) {
             System.out.println(doc.outerHtml());
         }
-
         String outputFile = getClass().getResource("/").toString().substring(6);
-        outputFile = outputFile + "balanceSheet.pdf";
-        
+        outputFile = outputFile + "incomeStatement.pdf";
         //String outputFile = "/pdf/balansrapport.pdf";
         try (OutputStream os = new FileOutputStream(outputFile)) {
             ITextRenderer renderer = new ITextRenderer();
@@ -143,5 +131,4 @@ public class BalanceSheetPresenter {
             renderer.createPDF(os);
         }
     }
-
 }

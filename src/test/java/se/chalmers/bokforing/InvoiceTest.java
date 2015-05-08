@@ -21,7 +21,7 @@ import se.chalmers.bokforing.service.CustomerService;
 import se.chalmers.bokforing.service.OrderEntityService;
 import se.chalmers.bokforing.service.ProductService;
 import se.chalmers.bokforing.service.UserService;
-import se.chalmers.bokforing.presenter.InvoicePresenter;
+import se.chalmers.bokforing.service.InvoicePresenter;
 
 /**
  *

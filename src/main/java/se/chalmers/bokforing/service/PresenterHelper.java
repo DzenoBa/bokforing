@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package se.chalmers.bokforing.presenter;
+package se.chalmers.bokforing.service;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

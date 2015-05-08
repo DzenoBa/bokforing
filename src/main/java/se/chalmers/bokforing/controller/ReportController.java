@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +16,8 @@ import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.ReportJSON;
 import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
-import se.chalmers.bokforing.presenter.BalanceSheetPresenter;
-import se.chalmers.bokforing.presenter.IncomeStatementPresenter;
+import se.chalmers.bokforing.service.BalanceSheetPresenter;
+import se.chalmers.bokforing.service.IncomeStatementPresenter;
 import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.session.AuthSession;
 
