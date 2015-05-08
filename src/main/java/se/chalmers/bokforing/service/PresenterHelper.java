@@ -26,13 +26,13 @@ class PresenterHelper {
     
     void replacer(String tag, String replaceWith) {
         replaceWith = nullReplace(replaceWith);
-        Element replace = doc.select("a[id=" + tag + "]").first();
+        Element replace = doc.select("[id=" + tag + "]").first();
         replace.text(replaceWith);
     }
 
     void replacerHTML(String tag, String replaceWith) {
         replaceWith = nullReplace(replaceWith);
-        Element replace = doc.select("a[id=" + tag + "]").first();
+        Element replace = doc.select("[id=" + tag + "]").first();
         replace.html(replaceWith);
     }
 }
