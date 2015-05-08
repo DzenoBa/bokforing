@@ -1,0 +1,42 @@
+<!--Body content-->
+<div class="row">
+    <div class="col-md-6">
+        <h2>Rapporter</h2>
+    </div>
+    <div class="col-md-6">
+        <div class="alert alert-success" role="alert" ng-show="form.numErrors === 0">
+            Success.
+        </div>
+        <div class="alert alert-danger" role="alert" ng-show="form.numErrors > 0">
+            <h4>{{form.numErrors}} fel hittades.</h4>
+            <p>{{form.errors.general}}</p>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <h3>Balansrapport</h3>
+        Generara balansrapport bla bla bla
+    </div>
+    <div class="col-md-6">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Startdatum</label>
+                <div class="col-md-9">
+                    <div class="input-group">
+                        <input type="text" class="form-control" ng-model="bsDate" is-open="opened" datepicker-popup="yyyy-MM-dd" datepicker-options="dateOptions" min-date="2014-01-01" max-date="'2015-06-22'"  date-disabled="disabled(date, mode)" ng-required="true"/>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="opencal($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-3"></div><!-- Offset -->
+                <div class="col-sm-9">
+                    <input type="button" value="Skapa" class="btn btn-success btn-block" ng-click="balancesheet()" ng-disabled="!bsDate"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

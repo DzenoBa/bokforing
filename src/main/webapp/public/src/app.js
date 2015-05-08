@@ -18,6 +18,7 @@ var bok = angular.module('Bok', [
     'CustomerControllers',
     'TimesheetControllers',
     'InvoiceControllers',
+    'ReportControllers',
     'UserService',
     'AuthHandlerService',
     'BookkeepingControllers',
@@ -27,7 +28,8 @@ var bok = angular.module('Bok', [
     'CustomerService',
     'StatisticsService',
     'TimesheetService',
-    'InvoiceService'
+    'InvoiceService',
+    'ReportService'
      // More here
 ]);
 
@@ -153,6 +155,16 @@ bok.config(['$routeProvider', 'USER_LEVELS',
                 when('/invoices', {
                     templateUrl: 'private/invoices.html',
                     controller: 'InvoiceCtrl',
+                    auth: USER_LEVELS.user,
+                    resolve: {
+                        auth: ['AuthHandler', function(AuthHandler) {
+                                return AuthHandler.promise();
+                        }]
+                    }
+                }).
+                when('/reports', {
+                    templateUrl: 'private/reports.html',
+                    controller: 'ReportCtrl',
                     auth: USER_LEVELS.user,
                     resolve: {
                         auth: ['AuthHandler', function(AuthHandler) {
