@@ -44,7 +44,7 @@ public class ReportController {
      * GENERATE BALANCE-SHEET-REPORT
      */
     @RequestMapping(value = "/report/balancesheet", method = RequestMethod.POST)
-    public @ResponseBody FormJSON getBalanceListByAccount(@RequestBody final ReportJSON report) {
+    public @ResponseBody FormJSON getBalanceSheet(@RequestBody final ReportJSON report) {
         
         FormJSON form = new FormJSON();
         
@@ -72,6 +72,48 @@ public class ReportController {
         
         try {
             balanceSheetPresenter.print(uh.getUA(), report.getStart(), today, terms.getPageRequest());
+        } catch (IOException ex) {
+            System.out.println(ex);
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+        } catch (DocumentException ex) {
+            System.out.println(ex);
+            form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
+        }
+        return form;
+    }
+    
+    /*
+     * GENERATE INCOME-STATEMENT-REPORT
+     */
+    @RequestMapping(value = "/report/incomestatement", method = RequestMethod.POST)
+    public @ResponseBody FormJSON getIncomeStatement(@RequestBody final ReportJSON report) {
+        
+        FormJSON form = new FormJSON();
+        
+        // CHECK SESSION
+        if (!(authSession.sessionCheck())) {
+            return form;
+        }
+        UserHandler uh = userService.getUser(authSession.getEmail());
+        
+        // DATE CHECK
+        if(report.getStart() == null) {
+            form.addError("gemeral", "Vänligen ange ett datum");
+            return form;
+        }
+        Calendar cal = Calendar.getInstance();
+        Date today = cal.getTime();
+        cal.set(Calendar.MONTH, 0);
+        cal.set(Calendar.DATE, 0);
+        Date firstDateOfYear = cal.getTime();
+        if(firstDateOfYear.after(report.getStart())) {
+            form.addError("general", "Datumet går över årsskiftet");
+            return form;
+        }
+        PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate");
+        
+        try {
+            incomeStatementPresenter.print(uh.getUA(), report.getStart(), today, terms.getPageRequest());
         } catch (IOException ex) {
             System.out.println(ex);
             form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");

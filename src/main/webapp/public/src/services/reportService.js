@@ -16,6 +16,9 @@ reportService.factory('ReportProxy', ['$http', '$location',
         return {
             balancesheet: function(report) {
                 return $http.post(url + '/balancesheet', report);
+            },
+            incomestatement: function(report) {
+                return $http.post(url + '/incomestatement', report);
             }
         };
     }
