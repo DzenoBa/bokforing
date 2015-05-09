@@ -14,6 +14,7 @@ import se.chalmers.bokforing.jsonobject.UserInfoJSON;
 import se.chalmers.bokforing.jsonobject.UserJSON;
 import se.chalmers.bokforing.model.AccessKey;
 import se.chalmers.bokforing.model.AccessKeyType;
+import se.chalmers.bokforing.model.Address;
 import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.service.UserManager;
@@ -247,7 +248,8 @@ public class UserController {
         // SET
         userInfo.setFirstname(ua.getName());
         userInfo.setPhonenumber(ua.getPhoneNumber());
-        userInfo.setCompanyname(ua.getAddress().getCompanyName());
+        if(ua.getAddress() != null)
+            userInfo.setCompanyname(ua.getAddress().getCompanyName());
 
         return userInfo;
     }
@@ -294,7 +296,13 @@ public class UserController {
 
         // USER REQUESTED TO CHANGE COMPANY NAME
         if (userInfo.getCompanyname() != null) {
-            uh.getAddress().setCompanyName(userInfo.getCompanyname());
+            if(uh.getAddress() != null)
+                uh.getAddress().setCompanyName(userInfo.getCompanyname());
+            else {
+                Address new_address = new Address();
+                new_address.setCompanyName(userInfo.getCompanyname());
+                uh.setAddress(new_address);
+            }
             userDb.storeUser(uh);
             return form;
         }
