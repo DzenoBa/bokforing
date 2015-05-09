@@ -94,7 +94,7 @@ public class IncomeStatementPresenter {
         return sb.toString();
     }
 
-    public void print(UserAccount user, Date startDate,
+    public String print(UserAccount user, Date startDate,
             Date endDate, Pageable pageable) throws IOException, DocumentException {
         incomeStatement = postService.getIncomeStatement(user, startDate,
                 endDate, pageable);
@@ -139,5 +139,6 @@ public class IncomeStatementPresenter {
             renderer.layout();
             renderer.createPDF(os);
         }
+        return outputFile;
     }
 }

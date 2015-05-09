@@ -71,7 +71,9 @@ public class ReportController {
         PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate");
         
         try {
-            balanceSheetPresenter.print(uh.getUA(), report.getStart(), today, terms.getPageRequest());
+            String path = balanceSheetPresenter.print(uh.getUA(), report.getStart(), today, terms.getPageRequest());
+            // NOT THE BEST WAY TO DO IT; BUT THE SIMPLEST
+            form.addError("destination", path);
         } catch (IOException ex) {
             System.out.println(ex);
             form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");
@@ -113,7 +115,9 @@ public class ReportController {
         PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "creationDate");
         
         try {
-            incomeStatementPresenter.print(uh.getUA(), report.getStart(), today, terms.getPageRequest());
+            String path = incomeStatementPresenter.print(uh.getUA(), report.getStart(), today, terms.getPageRequest());
+            // NOT THE BEST WAY TO DO IT; BUT THE SIMPLEST
+            form.addError("destination", path);
         } catch (IOException ex) {
             System.out.println(ex);
             form.addError("general", "Något gick fel, vänligen försök igen om en liten stund!");

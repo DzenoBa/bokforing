@@ -101,7 +101,7 @@ public class BalanceSheetPresenter {
         return sb.toString();
     }
     
-    public void print(UserAccount user, Date startDate,
+    public String print(UserAccount user, Date startDate,
             Date endDate, Pageable pageable) throws IOException, DocumentException {
          balanceSheet = postService.getBalanceSheet(user, startDate,
                 endDate, pageable);
@@ -150,6 +150,7 @@ public class BalanceSheetPresenter {
             renderer.layout();
             renderer.createPDF(os);
         }
+        return outputFile;
     }
 
 }
