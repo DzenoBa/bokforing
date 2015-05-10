@@ -103,38 +103,36 @@ public class BalanceSheetPresenter {
     
     public String print(UserAccount user, Date startDate,
             Date endDate, Pageable pageable) throws IOException, DocumentException {
-         balanceSheet = postService.getBalanceSheet(user, startDate,
-                endDate, pageable);
+         balanceSheet = postService.getBalanceSheet(user, startDate, endDate, pageable);
          File input = new File(getClass().getResource("/xhtml/balanceSheet.xhtml").toString().substring(6));
 
         //File input = new File("/xhtml/balanceSheet.html");
         Document doc = Jsoup.parse(input, "UTF-8");
-        PresenterHelper ph = new PresenterHelper(doc);
+        PresenterHelper presentHelper = new PresenterHelper(doc);
 
         //SPECIFICATION
-        //don't know how to find company name
-        ph.replacer("fornamn", user.getUserInfo().getName());
-        ph.replacer("utskrd", new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-        ph.replacer("raken", new SimpleDateFormat("yyyy").format(startDate));
-        ph.replacer("valdper", new SimpleDateFormat("dd/MM/yyyy").format(startDate) + " - "
+        presentHelper.replacer("fornamn", user.getUserInfo().getName());
+        presentHelper.replacer("utskrd", new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+        presentHelper.replacer("raken", new SimpleDateFormat("yyyy").format(startDate));
+        presentHelper.replacer("valdper", new SimpleDateFormat("dd/MM/yyyy").format(startDate) + " - "
                 + new SimpleDateFormat("dd/MM/yyyy").format(endDate));
 
         //VERIFICATION NUMBER
         PagingAndSortingTerms terms = new PagingAndSortingTerms(0, Boolean.FALSE, "verificationNumber");
         Page<Verification> pageVer = verificationService.findAllVerifications(user, terms);
         if(pageVer.getContent().size() > 0)
-            ph.replacer("verinr", pageVer.getContent().get(0).getVerificationNumber().toString());
+            presentHelper.replacer("verinr", pageVer.getContent().get(0).getVerificationNumber().toString());
         else
-            ph.replacer("verinr", "");
+            presentHelper.replacer("verinr", "");
 
         //ASSETS SECTION
-        ph.replacerHTML("tillgkonto", assetAccountsGenerator());
+        presentHelper.replacerHTML("tillgkonto", assetAccountsGenerator());
 
         //DEBT SECTION
-        ph.replacerHTML("skuldkonto", debtAccountsGenerator());
+        presentHelper.replacerHTML("skuldkonto", debtAccountsGenerator());
 
         //FINAL SECTION
-        ph.replacerHTML("ingresultat", resultGenerator());
+        presentHelper.replacerHTML("ingresultat", resultGenerator());
 
         if (DEBUG) {
             System.out.println(doc.outerHtml());
