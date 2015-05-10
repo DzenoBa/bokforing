@@ -82,8 +82,8 @@ public class ReportTest extends AbstractIntegrationTest {
         double sum3Amount = 200.0;
         double sum4Amount = 200.0;
 
-        double sum5Amount = 100.0;
-        double sum6Amount = 100.0;
+        double sum5Amount = 300.0;
+        double sum6Amount = 300.0;
 
         Calendar cal = Calendar.getInstance();
 
@@ -168,10 +168,10 @@ public class ReportTest extends AbstractIntegrationTest {
         Post post24 = postManager.createPost(sum2, account23);
         Post post25 = postManager.createPost(sum, account24);
         Post post26 = postManager.createPost(sum2, account25);
-        Post post27 = postManager.createPost(sum, account26);
-        Post post28 = postManager.createPost(sum2, account27);
-        Post post29 = postManager.createPost(sum, account28);
-        Post post30 = postManager.createPost(sum2, account3);
+        Post post27 = postManager.createPost(sum6, account26);
+        Post post28 = postManager.createPost(sum5, account27);
+        Post post29 = postManager.createPost(sum5, account28);
+        Post post30 = postManager.createPost(sum6, account3);
 
         ArrayList<Post> postList = new ArrayList<>();
         postList.add(post);
@@ -190,48 +190,48 @@ public class ReportTest extends AbstractIntegrationTest {
         postList4.add(post8);
 
         ArrayList<Post> postList5 = new ArrayList<>();
-        postList4.add(post9);
-        postList4.add(post10);
+        postList5.add(post9);
+        postList5.add(post10);
 
         ArrayList<Post> postList6 = new ArrayList<>();
-        postList4.add(post11);
-        postList4.add(post12);
+        postList6.add(post11);
+        postList6.add(post12);
 
         ArrayList<Post> postList7 = new ArrayList<>();
-        postList4.add(post13);
-        postList4.add(post14);
+        postList7.add(post13);
+        postList7.add(post14);
 
         ArrayList<Post> postList8 = new ArrayList<>();
-        postList4.add(post15);
-        postList4.add(post16);
+        postList8.add(post15);
+        postList8.add(post16);
 
         ArrayList<Post> postList9 = new ArrayList<>();
-        postList.add(post17);
-        postList.add(post18);
+        postList9.add(post17);
+        postList9.add(post18);
 
         ArrayList<Post> postList10 = new ArrayList<>();
-        postList.add(post19);
-        postList.add(post20);
+        postList10.add(post19);
+        postList10.add(post20);
 
         ArrayList<Post> postList11 = new ArrayList<>();
-        postList.add(post21);
-        postList.add(post22);
+        postList11.add(post21);
+        postList11.add(post22);
 
         ArrayList<Post> postList12 = new ArrayList<>();
-        postList.add(post23);
-        postList.add(post24);
+        postList12.add(post23);
+        postList12.add(post24);
 
         ArrayList<Post> postList13 = new ArrayList<>();
-        postList.add(post25);
-        postList.add(post26);
+        postList13.add(post25);
+        postList13.add(post26);
 
         ArrayList<Post> postList14 = new ArrayList<>();
-        postList.add(post27);
-        postList.add(post28);
+        postList14.add(post27);
+        postList14.add(post28);
 
         ArrayList<Post> postList15 = new ArrayList<>();
-        postList.add(post29);
-        postList.add(post30);
+        postList15.add(post29);
+        postList15.add(post30);
 
         Long verNbr = 7372L;
         Verification verification = manager.createVerification(user, verNbr, postList, cal.getTime(), customer, "");
