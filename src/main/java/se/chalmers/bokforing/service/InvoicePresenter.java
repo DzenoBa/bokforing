@@ -36,7 +36,9 @@ public class InvoicePresenter {
     private final static boolean DEBUG = false;
     private final static SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
     private final static DecimalFormat df = new DecimalFormat("#.##");
-
+    private final static String inputFilePath = "xhtml" + File.separator + "faktura.xhtml";
+    private final static String outputFilePath = "src" + File.separator + "main" + File.separator + "webapp" + File.separator + "public" + File.separator + "pdf";    
+    
     private final Invoice fak;
 
     private final Customer buyer;
@@ -92,7 +94,7 @@ public class InvoicePresenter {
     }
 
     private String invoiceToHTML(HashMap<Product, Integer> cont) throws IOException{
-        File input = new File("xhtml/faktura.xhtml");
+        File input = new File(inputFilePath);
         Document doc = Jsoup.parse(input, "UTF-8");
         
         PresenterHelper ph = new PresenterHelper(doc);
@@ -184,8 +186,7 @@ public class InvoicePresenter {
     public String print() throws IOException, DocumentException {
         
         List<HashMap<Product, Integer>> list = generateInvoice();
-        
-        String outputFile = "pdf/fak" + fak.getFakturaId().toString() + " " + fak.getFakturaDate() + ".pdf";
+        String outputFile = outputFilePath + File.separator + "fak" + fak.getFakturaId().toString() + " " + fak.getFakturaDate() + ".pdf";
         try (OutputStream os = new FileOutputStream(outputFile)) {
             
             Iterator<HashMap<Product, Integer>> ite = list.iterator();

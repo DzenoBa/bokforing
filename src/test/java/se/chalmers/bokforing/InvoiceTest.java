@@ -40,13 +40,12 @@ public class InvoiceTest extends AbstractIntegrationTest {
     
     @Autowired
     private InvoiceService inDb;
-    private long i = 0;
 
     private Invoice setUp() {
         Invoice fak = new Invoice();
         Customer toUh = new Customer();
         toUh.setName("To Who");
-        toUh.setCustomerNumber(i++);
+        toUh.setCustomerNumber(0l);
         Address adr = new Address();
         adr.setStreetNameAndNumber("Road not found 404");
         adr.setPostalCode("333 21");
@@ -104,7 +103,8 @@ public class InvoiceTest extends AbstractIntegrationTest {
         }
         inDb.storeFaktura(oe);
 
-        print(oe);
+        String str = print(oe);
+        System.out.println(str);
     }
 
     @Test
@@ -125,14 +125,15 @@ public class InvoiceTest extends AbstractIntegrationTest {
         print(oe);
     }
 
-    private void print(Invoice fak) {
+    private String print(Invoice fak) {
         InvoicePresenter fp = new InvoicePresenter(fak);
-        // Doesn't work without the correct files
+        String str = null;
         try {
-            fp.print();
+            str = fp.print();
         } catch (IOException | DocumentException e) {
-            // TODO: fix path
-//            assert(false);
+            System.out.println(e.getLocalizedMessage());
+            assert(false);
         }
+        return str;
     }
 }
