@@ -14,14 +14,13 @@ import se.chalmers.bokforing.config.TestApplicationConfig;
 import se.chalmers.bokforing.model.Address;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Invoice;
-import se.chalmers.bokforing.model.OrderEntity;
 import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.service.CustomerService;
-import se.chalmers.bokforing.service.OrderEntityService;
+import se.chalmers.bokforing.service.InvoicePresenter;
+import se.chalmers.bokforing.service.InvoiceService;
 import se.chalmers.bokforing.service.ProductService;
 import se.chalmers.bokforing.service.UserService;
-import se.chalmers.bokforing.service.InvoicePresenter;
 
 /**
  *
@@ -37,18 +36,17 @@ public class InvoiceTest extends AbstractIntegrationTest {
     private CustomerService cusDb;
 
     @Autowired
-    private OrderEntityService oeDb;
-
-    @Autowired
     private ProductService psDb;
+    
+    @Autowired
+    private InvoiceService inDb;
+    private long i = 0;
 
-    private OrderEntity setUp() {
-        OrderEntity oe = new OrderEntity();
-
-        oeDb.storeOrderEntity(oe);
+    private Invoice setUp() {
+        Invoice fak = new Invoice();
         Customer toUh = new Customer();
         toUh.setName("To Who");
-        toUh.setCustomerNumber(Long.MIN_VALUE + 5);
+        toUh.setCustomerNumber(i++);
         Address adr = new Address();
         adr.setStreetNameAndNumber("Road not found 404");
         adr.setPostalCode("333 21");
@@ -63,21 +61,22 @@ public class InvoiceTest extends AbstractIntegrationTest {
         adr.setCompanyName("THE COMPANY THAT SELLS");
         sender.setAddress(adr);
         sender.setPhoneNumber("331-10 10 10");
-        oe.setBuyer(toUh);
-        oe.setSeller(sender.getUI());
+        fak.setBuyer(toUh);
+        fak.setSeller(sender.getUI());
         sender.setBankgiro("123-4567");
         cusDb.save(toUh);
         userDb.storeUser(sender);
 
-        oe.setMomsPrecentage(0.25);
-        oe.setMomsRegistredNumber("SE012345678912");
+        fak.setMoms(0.25);
+        fak.setMomsNumber("SE012345678912");
+        inDb.storeFaktura(fak);
 
-        return oe;
+        return fak;
     }
 
     @Test
     public void printPDF() {
-        OrderEntity oe = setUp();
+        Invoice oe = setUp();
 
         //Add products
         Product p = new Product();
@@ -87,17 +86,14 @@ public class InvoiceTest extends AbstractIntegrationTest {
 
         oe.addProduct(p, 10);
 
-        oeDb.storeOrderEntity(oe);
-        oeDb.generateInvoice(oe);
+        inDb.storeFaktura(oe);
 
-        for (Invoice fak : oe.getInvoices()) {
-            print(fak);
-        }
+        print(oe);
     }
 
     @Test
     public void printPDFManyPages() {
-        OrderEntity oe = setUp();
+        Invoice oe = setUp();
         //Add products
         for (int i = 0; i < 30; i++) {
             Product p = new Product();
@@ -106,17 +102,14 @@ public class InvoiceTest extends AbstractIntegrationTest {
             psDb.save(p);
             oe.addProduct(p, (i * 3) / 2);
         }
-        oeDb.storeOrderEntity(oe);
-        oeDb.generateInvoice(oe);
+        inDb.storeFaktura(oe);
 
-        for (Invoice fak : oe.getInvoices()) {
-            print(fak);
-        }
+        print(oe);
     }
 
     @Test
     public void printPDFInvalid() {
-        OrderEntity oe = setUp();
+        Invoice oe = setUp();
         //Add products
         for (int i = 0; i < 20; i++) {
             Product p = new Product();
@@ -125,22 +118,11 @@ public class InvoiceTest extends AbstractIntegrationTest {
             psDb.save(p);
             oe.addProduct(p, i);
         }
-        oeDb.storeOrderEntity(oe);
-        oeDb.generateInvoice(oe);
+        inDb.storeFaktura(oe);
 
-        for (int i = 0; i < 5; i++) {
-            Product p = new Product();
-            p.setName("Valid" + i);
-            p.setPrice(i + 0.0);
-            psDb.save(p);
-            oe.addProduct(p, i);
-        }
-        oeDb.storeOrderEntity(oe);
-        oeDb.generateInvoice(oe);
-
-        for (Invoice fak : oe.getInvoices()) {
-            print(fak);
-        }
+        print(oe);
+        oe.setValid(false);
+        print(oe);
     }
 
     private void print(Invoice fak) {

@@ -10,18 +10,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import se.chalmers.bokforing.jsonobject.CustomerJSON;
 import se.chalmers.bokforing.jsonobject.FormJSON;
 import se.chalmers.bokforing.jsonobject.InvoiceJSON;
 import se.chalmers.bokforing.jsonobject.ProductJSON;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Invoice;
-import se.chalmers.bokforing.model.OrderEntity;
 import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.service.CustomerService;
-import se.chalmers.bokforing.service.OrderEntityService;
 import se.chalmers.bokforing.service.ProductService;
 import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.session.AuthSession;
@@ -35,9 +32,6 @@ public class InvoiceController {
     
     @Autowired
     private AuthSession authSession;
-    
-    @Autowired
-    private OrderEntityService orderEntityService;
     
     @Autowired
     private UserService userService;
@@ -113,19 +107,20 @@ public class InvoiceController {
         }
         
         // EVERYTHING SEEMS TO BE IN ORDER
-        OrderEntity oe = new OrderEntity();
+        Invoice oe = new Invoice();
         oe.setSeller(uh);
         oe.setBuyer(c);
         oe.setFskatt(invoice.getFtax());
-        oe.setMomsRegistredNumber(invoice.getVatnumber());
-        oe.setMomsPrecentage(invoice.getVat());
+        oe.setMomsNumber(invoice.getVatnumber());
+        oe.setMoms(invoice.getVat());
         
         for(Product p : pLs) {
             int i = pLs.indexOf(p);
             oe.addProduct(p, intLs.get(i));
         }
         
-        orderEntityService.generateInvoice(oe);
+        //orderEntityService.generateInvoice(oe);
+        //TODO place new print here
         
         return form;
     }

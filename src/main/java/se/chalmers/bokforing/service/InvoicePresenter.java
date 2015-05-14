@@ -12,15 +12,18 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.springframework.stereotype.Service;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Invoice;
-import se.chalmers.bokforing.model.OrderEntity;
 import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.UserInfo;
 
@@ -39,18 +42,15 @@ public class InvoicePresenter {
     private final Customer buyer;
     private final UserInfo seller;
 
-    private final HashMap<Product, Integer> cont;
+    //private final HashMap<Product, Integer> cont;
 
     public InvoicePresenter(Invoice faktura) {
         this.fak = faktura;
-        OrderEntity oe = fak.getOrderEntity();
-        buyer = oe.getBuyer();
-        seller = oe.getSeller();
-        cont = fak.Products();
-
+        buyer = fak.getBuyer();
+        seller = fak.getSeller();
     }
 
-    private double getTotalPrice() {
+    private double getTotalPrice(HashMap<Product, Integer> cont) {
         double cost = 0;
         for (Map.Entry<Product, Integer> entry : cont.entrySet()) {
             cost += entry.getKey().getPrice() * entry.getValue();
@@ -58,17 +58,17 @@ public class InvoicePresenter {
         return cost;
     }
 
-    private String summaryContent() {
+    private String summaryContent(HashMap<Product, Integer> cont) {
         StringBuilder sb = new StringBuilder();
-        double cost = getTotalPrice();
-        final Double momsPre = fak.getOrderEntity().getMomsPrecentage();
+        double cost = getTotalPrice(cont);
+        final Double momsPre = fak.getMoms();
         sb.append("Belopp utan moms: " + df.format(cost) + " kr\n");
         sb.append("Moms kr " + (momsPre * 100) + "% " + df.format(cost * momsPre) + " kr\n");
         sb.append("Belopp att betala: " + df.format(cost + (cost * momsPre)) + " kr");
         return sb.toString();
     }
 
-    private String contentListGenerator() {
+    private String contentListGenerator(HashMap<Product, Integer> cont) {
         StringBuilder sb = new StringBuilder();
         //HeaderRow
         sb.append("<table class=\"contentTable\">");
@@ -91,15 +91,16 @@ public class InvoicePresenter {
         return sb.toString();
     }
 
-    public void print() throws IOException, DocumentException {
+    private String invoiceToHTML(HashMap<Product, Integer> cont) throws IOException{
         File input = new File("xhtml/faktura.xhtml");
         Document doc = Jsoup.parse(input, "UTF-8");
+        
         PresenterHelper ph = new PresenterHelper(doc);
 
         if (fak.isValid()) {
             ph.replacer("head", "Faktura");
         } else {
-            ph.replacerHTML("head", "<a style=\"color: red;\">Ogiltlig Faktura</a>");
+            ph.replacerHTML("head", "<a style=\"color: red;\">Ogiltig Faktura</a>");
         }
 
         //TOP
@@ -112,7 +113,7 @@ public class InvoicePresenter {
 
         //MID/TOP
         ph.replacer("ernamn", buyer.getName());
-        ph.replacer("ordnr", fak.getOrderEntity().getOrderEntityId().toString());
+        ph.replacer("ordnr", "NUMMER SAKNAS");
 
         ph.replacer("vnamn", seller.getName());
         ph.replacer("betvil", "30 dagars betalnings tid");
@@ -120,8 +121,8 @@ public class InvoicePresenter {
         ph.replacer("intrest", "50 kr betalnings ränta");
 
         //MID
-        ph.replacerHTML("content", contentListGenerator());
-        ph.replacer("totalcost", summaryContent());
+        ph.replacerHTML("content", contentListGenerator(cont));
+        ph.replacer("totalcost", summaryContent(cont));
 
         //BOT
         ph.replacer("fcname", seller.getAddress().getCompanyName());
@@ -132,9 +133,9 @@ public class InvoicePresenter {
 
         StringBuilder sb = new StringBuilder();
         sb.append("<ul><li>");
-        sb.append(fak.getOrderEntity().getMomsRegistredNumber());
+        sb.append(fak.getMomsNumber());
         sb.append("</li><li>");
-        if (fak.getOrderEntity().isFskatt()) {
+        if (fak.isFtax()) {
             sb.append("Godkänd för F-skatt");
         } else {
             sb.append("<b>Ej</b> godkänd för F-skatt");
@@ -148,14 +149,64 @@ public class InvoicePresenter {
         if (DEBUG) {
             System.out.println(doc.outerHtml());
         }
+        return doc.outerHtml();
+    }
+    
+    private List<HashMap<Product, Integer>> generateInvoice() {
+        //invalidate(oe);
 
-        String outputFile = "pdf/fak" + fak.getFakturaId().toString() + ".pdf";
-        try (OutputStream os = new FileOutputStream(outputFile)) {
-            ITextRenderer renderer = new ITextRenderer();
-            renderer.setDocumentFromString(doc.outerHtml());
-            renderer.layout();
-            renderer.createPDF(os);
+        //int offset = oe.getInvoices().size();
+        int offset = 0;
+
+        int fakNum = offset - 1;
+        
+        List<HashMap<Product, Integer>> tcont = new ArrayList<>();
+        Iterator<Entry<Product,Integer>> ite = fak.products().entrySet().iterator();
+        int i = 0;
+        while(ite.hasNext()){
+            Entry<Product,Integer> ent = ite.next();
+            if (i % 15 == 0) {
+                tcont.add(new HashMap<Product, Integer>());
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(fak.getFakturaDate());
+                cal.add(Calendar.DAY_OF_MONTH, 30);
+                fak.setExpireDate(cal.getTime());
+                fakNum++;
+                //Do the next page
+            }
+            tcont.get(fakNum).put(ent.getKey(), ent.getValue());
+            i++;
         }
+        
+        return tcont;
+    }
+    
+    public String print() throws IOException, DocumentException {
+        
+        List<HashMap<Product, Integer>> list = generateInvoice();
+        
+        String outputFile = "pdf/fak" + fak.getFakturaId().toString() + " " + fak.getFakturaDate() + ".pdf";
+        try (OutputStream os = new FileOutputStream(outputFile)) {
+            
+            Iterator<HashMap<Product, Integer>> ite = list.iterator();
+
+            ITextRenderer renderer = new ITextRenderer();
+            
+            String html = invoiceToHTML(ite.next());
+            renderer.setDocumentFromString(html);
+            renderer.layout();    
+            renderer.createPDF(os, false);
+
+            while(ite.hasNext()){
+                html = invoiceToHTML(ite.next());
+                renderer.setDocumentFromString(html);
+                renderer.layout();
+                renderer.writeNextDocument();
+            }
+
+            renderer.finishPDF();
+        }
+    return outputFile;
     }
 
 }
