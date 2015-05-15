@@ -37,14 +37,12 @@ public class InvoicePresenter {
     private final static SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy");
     private final static DecimalFormat df = new DecimalFormat("#.##");
     private final static String inputFilePath = "xhtml" + File.separator + "faktura.xhtml";
-    private final static String outputFilePath = "src" + File.separator + "main" + File.separator + "webapp" + File.separator + "public" + File.separator + "pdf";    
-    
+    private final static String outputFilePath = PresenterHelper.pdfPath;
+            
     private final Invoice fak;
 
     private final Customer buyer;
     private final UserInfo seller;
-
-    //private final HashMap<Product, Integer> cont;
 
     public InvoicePresenter(Invoice faktura) {
         this.fak = faktura;
@@ -93,10 +91,10 @@ public class InvoicePresenter {
         return sb.toString();
     }
 
-    private String invoiceToHTML(HashMap<Product, Integer> cont) throws IOException{
+    private String invoiceToHTML(HashMap<Product, Integer> cont) throws IOException {
         File input = new File(inputFilePath);
         Document doc = Jsoup.parse(input, "UTF-8");
-        
+
         PresenterHelper ph = new PresenterHelper(doc);
 
         if (fak.isValid()) {
@@ -153,20 +151,14 @@ public class InvoicePresenter {
         }
         return doc.outerHtml();
     }
-    
+
     private List<HashMap<Product, Integer>> generateInvoice() {
-        //invalidate(oe);
-
-        //int offset = oe.getInvoices().size();
-        int offset = 0;
-
-        int fakNum = offset - 1;
-        
-        List<HashMap<Product, Integer>> tcont = new ArrayList<>();
-        Iterator<Entry<Product,Integer>> ite = fak.products().entrySet().iterator();
+        final List<HashMap<Product, Integer>> tcont = new ArrayList<>();
+        final Iterator<Entry<Product, Integer>> ite = fak.products().entrySet().iterator();
+        int fakNum = -1;
         int i = 0;
-        while(ite.hasNext()){
-            Entry<Product,Integer> ent = ite.next();
+        while (ite.hasNext()) {
+            final Entry<Product, Integer> ent = ite.next();
             if (i % 15 == 0) {
                 tcont.add(new HashMap<Product, Integer>());
                 Calendar cal = Calendar.getInstance();
@@ -179,26 +171,27 @@ public class InvoicePresenter {
             tcont.get(fakNum).put(ent.getKey(), ent.getValue());
             i++;
         }
-        
+
         return tcont;
     }
-    
-    public String print() throws IOException, DocumentException {
-        
-        List<HashMap<Product, Integer>> list = generateInvoice();
-        String outputFile = outputFilePath + File.separator + "fak" + fak.getFakturaId().toString() + " " + fak.getFakturaDate() + ".pdf";
-        try (OutputStream os = new FileOutputStream(outputFile)) {
-            
-            Iterator<HashMap<Product, Integer>> ite = list.iterator();
 
-            ITextRenderer renderer = new ITextRenderer();
-            
+    public String print() throws IOException, DocumentException {
+
+        final List<HashMap<Product, Integer>> list = generateInvoice();
+        final String outputFileName = "Faktura " + fak.getSeller().getName() + ", " + fak.getFakturaId().toString() + ", " + fak.getFakturaDate() + ".pdf";
+        final String outputFile = outputFilePath + File.separator + outputFileName;
+        try (OutputStream os = new FileOutputStream(outputFile)) {
+
+            final Iterator<HashMap<Product, Integer>> ite = list.iterator();
+
+            final ITextRenderer renderer = new ITextRenderer();
+
             String html = invoiceToHTML(ite.next());
             renderer.setDocumentFromString(html);
-            renderer.layout();    
+            renderer.layout();
             renderer.createPDF(os, false);
 
-            while(ite.hasNext()){
+            while (ite.hasNext()) {
                 html = invoiceToHTML(ite.next());
                 renderer.setDocumentFromString(html);
                 renderer.layout();
@@ -207,7 +200,7 @@ public class InvoicePresenter {
 
             renderer.finishPDF();
         }
-    return outputFile;
+        return outputFile;
     }
 
 }

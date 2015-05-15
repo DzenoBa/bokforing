@@ -5,6 +5,7 @@
  */
 package se.chalmers.bokforing.service;
 
+import java.io.File;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -13,6 +14,8 @@ import org.jsoup.nodes.Element;
  * @author victor
  */
 class PresenterHelper {
+    public final static String pdfPath = "src" + File.separator + "main" + File.separator + "webapp" + File.separator + "public" + File.separator + "pdf";
+
     Document doc;
     PresenterHelper(Document doc){
         this.doc = doc;
