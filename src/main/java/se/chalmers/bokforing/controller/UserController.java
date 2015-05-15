@@ -296,9 +296,11 @@ public class UserController {
 
         // USER REQUESTED TO CHANGE COMPANY NAME
         if (userInfo.getCompanyname() != null) {
-            if(uh.getAddress() != null)
-                uh.getAddress().setCompanyName(userInfo.getCompanyname());
-            else {
+            if(uh.getAddress() != null) {
+                Address address = uh.getAddress();
+                address.setCompanyName(userInfo.getCompanyname());
+                uh.setAddress(address);
+            } else {
                 Address new_address = new Address();
                 new_address.setCompanyName(userInfo.getCompanyname());
                 uh.setAddress(new_address);
