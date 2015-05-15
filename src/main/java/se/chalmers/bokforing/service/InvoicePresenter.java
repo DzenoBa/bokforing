@@ -178,7 +178,7 @@ public class InvoicePresenter {
     public String print() throws IOException, DocumentException {
 
         final List<HashMap<Product, Integer>> list = generateInvoice();
-        final String outputFileName = "Faktura " + fak.getSeller().getName() + ", " + fak.getFakturaId().toString() + ", " + fak.getFakturaDate() + ".pdf";
+        final String outputFileName = "Faktura " + fak.getFakturaId().toString() + ", "+ fak.getSeller().getName() + ", " + sdf.format(fak.getFakturaDate()) + ".pdf";
         final String outputFile = outputFilePath + File.separator + outputFileName;
         try (OutputStream os = new FileOutputStream(outputFile)) {
 
