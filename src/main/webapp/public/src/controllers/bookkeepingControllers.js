@@ -146,10 +146,7 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
     
     $scope.selected = function(account) {
         account: account;
-    };
-
-    $scope.ok = function () {
-      $modalInstance.close($scope.selected.account);
+        $modalInstance.close(account);
     };
 
     $scope.cancel = function () {

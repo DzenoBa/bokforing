@@ -1,5 +1,14 @@
 <div class="modal-header">
-    <h3 class="modal-title">Välj produkt</h3>
+    <div class="row">
+        <div class="col-sm-6" style="text-align:left;">
+            <h3 class="modal-title">Välj produkt</h3>
+        </div>
+        <div class="col-sm-6" style="text-align: right;">
+            <button class="btn btn-dz" ng-click="cancel()">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
 </div>
 <div class="modal-body">
     <div class="row">
@@ -25,18 +34,9 @@
             <tr ng-repeat="product in products">
                 <td>{{product.name}}</td>
                 <td>{{product.price}}</td>
-                <td><button class="btn btn-success" ng-click="selected.product = product">Välj</button></td>
+                <td><button class="btn btn-success" ng-click="selected(product)" ng-show="product">Välj</button></td>
             </tr>
         </tbody>
     </table>
     <pagination total-items="maxsize" items-per-page="10" ng-model="currentPage" max-size="5" class="pagination-sm" boundary-links="true" ng-change="pageChanged()" ng-show="maxsize > 10"></pagination>
-</div>
-<div class="modal-footer">
-    <div class="col-sm-6" style="text-align:left;">
-        Du har valt: <b>{{selected.product.name}}</b>
-    </div>
-    <div class="col-sm-6">
-        <button class="btn btn-primary" ng-click="ok()" ng-disabled="!selected.product">OK</button>
-        <button class="btn btn-warning" ng-click="cancel()">Avbryt</button>
-    </div>
 </div>

@@ -138,10 +138,7 @@ customerControllers.controller('ModalInstanceCustomerCtrl',
     
     $scope.selected = function(customer) {
         customer: customer;
-    };
-
-    $scope.ok = function () {
-      $modalInstance.close($scope.selected.customer);
+        $modalInstance.close(customer);
     };
 
     $scope.cancel = function () {

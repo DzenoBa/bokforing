@@ -161,3 +161,21 @@ div {
 .panel-dz > .panel-footer + .panel-collapse > .panel-body {
   border-bottom-color: #ddd;
 }
+
+/*
+ * DZ - BTN
+ */
+
+.btn-dz {
+  color: #ddd;
+  background-color: transparent;
+  border-color: transparent;
+}
+.btn-dz:hover,
+.btn-dz:focus,
+.btn-dz:active,
+.btn-dz.active {
+  color: #575757;
+  background-color: transparent;
+  border-color: transparent;
+}

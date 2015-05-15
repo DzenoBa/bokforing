@@ -177,10 +177,7 @@ productControllers.controller('ModalInstanceProductCtrl',
     
     $scope.selected = function(product) {
         product: product;
-    };
-
-    $scope.ok = function () {
-      $modalInstance.close($scope.selected.product);
+        $modalInstance.close(product);
     };
 
     $scope.cancel = function () {
