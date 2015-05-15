@@ -41,7 +41,7 @@ public class InvoiceTest extends AbstractIntegrationTest {
     @Autowired
     private InvoiceService inDb;
 
-    private Invoice setUp() {
+    private Invoice setUp(String name) {
         Invoice fak = new Invoice();
         Customer toUh = new Customer();
         toUh.setName("To Who");
@@ -53,7 +53,7 @@ public class InvoiceTest extends AbstractIntegrationTest {
         toUh.setAddress(adr);
         UserHandler sender = new UserHandler();
         sender.setEmail("from@from.com");
-        sender.setName("From who");
+        sender.setName(name);
         adr = new Address();
         adr.setStreetNameAndNumber("Highway to Hell");
         adr.setPostalCode("666 42");
@@ -75,7 +75,7 @@ public class InvoiceTest extends AbstractIntegrationTest {
 
     @Test
     public void printPDF() {
-        Invoice oe = setUp();
+        Invoice oe = setUp("printPDF()");
 
         //Add products
         Product p = new Product();
@@ -92,7 +92,7 @@ public class InvoiceTest extends AbstractIntegrationTest {
 
     @Test
     public void printPDFManyPages() {
-        Invoice oe = setUp();
+        Invoice oe = setUp("printPDFManyPages()");
         //Add products
         for (int i = 0; i < 30; i++) {
             Product p = new Product();
@@ -109,7 +109,7 @@ public class InvoiceTest extends AbstractIntegrationTest {
 
     @Test
     public void printPDFInvalid() {
-        Invoice oe = setUp();
+        Invoice oe = setUp("printPDFInvalid()");
         //Add products
         for (int i = 0; i < 20; i++) {
             Product p = new Product();

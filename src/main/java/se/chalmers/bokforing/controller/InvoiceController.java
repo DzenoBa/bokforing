@@ -1,8 +1,12 @@
 
 package se.chalmers.bokforing.controller;
 
+import com.lowagie.text.DocumentException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -19,6 +23,7 @@ import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.service.CustomerService;
+import se.chalmers.bokforing.service.InvoicePresenter;
 import se.chalmers.bokforing.service.ProductService;
 import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.session.AuthSession;
@@ -119,8 +124,12 @@ public class InvoiceController {
             oe.addProduct(p, intLs.get(i));
         }
         
-        //orderEntityService.generateInvoice(oe);
-        //TODO place new print here
+        InvoicePresenter ip = new InvoicePresenter(oe);
+        try {
+            ip.print();
+        } catch (IOException | DocumentException ex) {
+            Logger.getLogger(InvoiceController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         return form;
     }
