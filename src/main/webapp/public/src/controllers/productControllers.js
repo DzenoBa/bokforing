@@ -174,6 +174,8 @@ productControllers.controller('ModalInstanceProductCtrl',
     function ($scope, $modalInstance, ProductProxy) {
 
     $scope.currentPage = 1;
+    $scope.product = {name: ""};
+    search();
     
     $scope.selected = function(product) {
         product: product;
@@ -192,7 +194,7 @@ productControllers.controller('ModalInstanceProductCtrl',
     $scope.autosearch = function() {
         if(angular.isDefined($scope.product)) {
             $scope.currentPage = 1;
-            if($scope.product.name.length > 2) {
+            if($scope.product.name.length > 0) {
                 search();
             } else {
                 $scope.products = {};
@@ -204,11 +206,7 @@ productControllers.controller('ModalInstanceProductCtrl',
     function search() {
         var product;
         var currentPage = $scope.currentPage - 1;
-        if($scope.product.name) {
-            product = {name: $scope.product.name, startrange: currentPage};
-        } else {
-            return;
-        }
+        product = {name: $scope.product.name, startrange: currentPage};
         ProductProxy.getProducts(product)
                     .success(function(products) {
                         $scope.products = products;

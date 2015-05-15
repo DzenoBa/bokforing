@@ -135,6 +135,8 @@ customerControllers.controller('ModalInstanceCustomerCtrl',
     function ($scope, $modalInstance, CustomerProxy) {
 
     $scope.currentPage = 1;
+    $scope.customer = {name: ""};
+    search();
     
     $scope.selected = function(customer) {
         customer: customer;
@@ -153,10 +155,10 @@ customerControllers.controller('ModalInstanceCustomerCtrl',
     $scope.autosearch = function() {
         if(angular.isDefined($scope.customer)) {
             $scope.currentPage = 1;
-            if($scope.customer.name.length > 2) {
+            if($scope.customer.name.length > 0) {
                 search();
             } else {
-                $scope.products = {};
+                $scope.customers = {};
                 $scope.maxsize = 0;
             }
         }
@@ -165,11 +167,7 @@ customerControllers.controller('ModalInstanceCustomerCtrl',
     function search() {
         var customer;
         var currentPage = $scope.currentPage - 1;
-        if($scope.customer.name) {
-            customer = {name: $scope.customer.name, startrange: currentPage};
-        } else {
-            return;
-        }
+        customer = {name: $scope.customer.name, startrange: currentPage};
         CustomerProxy.getCustomers(customer)
                     .success(function(customers) {
                         $scope.customers = customers;
