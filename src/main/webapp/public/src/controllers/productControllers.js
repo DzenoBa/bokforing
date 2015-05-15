@@ -153,7 +153,7 @@ productControllers.controller('ProductCtrl', ['$scope', 'ProductProxy', '$modal'
                 size: 'lg',
                 resolve: {
                     accountType: function() {
-                        return 3;
+                        return [3,4,5,6,7];
                     }
                 }
             });

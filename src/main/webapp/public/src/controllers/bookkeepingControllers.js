@@ -206,6 +206,8 @@ bookkeepingControllers.controller('ModalInstanceAccountCtrl',
         if(accountType !== null && accountType.length > 0) {
             $scope.accountType = accountType[0];
             $scope.accountTypes = accountType;
+            $scope.account = {number: ""};
+            search();
         } else
             $scope.accountType = accountType;
         if(accountType > 0) {
