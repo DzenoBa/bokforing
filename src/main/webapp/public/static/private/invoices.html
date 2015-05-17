@@ -3,6 +3,33 @@
     <!-- LST INVOICES -->
     <div class="col-md-6">
         <h2>Dina fakturor</h2>
+        <button type="button" class="btn btn-success" ng-show="!createboolean" ng-click="showcreate()">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Skapa ny faktura
+        </button>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th style="width:30%;">Kund</th>
+                    <th style="width:15%;">Skapad</th>
+                    <th style="width:15%;">Förfallodatum</th>
+                    <th style="width:20%;">Antal produkt typer</th>
+                    <th style="width:20%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="invoice in invoices">
+                    <td>{{invoice.customer.name}}</td>
+                    <td>{{invoice.creationdate}}</td>
+                    <td>{{invoice.expiredate}}</td>
+                    <td>{{invoice.productls.length}}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" ng-click="showview(invoice)">
+                            <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     <!-- NEW INVOICE -->
     <div class="col-md-6" ng-show="createboolean">
@@ -130,5 +157,39 @@
                 </div>
             </div>
         </form>
+    </div>
+    <!-- VIEW INVOICE -->
+    <div class="col-md-6" ng-show="viewboolean">
+        <h2>Visa faktura</h2>
+        <dl class="dl-horizontal">
+            <dt>Kundnummer</dt><dd>{{invoice.customer.customernumber}}</dd>
+            <dt>Kundamn</dt><dd>{{invoice.customer.name}}</dd>
+            <dt>Skapad</dt><dd>{{invoice.creationdate}}</dd>
+            <dt>Förfallodatum</dt><dd>{{invoice.expiredate}}</dd>
+            <dt>Momsnummer</dt><dd>{{invoice.vatnumber}}</dd>
+            <dt>Moms</dt><dd>{{invoice.vat}}</dd>
+        </dl>
+        <h3>Produkter</h3>
+        <table class="table">
+            <thead>
+                <th style="width:40%;">Produktnamn</th>
+                <th style="width:30%;">Pris</th>
+                <th style="width:20%;">Antal</th>
+            </thead>
+            <tr ng-repeat="product in invoice.productls">
+                <td>{{product.name}}</td>
+                <td>{{product.price}}</td>
+                <td>{{product.amount}}</td>
+            </tr>
+        </table>
+        <div class="row">
+            <div class="col-sm-3"></div><!-- Offset -->
+            <div class="col-sm-9">
+                <div class="btn-group">
+                    <input type="button" value="Ändra" class="btn btn-success" ng-click="showedit(invoice)" ng-disabled="true"/>
+                    <input type="button" value="Ta bort" class="btn btn-danger" ng-click="delete()" ng-disabled="true"/>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
