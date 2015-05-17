@@ -33,59 +33,48 @@
         <table width = "30%">
             <tr>
                 <td>Företagsnamn</td>
-                <td><a id="fornamn">[FORNAMN]</a> </td> 
+                <td><span id="fornamn">[FORNAMN]</span> </td> 
             </tr>
             <tr>
                 <td>Utskriftsdatum</td> 
-                <td><a id="utskrd">[UTSKRD]</a></td> 
+                <td><span id="utskrd">[UTSKRD]</span></td> 
             </tr>
             <tr>
                 <td>Räkenskapsår</td> 
-                <td><a id="raken">[RAKEN]</a></td> 
+                <td><span id="raken">[RAKEN]</span></td> 
             </tr>
             <tr>
                 <td>Period</td>
-                <td><a id="valdper">[VALDPER]</a></td> 
+                <td><span id="valdper">[VALDPER]</span></td> 
             </tr>
         </table>
 
-        <h4>Senaste verifikationsnummret: <p id="verinr">[VERINR]</p> </h4> 
+        <h4>Senaste verifikationsnummret: <span id="verinr">[VERINR]</span> </h4> 
 
 
 
-        <table width = "100%">
+        <table style="width:100%;">
             <tr>
-                <th>Tillgångar</th>
-                <th>Ingående balans</th>		
-                <th>Utgående balans</th>
+                <th style="width:50%;">Tillgångar</th>
+                <th style="width:25%;">Ingående balans</th>		
+                <th style="width:25%;">Utgående balans</th>
             </tr>
+			<tbody id="tillgkonto" style="width:100%;">[TILLGKONTO]</tbody>
+		</table>
+		<table style="width:100%; margin-top:10px;">
             <tr>
-                <td style="padding:0">
-					<table id="tillgkonto" style="width:100%;">[TILLGKONTO]</table>
-				</td>
-
+                <th style="width:50%;">Eget kapital och skulder </th>
+                <th style="width:25%;">Ingående balans</th>		
+                <th style="width:25%;">Utgående balans</th>
             </tr>
+			<tbody id="skuldkonto" style="width:100%;">[SKULDKONTO]</tbody>
+		</table>
+		<table style="width:100%; margin-top:10px;">
             <tr>
-                <th>Eget kapital och skulder </th>
-                <th>Ingående balans</th>		
-                <th>Utgående balans</th>
+                <th style="width:50%;">Ingående resultat</th>
+                <th colspan="2" style="width:50%;">Resultat</th>		
             </tr>
-            <tr>
-                <td style="padding:0">
-					<table id="skuldkonto" style="width:100%;">[SKULDKONTO]</table>
-				</td>
-
-            </tr>
-            <tr>
-                <th>Ingående resultat</th>
-                <th colspan="2">Resultat</th>		
-
-            </tr>
-            <tr>
-                <td><a id="ingresultat">[INGRESULTAT]</a></td>
-                
-
-            </tr>
+            <tbody id="ingresultat">[INGRESULTAT]</tbody>
         </table>
     </body>
 </html>

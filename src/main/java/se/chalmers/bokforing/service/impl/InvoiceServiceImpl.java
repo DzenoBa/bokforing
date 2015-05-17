@@ -6,16 +6,10 @@
 package se.chalmers.bokforing.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import se.chalmers.bokforing.model.Customer;
-import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.model.Invoice;
-import se.chalmers.bokforing.model.OrderEntity;
 import se.chalmers.bokforing.persistence.InvoiceRepository;
-import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.service.InvoiceService;
 
 /**
@@ -39,13 +33,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         frep.save(fak);
     }
 
-    @Override
-    public Page<Invoice> getByOrderEntity(OrderEntity oe, PagingAndSortingTerms terms) {
+/*    public Page<Invoice> getByOrderEntity(OrderEntity oe, PagingAndSortingTerms terms) {
         PageRequest request = terms.getPageRequest();
 
         return frep.findByOrderEntity(oe, request);
-    }
-
+    }*/
+/*
     @Override
     public Page<Invoice> findByCustomer(UserAccount user, Customer customer, PagingAndSortingTerms terms) {
         PageRequest request = terms.getPageRequest();
@@ -60,4 +53,5 @@ public class InvoiceServiceImpl implements InvoiceService {
         
         return frep.findByOrderEntity_Seller_Ua(user, request);
     }
+    */
 }

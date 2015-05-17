@@ -29,23 +29,21 @@ public class Invoice implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fakturaId;
+    
+    private boolean ftax = false;
+    private String momsNumber;
+    private Double moms;
 
     @ManyToOne
-    private OrderEntity orderEntity;
-
-    public OrderEntity getOrderEntity() {
-        return orderEntity;
-    }
-
-    public void setOrderEntity(OrderEntity oe) {
-        orderEntity = oe;
-    }
+    private UserInfo seller;
+    @ManyToOne
+    private Customer buyer;
 
     @ManyToMany
-    private final List<Product> prod = new LinkedList<>();
+    private List<Product> prod = new LinkedList<>();
 
     @ElementCollection
-    private final List<Integer> countList = new LinkedList<>();
+    private List<Integer> countList = new LinkedList<>();
 
     private boolean valid = true;
     //Date
@@ -110,12 +108,7 @@ public class Invoice implements Serializable {
         this.expireDate = expireDate;
     }
 
-    public void addProduct(Product p, Integer amount) {
-        getProd().add(p);
-        getCountList().add(amount);
-    }
-
-    public HashMap Products() {
+    public HashMap products() {
         HashMap<Product, Integer> hm = new HashMap<>();
         for (int i = 0; i < getProd().size(); i++) {
             hm.put(getProd().get(i), getCountList().get(i));
@@ -135,5 +128,120 @@ public class Invoice implements Serializable {
      */
     public List<Integer> getCountList() {
         return countList;
+    }
+    
+    public void addProduct(Product p) {
+        addProduct(p, 1);
+    }
+
+    public void addProduct(Product p, Integer amount) {
+        if (getProd().contains(p)) {
+            int i = getProd().indexOf(p);
+            int x = getCountList().get(i);
+            x += amount;
+            if (x > 0) {
+                getCountList().set(i, x);
+            } else {
+                removeAllOfProduct(p);
+            }
+        } else {
+            getProd().add(p);
+            getCountList().add(amount);
+        }
+    }
+
+    public void removeProduct(Product p) {
+        addProduct(p, -1);
+    }
+
+    public void removeProduct(Product p, Integer amount) {
+        addProduct(p, -amount);
+    }
+
+    public void removeAllOfProduct(Product p) {
+        int i = getProd().indexOf(p);
+        getProd().remove(i);
+        getCountList().remove(i);
+    }
+    
+        public UserInfo getSeller() {
+        return seller;
+    }
+
+    public Customer getBuyer() {
+        return buyer;
+    }
+
+    public void setSeller(UserInfo ui) {
+        seller = ui;
+    }
+
+    public void setSeller(UserHandler uh) {
+        setSeller(uh.getUI());
+    }
+
+    public void setBuyer(Customer cus) {
+        buyer = cus;
+    }
+
+    public void setFskatt(boolean ftax) {
+        this.setFtax(ftax);
+    }
+
+    public void setMomsNumber(String vatnumber) {
+        this.momsNumber = vatnumber;
+    }
+
+    public void setMoms(double vat) {
+        this.setMoms((Double) vat);
+    }
+
+    /**
+     * @return the ftax
+     */
+    public boolean isFtax() {
+        return ftax;
+    }
+
+    /**
+     * @param ftax the ftax to set
+     */
+    public void setFtax(boolean ftax) {
+        this.ftax = ftax;
+    }
+
+    /**
+     * @return the momsNumber
+     */
+    public String getMomsNumber() {
+        return momsNumber;
+    }
+
+    /**
+     * @return the moms
+     */
+    public Double getMoms() {
+        return moms;
+    }
+
+    /**
+     * @param moms the moms to set
+     */
+    public void setMoms(Double moms) {
+        this.moms = moms;
+    }
+
+    /**
+     * @param prod the prod to set
+     */
+    public void setProd(List<Product> prod) {
+        this.prod = prod;
+    }
+
+    /**
+     * @param countList the countList to set
+     */
+    public void setCountList(List<Integer> countList) {
+        this.countList = countList;
     }
 }
