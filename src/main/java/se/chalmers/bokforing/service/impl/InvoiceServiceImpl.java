@@ -11,9 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.chalmers.bokforing.model.Customer;
-import se.chalmers.bokforing.model.UserAccount;
 import se.chalmers.bokforing.model.Invoice;
-import se.chalmers.bokforing.model.OrderEntity;
+import se.chalmers.bokforing.model.UserInfo;
 import se.chalmers.bokforing.persistence.InvoiceRepository;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.service.InvoiceService;
@@ -39,25 +38,25 @@ public class InvoiceServiceImpl implements InvoiceService {
         frep.save(fak);
     }
 
-    @Override
-    public Page<Invoice> getByOrderEntity(OrderEntity oe, PagingAndSortingTerms terms) {
+/*    public Page<Invoice> getByOrderEntity(OrderEntity oe, PagingAndSortingTerms terms) {
         PageRequest request = terms.getPageRequest();
 
         return frep.findByOrderEntity(oe, request);
-    }
+    }*/
 
     @Override
-    public Page<Invoice> findByCustomer(UserAccount user, Customer customer, PagingAndSortingTerms terms) {
+    public Page<Invoice> findByCustomer(UserInfo userinfo, Customer customer, PagingAndSortingTerms terms) {
         PageRequest request = terms.getPageRequest();
 
-        return frep.findByOrderEntity_Seller_UaAndOrderEntity_Buyer(user, customer, request);
+        return frep.findBySellerAndBuyer(userinfo, customer, request);
 
     }
-
+    
     @Override
-    public Page<Invoice> findByUser(UserAccount user, PagingAndSortingTerms terms) {
+    public Page<Invoice> findAllInvoices(UserInfo userinfo, PagingAndSortingTerms terms) {
         PageRequest request = terms.getPageRequest();
         
-        return frep.findByOrderEntity_Seller_Ua(user, request);
+        return frep.findBySeller(userinfo, request);
     }
+
 }

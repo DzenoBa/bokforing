@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,12 +17,12 @@ import se.chalmers.bokforing.jsonobject.InvoiceJSON;
 import se.chalmers.bokforing.jsonobject.ProductJSON;
 import se.chalmers.bokforing.model.Customer;
 import se.chalmers.bokforing.model.Invoice;
-import se.chalmers.bokforing.model.OrderEntity;
 import se.chalmers.bokforing.model.Product;
 import se.chalmers.bokforing.model.UserHandler;
 import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 import se.chalmers.bokforing.service.CustomerService;
-import se.chalmers.bokforing.service.OrderEntityService;
+import se.chalmers.bokforing.service.InvoicePresenter;
+import se.chalmers.bokforing.service.InvoiceService;
 import se.chalmers.bokforing.service.ProductService;
 import se.chalmers.bokforing.service.UserService;
 import se.chalmers.bokforing.session.AuthSession;
@@ -37,10 +38,10 @@ public class InvoiceController {
     private AuthSession authSession;
     
     @Autowired
-    private OrderEntityService orderEntityService;
+    private UserService userService;
     
     @Autowired
-    private UserService userService;
+    private InvoiceService invoiceService;
     
     @Autowired
     private CustomerService customerService;
@@ -49,7 +50,7 @@ public class InvoiceController {
     private ProductService productService;
     
     /*
-     * CREATE PRODUCT
+     * CREATE INVOICE
      */
     @RequestMapping(value = "/invoice/create", method = RequestMethod.POST)
     public @ResponseBody FormJSON create(@RequestBody final InvoiceJSON invoice) {
@@ -113,26 +114,26 @@ public class InvoiceController {
         }
         
         // EVERYTHING SEEMS TO BE IN ORDER
-        OrderEntity oe = new OrderEntity();
-        oe.setSeller(uh);
-        oe.setBuyer(c);
-        oe.setFskatt(invoice.getFtax());
-        oe.setMomsRegistredNumber(invoice.getVatnumber());
-        oe.setMomsPrecentage(invoice.getVat());
+        Invoice iv = new Invoice();
+        iv.setSeller(uh);
+        iv.setBuyer(c);
+        iv.setFskatt(invoice.getFtax());
+        iv.setMomsNumber(invoice.getVatnumber());
+        iv.setMoms(invoice.getVat());
         
         for(Product p : pLs) {
             int i = pLs.indexOf(p);
-            oe.addProduct(p, intLs.get(i));
+            iv.addProduct(p, intLs.get(i));
         }
         
-        orderEntityService.generateInvoice(oe);
-        
+        invoiceService.storeFaktura(iv);
         return form;
     }
     
     /*
      * GET INVOICES
      */
+    @Transactional
     @RequestMapping(value = "/invoice/getinvoices", method = RequestMethod.POST)
     public @ResponseBody List<InvoiceJSON> getInvoices(@RequestBody final InvoiceJSON invoice) {
         
@@ -157,41 +158,39 @@ public class InvoiceController {
             Customer c = customerService.findByCustomerNumber(uh.getUA(), invoice.getCustomer().getCustomernumber());
             if(c == null)
                 return invoiceJSONLs;
-            //invoicePage = invoiceService.findByCustomer(uh.getUA(), c, terms);
+            invoicePage = invoiceService.findByCustomer(uh.getUI(), c, terms);
         } else {
-            //invoicePage = invoiceService.findByUser(uh.getUA(), terms);
+            invoicePage = invoiceService.findAllInvoices(uh.getUI(), terms);
         }
         
-        /*for (Invoice i : invoicePage.getContent()) {
+        for (Invoice iv : invoicePage.getContent()) {
             InvoiceJSON temp = new InvoiceJSON();
             
-            OrderEntity oe = i.getOrderEntity();
-            
             CustomerJSON temp_c = new CustomerJSON();
-            temp_c.setCustomernumber(oe.getBuyer().getCustomerNumber());
-            temp_c.setName(oe.getBuyer().getName());
+            temp_c.setCustomernumber(iv.getBuyer().getCustomerNumber());
+            temp_c.setName(iv.getBuyer().getName());
             temp.setCustomer(temp_c);
             
             List<ProductJSON> temp_pls = new ArrayList();
-            for(Product p : oe.getProd()) {
+            for(Product p : iv.getProd()) {
                 ProductJSON temp_p = new ProductJSON();
                 
                 temp_p.setName(p.getName());
                 temp_p.setPrice(p.getPrice());
-                temp_p.setAmount(oe.getCountList().get(oe.getProd().indexOf(p)));
+                temp_p.setAmount(iv.getCountList().get(iv.getProd().indexOf(p)));
                 
                 temp_pls.add(temp_p);
             }
             temp.setProductls(temp_pls);
             
-            temp.setFtax(oe.isFskatt());
-            temp.setVatnumber(oe.getMomsRegistredNumber());
-            temp.setVat(oe.getMomsPrecentage());
-            temp.setCreationdate(i.getFakturaDate());
-            temp.setExpiredate(i.getExpireDate());
+            temp.setFtax(iv.isFtax());
+            temp.setVatnumber(iv.getMomsNumber());
+            temp.setVat(iv.getMoms());
+            temp.setCreationdate(iv.getFakturaDate());
+            temp.setExpiredate(iv.getExpireDate());
             
             invoiceJSONLs.add(temp);
-        }*/
+        }
         
         return invoiceJSONLs;
     }
@@ -215,12 +214,18 @@ public class InvoiceController {
             Customer c = customerService.findByCustomerNumber(uh.getUA(), invoice.getCustomer().getCustomernumber());
             if(c == null)
                 return size;
-            //invoicePage = invoiceService.findByCustomer(uh.getUA(), c, terms);
+            invoicePage = invoiceService.findByCustomer(uh.getUI(), c, terms);
         } else {
-            //invoicePage = invoiceService.findByUser(uh.getUA(), terms);
+            invoicePage = invoiceService.findAllInvoices(uh.getUI(), terms);
         }
 
-        //size = invoicePage.getTotalElements();
+        size = invoicePage.getTotalElements();
         return size;
     }
+    /*InvoicePresenter ip = new InvoicePresenter(oe);
+        try {
+            ip.print();
+        } catch (IOException | DocumentException ex) {
+            Logger.getLogger(InvoiceController.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
 }

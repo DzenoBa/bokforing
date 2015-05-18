@@ -16,6 +16,12 @@ invoiceService.factory('InvoiceProxy', ['$http', '$location',
         return {
             create: function(invoice) {
                 return $http.post(url + '/create', invoice);
+            },
+            getInvoices: function(invoice) {
+                return $http.post(url + '/getinvoices', invoice);
+            },
+            countInvoices: function(invoice) {
+                return $http.post(url + '/countinvoices', invoice);
             }
         };
     }

@@ -69,7 +69,7 @@
         <div class="col-md-4">
             <div class="panel panel-dz">
                 <div class="panel-heading">
-                    Dina utgifter idag
+                    Dina kostnader idag
                 </div>
                 <div class="panel-body">
                     <center>
@@ -79,7 +79,7 @@
                             <span ng-show="costToday > costYesterday">En ökning med SEK {{costToday-costYesterday | number:1}} sen igår,</span>
                             <span ng-show="costToday < costYesterday">En minskning med SEK {{costYesterday-costToday  | number:1}} sen igår,</span>
                             <br/>
-                            dina utgifter igår var SEK {{costYesterday}}.
+                            dina kostnader igår var SEK {{costYesterday}}.
                         </p>
                     </center>
                 </div>
@@ -88,7 +88,7 @@
         <div class="col-md-4">
             <div class="panel panel-dz">
                 <div class="panel-heading">
-                    Utgifter denna vecka
+                    Kostnader denna vecka
                 </div>
                 <div class="panel-body">
                     <canvas id="costChart"></canvas>

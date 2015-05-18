@@ -34,6 +34,9 @@ import se.chalmers.bokforing.persistence.PagingAndSortingTerms;
 @Service
 @Transactional
 public class IncomeStatementPresenter {
+        
+    private final static String inputFilePath = "xhtml" + File.separator + "incomeStatement.xhtml";
+    private final static String outputFilePath = PresenterHelper.pdfPath;
 
     private final static boolean DEBUG = false;
     Map<Account, Double> incomeStatement;
@@ -98,7 +101,7 @@ public class IncomeStatementPresenter {
             Date endDate, Pageable pageable) throws IOException, DocumentException {
         incomeStatement = postService.getIncomeStatement(user, startDate,
                 endDate, pageable);
-        File input = new File(getClass().getResource("/xhtml/incomeStatement.xhtml").toString().substring(6));
+        File input = new File(inputFilePath);
         Document doc = Jsoup.parse(input, "UTF-8");
         PresenterHelper ph = new PresenterHelper(doc);
 
@@ -130,8 +133,7 @@ public class IncomeStatementPresenter {
         if (DEBUG) {
             System.out.println(doc.outerHtml());
         }
-        String outputFile = getClass().getResource("/").toString().substring(6);
-        outputFile = outputFile + "incomeStatement.pdf";
+        String outputFile = outputFilePath + File.separator + "incomeStatement.pdf";
         //String outputFile = "/pdf/balansrapport.pdf";
         try (OutputStream os = new FileOutputStream(outputFile)) {
             ITextRenderer renderer = new ITextRenderer();

@@ -153,7 +153,7 @@ productControllers.controller('ProductCtrl', ['$scope', 'ProductProxy', '$modal'
                 size: 'lg',
                 resolve: {
                     accountType: function() {
-                        return 3;
+                        return [3,4,5,6,7];
                     }
                 }
             });
@@ -174,13 +174,12 @@ productControllers.controller('ModalInstanceProductCtrl',
     function ($scope, $modalInstance, ProductProxy) {
 
     $scope.currentPage = 1;
+    $scope.product = {name: ""};
+    search();
     
     $scope.selected = function(product) {
         product: product;
-    };
-
-    $scope.ok = function () {
-      $modalInstance.close($scope.selected.product);
+        $modalInstance.close(product);
     };
 
     $scope.cancel = function () {
@@ -195,7 +194,7 @@ productControllers.controller('ModalInstanceProductCtrl',
     $scope.autosearch = function() {
         if(angular.isDefined($scope.product)) {
             $scope.currentPage = 1;
-            if($scope.product.name.length > 2) {
+            if($scope.product.name.length > 0) {
                 search();
             } else {
                 $scope.products = {};
@@ -207,11 +206,7 @@ productControllers.controller('ModalInstanceProductCtrl',
     function search() {
         var product;
         var currentPage = $scope.currentPage - 1;
-        if($scope.product.name) {
-            product = {name: $scope.product.name, startrange: currentPage};
-        } else {
-            return;
-        }
+        product = {name: $scope.product.name, startrange: currentPage};
         ProductProxy.getProducts(product)
                     .success(function(products) {
                         $scope.products = products;
