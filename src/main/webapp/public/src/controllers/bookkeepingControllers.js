@@ -522,7 +522,7 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
             } else {
                 $scope.form = null;
             }
-            var totalSum = $filter('number')($scope.sum, 2);
+            var totalSum = $scope.sum;
             
             if($scope.steptype[2] === 0) {
                 addPost(1910, "Kassa", "credit", totalSum);
@@ -533,8 +533,8 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
             var accountSum = totalSum;
 
             if($scope.vat !== null && $scope.vat > 0) {
-                var vatSum = $filter('number')(totalSum * $scope.vat);
-                accountSum = $filter('number')(totalSum - vatSum);
+                var vatSum = totalSum * $scope.vat;
+                accountSum = totalSum - vatSum;
                 var vatAccount = vatToAccountConverter($scope.vat);
                 addPost(vatAccount.number, vatAccount.name,
                     "debit", vatSum);
@@ -622,7 +622,7 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
             } else {
                 $scope.form = null;
             }
-            var productSum = $filter('number')($scope.selectedProduct.price * $scope.noofproduct, 2);
+            var productSum = $scope.selectedProduct.price * $scope.noofproduct;
             addPost($scope.selectedProduct.account.number, $scope.selectedProduct.account.name,
                 "credit", productSum);
             
@@ -630,8 +630,8 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
             
             if($scope.selectedProduct.vat !== null) {
                 var vat = 1 + vatConverter($scope.selectedProduct.vat.number);
-                totalSum = $filter('number')(productSum * vat, 2);
-                var vatSum = $filter('number')(totalSum-productSum, 2);
+                totalSum = productSum * vat;
+                var vatSum = totalSum-productSum;
                 addPost($scope.selectedProduct.vat.number, $scope.selectedProduct.vat.name,
                     "credit", vatSum);
             }
@@ -674,8 +674,8 @@ bookkeepingControllers.controller('FastbookkeepingCtrl', ['$scope', 'Bookkeeping
             var credit = 0;
             
             angular.forEach($scope.posts, function(value, key) { 
-                debit = debit + parseFloat(value.debit);
-                credit = credit + parseFloat(value.credit);
+                debit = debit + value.debit;
+                credit = credit + value.credit;
             });
             
             $scope.sumDebit = $filter('number')(debit, 2);
