@@ -14,11 +14,17 @@ reportControllers.controller('ReportCtrl', ['$scope', 'ReportProxy', '$filter', 
                 
         $scope.bsDate = $filter('date')(new Date(),'yyyy-MM-dd');
         $scope.isDate = $filter('date')(new Date(),'yyyy-MM-dd');
+        $scope.bsDateEnd = $filter('date')(new Date(),'yyyy-MM-dd');
+        $scope.isDateEnd = $filter('date')(new Date(),'yyyy-MM-dd');
         
         $scope.balancesheet = function() {
             var request = {start: $scope.bsDate};
             ReportProxy.balancesheet(request)
                     .success(function(form) {
+                        if(angular.isDefined(form.errors.destination)) {
+                            // TODO
+                            form.numErrors = 0;
+                        }
                         $scope.form = form;
                     }).error(function() {
                         console.log("report:balancesheet: error");
@@ -46,11 +52,11 @@ reportControllers.controller('ReportCtrl', ['$scope', 'ReportProxy', '$filter', 
                     });
         };
         
-        $scope.opencal = function($event) {
+        $scope.opencal = function($event, opened) {
             $event.preventDefault();
             $event.stopPropagation();
-            
-            $scope.opened = true;
+
+            $scope[opened] = true;
         };
         
         $scope.dateOptions = {
