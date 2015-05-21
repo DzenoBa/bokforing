@@ -2,8 +2,10 @@ package se.chalmers.bokforing.service.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.chalmers.bokforing.service.AccountManager;
@@ -35,13 +37,15 @@ public class InitializationUtilImpl implements InitializationUtil {
 
         BufferedReader br;
         try {
-            br = new BufferedReader(new FileReader(input));
+            br = new BufferedReader(new InputStreamReader(
+                                        new FileInputStream(input), "UTF8"));
             helper(br);
 
         } catch (IOException e) {
             input = new File("/" + getClass().getResource("/accounts.txt").toString().substring(6));
             try {
-                br = new BufferedReader(new FileReader(input));
+                br = new BufferedReader(new InputStreamReader(
+                                            new FileInputStream(input), "UTF8"));
                 helper(br);
             } catch (IOException e1) {
                 return false;
