@@ -307,7 +307,7 @@ public class ReportTest extends AbstractIntegrationTest {
         Calendar cal = Calendar.getInstance();
 
         Account account = accountManager.createAccount(2018, "Fel");
-        Account account2 = accountManager.createAccount(4055, "Någon kostnad");
+        Account account2 = accountManager.createAccount(4055, "Någon utgift");
         Account account3 = accountManager.createAccount(3055, "Någon inkomst");
 
         PostSum sum = new PostSum();

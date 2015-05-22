@@ -119,13 +119,12 @@
                     <button type="button" class="btn btn-success" ng-click="openaccount()">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Lägg till konto
                     </button>
-                    <h3>Dina favoritkonton</h3>
                     <div style="height:250px; width:100%; border: 1px solid #ccc; overflow:auto;">
                         <table class="table">
                             <tr>
-                                <th style="width: 40%;">Nummer</th>
-                                <th style="width: 40%;">Namn</th>
-                                <th style="width: 20%;"></th>
+                                <th style="width: 35%;">Nummer</th>
+                                <th style="width: 35%;">Namn</th>
+                                <th style="width: 30%;"></th>
                             </tr>
                             <tr ng-repeat="account in accounts">
                                 <td>{{account.number}}</td>
@@ -141,9 +140,6 @@
                             </tr>
                         </table>
                     </div>
-                    <button type="button" class="btn btn-success" ng-click="openaccount()">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Lägg till konto
-                    </button>
                 </div>
                 <div class="col-md-6" ng-show="selectedAccount">
                     <form class="form-horizontal">
@@ -240,8 +236,8 @@
                 <tbody>
                     <tr ng-repeat="post in posts">
                         <td>{{post.accountid}} - {{post.accountname}}</td>
-                        <td>{{post.debit}}</td>
-                        <td>{{post.credit}}</td>
+                        <td>{{post.debit | number:2}}</td>
+                        <td>{{post.credit | number:2}}</td>
                     </tr>
                 </tbody>
                 <tfoot>

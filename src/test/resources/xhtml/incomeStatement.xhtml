@@ -33,64 +33,46 @@
         <table width = "30%">
             <tr>
                 <td>Företagsnamn</td>
-                <td><a id="fornamn">[FORNAMN]</a> </td> 
+                <td><span id="fornamn">[FORNAMN]</span> </td> 
             </tr>
             <tr>
                 <td>Utskriftsdatum</td> 
-                <td><a id="utskrd">[UTSKRD]</a></td> 
+                <td><span id="utskrd">[UTSKRD]</span></td> 
             </tr>
             <tr>
                 <td>Räkenskapsår</td> 
-                <td><a id="raken">[RAKEN]</a></td> 
+                <td><span id="raken">[RAKEN]</span></td> 
             </tr>
             <tr>
                 <td>Period</td>
-                <td><a id="valdper">[VALDPER]</a></td> 
+                <td><span id="valdper">[VALDPER]</span></td> 
             </tr>
         </table>
 
-        <h4>Senaste verifikationsnummret: <a id="verinr">[VERINR]</a> </h4>
+        <h4>Senaste verifikationsnummret: <span id="verinr">[VERINR]</span> </h4>
 
 
 
 
-        <table width = "100%">
+        <table style="width:100%;">
             <tr>
-                <th>Intäkter</th>
-                <th>Balans</th>		
-
+                <th style="width:60%;">Intäkter</th>
+                <th style="width:40%;">Balans</th>		
             </tr>
+			<tbody id="intaktkonto">[INTAKTKONTO]</tbody>
+		</table>
+		<table style="width:100%; margin-top:10px;">
             <tr>
-
-                <td> 
-
-                    <a id="intaktkonto">[INTAKTKONTO]</a>
-                </td>
+                <th style="width:60%;">Kostnader</th>
+                <th style="width:40%;">Balans</th>	
             </tr>
-
+            <tbody id="kostnadkonto">[KOSTNADKONTO]</tbody>
+		</table>
+		<table style="width:100%; margin-top:10px;">
             <tr>
-                <th>Kostnader </th>
-                <td> </td>		
-
+                <th colspan="2">Resultat</th>		
             </tr>
-            <tr>
-
-                <td> 
-                    <a id="kostnadkonto">[KOSTNADKONTO]</a>
-                </td>
-            </tr>
-
-
-            <tr>
-                <th>Resultat</th>
-                <td></td>		
-
-            </tr>
-            <tr>
-
-                <td> <a id="resultat">[RESULTAT]</a> </td>
-            </tr>
-
+			<tbody id="resultat">[RESULTAT]</tbody>
         </table>
     </body>
 </html>
